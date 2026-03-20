@@ -412,7 +412,7 @@ export default function Home() {
             <div>
               <div className="about-body">
                 <p>Kizuna Proxy was born from a simple idea: making Japan more accessible to people around the world.</p>
-                <p>We are a <strong>couple — French and Japanese</strong>, living between Paris and Tokyo. One of us is based in Tokyo and speaks Japanese fluently, while the other manages communication with clients abroad.</p>
+                <p>We are a <strong>couple — French and Japanese</strong>, living between France and Tokyo. One of us is based in Tokyo and speaks Japanese fluently, while the other manages communication with clients abroad.</p>
                 <p>We started after noticing how difficult it can be to purchase items from Japan: limited releases, store-exclusive products, Mercari listings, and goods that simply cannot be shipped overseas.</p>
                 <p>Rather than building a large, impersonal operation, we chose to keep things human. <strong>Every request is handled individually</strong>, with care and close attention to detail.</p>
                 <p>Whether it is a gift for a loved one, a birthday surprise, a rare collectible, or something personally meaningful from Japan — we treat each request with the seriousness it deserves.</p>
