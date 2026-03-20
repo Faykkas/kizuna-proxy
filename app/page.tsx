@@ -163,13 +163,15 @@ function Carousel() {
 }
 
 // ─── FORM ────────────────────────────────────────────────────────────────────
+const FORMSPREE_ID = "https://formspree.io/f/mlgpvrvo";
+
 type FormState = { name: string; email: string; platform: string; itemLink: string; country: string; message: string; };
 const emptyForm: FormState = { name: "", email: "", platform: "", itemLink: "", country: "", message: "" };
 
 function RequestForm() {
   const [form, setForm] = useState<FormState>(emptyForm);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
-  const [copied, setCopied] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
   function update<K extends keyof FormState>(k: K, v: string) {
     setForm(p => ({ ...p, [k]: v }));
@@ -187,21 +189,44 @@ function RequestForm() {
     return Object.keys(e).length === 0;
   }
 
-  function buildBody() {
-    return `Name: ${form.name}\nEmail: ${form.email}\nPlatform: ${form.platform}\nItem link: ${form.itemLink}\nCountry: ${form.country}\n\nRequest details:\n${form.message}`.trim();
+  async function handleSubmit() {
+    if (!validate()) return;
+    setStatus("sending");
+    try {
+      const res = await fetch(FORMSPREE_ID, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          platform: form.platform,
+          item_link: form.itemLink,
+          country: form.country,
+          message: form.message,
+        }),
+      });
+      if (res.ok) {
+        setStatus("success");
+        setForm(emptyForm);
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
   }
 
-  function handleMailto() {
-    if (!validate()) return;
-    const s = encodeURIComponent(`Kizuna Proxy Request — ${form.platform || "New Request"}`);
-    window.location.href = `mailto:contact@kizunaproxy.com?subject=${s}&body=${encodeURIComponent(buildBody())}`;
-  }
-
-  async function handleCopy() {
-    if (!validate()) return;
-    await navigator.clipboard.writeText(buildBody());
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2200);
+  if (status === "success") {
+    return (
+      <div className="req-form" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "320px", gap: "1rem", textAlign: "center" }}>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#3a7d44" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" /><polyline points="9 12 11 14 15 10" />
+        </svg>
+        <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.4rem", fontWeight: 600, color: "var(--ink)" }}>Message sent!</p>
+        <p style={{ fontSize: ".9rem", color: "var(--warm)", fontWeight: 300 }}>We will get back to you as soon as possible.</p>
+        <button className="btn btn-ghost" onClick={() => setStatus("idle")} style={{ marginTop: ".5rem" }}>Send another request</button>
+      </div>
+    );
   }
 
   return (
@@ -236,12 +261,14 @@ function RequestForm() {
         <textarea rows={6} placeholder="Describe the item in detail — size, quantity, budget, condition, and any other important information…" value={form.message} onChange={e => update("message", e.target.value)} />
         {errors.message && <span className="f-err">{errors.message}</span>}
       </div>
+      {status === "error" && (
+        <p style={{ fontSize: ".78rem", color: "var(--red)", marginBottom: ".5rem" }}>Something went wrong. Please try again.</p>
+      )}
       <div className="f-actions">
         <span className="f-note">Each request is reviewed personally.</span>
-        <button type="button" className={`btn btn-ghost ${copied ? "btn-success" : ""}`} onClick={handleCopy}>
-          {copied ? "Copied" : "Copy request"}
+        <button type="button" className="btn btn-red" onClick={handleSubmit} disabled={status === "sending"}>
+          {status === "sending" ? "Sending…" : "Send request"}
         </button>
-        <button type="button" className="btn btn-red" onClick={handleMailto}>Send by email</button>
       </div>
     </div>
   );
