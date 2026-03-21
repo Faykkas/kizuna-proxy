@@ -45,16 +45,16 @@ nav {
   display: flex; align-items: center;
   justify-content: space-between; gap: 2rem;
 }
-.logo { display: flex; align-items: center; gap: .85rem; text-decoration: none; }
+.logo { display: flex; align-items: center; gap: .7rem; text-decoration: none; }
 .logo-wordmark { display: flex; flex-direction: column; line-height: 1.15; }
-.logo-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 700; letter-spacing: .04em; color: var(--ink); }
+.logo-name { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: .04em; color: var(--ink); }
 .logo-name .r { color: var(--red); }
-.logo-sub { font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: var(--warm); font-weight: 300; }
+.logo-sub { font-size: .55rem; letter-spacing: .18em; text-transform: uppercase; color: var(--warm); font-weight: 300; }
 
-.nav-links { display: flex; align-items: center; gap: 2.2rem; list-style: none; }
-.nav-links a { font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--warm); text-decoration: none; font-weight: 400; transition: color .2s; }
+.nav-links { display: flex; align-items: center; gap: 1.4rem; list-style: none; }
+.nav-links a { font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; color: var(--warm); text-decoration: none; font-weight: 400; transition: color .2s; white-space: nowrap; }
 .nav-links a:hover { color: var(--ink); }
-.nav-cta { background: var(--ink) !important; color: var(--white) !important; padding: .48rem 1.35rem; border-radius: 1px; transition: background .2s !important; }
+.nav-cta { background: var(--ink) !important; color: var(--white) !important; padding: .42rem 1.1rem; border-radius: 1px; transition: background .2s !important; }
 .nav-cta:hover { background: var(--red) !important; }
 
 .mobile-menu-btn { display: none; background: none; border: 1px solid var(--border); border-radius: 1px; padding: .5rem; cursor: pointer; color: var(--ink); }
@@ -321,6 +321,7 @@ html.dark {
 }
 /* nav */
 html.dark nav { background: rgba(20,17,14,.93); }
+html.dark .logo img { mix-blend-mode: normal; filter: drop-shadow(0 1px 4px rgba(0,0,0,.5)); }
 html.dark .nav-cta { background: var(--red) !important; }
 html.dark .mobile-menu { background: var(--paper); }
 /* sections with hardcoded dark bg — override back */

@@ -16,7 +16,7 @@ const SLIDES = [
 function LogoMark() {
   return (
     <img src="/logo.png" alt="Kizuna Proxy"
-      style={{ height: "58px", width: "auto", objectFit: "contain", filter: "drop-shadow(0 1px 3px rgba(13,11,9,.15))" }} />
+      style={{ height: "46px", width: "auto", objectFit: "contain", mixBlendMode: "multiply" }} />
   );
 }
 
@@ -324,19 +324,22 @@ export default function Home() {
               {dark ? <IconSun /> : <IconMoon />}
             </button>
             {/* Language selector */}
-            <div className="lang-selector" onMouseLeave={() => setLangOpen(false)}>
+            <div className="lang-selector">
               <button className="icon-btn lang-btn" onClick={() => setLangOpen(v => !v)} aria-label="Change language">
                 <span>{LANG_LABELS[lang]}</span>
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
               </button>
               {langOpen && (
-                <div className="lang-dropdown">
-                  {Object.keys(LANG_LABELS).map(l => (
-                    <button key={l} className={`lang-option ${l === lang ? "active" : ""}`} onClick={() => { setLang(l); setLangOpen(false); }}>
-                      {LANG_LABELS[l]}
-                    </button>
-                  ))}
-                </div>
+                <>
+                  <div style={{ position: "fixed", inset: 0, zIndex: 199 }} onClick={() => setLangOpen(false)} />
+                  <div className="lang-dropdown">
+                    {Object.keys(LANG_LABELS).map(l => (
+                      <button key={l} className={`lang-option ${l === lang ? "active" : ""}`} onClick={() => { setLang(l); setLangOpen(false); }}>
+                        {LANG_LABELS[l]}
+                      </button>
+                    ))}
+                  </div>
+                </>
               )}
             </div>
             <button className="mobile-menu-btn" onClick={() => setMobileOpen(v => !v)} aria-label="Menu">
