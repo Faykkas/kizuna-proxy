@@ -266,9 +266,10 @@ footer p { font-size: .7rem; letter-spacing: .06em; color: rgba(250,248,244,.28)
 .tp-stars { display: flex; align-items: center; gap: 1px; }
 
 /* ── BACK TO TOP ── */
-.back-to-top { position: fixed; bottom: 2rem; right: 2rem; z-index: 200; width: 44px; height: 44px; background: var(--ink); border: none; border-radius: 1px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 16px rgba(13,11,9,.18); opacity: 0; transform: translateY(8px); transition: opacity .3s, transform .3s, background .2s; pointer-events: none; color: #fff; }
+.back-to-top { position: fixed; bottom: 2rem; right: 2rem; z-index: 200; width: 44px; height: 44px; background: #0d0b09; border: none; border-radius: 1px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 16px rgba(13,11,9,.18); opacity: 0; transform: translateY(8px); transition: opacity .3s, transform .3s, background .2s; pointer-events: none; color: #ffffff; }
 .back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .back-to-top:hover { background: var(--red); }
+.back-to-top svg { stroke: #ffffff !important; }
 
 /* ── FAQ ── */
 .faq-list { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 2px; overflow: hidden; background: var(--white); }
