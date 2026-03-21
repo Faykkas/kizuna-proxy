@@ -344,13 +344,55 @@ function BackToTop() {
   );
 }
 
+// ─── SCROLL ANIMATION HOOK ───────────────────────────────────────────────────
+function useScrollReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll(".reveal");
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("revealed"); observer.unobserve(e.target); } }),
+      { threshold: 0.12 }
+    );
+    els.forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+}
+
+// ─── ANIMATED COUNTER ────────────────────────────────────────────────────────
+function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      let start = 0;
+      const duration = 1800;
+      const step = (timestamp: number) => {
+        if (!start) start = timestamp;
+        const progress = Math.min((timestamp - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        setCount(Math.floor(ease * target));
+        if (progress < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }, { threshold: 0.5 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [target]);
+  return <span ref={ref}>{count}{suffix}</span>;
+}
+
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  useScrollReveal();
 
   const navLinks = [
     { href: "#how-it-works", label: "How it works" },
     { href: "#about", label: "About" },
+    { href: "#what-we-buy", label: "What we buy" },
     { href: "#pricing", label: "Pricing" },
     { href: "#photos", label: "Gallery" },
     { href: "#faq", label: "FAQ" },
@@ -426,6 +468,33 @@ export default function Home() {
 
       <div className="wrap"><hr className="hr" /></div>
 
+      {/* ── STATS BAR ── */}
+      <div className="stats-bar reveal">
+        <div className="wrap">
+          <div className="stats-inner">
+            <div className="stat-item">
+              <strong><Counter target={150} suffix="+" /></strong>
+              <span>Orders completed</span>
+            </div>
+            <div className="stat-sep" />
+            <div className="stat-item">
+              <strong><Counter target={25} suffix="+" /></strong>
+              <span>Countries served</span>
+            </div>
+            <div className="stat-sep" />
+            <div className="stat-item">
+              <strong><Counter target={100} suffix="%" /></strong>
+              <span>Transparent pricing</span>
+            </div>
+            <div className="stat-sep" />
+            <div className="stat-item">
+              <strong>Same day</strong>
+              <span>Response time</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* ── HOW IT WORKS ── */}
       <section id="how-it-works" className="section">
         <div className="wrap">
@@ -478,6 +547,36 @@ export default function Home() {
                 <span className="ph-lbl">slide2.jpg</span>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── WHAT WE BUY ── */}
+      <section id="what-we-buy" className="section reveal">
+        <div className="wrap">
+          <div className="sec-header">
+            <p className="sec-label">What we can source</p>
+            <h2>Any item from <em>Japan</em></h2>
+            <p className="sec-desc">From online marketplaces to physical stores in Tokyo — if it exists in Japan, we can get it for you.</p>
+          </div>
+          <div className="wbuy-grid">
+            {[
+              { icon: "🛒", title: "Mercari Japan", desc: "Japan's largest secondhand marketplace. Find rare items, vintage goods, and great deals unavailable outside Japan.", tags: ["メルカリ", "Secondhand", "Rare finds"] },
+              { icon: "🏷️", title: "Yahoo Auctions Japan", desc: "Bid on millions of listings — collectibles, electronics, fashion, toys, and more, directly from Japanese sellers.", tags: ["ヤフオク", "Auctions", "Collectibles"] },
+              { icon: "👟", title: "Limited & Exclusive Releases", desc: "Sneakers, streetwear, collabs, pop-up exclusives — we queue, we go in-store, we secure what you need.", tags: ["Sneakers", "Streetwear", "Limited drops"] },
+              { icon: "🎌", title: "Anime & Manga Goods", desc: "Figures, artbooks, limited edition sets, doujinshi, official merchandise — straight from Japanese retailers.", tags: ["Figures", "Manga", "Merch"] },
+              { icon: "🎮", title: "Games & Electronics", desc: "Japanese game releases, retro consoles, exclusive bundles, and electronics only available in the Japanese market.", tags: ["Nintendo", "Sony", "Retro"] },
+              { icon: "🏪", title: "Tokyo Store Visits", desc: "Akihabara, Shibuya, Harajuku — we physically visit any store in Tokyo to find exactly what you are looking for.", tags: ["Akihabara", "Shibuya", "In-store"] },
+            ].map((item, i) => (
+              <div key={i} className="wbuy-card reveal" style={{ animationDelay: `${i * 0.08}s` }}>
+                <div className="wbuy-icon">{item.icon}</div>
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
+                <div className="wbuy-tags">
+                  {item.tags.map(t => <span key={t} className="wbuy-tag">{t}</span>)}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

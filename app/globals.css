@@ -281,6 +281,29 @@ footer p { font-size: .7rem; letter-spacing: .06em; color: rgba(250,248,244,.28)
 .faq-a { margin-top: .9rem; padding-top: .9rem; border-top: 1px solid var(--border); }
 .faq-a p { font-size: .9rem; line-height: 1.8; color: var(--warm); font-weight: 300; }
 
+/* ── SCROLL REVEAL ── */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; }
+.reveal.revealed { opacity: 1; transform: translateY(0); }
+
+/* ── STATS BAR ── */
+.stats-bar { background: var(--ink); padding: 2.5rem 0; }
+.stats-inner { display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap; }
+.stat-item { display: flex; flex-direction: column; align-items: center; gap: .3rem; padding: 0 3rem; }
+.stat-item strong { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600; color: var(--cream); line-height: 1; }
+.stat-item span { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(250,248,244,.4); }
+.stat-sep { width: 1px; height: 40px; background: rgba(250,248,244,.1); }
+
+/* ── WHAT WE BUY ── */
+#what-we-buy { background: var(--paper); }
+.wbuy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 2px; overflow: hidden; margin-top: 3rem; }
+.wbuy-card { background: var(--white); padding: 2rem 1.8rem; transition: background .2s; }
+.wbuy-card:hover { background: var(--cream); }
+.wbuy-icon { font-size: 1.6rem; margin-bottom: 1rem; }
+.wbuy-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; color: var(--ink); margin-bottom: .6rem; }
+.wbuy-card p { font-size: .85rem; line-height: 1.75; color: var(--warm); font-weight: 300; margin-bottom: 1rem; }
+.wbuy-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+.wbuy-tag { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--warm); background: var(--paper); border: 1px solid var(--border); padding: .2rem .6rem; border-radius: 1px; }
+
 /* ── ANIMATIONS ── */
 @keyframes rise { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
 .hero > div { animation: rise .7s ease both; }
@@ -296,6 +319,8 @@ footer p { font-size: .7rem; letter-spacing: .06em; color: rgba(250,248,244,.28)
   .req-side { display: none; }
   .pricing-grid { grid-template-columns: 1fr; }
   .p-card + .p-card { border-left: none; border-top: 1px solid rgba(250,248,244,.07); }
+  .wbuy-grid { grid-template-columns: 1fr 1fr; }
+  .stat-item { padding: 1rem 1.5rem; }
 }
 @media (max-width: 768px) {
   .nav-links { display: none; }
@@ -308,4 +333,8 @@ footer p { font-size: .7rem; letter-spacing: .06em; color: rgba(250,248,244,.28)
   .carousel-btn.next { right: .5rem; }
   .carousel-thumbs { display: none; }
   .carousel-dots { display: flex; }
+  .wbuy-grid { grid-template-columns: 1fr; }
+  .stats-inner { gap: 0; }
+  .stat-sep { width: 100%; height: 1px; }
+  .trustpilot-float { right: 5rem; }
 }
