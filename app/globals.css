@@ -300,8 +300,8 @@ footer p { font-size: .7rem; letter-spacing: .06em; color: rgba(250,248,244,.28)
 .wbuy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
 .wbuy-card { background: var(--white); border: 1px solid var(--border); border-radius: 2px; overflow: hidden; transition: transform .2s, box-shadow .2s; }
 .wbuy-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(13,11,9,.08); }
-.wbuy-img { width: 100%; height: 200px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: var(--paper); }
-.wbuy-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s ease; }
+.wbuy-img { width: 100%; height: 200px; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; background: var(--paper); }
+.wbuy-img img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform .4s ease; }
 .wbuy-card:hover .wbuy-img img { transform: scale(1.04); }
 .wbuy-body { padding: 1.5rem; }
 .wbuy-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; color: var(--ink); margin-bottom: .6rem; }
