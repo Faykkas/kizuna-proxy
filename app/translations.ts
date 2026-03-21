@@ -66,6 +66,14 @@ export const translations = {
       title: "Any item from",
       titleEm: "Japan",
       desc: "From online marketplaces to physical stores in Tokyo — if it exists in Japan, we can get it for you.",
+      items: [
+        { title: "Mercari Japan", desc: "Japan's largest secondhand marketplace. Vintage clothing, rare sneakers, electronics, toys — thousands of listings unavailable outside Japan." },
+        { title: "Yahoo Auctions Japan", desc: "Bid on millions of listings daily — collectibles, manga, retro games, fashion, and hard-to-find items straight from Japanese sellers." },
+        { title: "Limited & Exclusive Drops", desc: "Nike Japan exclusives, Supreme collabs, BAPE — we queue and go in-store to secure limited releases you cannot get elsewhere." },
+        { title: "Pokémon & Anime Goods", desc: "Japanese Pokémon card sets, exclusive booster packs, One Piece figures, Dragon Ball merch, artbooks — straight from Japanese retailers." },
+        { title: "Games & Electronics", desc: "Nintendo Switch Japan-exclusive titles, retro consoles, limited bundles, PlayStation Japan releases, and electronics only found in Japan." },
+        { title: "Tokyo Store Visits", desc: "Akihabara, Shibuya, Harajuku, Nakano Broadway — we physically visit any store in Tokyo to find exactly what you are looking for." },
+      ],
     },
     pricing: {
       label: "Pricing",
@@ -170,6 +178,14 @@ export const translations = {
       title: "Tout article venu du",
       titleEm: "Japon",
       desc: "Des marketplaces en ligne aux boutiques physiques de Tokyo — si ça existe au Japon, on peut vous le trouver.",
+      items: [
+        { title: "Mercari Japan", desc: "La plus grande marketplace de seconde main au Japon. Vêtements vintage, sneakers rares, électronique, jouets — introuvables hors du Japon." },
+        { title: "Yahoo Auctions Japan", desc: "Des millions d'annonces quotidiennes — collectibles, manga, jeux rétro, mode, directement auprès de vendeurs japonais." },
+        { title: "Sorties Limitées & Exclusives", desc: "Nike Japan, Supreme, BAPE — on fait la queue et on va en boutique pour sécuriser les sorties limitées introuvables ailleurs." },
+        { title: "Pokémon & Goodies Anime", desc: "Cartes Pokémon japonaises, boosters exclusifs, figurines One Piece, merch Dragon Ball, artbooks — directement chez les revendeurs japonais." },
+        { title: "Jeux & Électronique", desc: "Jeux Nintendo Switch exclusifs au Japon, consoles rétro, bundles limités, sorties PlayStation japonaises." },
+        { title: "Visites en Boutique à Tokyo", desc: "Akihabara, Shibuya, Harajuku, Nakano Broadway — on visite n'importe quelle boutique de Tokyo pour trouver exactement ce que vous cherchez." },
+      ],
     },
     pricing: {
       label: "Tarifs",
@@ -274,6 +290,14 @@ export const translations = {
       title: "日本の",
       titleEm: "あらゆるアイテム",
       desc: "オンラインマーケットプレイスから東京の実店舗まで — 日本に存在するものなら何でも入手できます。",
+      items: [
+        { title: "メルカリ", desc: "日本最大のフリマアプリ。ヴィンテージ衣類、レアスニーカー、電子機器など日本国外では手に入らない商品が多数。" },
+        { title: "ヤフオク", desc: "毎日数百万件の出品 — コレクターズアイテム、マンガ、レトロゲーム、ファッション等。" },
+        { title: "限定品・コラボ商品", desc: "Nike Japan限定、Supremeコラボ、BAPE — 並んで実店舗で確保します。" },
+        { title: "ポケモン・アニメグッズ", desc: "日本限定ポケモンカード、フィギュア、ワンピースグッズ、ドラゴンボールグッズ等。" },
+        { title: "ゲーム・電子機器", desc: "Nintendo Switch日本限定タイトル、レトロゲーム機、PlayStation日本版等。" },
+        { title: "東京店舗訪問", desc: "秋葉原、渋谷、原宿、中野ブロードウェイ — 東京のどの店舗でも代わりに訪問します。" },
+      ],
     },
     pricing: {
       label: "料金",
@@ -371,7 +395,7 @@ export const translations = {
       p5: "Ya sea un regalo, una sorpresa de cumpleaños o un coleccionable raro — tratamos cada solicitud con seriedad.",
       pull: '"Kizuna" significa conexión o vínculo en japonés — y eso es exactamente lo que queremos crear.',
     },
-    whatWeBuy: { label: "Lo que podemos conseguir", title: "Cualquier artículo de", titleEm: "Japón", desc: "Desde marketplaces online hasta tiendas físicas en Tokio — si existe en Japón, podemos conseguirlo." },
+    whatWeBuy: { label: "Lo que podemos conseguir", title: "Cualquier artículo de", titleEm: "Japón", desc: "Desde marketplaces online hasta tiendas físicas en Tokio — si existe en Japón, podemos conseguirlo.", items: [ { title: "Mercari Japan", desc: "El marketplace de segunda mano más grande de Japón. Ropa vintage, sneakers raros, electrónica, juguetes — miles de artículos no disponibles fuera de Japón." }, { title: "Yahoo Auctions Japan", desc: "Puja en millones de listados diarios — coleccionables, manga, juegos retro, moda y más." }, { title: "Lanzamientos Limitados", desc: "Exclusivos de Nike Japan, Supreme, BAPE — hacemos cola y vamos a la tienda para conseguir ediciones limitadas." }, { title: "Pokémon y Anime", desc: "Cartas Pokémon japonesas, boosters exclusivos, figuras de One Piece, merchandising de Dragon Ball." }, { title: "Juegos y Electrónica", desc: "Títulos exclusivos de Nintendo Switch en Japón, consolas retro, bundles limitados, lanzamientos de PlayStation Japan." }, { title: "Visitas a Tiendas de Tokio", desc: "Akihabara, Shibuya, Harajuku — visitamos cualquier tienda de Tokio para encontrar exactamente lo que buscas." }, ] },
     pricing: {
       label: "Precios", title: "Tarifas claras y", titleEm: "transparentes",
       desc: "Nuestros precios son simples. Para varios artículos, hay descuentos disponibles.",
@@ -456,7 +480,7 @@ export const translations = {
       p5: "Che si tratti di un regalo, una sorpresa di compleanno o un oggetto da collezione raro — trattiamo ogni richiesta con serietà.",
       pull: '"Kizuna" significa connessione o legame in giapponese — ed è esattamente quello che vogliamo creare.',
     },
-    whatWeBuy: { label: "Cosa possiamo procurare", title: "Qualsiasi articolo dal", titleEm: "Giappone", desc: "Dai marketplace online ai negozi fisici di Tokyo — se esiste in Giappone, possiamo procurarlo." },
+    whatWeBuy: { label: "Cosa possiamo procurare", title: "Qualsiasi articolo dal", titleEm: "Giappone", desc: "Dai marketplace online ai negozi fisici di Tokyo — se esiste in Giappone, possiamo procurarlo.", items: [ { title: "Mercari Japan", desc: "Il più grande marketplace dell'usato giapponese. Abbigliamento vintage, sneaker rare, elettronica, giocattoli." }, { title: "Yahoo Auctions Japan", desc: "Milioni di inserzioni ogni giorno — collezionabili, manga, giochi retro, moda e altro." }, { title: "Limited & Exclusive Drops", desc: "Esclusivi Nike Japan, collab Supreme, BAPE — facciamo la fila e andiamo in negozio per te." }, { title: "Pokémon e Anime", desc: "Set di carte Pokémon giapponesi, booster esclusivi, figure di One Piece, merch Dragon Ball." }, { title: "Giochi ed Elettronica", desc: "Titoli esclusivi Nintendo Switch, console retro, bundle limitati, uscite PlayStation Japan." }, { title: "Visite ai Negozi di Tokyo", desc: "Akihabara, Shibuya, Harajuku — visitiamo fisicamente qualsiasi negozio di Tokyo." }, ] },
     pricing: {
       label: "Prezzi", title: "Tariffe chiare e", titleEm: "trasparenti",
       desc: "I nostri prezzi sono semplici. Per più articoli sono disponibili sconti.",
@@ -541,7 +565,7 @@ export const translations = {
       p5: "Ob Geschenk, Geburtstagsüberraschung oder seltenes Sammlerstück — wir nehmen jede Anfrage ernst.",
       pull: '"Kizuna" bedeutet Verbindung oder Band auf Japanisch — genau das wollen wir schaffen.',
     },
-    whatWeBuy: { label: "Was wir beschaffen können", title: "Jeder Artikel aus", titleEm: "Japan", desc: "Von Online-Marktplätzen bis zu physischen Geschäften in Tokio — wenn es in Japan existiert, können wir es besorgen." },
+    whatWeBuy: { label: "Was wir beschaffen können", title: "Jeder Artikel aus", titleEm: "Japan", desc: "Von Online-Marktplätzen bis zu physischen Geschäften in Tokio — wenn es in Japan existiert, können wir es besorgen.", items: [ { title: "Mercari Japan", desc: "Japans größter Secondhand-Marktplatz. Vintage-Kleidung, seltene Sneaker, Elektronik, Spielzeug — tausende Angebote." }, { title: "Yahoo Auctions Japan", desc: "Millionen von Angeboten täglich — Sammlerstücke, Manga, Retro-Spiele, Mode direkt von japanischen Verkäufern." }, { title: "Limitierte Editionen", desc: "Nike Japan-Exclusives, Supreme-Collabs, BAPE — wir stehen an und gehen in den Laden für dich." }, { title: "Pokémon & Anime", desc: "Japanische Pokémon-Karten, exklusive Booster, One Piece-Figuren, Dragon Ball-Merchandise." }, { title: "Spiele & Elektronik", desc: "Japanische Nintendo Switch-Exclusives, Retro-Konsolen, limitierte Bundles, PlayStation Japan." }, { title: "Tokio Ladenbesuche", desc: "Akihabara, Shibuya, Harajuku — wir besuchen physisch jeden Laden in Tokio für dich." }, ] },
     pricing: {
       label: "Preise", title: "Klare und", titleEm: "transparente Gebühren",
       desc: "Unsere Preise sind einfach. Für mehrere Artikel sind Rabatte verfügbar.",
@@ -626,7 +650,7 @@ export const translations = {
       p5: "선물, 생일 선물, 희귀 수집품 등 — 모든 의뢰를 진지하게 처리합니다.",
       pull: '"기즈나(絆)"는 일본어로 연결 또는 유대를 의미합니다 — 그것이 바로 저희가 만들고자 하는 것입니다.',
     },
-    whatWeBuy: { label: "구매 가능 품목", title: "일본의", titleEm: "모든 상품", desc: "온라인 마켓플레이스부터 도쿄 매장까지 — 일본에 있다면 무엇이든 구해드립니다." },
+    whatWeBuy: { label: "구매 가능 품목", title: "일본의", titleEm: "모든 상품", desc: "온라인 마켓플레이스부터 도쿄 매장까지 — 일본에 있다면 무엇이든 구해드립니다.", items: [ { title: "메르카리 재팬", desc: "일본 최대의 중고 마켓. 빈티지 의류, 희귀 스니커즈, 전자제품, 장난감 등 일본 외에서 구하기 힘든 상품들." }, { title: "야후옥션 재팬", desc: "매일 수백만 건의 경매 — 수집품, 만화, 레트로 게임, 패션 등." }, { title: "한정판 드롭", desc: "나이키 재팬 한정판, 슈프림 콜라보, BAPE — 줄 서서 매장에서 직접 구매합니다." }, { title: "포켓몬 & 애니메이션 굿즈", desc: "일본 포켓몬 카드, 한정 부스터팩, 원피스 피규어, 드래곤볼 굿즈." }, { title: "게임 & 전자제품", desc: "닌텐도 스위치 일본 한정 타이틀, 레트로 게임기, 한정 번들, 플레이스테이션 일본판." }, { title: "도쿄 매장 방문", desc: "아키하바라, 시부야, 하라주쿠 — 도쿄 어느 매장이든 직접 방문합니다." }, ] },
     pricing: {
       label: "가격", title: "명확하고", titleEm: "투명한 수수료",
       desc: "가격은 간단합니다. 여러 상품의 경우 할인이 가능합니다.",
@@ -711,7 +735,7 @@ export const translations = {
       p5: "无论是礼物、生日惊喜，还是稀有收藏品——我们都认真对待每一个需求。",
       pull: '"绊（Kizuna）"在日语中意为联系或纽带——这正是我们想要创造的：您与日本之间的信任桥梁。',
     },
-    whatWeBuy: { label: "代购范围", title: "日本的", titleEm: "任何商品", desc: "从线上市场到东京实体店——只要日本有的，我们都能为您代购。" },
+    whatWeBuy: { label: "代购范围", title: "日本的", titleEm: "任何商品", desc: "从线上市场到东京实体店——只要日本有的，我们都能为您代购。", items: [ { title: "Mercari 日本", desc: "日本最大的二手交易平台。复古服装、稀有球鞋、电子产品、玩具——海外无法直接购买的商品。" }, { title: "雅虎拍卖日本", desc: "每天数百万条拍卖信息——收藏品、漫画、复古游戏、时尚等。" }, { title: "限量版商品", desc: "Nike Japan限定款、Supreme联名、BAPE——我们排队亲自到店为您购买。" }, { title: "宝可梦和动漫周边", desc: "日本宝可梦卡牌套装、限定补充包、海贼王手办、龙珠周边、画集等。" }, { title: "游戏和电子产品", desc: "Nintendo Switch日本限定游戏、复古游戏机、限定套装、PlayStation日本版。" }, { title: "东京实体店购物", desc: "秋叶原、涩谷、原宿、中野百老汇——我们亲自前往东京任何商店为您寻找商品。" }, ] },
     pricing: {
       label: "价格", title: "清晰", titleEm: "透明的费用",
       desc: "我们的价格简单明了。多件商品可享折扣。",

@@ -299,14 +299,8 @@ export default function Home() {
     { href: "#faq", label: t.nav.faq },
   ];
 
-  const whatWeBuy = [
-    { img: "/buy-mercari.png",   title: "Mercari Japan",             desc: "Japan's largest secondhand marketplace. Vintage clothing, rare sneakers, electronics, toys — thousands of listings unavailable outside Japan.", tags: ["メルカリ", "Secondhand", "Rare finds"] },
-    { img: "/buy-yahoo.png",     title: "Yahoo Auctions Japan",      desc: "Bid on millions of listings daily — collectibles, manga, retro games, fashion, and hard-to-find items straight from Japanese sellers.", tags: ["ヤフオク", "Auctions", "Collectibles"] },
-    { img: "/buy-sneakers.jpg",  title: "Limited & Exclusive Drops", desc: "Nike Japan exclusives, Supreme collabs, BAPE — we queue and go in-store to secure limited releases you cannot get elsewhere.", tags: ["Nike Japan", "Supreme", "BAPE"] },
-    { img: "/buy-pokemon.jpg",   title: "Pokémon & Anime Goods",     desc: "Japanese Pokémon card sets, exclusive booster packs, One Piece figures, Dragon Ball merch, artbooks — straight from Japanese retailers.", tags: ["Pokémon Cards", "One Piece", "Dragon Ball"] },
-    { img: "/buy-nintendo.png",  title: "Games & Electronics",       desc: "Nintendo Switch Japan-exclusive titles, retro consoles, limited bundles, PlayStation Japan releases, and electronics only found in Japan.", tags: ["Nintendo", "PlayStation", "Retro"] },
-    { img: "/buy-akihabara.jpg", title: "Tokyo Store Visits",        desc: "Akihabara, Shibuya, Harajuku, Nakano Broadway — we physically visit any store in Tokyo to find exactly what you are looking for.", tags: ["Akihabara", "Shibuya", "Harajuku"] },
-  ];
+  const wbuyImgs = ["/buy-mercari.png", "/buy-yahoo.png", "/buy-sneakers.jpg", "/buy-pokemon.jpg", "/buy-nintendo.png", "/buy-akihabara.jpg"];
+  const wbuyTags = [["メルカリ","Secondhand","Rare finds"],["ヤフオク","Auctions","Collectibles"],["Nike Japan","Supreme","BAPE"],["Pokémon Cards","One Piece","Dragon Ball"],["Nintendo","PlayStation","Retro"],["Akihabara","Shibuya","Harajuku"]];
 
   return (
     <>
@@ -325,8 +319,8 @@ export default function Home() {
             <li><a href="#request-wrap" className="nav-cta">{t.nav.request}</a></li>
           </ul>
           <div className="nav-controls">
-            {/* Dark mode toggle */}
-            <button className="icon-btn" onClick={toggleDark} aria-label="Toggle dark mode" title={dark ? "Light mode" : "Dark mode"}>
+            {/* Dark mode toggle - single button */}
+            <button className="icon-btn" onClick={toggleDark} aria-label="Toggle dark mode">
               {dark ? <IconSun /> : <IconMoon />}
             </button>
             {/* Language selector */}
@@ -337,7 +331,7 @@ export default function Home() {
               </button>
               {langOpen && (
                 <div className="lang-dropdown">
-                  {(Object.keys(LANG_LABELS) as Lang[]).map(l => (
+                  {Object.keys(LANG_LABELS).map(l => (
                     <button key={l} className={`lang-option ${l === lang ? "active" : ""}`} onClick={() => { setLang(l); setLangOpen(false); }}>
                       {LANG_LABELS[l]}
                     </button>
@@ -448,13 +442,13 @@ export default function Home() {
             <p className="sec-desc">{t.whatWeBuy.desc}</p>
           </div>
           <div className="wbuy-grid">
-            {whatWeBuy.map((item, i) => (
+            {(t.whatWeBuy.items || []).map((item, i) => (
               <div key={i} className="wbuy-card">
-                <div className="wbuy-img"><img src={item.img} alt={item.title} /></div>
+                <div className="wbuy-img"><img src={wbuyImgs[i]} alt={item.title} /></div>
                 <div className="wbuy-body">
                   <h3>{item.title}</h3>
                   <p>{item.desc}</p>
-                  <div className="wbuy-tags">{item.tags.map(tag => <span key={tag} className="wbuy-tag">{tag}</span>)}</div>
+                  <div className="wbuy-tags">{(wbuyTags[i] || []).map(tag => <span key={tag} className="wbuy-tag">{tag}</span>)}</div>
                 </div>
               </div>
             ))}

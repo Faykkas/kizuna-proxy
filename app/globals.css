@@ -319,16 +319,34 @@ html.dark {
   --border: rgba(240,236,230,.1);
   --white:  #1e1a16;
 }
+/* nav */
 html.dark nav { background: rgba(20,17,14,.93); }
+html.dark .nav-cta { background: var(--red) !important; }
+html.dark .mobile-menu { background: var(--paper); }
+/* sections with hardcoded dark bg — override back */
+html.dark #pricing { background: #0a0806; }
+html.dark #pricing .p-card { background: rgba(240,236,230,.03); }
+html.dark #pricing .pricing-grid { background: rgba(240,236,230,.06); border-color: rgba(240,236,230,.08); }
+html.dark #pricing .p-note { background: rgba(240,236,230,.02); border-color: rgba(240,236,230,.06); color: rgba(240,236,230,.4); }
+html.dark footer { background: #0a0806; }
+html.dark footer p { color: rgba(240,236,230,.3); }
+html.dark .footer-logo { color: rgba(240,236,230,.5); }
+html.dark .social-link { border-color: rgba(240,236,230,.12); color: rgba(240,236,230,.5); background: rgba(240,236,230,.04); }
+/* cards & forms */
 html.dark .about-pull { background: rgba(184,42,36,.08); }
 html.dark .req-form { background: var(--white); }
-html.dark .f-field input, html.dark .f-field textarea { background: var(--cream); color: var(--ink); }
+html.dark .f-field input, html.dark .f-field textarea { background: var(--cream); color: var(--ink); border-color: rgba(240,236,230,.12); }
 html.dark .steps { background: var(--white); }
+html.dark .step:hover { background: var(--mist); }
 html.dark .wbuy-card { background: var(--white); }
 html.dark .wbuy-card:hover { background: var(--mist); }
+html.dark .wbuy-tag { background: var(--mist); }
 html.dark .faq-list { background: var(--white); }
 html.dark .faq-item:hover { background: var(--mist); }
 html.dark .faq-item.open { background: var(--mist); }
+html.dark .faq-a { border-color: rgba(240,236,230,.1); }
+html.dark .hero-img { box-shadow: 0 32px 64px rgba(0,0,0,.4); }
+html.dark .about-img { box-shadow: 0 16px 40px rgba(0,0,0,.3); }
 
 /* ── NAV CONTROLS ── */
 .nav-controls { display: flex; align-items: center; gap: .5rem; }
