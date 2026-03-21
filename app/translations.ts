@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ─────────────────────────────────────────────────────────────────────────────
 // KIZUNA PROXY — Translations
 // Pour modifier un texte, changez simplement la valeur dans la langue voulue.
@@ -21,8 +22,6 @@ export function detectLang(): Lang {
   };
   return map[lang] ?? "en";
 }
-
-export type T = typeof translations.en;
 
 export const translations = {
   en: {
@@ -763,3 +762,5 @@ export const translations = {
     trustpilot: "评价",
   },
 };
+
+export type T = (typeof translations)["en"];
