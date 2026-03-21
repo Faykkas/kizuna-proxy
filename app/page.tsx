@@ -12,21 +12,14 @@ const SLIDES = [
   { src: "/gallery3.png", alt: "Items carefully packed" },
 ];
 
-// ─── LOGO SVG ────────────────────────────────────────────────────────────────
+// ─── LOGO ────────────────────────────────────────────────────────────────────
 function LogoMark() {
   return (
-    <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
-      <defs><clipPath id="cl"><circle cx="21" cy="21" r="19" /></clipPath></defs>
-      <circle cx="21" cy="21" r="19" fill="#f9f7f3" />
-      <rect x="2" y="2" width="9.5" height="38" clipPath="url(#cl)" fill="#002395" opacity=".82" />
-      <rect x="11.5" y="2" width="9.5" height="38" clipPath="url(#cl)" fill="#ffffff" />
-      <rect x="21" y="2" width="19" height="38" clipPath="url(#cl)" fill="#f9f7f3" />
-      <circle cx="29" cy="21" r="6" fill="#bc002d" opacity=".85" />
-      <line x1="21" y1="3" x2="21" y2="39" stroke="#0d0b09" strokeWidth=".7" strokeOpacity=".18" />
-      <circle cx="21" cy="21" r="19" stroke="#0d0b09" strokeWidth=".9" strokeOpacity=".11" />
-      <text x="11.5" y="24" fontFamily="Jost,sans-serif" fontSize="5" fontWeight="400" fill="#fff" opacity=".9" textAnchor="middle">FR</text>
-      <text x="30.5" y="24" fontFamily="Jost,sans-serif" fontSize="5" fontWeight="400" fill="#0d0b09" opacity=".45" textAnchor="middle">JP</text>
-    </svg>
+    <img
+      src="/logo.png"
+      alt="Kizuna Proxy"
+      style={{ height: "48px", width: "auto", objectFit: "contain", filter: "drop-shadow(0 1px 3px rgba(13,11,9,.15))" }}
+    />
   );
 }
 
@@ -274,6 +267,36 @@ function RequestForm() {
   );
 }
 
+// ─── FAQ ─────────────────────────────────────────────────────────────────────
+const FAQ_ITEMS = [
+  { q: "What is a proxy service?", a: "A proxy service means we purchase items on your behalf from Japan — whether online (Mercari, Yahoo Auctions, etc.) or directly in physical stores in Tokyo. We act as your trusted local representative." },
+  { q: "How do I pay?", a: "Once we confirm your request and verify availability, you pay the item price plus our service fee upfront. We accept PayPal and bank transfer. Shipping is invoiced separately once all items are ready." },
+  { q: "How long does it take?", a: "Online orders are typically purchased within 1–3 business days after payment. Physical store visits depend on availability and location. International shipping usually takes 5–14 days depending on the method chosen." },
+  { q: "Can you visit any store in Tokyo?", a: "Yes — we can visit most stores in Tokyo and the surrounding area. Limited releases, pop-up stores, brand exclusives, and hard-to-find items are all within reach. Just send us the details." },
+  { q: "What if the item is out of stock?", a: "We always verify availability before asking for any payment. If an item becomes unavailable after purchase, we will notify you immediately and offer a full refund." },
+  { q: "How are shipping costs calculated?", a: "Shipping costs depend on the weight, dimensions, and your destination country. We always present the options transparently so you can choose the method that best suits your budget and urgency." },
+  { q: "Do you offer discounts for multiple items?", a: "Yes — for larger orders we can discuss a reduced service fee. Just mention the full list of items in your request message and we will get back to you with a tailored quote." },
+];
+
+function FaqSection() {
+  const [open, setOpen] = useState<number | null>(null);
+  return (
+    <div className="faq-list">
+      {FAQ_ITEMS.map((item, i) => (
+        <div key={i} className={`faq-item ${open === i ? "open" : ""}`} onClick={() => setOpen(open === i ? null : i)}>
+          <div className="faq-q">
+            <span>{item.q}</span>
+            <svg className="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </div>
+          {open === i && <div className="faq-a"><p>{item.a}</p></div>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // ─── BACK TO TOP ─────────────────────────────────────────────────────────────
 function BackToTop() {
   const [visible, setVisible] = useState(false);
@@ -303,6 +326,7 @@ export default function Home() {
     { href: "#how-it-works", label: "How it works" },
     { href: "#about", label: "About" },
     { href: "#pricing", label: "Pricing" },
+    { href: "#faq", label: "FAQ" },
     { href: "#photos", label: "Gallery" },
   ];
 
@@ -348,8 +372,8 @@ export default function Home() {
           <div className="hero-social-row">
             <span className="social-label">Follow us</span>
             <div className="social-links hero-social">
-              <a className="social-link" aria-label="Instagram"><IconInstagram /></a>
-              <a className="social-link" aria-label="TikTok"><IconTiktok /></a>
+              <a className="social-link" href="https://www.instagram.com/kizuna_proxy/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><IconInstagram /></a>
+              <a className="social-link" href="https://www.tiktok.com/@kizunaproxy" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><IconTiktok /></a>
             </div>
           </div>
           <p className="hero-desc">We help you buy items from Japan through Mercari, Yahoo Auctions, Tokyo stores, limited releases, and rare collectibles — with a personal, human, and reliable approach.</p>
@@ -412,7 +436,7 @@ export default function Home() {
             <div>
               <div className="about-body">
                 <p>Kizuna Proxy was born from a simple idea: making Japan more accessible to people around the world.</p>
-                <p>We are a <strong>couple — French and Japanese</strong>, living between France and Tokyo. One of us is based in Tokyo and speaks Japanese fluently, while the other manages communication with clients abroad.</p>
+                <p>We are a <strong>couple — French and Japanese</strong>, living between Paris and Tokyo. One of us is based in Tokyo and speaks Japanese fluently, while the other manages communication with clients abroad.</p>
                 <p>We started after noticing how difficult it can be to purchase items from Japan: limited releases, store-exclusive products, Mercari listings, and goods that simply cannot be shipped overseas.</p>
                 <p>Rather than building a large, impersonal operation, we chose to keep things human. <strong>Every request is handled individually</strong>, with care and close attention to detail.</p>
                 <p>Whether it is a gift for a loved one, a birthday surprise, a rare collectible, or something personally meaningful from Japan — we treat each request with the seriousness it deserves.</p>
@@ -445,6 +469,40 @@ export default function Home() {
             <div className="p-card store"><div className="p-accent" /><p className="p-tag">Physical Purchases</p><p className="p-price">¥3,000</p><p className="p-unit">per item</p><p className="p-desc">Store visits, in-person searches, limited releases, and physical purchases anywhere in Tokyo — we go there for you.</p></div>
           </div>
           <p className="p-note">For multiple items, discounts may apply depending on the order. Each request is studied carefully — please leave a detailed message when contacting us. Shipping costs are discussed separately once all items are ready and always remain fully transparent.</p>
+        </div>
+      </section>
+
+      {/* ── TRUSTPILOT ── */}
+      <div style={{ background: "var(--ink)", paddingBottom: "3rem", marginTop: "-1px" }}>
+        <div className="wrap" style={{ display: "flex", justifyContent: "center" }}>
+          <a
+            href="https://fr.trustpilot.com/review/kizunaproxy.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: "inline-flex", alignItems: "center", gap: "1rem", padding: "1rem 2rem", border: "1px solid rgba(250,248,244,.1)", borderRadius: "2px", textDecoration: "none", transition: "border-color .2s, background .2s", background: "rgba(250,248,244,.03)" }}
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(250,248,244,.25)"; (e.currentTarget as HTMLAnchorElement).style.background = "rgba(250,248,244,.07)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(250,248,244,.1)"; (e.currentTarget as HTMLAnchorElement).style.background = "rgba(250,248,244,.03)"; }}
+          >
+            {/* Trustpilot star icon */}
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#00b67a"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+            <div>
+              <p style={{ fontSize: ".7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(250,248,244,.4)", marginBottom: ".2rem" }}>Rated on</p>
+              <p style={{ fontSize: ".95rem", fontWeight: 500, color: "rgba(250,248,244,.8)", fontFamily: "'Cormorant Garamond', serif", letterSpacing: ".02em" }}>Trustpilot</p>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(250,248,244,.3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          </a>
+        </div>
+      </div>
+
+      {/* ── FAQ ── */}
+      <section id="faq" className="section">
+        <div className="wrap">
+          <div className="sec-header">
+            <p className="sec-label">FAQ</p>
+            <h2>Frequently asked <em>questions</em></h2>
+            <p className="sec-desc">Everything you need to know before placing a request.</p>
+          </div>
+          <FaqSection />
         </div>
       </section>
 
@@ -497,8 +555,8 @@ export default function Home() {
             <p>contact@kizunaproxy.com</p>
             <span style={{ width: "1px", height: "12px", background: "rgba(250,248,244,.15)" }} />
             <div className="social-links">
-              <a className="social-link" aria-label="Instagram"><IconInstagram size={14} /></a>
-              <a className="social-link" aria-label="TikTok"><IconTiktok size={14} /></a>
+              <a className="social-link" href="https://www.instagram.com/kizuna_proxy/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><IconInstagram size={14} /></a>
+              <a className="social-link" href="https://www.tiktok.com/@kizunaproxy" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><IconTiktok size={14} /></a>
             </div>
           </div>
         </div>
