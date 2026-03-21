@@ -18,7 +18,7 @@ function LogoMark() {
     <img
       src="/logo.png"
       alt="Kizuna Proxy"
-      style={{ height: "48px", width: "auto", objectFit: "contain", filter: "drop-shadow(0 1px 3px rgba(13,11,9,.15))" }}
+      style={{ height: "58px", width: "auto", objectFit: "contain", filter: "drop-shadow(0 1px 3px rgba(13,11,9,.15))" }}
     />
   );
 }
@@ -158,8 +158,8 @@ function Carousel() {
 // ─── FORM ────────────────────────────────────────────────────────────────────
 const FORMSPREE_ID = "https://formspree.io/f/mlgpvrvo";
 
-type FormState = { name: string; email: string; platform: string; itemLink: string; country: string; message: string; };
-const emptyForm: FormState = { name: "", email: "", platform: "", itemLink: "", country: "", message: "" };
+type FormState = { name: string; email: string; contact: string; platform: string; itemLink: string; country: string; message: string; };
+const emptyForm: FormState = { name: "", email: "", contact: "", platform: "", itemLink: "", country: "", message: "" };
 
 function RequestForm() {
   const [form, setForm] = useState<FormState>(emptyForm);
@@ -176,6 +176,7 @@ function RequestForm() {
     if (!form.name.trim()) e.name = "Please enter your name.";
     if (!form.email.trim()) e.email = "Please enter your email.";
     else if (!form.email.includes("@")) e.email = "Please enter a valid email address.";
+    if (!form.contact.trim()) e.contact = "Please enter a contact method (Discord, WhatsApp, etc.).";
     if (!form.country.trim()) e.country = "Please enter your country.";
     if (!form.message.trim()) e.message = "Please leave a detailed message.";
     setErrors(e);
@@ -192,21 +193,16 @@ function RequestForm() {
         body: JSON.stringify({
           name: form.name,
           email: form.email,
+          contact: form.contact,
           platform: form.platform,
           item_link: form.itemLink,
           country: form.country,
           message: form.message,
         }),
       });
-      if (res.ok) {
-        setStatus("success");
-        setForm(emptyForm);
-      } else {
-        setStatus("error");
-      }
-    } catch {
-      setStatus("error");
-    }
+      if (res.ok) { setStatus("success"); setForm(emptyForm); }
+      else { setStatus("error"); }
+    } catch { setStatus("error"); }
   }
 
   if (status === "success") {
@@ -235,6 +231,11 @@ function RequestForm() {
           <input type="email" placeholder="you@example.com" value={form.email} onChange={e => update("email", e.target.value)} />
           {errors.email && <span className="f-err">{errors.email}</span>}
         </div>
+      </div>
+      <div className="f-field">
+        <label>Contact method * <span style={{ fontWeight: 300, textTransform: "none", letterSpacing: 0, color: "var(--warm)", fontSize: ".62rem" }}>(Discord, WhatsApp, Instagram…)</span></label>
+        <input type="text" placeholder="e.g. Discord: username#0000 / WhatsApp: +33 6 00 00 00 00" value={form.contact} onChange={e => update("contact", e.target.value)} />
+        {errors.contact && <span className="f-err">{errors.contact}</span>}
       </div>
       <div className="f-field">
         <label>Platform</label>
@@ -269,13 +270,34 @@ function RequestForm() {
 
 // ─── FAQ ─────────────────────────────────────────────────────────────────────
 const FAQ_ITEMS = [
-  { q: "What is a proxy service?", a: "A proxy service means we purchase items on your behalf from Japan — whether online (Mercari, Yahoo Auctions, etc.) or directly in physical stores in Tokyo. We act as your trusted local representative." },
-  { q: "How do I pay?", a: "Once we confirm your request and verify availability, you pay the item price plus our service fee upfront. We accept PayPal and bank transfer. Shipping is invoiced separately once all items are ready." },
-  { q: "How long does it take?", a: "Online orders are typically purchased within 1–3 business days after payment. Physical store visits depend on availability and location. International shipping usually takes 5–14 days depending on the method chosen." },
-  { q: "Can you visit any store in Tokyo?", a: "Yes — we can visit most stores in Tokyo and the surrounding area. Limited releases, pop-up stores, brand exclusives, and hard-to-find items are all within reach. Just send us the details." },
-  { q: "What if the item is out of stock?", a: "We always verify availability before asking for any payment. If an item becomes unavailable after purchase, we will notify you immediately and offer a full refund." },
-  { q: "How are shipping costs calculated?", a: "Shipping costs depend on the weight, dimensions, and your destination country. We always present the options transparently so you can choose the method that best suits your budget and urgency." },
-  { q: "Do you offer discounts for multiple items?", a: "Yes — for larger orders we can discuss a reduced service fee. Just mention the full list of items in your request message and we will get back to you with a tailored quote." },
+  {
+    q: "What is a proxy service?",
+    a: "A proxy service means we purchase items on your behalf from Japan — whether online or directly in physical stores in Tokyo. We act as your trusted local representative, bridging the gap between you and Japan."
+  },
+  {
+    q: "What payment methods do you accept?",
+    a: "We accept PayPal only — either Goods & Services or Friends & Family. If you pay via Goods & Services (buyer protection), an additional 4% fee applies to cover PayPal's commission. Please note: we always ship to the address registered on your PayPal account, so make sure your delivery address matches your PayPal address before placing a request."
+  },
+  {
+    q: "How long does it take to find an item?",
+    a: "For online orders, we generally search and purchase within the same day. However, during periods of high demand, it may take a little longer. For physical store visits or special requests, timing is assessed case by case — every situation is different and we always communicate with you directly."
+  },
+  {
+    q: "Can you visit any store in Japan?",
+    a: "We cover stores across Tokyo. If an item requires travel outside of Tokyo, additional costs will apply to account for the extra travel time and transportation. We will always let you know in advance."
+  },
+  {
+    q: "Can you buy from any online platform?",
+    a: "We can purchase from most Japanese online platforms. However, we reserve the right to decline requests from websites that appear suspicious or unsafe — we will never share our personal address with clearly untrustworthy sites. If a site seems borderline, we will discuss it with you and proceed only with your agreement and mutual understanding."
+  },
+  {
+    q: "How is shipping handled?",
+    a: "Once all your items are ready, we discuss the shipping method together. Costs depend on the weight, size, and your destination country. Everything is fully transparent and you choose the option that works best for you."
+  },
+  {
+    q: "Do you offer discounts for multiple items?",
+    a: "Yes — for larger orders we can offer a reduced service fee. Simply include all the items in your initial request message and we will come back to you with a tailored quote."
+  },
 ];
 
 function FaqSection() {
@@ -305,6 +327,10 @@ function BackToTop() {
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
+  useEffect(() => {
+    const tp = document.querySelector(".trustpilot-float");
+    if (tp) tp.classList.toggle("visible", visible);
+  }, [visible]);
   return (
     <button
       className={`back-to-top ${visible ? "visible" : ""}`}
@@ -326,8 +352,8 @@ export default function Home() {
     { href: "#how-it-works", label: "How it works" },
     { href: "#about", label: "About" },
     { href: "#pricing", label: "Pricing" },
-    { href: "#faq", label: "FAQ" },
     { href: "#photos", label: "Gallery" },
+    { href: "#faq", label: "FAQ" },
   ];
 
   return (
@@ -472,40 +498,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── TRUSTPILOT ── */}
-      <div style={{ background: "var(--ink)", paddingBottom: "3rem", marginTop: "-1px" }}>
-        <div className="wrap" style={{ display: "flex", justifyContent: "center" }}>
-          <a
-            href="https://fr.trustpilot.com/review/kizunaproxy.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ display: "inline-flex", alignItems: "center", gap: "1rem", padding: "1rem 2rem", border: "1px solid rgba(250,248,244,.1)", borderRadius: "2px", textDecoration: "none", transition: "border-color .2s, background .2s", background: "rgba(250,248,244,.03)" }}
-            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(250,248,244,.25)"; (e.currentTarget as HTMLAnchorElement).style.background = "rgba(250,248,244,.07)"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(250,248,244,.1)"; (e.currentTarget as HTMLAnchorElement).style.background = "rgba(250,248,244,.03)"; }}
-          >
-            {/* Trustpilot star icon */}
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="#00b67a"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
-            <div>
-              <p style={{ fontSize: ".7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(250,248,244,.4)", marginBottom: ".2rem" }}>Rated on</p>
-              <p style={{ fontSize: ".95rem", fontWeight: 500, color: "rgba(250,248,244,.8)", fontFamily: "'Cormorant Garamond', serif", letterSpacing: ".02em" }}>Trustpilot</p>
-            </div>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(250,248,244,.3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
-          </a>
-        </div>
-      </div>
-
-      {/* ── FAQ ── */}
-      <section id="faq" className="section">
-        <div className="wrap">
-          <div className="sec-header">
-            <p className="sec-label">FAQ</p>
-            <h2>Frequently asked <em>questions</em></h2>
-            <p className="sec-desc">Everything you need to know before placing a request.</p>
-          </div>
-          <FaqSection />
-        </div>
-      </section>
-
       {/* ── GALLERY ── */}
       <section id="photos" className="section" style={{ background: "var(--cream)" }}>
         <div className="wrap">
@@ -546,6 +538,18 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── FAQ ── */}
+      <section id="faq" className="section" style={{ background: "var(--cream)" }}>
+        <div className="wrap">
+          <div className="sec-header">
+            <p className="sec-label">FAQ</p>
+            <h2>Frequently asked <em>questions</em></h2>
+            <p className="sec-desc">Everything you need to know before placing a request.</p>
+          </div>
+          <FaqSection />
+        </div>
+      </section>
+
       {/* ── FOOTER ── */}
       <footer>
         <div className="footer-inner">
@@ -563,6 +567,18 @@ export default function Home() {
       </footer>
 
       <BackToTop />
+
+      {/* ── FLOATING TRUSTPILOT ── */}
+      <a
+        href="https://fr.trustpilot.com/review/kizunaproxy.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="trustpilot-float"
+        aria-label="Trustpilot"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        <span>Reviews</span>
+      </a>
     </>
   );
 }
