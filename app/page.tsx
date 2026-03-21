@@ -338,42 +338,42 @@ export default function Home() {
 
   const whatWeBuy = [
     {
-      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Mercari_Logo.svg/1200px-Mercari_Logo.svg.png",
+      img: "/buy-mercari.png",
       imgBg: "#e8f5e9",
       title: "Mercari Japan",
       desc: "Japan's largest secondhand marketplace. Vintage clothing, rare sneakers, electronics, toys — thousands of listings unavailable outside Japan.",
       tags: ["メルカリ", "Secondhand", "Rare finds", "Vintage"],
     },
     {
-      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Yahoo%21_Japan_logo.svg/1200px-Yahoo%21_Japan_logo.svg.png",
+      img: "/buy-yahoo.png",
       imgBg: "#fff8e1",
       title: "Yahoo Auctions Japan",
       desc: "Bid on millions of listings daily — collectibles, manga, retro games, fashion, and hard-to-find items straight from Japanese sellers.",
       tags: ["ヤフオク", "Auctions", "Collectibles", "Manga"],
     },
     {
-      img: "https://images.stockcake.com/public/5/5/e/55e2b46e-8db5-424f-9c86-5d8e3041e86a_large/colorful-sneaker-collection-stockcake.jpg",
+      img: "/buy-sneakers.jpg",
       imgBg: "#f3e5f5",
       title: "Limited & Exclusive Drops",
       desc: "Nike Japan exclusives, Supreme collabs, BAPE — we queue and go in-store to secure limited releases you cannot get elsewhere.",
       tags: ["Nike Japan", "Supreme", "BAPE", "Streetwear"],
     },
     {
-      img: "https://images.pokemoncenter.com/content/dam/pokemoncenter/en-us/assets/homepage/241105_PokemonCards_ModuleA_US.jpg",
+      img: "/buy-pokemon.jpg",
       imgBg: "#e3f2fd",
       title: "Pokémon & Anime Goods",
       desc: "Japanese Pokémon card sets, exclusive booster packs, One Piece figures, Dragon Ball merch, artbooks — straight from Japanese retailers.",
       tags: ["Pokémon Cards", "One Piece", "Dragon Ball", "Figures"],
     },
     {
-      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/NintendoSwitchLogo.svg/1200px-NintendoSwitchLogo.svg.png",
+      img: "/buy-nintendo.png",
       imgBg: "#fce4ec",
       title: "Games & Electronics",
       desc: "Nintendo Switch Japan-exclusive titles, retro consoles, limited bundles, PlayStation Japan releases, and electronics only found in Japan.",
       tags: ["Nintendo", "PlayStation", "Retro games", "Exclusives"],
     },
     {
-      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Akihabara_dsc04764.jpg/1280px-Akihabara_dsc04764.jpg",
+      img: "/buy-akihabara.jpg",
       imgBg: "#e8eaf6",
       title: "Tokyo Store Visits",
       desc: "Akihabara, Shibuya, Harajuku, Nakano Broadway — we physically visit any store in Tokyo to find exactly what you are looking for.",
