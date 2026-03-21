@@ -337,48 +337,12 @@ export default function Home() {
   ];
 
   const whatWeBuy = [
-    {
-      img: "/buy-mercari.png",
-      imgBg: "#e8f5e9",
-      title: "Mercari Japan",
-      desc: "Japan's largest secondhand marketplace. Vintage clothing, rare sneakers, electronics, toys — thousands of listings unavailable outside Japan.",
-      tags: ["メルカリ", "Secondhand", "Rare finds", "Vintage"],
-    },
-    {
-      img: "/buy-yahoo.png",
-      imgBg: "#fff8e1",
-      title: "Yahoo Auctions Japan",
-      desc: "Bid on millions of listings daily — collectibles, manga, retro games, fashion, and hard-to-find items straight from Japanese sellers.",
-      tags: ["ヤフオク", "Auctions", "Collectibles", "Manga"],
-    },
-    {
-      img: "/buy-sneakers.jpg",
-      imgBg: "#f3e5f5",
-      title: "Limited & Exclusive Drops",
-      desc: "Nike Japan exclusives, Supreme collabs, BAPE — we queue and go in-store to secure limited releases you cannot get elsewhere.",
-      tags: ["Nike Japan", "Supreme", "BAPE", "Streetwear"],
-    },
-    {
-      img: "/buy-pokemon.jpg",
-      imgBg: "#e3f2fd",
-      title: "Pokémon & Anime Goods",
-      desc: "Japanese Pokémon card sets, exclusive booster packs, One Piece figures, Dragon Ball merch, artbooks — straight from Japanese retailers.",
-      tags: ["Pokémon Cards", "One Piece", "Dragon Ball", "Figures"],
-    },
-    {
-      img: "/buy-nintendo.png",
-      imgBg: "#fce4ec",
-      title: "Games & Electronics",
-      desc: "Nintendo Switch Japan-exclusive titles, retro consoles, limited bundles, PlayStation Japan releases, and electronics only found in Japan.",
-      tags: ["Nintendo", "PlayStation", "Retro games", "Exclusives"],
-    },
-    {
-      img: "/buy-akihabara.jpg",
-      imgBg: "#e8eaf6",
-      title: "Tokyo Store Visits",
-      desc: "Akihabara, Shibuya, Harajuku, Nakano Broadway — we physically visit any store in Tokyo to find exactly what you are looking for.",
-      tags: ["Akihabara", "Shibuya", "Harajuku", "In-store"],
-    },
+    { img: "/buy-mercari.png",    title: "Mercari Japan",            desc: "Japan's largest secondhand marketplace. Vintage clothing, rare sneakers, electronics, toys — thousands of listings unavailable outside Japan.", tags: ["メルカリ", "Secondhand", "Rare finds", "Vintage"] },
+    { img: "/buy-yahoo.png",      title: "Yahoo Auctions Japan",     desc: "Bid on millions of listings daily — collectibles, manga, retro games, fashion, and hard-to-find items straight from Japanese sellers.", tags: ["ヤフオク", "Auctions", "Collectibles", "Manga"] },
+    { img: "/buy-sneakers.jpg",   title: "Limited & Exclusive Drops",desc: "Nike Japan exclusives, Supreme collabs, BAPE — we queue and go in-store to secure limited releases you cannot get elsewhere.", tags: ["Nike Japan", "Supreme", "BAPE", "Streetwear"] },
+    { img: "/buy-pokemon.jpg",    title: "Pokémon & Anime Goods",    desc: "Japanese Pokémon card sets, exclusive booster packs, One Piece figures, Dragon Ball merch, artbooks — straight from Japanese retailers.", tags: ["Pokémon Cards", "One Piece", "Dragon Ball", "Figures"] },
+    { img: "/buy-nintendo.png",   title: "Games & Electronics",      desc: "Nintendo Switch Japan-exclusive titles, retro consoles, limited bundles, PlayStation Japan releases, and electronics only found in Japan.", tags: ["Nintendo", "PlayStation", "Retro games", "Exclusives"] },
+    { img: "/buy-akihabara.jpg",  title: "Tokyo Store Visits",       desc: "Akihabara, Shibuya, Harajuku, Nakano Broadway — we physically visit any store in Tokyo to find exactly what you are looking for.", tags: ["Akihabara", "Shibuya", "Harajuku", "In-store"] },
   ];
 
   return (
@@ -518,7 +482,7 @@ export default function Home() {
           <div className="wbuy-grid">
             {whatWeBuy.map((item, i) => (
               <div key={i} className="wbuy-card">
-                <div className="wbuy-img" style={{ background: item.imgBg }}>
+                <div className="wbuy-img">
                   <img src={item.img} alt={item.title} />
                 </div>
                 <div className="wbuy-body">
