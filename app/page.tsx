@@ -271,7 +271,7 @@ function BackToTop() {
   }, [visible]);
   return (
     <button className={`back-to-top ${visible ? "visible" : ""}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="Back to top">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15" /></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15" /></svg>
     </button>
   );
 }
@@ -279,13 +279,17 @@ function BackToTop() {
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [lang, setLang] = useState<Lang>("en");
-  const [dark, toggleDark] = useDarkMode();
-  const [langOpen, setLangOpen] = useState(false);
-  useScrollReveal();
+  const [lang, setLang] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("kizuna-lang");
+      if (saved) return saved;
+    }
+    return "en";
+  });
 
   useEffect(() => {
-    setLang(detectLang());
+    const saved = localStorage.getItem("kizuna-lang");
+    if (!saved) setLang(detectLang());
   }, []);
 
   const t = translations[lang];
@@ -334,7 +338,7 @@ export default function Home() {
                   <div style={{ position: "fixed", inset: 0, zIndex: 199 }} onClick={() => setLangOpen(false)} />
                   <div className="lang-dropdown">
                     {Object.keys(LANG_LABELS).map(l => (
-                      <button key={l} className={`lang-option ${l === lang ? "active" : ""}`} onClick={() => { setLang(l); setLangOpen(false); }}>
+                      <button key={l} className={`lang-option ${l === lang ? "active" : ""}`} onClick={() => { setLang(l); localStorage.setItem("kizuna-lang", l); setLangOpen(false); }}>
                         {LANG_LABELS[l]}
                       </button>
                     ))}
