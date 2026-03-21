@@ -279,17 +279,16 @@ function BackToTop() {
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [lang, setLang] = useState<string>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("kizuna-lang");
-      if (saved) return saved;
-    }
-    return "en";
-  });
+  const [dark, toggleDark] = useDarkMode();
+  const [langOpen, setLangOpen] = useState(false);
+  const [lang, setLang] = useState<string>("en");
+
+  useScrollReveal();
 
   useEffect(() => {
     const saved = localStorage.getItem("kizuna-lang");
-    if (!saved) setLang(detectLang());
+    if (saved) setLang(saved);
+    else setLang(detectLang());
   }, []);
 
   const t = translations[lang];
