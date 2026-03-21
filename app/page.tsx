@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { translations, detectLang, LANG_LABELS, type Lang, type T } from "./translations";
 
 // ─── CAROUSEL SLIDES ─────────────────────────────────────────────────────────
 const SLIDES = [
@@ -12,11 +13,8 @@ const SLIDES = [
 // ─── LOGO ─────────────────────────────────────────────────────────────────────
 function LogoMark() {
   return (
-    <img
-      src="/logo.png"
-      alt="Kizuna Proxy"
-      style={{ height: "58px", width: "auto", objectFit: "contain", filter: "drop-shadow(0 1px 3px rgba(13,11,9,.15))" }}
-    />
+    <img src="/logo.png" alt="Kizuna Proxy"
+      style={{ height: "58px", width: "auto", objectFit: "contain", filter: "drop-shadow(0 1px 3px rgba(13,11,9,.15))" }} />
   );
 }
 
@@ -38,9 +36,22 @@ function IconTiktok({ size = 15 }: { size?: number }) {
   );
 }
 function StarIcon() {
+  return <svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>;
+}
+function IconSun() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff">
-      <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+      <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  );
+}
+function IconMoon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
     </svg>
   );
 }
@@ -58,6 +69,27 @@ function useScrollReveal() {
     els.forEach(el => observer.observe(el));
     return () => observer.disconnect();
   }, []);
+}
+
+// ─── DARK MODE ────────────────────────────────────────────────────────────────
+function useDarkMode(): [boolean, () => void] {
+  const [dark, setDark] = useState(false);
+  useEffect(() => {
+    const saved = localStorage.getItem("kizuna-theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const isDark = saved ? saved === "dark" : prefersDark;
+    setDark(isDark);
+    document.documentElement.classList.toggle("dark", isDark);
+  }, []);
+  const toggle = useCallback(() => {
+    setDark(d => {
+      const next = !d;
+      document.documentElement.classList.toggle("dark", next);
+      localStorage.setItem("kizuna-theme", next ? "dark" : "light");
+      return next;
+    });
+  }, []);
+  return [dark, toggle];
 }
 
 // ─── CAROUSEL ─────────────────────────────────────────────────────────────────
@@ -80,57 +112,33 @@ function Carousel() {
     goTo((current + dir + SLIDES.length) % SLIDES.length);
   }, [current, goTo]);
 
-  const startAuto = useCallback(() => {
-    autoRef.current = setInterval(() => move(1), 5000);
-  }, [move]);
-  const stopAuto = useCallback(() => {
-    if (autoRef.current) clearInterval(autoRef.current);
-  }, []);
+  const startAuto = useCallback(() => { autoRef.current = setInterval(() => move(1), 5000); }, [move]);
+  const stopAuto = useCallback(() => { if (autoRef.current) clearInterval(autoRef.current); }, []);
 
   useEffect(() => { startAuto(); return stopAuto; }, [startAuto, stopAuto]);
-
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") move(-1);
-      if (e.key === "ArrowRight") move(1);
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    const h = (e: KeyboardEvent) => { if (e.key === "ArrowLeft") move(-1); if (e.key === "ArrowRight") move(1); };
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
   }, [move]);
-
   useEffect(() => {
     const strip = thumbsRef.current;
     const active = strip?.querySelector<HTMLElement>(".thumb-active");
-    if (strip && active) {
-      strip.scrollLeft = active.offsetLeft - strip.offsetWidth / 2 + active.offsetWidth / 2;
-    }
+    if (strip && active) strip.scrollLeft = active.offsetLeft - strip.offsetWidth / 2 + active.offsetWidth / 2;
   }, [current]);
 
   const touchStartX = useRef(0);
-  const onTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; };
-  const onTouchEnd = (e: React.TouchEvent) => {
-    const dx = e.changedTouches[0].clientX - touchStartX.current;
-    if (Math.abs(dx) > 40) move(dx < 0 ? 1 : -1);
-  };
-
   return (
     <div className="carousel" onMouseEnter={stopAuto} onMouseLeave={startAuto}>
-      <div className="carousel-stage" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+      <div className="carousel-stage"
+        onTouchStart={e => { touchStartX.current = e.touches[0].clientX; }}
+        onTouchEnd={e => { const dx = e.changedTouches[0].clientX - touchStartX.current; if (Math.abs(dx) > 40) move(dx < 0 ? 1 : -1); }}>
         {SLIDES.map((s, i) => (
-          <div key={i} className={[
-            "carousel-slide",
-            i === current ? "active" : "",
+          <div key={i} className={["carousel-slide", i === current ? "active" : "",
             isAnimating && i === (current - (animDir === "left" ? 1 : -1) + SLIDES.length) % SLIDES.length
-              ? animDir === "left" ? "exit-left" : "exit-right" : "",
-          ].join(" ").trim()}>
-            <img src={s.src} alt={s.alt} onError={(e) => {
-              (e.target as HTMLImageElement).style.display = "none";
-              (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex");
-            }} />
-            <div className="img-ph" style={{ display: "none" }}>
-              <span className="ph-jp">荷物</span>
-              <span className="ph-lbl">{s.src.split("/").pop()}</span>
-            </div>
+              ? animDir === "left" ? "exit-left" : "exit-right" : ""].join(" ").trim()}>
+            <img src={s.src} alt={s.alt} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex"); }} />
+            <div className="img-ph" style={{ display: "none" }}><span className="ph-jp">荷物</span><span className="ph-lbl">{s.src.split("/").pop()}</span></div>
           </div>
         ))}
         <div className="carousel-counter">{current + 1} / {SLIDES.length}</div>
@@ -144,18 +152,13 @@ function Carousel() {
       <div className="carousel-thumbs" ref={thumbsRef}>
         {SLIDES.map((s, i) => (
           <div key={i} className={`carousel-thumb ${i === current ? "active thumb-active" : ""}`} onClick={() => goTo(i)}>
-            <img src={s.src} alt={s.alt} onError={(e) => {
-              (e.target as HTMLImageElement).style.display = "none";
-              (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex");
-            }} />
+            <img src={s.src} alt={s.alt} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex"); }} />
             <div className="thumb-ph" style={{ display: "none" }}>荷物</div>
           </div>
         ))}
       </div>
       <div className="carousel-dots">
-        {SLIDES.map((_, i) => (
-          <div key={i} className={`carousel-dot ${i === current ? "active" : ""}`} onClick={() => goTo(i)} />
-        ))}
+        {SLIDES.map((_, i) => <div key={i} className={`carousel-dot ${i === current ? "active" : ""}`} onClick={() => goTo(i)} />)}
       </div>
     </div>
   );
@@ -166,28 +169,26 @@ const FORMSPREE_ID = "https://formspree.io/f/mlgpvrvo";
 type FormState = { name: string; email: string; contact: string; platform: string; itemLink: string; country: string; message: string; };
 const emptyForm: FormState = { name: "", email: "", contact: "", platform: "", itemLink: "", country: "", message: "" };
 
-function RequestForm() {
+function RequestForm({ t }: { t: T }) {
   const [form, setForm] = useState<FormState>(emptyForm);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const r = t.request;
 
   function update<K extends keyof FormState>(k: K, v: string) {
     setForm(p => ({ ...p, [k]: v }));
     if (errors[k]) setErrors(p => ({ ...p, [k]: "" }));
   }
-
   function validate() {
     const e: Partial<Record<keyof FormState, string>> = {};
-    if (!form.name.trim()) e.name = "Please enter your name.";
-    if (!form.email.trim()) e.email = "Please enter your email.";
-    else if (!form.email.includes("@")) e.email = "Please enter a valid email address.";
-    if (!form.contact.trim()) e.contact = "Please enter a contact method (Discord, WhatsApp, etc.).";
-    if (!form.country.trim()) e.country = "Please enter your country.";
-    if (!form.message.trim()) e.message = "Please leave a detailed message.";
-    setErrors(e);
-    return Object.keys(e).length === 0;
+    if (!form.name.trim()) e.name = r.errName;
+    if (!form.email.trim()) e.email = r.errEmail;
+    else if (!form.email.includes("@")) e.email = r.errEmailInvalid;
+    if (!form.contact.trim()) e.contact = r.errContact;
+    if (!form.country.trim()) e.country = r.errCountry;
+    if (!form.message.trim()) e.message = r.errMessage;
+    setErrors(e); return Object.keys(e).length === 0;
   }
-
   async function handleSubmit() {
     if (!validate()) return;
     setStatus("sending");
@@ -195,72 +196,42 @@ function RequestForm() {
       const res = await fetch(FORMSPREE_ID, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({
-          name: form.name, email: form.email, contact: form.contact,
-          platform: form.platform, item_link: form.itemLink,
-          country: form.country, message: form.message,
-        }),
+        body: JSON.stringify({ name: form.name, email: form.email, contact: form.contact, platform: form.platform, item_link: form.itemLink, country: form.country, message: form.message }),
       });
-      if (res.ok) { setStatus("success"); setForm(emptyForm); }
-      else setStatus("error");
+      if (res.ok) { setStatus("success"); setForm(emptyForm); } else setStatus("error");
     } catch { setStatus("error"); }
   }
 
   if (status === "success") {
     return (
       <div className="req-form" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "320px", gap: "1rem", textAlign: "center" }}>
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#3a7d44" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10" /><polyline points="9 12 11 14 15 10" />
-        </svg>
-        <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.4rem", fontWeight: 600, color: "var(--ink)" }}>Message sent!</p>
-        <p style={{ fontSize: ".9rem", color: "var(--warm)", fontWeight: 300 }}>We will get back to you as soon as possible.</p>
-        <button className="btn btn-ghost" onClick={() => setStatus("idle")} style={{ marginTop: ".5rem" }}>Send another request</button>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#3a7d44" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="9 12 11 14 15 10" /></svg>
+        <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.4rem", fontWeight: 600, color: "var(--ink)" }}>{r.successTitle}</p>
+        <p style={{ fontSize: ".9rem", color: "var(--warm)", fontWeight: 300 }}>{r.successDesc}</p>
+        <button className="btn btn-ghost" onClick={() => setStatus("idle")} style={{ marginTop: ".5rem" }}>{r.successBtn}</button>
       </div>
     );
   }
-
   return (
     <div className="req-form">
       <div className="f-row">
-        <div className="f-field">
-          <label>Full name *</label>
-          <input type="text" placeholder="Your name" value={form.name} onChange={e => update("name", e.target.value)} />
-          {errors.name && <span className="f-err">{errors.name}</span>}
-        </div>
-        <div className="f-field">
-          <label>Email address *</label>
-          <input type="email" placeholder="you@example.com" value={form.email} onChange={e => update("email", e.target.value)} />
-          {errors.email && <span className="f-err">{errors.email}</span>}
-        </div>
+        <div className="f-field"><label>{r.fieldName}</label><input type="text" placeholder="Your name" value={form.name} onChange={e => update("name", e.target.value)} />{errors.name && <span className="f-err">{errors.name}</span>}</div>
+        <div className="f-field"><label>{r.fieldEmail}</label><input type="email" placeholder="you@example.com" value={form.email} onChange={e => update("email", e.target.value)} />{errors.email && <span className="f-err">{errors.email}</span>}</div>
       </div>
       <div className="f-field">
-        <label>Contact method * <span style={{ fontWeight: 300, textTransform: "none", letterSpacing: 0, color: "var(--warm)", fontSize: ".62rem" }}>(Discord, WhatsApp, Instagram…)</span></label>
-        <input type="text" placeholder="e.g. Discord: username#0000 / WhatsApp: +33 6 00 00 00 00" value={form.contact} onChange={e => update("contact", e.target.value)} />
+        <label>{r.fieldContact} <span style={{ fontWeight: 300, textTransform: "none", letterSpacing: 0, color: "var(--warm)", fontSize: ".62rem" }}>{r.fieldContactHint}</span></label>
+        <input type="text" placeholder={r.fieldContactPlaceholder} value={form.contact} onChange={e => update("contact", e.target.value)} />
         {errors.contact && <span className="f-err">{errors.contact}</span>}
       </div>
-      <div className="f-field">
-        <label>Platform</label>
-        <input type="text" placeholder="Mercari, Yahoo Auctions, store name…" value={form.platform} onChange={e => update("platform", e.target.value)} />
-      </div>
-      <div className="f-field">
-        <label>Item link</label>
-        <input type="text" placeholder="https://…" value={form.itemLink} onChange={e => update("itemLink", e.target.value)} />
-      </div>
-      <div className="f-field">
-        <label>Country *</label>
-        <input type="text" placeholder="France, Germany, USA…" value={form.country} onChange={e => update("country", e.target.value)} />
-        {errors.country && <span className="f-err">{errors.country}</span>}
-      </div>
-      <div className="f-field">
-        <label>Message *</label>
-        <textarea rows={6} placeholder="Describe the item in detail — size, quantity, budget, condition, and any other important information…" value={form.message} onChange={e => update("message", e.target.value)} />
-        {errors.message && <span className="f-err">{errors.message}</span>}
-      </div>
-      {status === "error" && <p style={{ fontSize: ".78rem", color: "var(--red)", marginBottom: ".5rem" }}>Something went wrong. Please try again.</p>}
+      <div className="f-field"><label>{r.fieldPlatform}</label><input type="text" placeholder={r.fieldPlatformPlaceholder} value={form.platform} onChange={e => update("platform", e.target.value)} /></div>
+      <div className="f-field"><label>{r.fieldLink}</label><input type="text" placeholder="https://…" value={form.itemLink} onChange={e => update("itemLink", e.target.value)} /></div>
+      <div className="f-field"><label>{r.fieldCountry}</label><input type="text" placeholder={r.fieldCountryPlaceholder} value={form.country} onChange={e => update("country", e.target.value)} />{errors.country && <span className="f-err">{errors.country}</span>}</div>
+      <div className="f-field"><label>{r.fieldMessage}</label><textarea rows={6} placeholder={r.fieldMessagePlaceholder} value={form.message} onChange={e => update("message", e.target.value)} />{errors.message && <span className="f-err">{errors.message}</span>}</div>
+      {status === "error" && <p style={{ fontSize: ".78rem", color: "var(--red)", marginBottom: ".5rem" }}>{r.errorMsg}</p>}
       <div className="f-actions">
-        <span className="f-note">Each request is reviewed personally.</span>
+        <span className="f-note">{r.footNote}</span>
         <button type="button" className="btn btn-red" onClick={handleSubmit} disabled={status === "sending"}>
-          {status === "sending" ? "Sending…" : "Send request"}
+          {status === "sending" ? r.sending : r.submit}
         </button>
       </div>
     </div>
@@ -268,27 +239,15 @@ function RequestForm() {
 }
 
 // ─── FAQ ──────────────────────────────────────────────────────────────────────
-const FAQ_ITEMS = [
-  { q: "What is a proxy service?", a: "A proxy service means we purchase items on your behalf from Japan — whether online or directly in physical stores in Tokyo. We act as your trusted local representative, bridging the gap between you and Japan." },
-  { q: "What payment methods do you accept?", a: "We accept PayPal only — either Goods & Services or Friends & Family. If you pay via Goods & Services (buyer protection), an additional 4% fee applies to cover PayPal's commission. Please note: we always ship to the address registered on your PayPal account, so make sure your delivery address matches your PayPal address before placing a request." },
-  { q: "How long does it take to find an item?", a: "For online orders, we generally search and purchase within the same day. However, during periods of high demand, it may take a little longer. For physical store visits or special requests, timing is assessed case by case — every situation is different and we always communicate with you directly." },
-  { q: "Can you visit any store in Japan?", a: "We cover stores across Tokyo. If an item requires travel outside of Tokyo, additional costs will apply to account for the extra travel time and transportation. We will always let you know in advance." },
-  { q: "Can you buy from any online platform?", a: "We can purchase from most Japanese online platforms. However, we reserve the right to decline requests from websites that appear suspicious or unsafe — we will never share our personal address with clearly untrustworthy sites. If a site seems borderline, we will discuss it with you and proceed only with your agreement and mutual understanding." },
-  { q: "How is shipping handled?", a: "Once all your items are ready, we discuss the shipping method together. Costs depend on the weight, size, and your destination country. Everything is fully transparent and you choose the option that works best for you." },
-  { q: "Do you offer discounts for multiple items?", a: "Yes — for larger orders we can offer a reduced service fee. Simply include all the items in your initial request message and we will come back to you with a tailored quote." },
-];
-
-function FaqSection() {
+function FaqSection({ t }: { t: T }) {
   const [open, setOpen] = useState<number | null>(null);
   return (
     <div className="faq-list">
-      {FAQ_ITEMS.map((item, i) => (
+      {t.faq.items.map((item, i) => (
         <div key={i} className={`faq-item ${open === i ? "open" : ""}`} onClick={() => setOpen(open === i ? null : i)}>
           <div className="faq-q">
             <span>{item.q}</span>
-            <svg className="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
+            <svg className="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
           </div>
           {open === i && <div className="faq-a"><p>{item.a}</p></div>}
         </div>
@@ -301,23 +260,16 @@ function FaqSection() {
 function BackToTop() {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
-    const handler = () => setVisible(window.scrollY > 400);
-    window.addEventListener("scroll", handler, { passive: true });
-    return () => window.removeEventListener("scroll", handler);
+    const h = () => setVisible(window.scrollY > 400);
+    window.addEventListener("scroll", h, { passive: true });
+    return () => window.removeEventListener("scroll", h);
   }, []);
   useEffect(() => {
-    const tp = document.querySelector(".trustpilot-float");
-    if (tp) tp.classList.toggle("visible", visible);
+    document.querySelector(".trustpilot-float")?.classList.toggle("visible", visible);
   }, [visible]);
   return (
-    <button
-      className={`back-to-top ${visible ? "visible" : ""}`}
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      aria-label="Back to top"
-    >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="18 15 12 9 6 15" />
-      </svg>
+    <button className={`back-to-top ${visible ? "visible" : ""}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="Back to top">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15" /></svg>
     </button>
   );
 }
@@ -325,24 +277,33 @@ function BackToTop() {
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [lang, setLang] = useState<Lang>("en");
+  const [dark, toggleDark] = useDarkMode();
+  const [langOpen, setLangOpen] = useState(false);
   useScrollReveal();
 
+  useEffect(() => {
+    setLang(detectLang());
+  }, []);
+
+  const t = translations[lang];
+
   const navLinks = [
-    { href: "#how-it-works", label: "How it works" },
-    { href: "#about", label: "About" },
-    { href: "#what-we-buy", label: "What we buy" },
-    { href: "#pricing", label: "Pricing" },
-    { href: "#photos", label: "Gallery" },
-    { href: "#faq", label: "FAQ" },
+    { href: "#how-it-works", label: t.nav.howItWorks },
+    { href: "#about", label: t.nav.about },
+    { href: "#what-we-buy", label: t.nav.whatWeBuy },
+    { href: "#pricing", label: t.nav.pricing },
+    { href: "#photos", label: t.nav.gallery },
+    { href: "#faq", label: t.nav.faq },
   ];
 
   const whatWeBuy = [
-    { img: "/buy-mercari.png",    title: "Mercari Japan",            desc: "Japan's largest secondhand marketplace. Vintage clothing, rare sneakers, electronics, toys — thousands of listings unavailable outside Japan.", tags: ["メルカリ", "Secondhand", "Rare finds", "Vintage"] },
-    { img: "/buy-yahoo.png",      title: "Yahoo Auctions Japan",     desc: "Bid on millions of listings daily — collectibles, manga, retro games, fashion, and hard-to-find items straight from Japanese sellers.", tags: ["ヤフオク", "Auctions", "Collectibles", "Manga"] },
-    { img: "/buy-sneakers.jpg",   title: "Limited & Exclusive Drops",desc: "Nike Japan exclusives, Supreme collabs, BAPE — we queue and go in-store to secure limited releases you cannot get elsewhere.", tags: ["Nike Japan", "Supreme", "BAPE", "Streetwear"] },
-    { img: "/buy-pokemon.jpg",    title: "Pokémon & Anime Goods",    desc: "Japanese Pokémon card sets, exclusive booster packs, One Piece figures, Dragon Ball merch, artbooks — straight from Japanese retailers.", tags: ["Pokémon Cards", "One Piece", "Dragon Ball", "Figures"] },
-    { img: "/buy-nintendo.png",   title: "Games & Electronics",      desc: "Nintendo Switch Japan-exclusive titles, retro consoles, limited bundles, PlayStation Japan releases, and electronics only found in Japan.", tags: ["Nintendo", "PlayStation", "Retro games", "Exclusives"] },
-    { img: "/buy-akihabara.jpg",  title: "Tokyo Store Visits",       desc: "Akihabara, Shibuya, Harajuku, Nakano Broadway — we physically visit any store in Tokyo to find exactly what you are looking for.", tags: ["Akihabara", "Shibuya", "Harajuku", "In-store"] },
+    { img: "/buy-mercari.png",   title: "Mercari Japan",             desc: t.lang === "fr" ? "La plus grande marketplace de seconde main au Japon." : "Japan's largest secondhand marketplace.", tags: ["メルカリ", "Secondhand", "Rare finds"] },
+    { img: "/buy-yahoo.png",     title: "Yahoo Auctions Japan",      desc: t.lang === "fr" ? "Des millions d'annonces quotidiennes." : "Bid on millions of listings daily.", tags: ["ヤフオク", "Auctions", "Collectibles"] },
+    { img: "/buy-sneakers.jpg",  title: "Limited & Exclusive Drops", desc: t.lang === "fr" ? "Nike Japan, Supreme, BAPE — on fait la queue pour vous." : "Nike Japan exclusives, Supreme, BAPE — we queue for you.", tags: ["Nike Japan", "Supreme", "BAPE"] },
+    { img: "/buy-pokemon.jpg",   title: "Pokémon & Anime Goods",     desc: t.lang === "fr" ? "Cartes Pokémon japonaises, figurines One Piece, Dragon Ball." : "Japanese Pokémon cards, One Piece figures, Dragon Ball merch.", tags: ["Pokémon Cards", "One Piece", "Dragon Ball"] },
+    { img: "/buy-nintendo.png",  title: "Games & Electronics",       desc: t.lang === "fr" ? "Jeux Nintendo exclusifs au Japon, consoles rétro, PlayStation." : "Nintendo Switch Japan-exclusive titles, retro consoles, PlayStation.", tags: ["Nintendo", "PlayStation", "Retro"] },
+    { img: "/buy-akihabara.jpg", title: "Tokyo Store Visits",        desc: t.lang === "fr" ? "Akihabara, Shibuya, Harajuku — on visite les boutiques pour vous." : "Akihabara, Shibuya, Harajuku — we visit any store for you.", tags: ["Akihabara", "Shibuya", "Harajuku"] },
   ];
 
   return (
@@ -359,18 +320,40 @@ export default function Home() {
           </a>
           <ul className="nav-links">
             {navLinks.map(l => <li key={l.href}><a href={l.href}>{l.label}</a></li>)}
-            <li><a href="#request-wrap" className="nav-cta">Request</a></li>
+            <li><a href="#request-wrap" className="nav-cta">{t.nav.request}</a></li>
           </ul>
-          <button className="mobile-menu-btn" onClick={() => setMobileOpen(v => !v)} aria-label="Menu">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-              <line x1="3" y1="5" x2="17" y2="5" /><line x1="3" y1="10" x2="17" y2="10" /><line x1="3" y1="15" x2="17" y2="15" />
-            </svg>
-          </button>
+          <div className="nav-controls">
+            {/* Dark mode toggle */}
+            <button className="icon-btn" onClick={toggleDark} aria-label="Toggle dark mode" title={dark ? "Light mode" : "Dark mode"}>
+              {dark ? <IconSun /> : <IconMoon />}
+            </button>
+            {/* Language selector */}
+            <div className="lang-selector" onMouseLeave={() => setLangOpen(false)}>
+              <button className="icon-btn lang-btn" onClick={() => setLangOpen(v => !v)} aria-label="Change language">
+                <span>{LANG_LABELS[lang]}</span>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              {langOpen && (
+                <div className="lang-dropdown">
+                  {(Object.keys(LANG_LABELS) as Lang[]).map(l => (
+                    <button key={l} className={`lang-option ${l === lang ? "active" : ""}`} onClick={() => { setLang(l); setLangOpen(false); }}>
+                      {LANG_LABELS[l]}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <button className="mobile-menu-btn" onClick={() => setMobileOpen(v => !v)} aria-label="Menu">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                <line x1="3" y1="5" x2="17" y2="5" /><line x1="3" y1="10" x2="17" y2="10" /><line x1="3" y1="15" x2="17" y2="15" />
+              </svg>
+            </button>
+          </div>
         </div>
         {mobileOpen && (
           <div className="mobile-menu">
             {navLinks.map(l => <a key={l.href} href={l.href} onClick={() => setMobileOpen(false)}>{l.label}</a>)}
-            <a href="#request-wrap" className="nav-cta" onClick={() => setMobileOpen(false)}>Request</a>
+            <a href="#request-wrap" className="nav-cta" onClick={() => setMobileOpen(false)}>{t.nav.request}</a>
           </div>
         )}
       </nav>
@@ -378,37 +361,34 @@ export default function Home() {
       {/* HERO */}
       <div className="hero">
         <div>
-          <div className="eyebrow"><div className="eyebrow-line" /><span>Franco-Japanese proxy service</span></div>
+          <div className="eyebrow"><div className="eyebrow-line" /><span>{t.hero.eyebrow}</span></div>
           <h1>
-            Your trusted<br />
-            <em>link to Japan</em>
-            <span className="jp-sub">絆 — 繋がりを大切に</span>
+            {t.hero.title1}<br />
+            <em>{t.hero.title2}</em>
+            <span className="jp-sub">{t.hero.jpSub}</span>
           </h1>
           <div className="hero-social-row">
-            <span className="social-label">Follow us</span>
+            <span className="social-label">{t.hero.followUs}</span>
             <div className="social-links hero-social">
               <a className="social-link" href="https://www.instagram.com/kizuna_proxy/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><IconInstagram /></a>
               <a className="social-link" href="https://www.tiktok.com/@kizunaproxy" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><IconTiktok /></a>
             </div>
           </div>
-          <p className="hero-desc">We help you buy items from Japan through Mercari, Yahoo Auctions, Tokyo stores, limited releases, and rare collectibles — with a personal, human, and reliable approach.</p>
+          <p className="hero-desc">{t.hero.desc}</p>
           <div className="hero-actions">
-            <a href="#request-wrap" className="btn btn-red">Request an Item</a>
-            <a href="#pricing" className="btn btn-ghost">View Pricing</a>
+            <a href="#request-wrap" className="btn btn-red">{t.hero.cta}</a>
+            <a href="#pricing" className="btn btn-ghost">{t.hero.ctaSecondary}</a>
           </div>
           <div className="hero-pills">
-            <div className="hero-pill"><strong>Online</strong><span>All online platforms</span></div>
-            <div className="hero-pill"><strong>Tokyo</strong><span>Physical store visits</span></div>
-            <div className="hero-pill"><strong>Worldwide</strong><span>International shipping</span></div>
+            <div className="hero-pill"><strong>{t.hero.pill1Title}</strong><span>{t.hero.pill1Sub}</span></div>
+            <div className="hero-pill"><strong>{t.hero.pill2Title}</strong><span>{t.hero.pill2Sub}</span></div>
+            <div className="hero-pill"><strong>{t.hero.pill3Title}</strong><span>{t.hero.pill3Sub}</span></div>
           </div>
         </div>
         <div className="hero-visual">
           <div className="hero-img">
             <img src="/Slide1.png" alt="Kizuna Proxy" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex"); }} />
-            <div className="img-ph" style={{ display: "none" }}>
-              <span className="ph-jp">東京</span>
-              <span className="ph-lbl">Slide1.png</span>
-            </div>
+            <div className="img-ph" style={{ display: "none" }}><span className="ph-jp">東京</span><span className="ph-lbl">Slide1.png</span></div>
           </div>
         </div>
       </div>
@@ -419,22 +399,17 @@ export default function Home() {
       <section id="how-it-works" className="section reveal">
         <div className="wrap">
           <div className="sec-header">
-            <p className="sec-label">How it works</p>
-            <h2>A simple, <em>transparent</em> process</h2>
-            <p className="sec-desc">A proxy service means we act on your behalf to purchase items from Japan — online or directly in store.</p>
+            <p className="sec-label">{t.howItWorks.label}</p>
+            <h2>{t.howItWorks.title}</h2>
+            <p className="sec-desc">{t.howItWorks.desc}</p>
           </div>
           <div className="steps">
             {[
-              { n: "01", title: "Send your request", body: "Share the item link, photo, title, or any details about what you are looking for in Japan. The more precise, the better we can assist." },
-              { n: "02", title: "Confirm & pay", body: "We review the request together, confirm every detail, then you pay the item price plus the agreed service fee before we proceed." },
-              { n: "03", title: "Receive your item", body: "Once ready, we choose the shipping method together. All costs remain fully transparent and easy to verify at every stage." },
+              { n: "01", title: t.howItWorks.step1Title, body: t.howItWorks.step1Body },
+              { n: "02", title: t.howItWorks.step2Title, body: t.howItWorks.step2Body },
+              { n: "03", title: t.howItWorks.step3Title, body: t.howItWorks.step3Body },
             ].map(s => (
-              <div key={s.n} className="step">
-                <div className="step-bar" />
-                <div className="step-num">{s.n}</div>
-                <h3>{s.title}</h3>
-                <p>{s.body}</p>
-              </div>
+              <div key={s.n} className="step"><div className="step-bar" /><div className="step-num">{s.n}</div><h3>{s.title}</h3><p>{s.body}</p></div>
             ))}
           </div>
         </div>
@@ -444,28 +419,19 @@ export default function Home() {
       <section id="about" className="section reveal">
         <div className="wrap">
           <div className="sec-header">
-            <p className="sec-label">About us</p>
-            <h2>A personal service<br />built on <em>trust</em></h2>
+            <p className="sec-label">{t.about.label}</p>
+            <h2>{t.about.title} <em>{t.about.titleEm}</em></h2>
           </div>
           <div className="about-grid">
             <div>
               <div className="about-body">
-                <p>Kizuna Proxy was born from a simple idea: making Japan more accessible to people around the world.</p>
-                <p>We are a <strong>couple — French and Japanese</strong>, living between Paris and Tokyo. One of us is based in Tokyo and speaks Japanese fluently, while the other manages communication with clients abroad.</p>
-                <p>We started after noticing how difficult it can be to purchase items from Japan: limited releases, store-exclusive products, Mercari listings, and goods that simply cannot be shipped overseas.</p>
-                <p>Rather than building a large, impersonal operation, we chose to keep things human. <strong>Every request is handled individually</strong>, with care and close attention to detail.</p>
-                <p>Whether it is a gift for a loved one, a birthday surprise, a rare collectible, or something personally meaningful from Japan — we treat each request with the seriousness it deserves.</p>
-                <div className="about-pull">
-                  <p>&ldquo;Kizuna&rdquo; means connection or bond in Japanese — and that is exactly what we want to create: a trusted link between you and Japan.</p>
-                </div>
+                <p>{t.about.p1}</p><p>{t.about.p2}</p><p>{t.about.p3}</p><p>{t.about.p4}</p><p>{t.about.p5}</p>
+                <div className="about-pull"><p>&ldquo;{t.about.pull}&rdquo;</p></div>
               </div>
             </div>
             <div className="about-img">
               <img src="/Slide2.png" alt="About Kizuna Proxy" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex"); }} />
-              <div className="img-ph" style={{ display: "none" }}>
-                <span className="ph-jp" style={{ fontSize: "2.5rem" }}>絆</span>
-                <span className="ph-lbl">Slide2.png</span>
-              </div>
+              <div className="img-ph" style={{ display: "none" }}><span className="ph-jp" style={{ fontSize: "2.5rem" }}>絆</span><span className="ph-lbl">Slide2.png</span></div>
             </div>
           </div>
         </div>
@@ -475,22 +441,18 @@ export default function Home() {
       <section id="what-we-buy" className="section reveal">
         <div className="wrap">
           <div className="sec-header">
-            <p className="sec-label">What we can source</p>
-            <h2>Any item from <em>Japan</em></h2>
-            <p className="sec-desc">From online marketplaces to physical stores in Tokyo — if it exists in Japan, we can get it for you.</p>
+            <p className="sec-label">{t.whatWeBuy.label}</p>
+            <h2>{t.whatWeBuy.title} <em>{t.whatWeBuy.titleEm}</em></h2>
+            <p className="sec-desc">{t.whatWeBuy.desc}</p>
           </div>
           <div className="wbuy-grid">
             {whatWeBuy.map((item, i) => (
               <div key={i} className="wbuy-card">
-                <div className="wbuy-img">
-                  <img src={item.img} alt={item.title} />
-                </div>
+                <div className="wbuy-img"><img src={item.img} alt={item.title} /></div>
                 <div className="wbuy-body">
                   <h3>{item.title}</h3>
                   <p>{item.desc}</p>
-                  <div className="wbuy-tags">
-                    {item.tags.map(t => <span key={t} className="wbuy-tag">{t}</span>)}
-                  </div>
+                  <div className="wbuy-tags">{item.tags.map(tag => <span key={tag} className="wbuy-tag">{tag}</span>)}</div>
                 </div>
               </div>
             ))}
@@ -502,15 +464,15 @@ export default function Home() {
       <section id="pricing" className="section reveal">
         <div className="wrap">
           <div className="sec-header">
-            <p className="sec-label">Pricing</p>
-            <h2>Clear &amp; <em>transparent</em> fees</h2>
-            <p className="sec-desc">We keep our pricing simple. For multiple items, discounts are available depending on the order.</p>
+            <p className="sec-label">{t.pricing.label}</p>
+            <h2>{t.pricing.title} <em>{t.pricing.titleEm}</em></h2>
+            <p className="sec-desc">{t.pricing.desc}</p>
           </div>
           <div className="pricing-grid">
-            <div className="p-card online"><div className="p-accent" /><p className="p-tag">Online Orders</p><p className="p-price">¥1,500</p><p className="p-unit">per item</p><p className="p-desc">Mercari, Yahoo Auctions, Japanese websites, and any online platform — purchased from Tokyo on your behalf.</p></div>
-            <div className="p-card store"><div className="p-accent" /><p className="p-tag">Physical Purchases</p><p className="p-price">¥3,000</p><p className="p-unit">per item</p><p className="p-desc">Store visits, in-person searches, limited releases, and physical purchases anywhere in Tokyo — we go there for you.</p></div>
+            <div className="p-card online"><div className="p-accent" /><p className="p-tag">{t.pricing.onlineTag}</p><p className="p-price">¥1,500</p><p className="p-unit">{t.pricing.perItem}</p><p className="p-desc">{t.pricing.onlineDesc}</p></div>
+            <div className="p-card store"><div className="p-accent" /><p className="p-tag">{t.pricing.storeTag}</p><p className="p-price">¥3,000</p><p className="p-unit">{t.pricing.perItem}</p><p className="p-desc">{t.pricing.storeDesc}</p></div>
           </div>
-          <p className="p-note">For multiple items, discounts may apply depending on the order. Each request is studied carefully — please leave a detailed message when contacting us. Shipping costs are discussed separately once all items are ready and always remain fully transparent.</p>
+          <p className="p-note">{t.pricing.note}</p>
         </div>
       </section>
 
@@ -518,9 +480,9 @@ export default function Home() {
       <section id="photos" className="section reveal" style={{ background: "var(--cream)" }}>
         <div className="wrap">
           <div className="sec-header">
-            <p className="sec-label">Gallery</p>
-            <h2>Orders we&apos;ve <em>prepared</em></h2>
-            <p className="sec-desc">A look at some of the parcels we have carefully packed and sent to our clients around the world.</p>
+            <p className="sec-label">{t.gallery.label}</p>
+            <h2>{t.gallery.title} <em>{t.gallery.titleEm}</em></h2>
+            <p className="sec-desc">{t.gallery.desc}</p>
           </div>
           <Carousel />
         </div>
@@ -530,26 +492,26 @@ export default function Home() {
       <section id="request-wrap" className="reveal">
         <div className="wrap">
           <div className="sec-header">
-            <p className="sec-label">Request</p>
-            <h2>Request an item <em>from Japan</em></h2>
-            <p className="sec-desc">Leave as much detail as possible so we can study your request carefully and give you the best response.</p>
+            <p className="sec-label">{t.request.label}</p>
+            <h2>{t.request.title} <em>{t.request.titleEm}</em></h2>
+            <p className="sec-desc">{t.request.desc}</p>
           </div>
           <div className="req-layout">
             <div className="req-side">
-              <p>Every request is read and handled personally by us. We always reply with a clear answer before any payment is made.</p>
+              <p>{t.request.sideDesc}</p>
               {[
-                { t: "Personal review", s: "Every request is handled by us directly" },
-                { t: "Item verification", s: "We confirm availability before any commitment" },
-                { t: "Direct communication", s: "You speak with us, not a support team" },
-                { t: "Transparent shipping", s: "All costs are clear and easy to verify" },
+                { title: t.request.detail1Title, sub: t.request.detail1Sub },
+                { title: t.request.detail2Title, sub: t.request.detail2Sub },
+                { title: t.request.detail3Title, sub: t.request.detail3Sub },
+                { title: t.request.detail4Title, sub: t.request.detail4Sub },
               ].map(d => (
-                <div key={d.t} className="req-detail">
+                <div key={d.title} className="req-detail">
                   <div className="rd-dot" />
-                  <div className="rd-text"><strong>{d.t}</strong><span>{d.s}</span></div>
+                  <div className="rd-text"><strong>{d.title}</strong><span>{d.sub}</span></div>
                 </div>
               ))}
             </div>
-            <RequestForm />
+            <RequestForm t={t} />
           </div>
         </div>
       </section>
@@ -558,11 +520,11 @@ export default function Home() {
       <section id="faq" className="section reveal" style={{ background: "var(--cream)" }}>
         <div className="wrap">
           <div className="sec-header">
-            <p className="sec-label">FAQ</p>
-            <h2>Frequently asked <em>questions</em></h2>
-            <p className="sec-desc">Everything you need to know before placing a request.</p>
+            <p className="sec-label">{t.faq.label}</p>
+            <h2>{t.faq.title} <em>{t.faq.titleEm}</em></h2>
+            <p className="sec-desc">{t.faq.desc}</p>
           </div>
-          <FaqSection />
+          <FaqSection t={t} />
         </div>
       </section>
 
@@ -570,7 +532,7 @@ export default function Home() {
       <footer>
         <div className="footer-inner">
           <div className="footer-logo"><span className="r">Kizuna</span> Proxy</div>
-          <p>© 2026 — Your trusted link to Japan</p>
+          <p>{t.footer.rights}</p>
           <div style={{ display: "flex", alignItems: "center", gap: ".75rem", flexWrap: "wrap" }}>
             <p>contact@kizunaproxy.com</p>
             <span style={{ width: "1px", height: "12px", background: "rgba(250,248,244,.15)" }} />
@@ -585,17 +547,9 @@ export default function Home() {
       <BackToTop />
 
       {/* FLOATING TRUSTPILOT */}
-      <a
-        href="https://fr.trustpilot.com/review/kizunaproxy.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="trustpilot-float"
-        aria-label="See our reviews on Trustpilot"
-      >
-        <div className="tp-stars">
-          <StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarIcon />
-        </div>
-        <span>Reviews</span>
+      <a href="https://fr.trustpilot.com/review/kizunaproxy.com" target="_blank" rel="noopener noreferrer" className="trustpilot-float" aria-label="See our reviews on Trustpilot">
+        <div className="tp-stars"><StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarIcon /></div>
+        <span>{t.trustpilot}</span>
       </a>
     </>
   );

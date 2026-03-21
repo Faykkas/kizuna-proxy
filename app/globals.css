@@ -309,6 +309,56 @@ footer p { font-size: .7rem; letter-spacing: .06em; color: rgba(250,248,244,.28)
 .wbuy-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
 .wbuy-tag { font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: var(--warm); background: var(--paper); border: 1px solid var(--border); padding: .2rem .6rem; border-radius: 1px; }
 
+/* ── DARK MODE ── */
+html.dark {
+  --ink:    #f0ece6;
+  --cream:  #14110e;
+  --paper:  #1c1814;
+  --mist:   #252018;
+  --warm:   #9a9088;
+  --border: rgba(240,236,230,.1);
+  --white:  #1e1a16;
+}
+html.dark nav { background: rgba(20,17,14,.93); }
+html.dark .about-pull { background: rgba(184,42,36,.08); }
+html.dark .req-form { background: var(--white); }
+html.dark .f-field input, html.dark .f-field textarea { background: var(--cream); color: var(--ink); }
+html.dark .steps { background: var(--white); }
+html.dark .wbuy-card { background: var(--white); }
+html.dark .wbuy-card:hover { background: var(--mist); }
+html.dark .faq-list { background: var(--white); }
+html.dark .faq-item:hover { background: var(--mist); }
+html.dark .faq-item.open { background: var(--mist); }
+
+/* ── NAV CONTROLS ── */
+.nav-controls { display: flex; align-items: center; gap: .5rem; }
+.icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 1px;
+  background: transparent; border: 1px solid var(--border);
+  color: var(--warm); cursor: pointer;
+  transition: color .2s, border-color .2s, background .2s;
+}
+.icon-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+.lang-selector { position: relative; }
+.lang-btn { width: auto; padding: 0 .6rem; gap: .3rem; font-size: .68rem; letter-spacing: .08em; font-family: 'Jost', sans-serif; font-weight: 500; }
+.lang-dropdown {
+  position: absolute; top: calc(100% + .5rem); right: 0;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 2px; box-shadow: 0 8px 24px rgba(13,11,9,.12);
+  z-index: 200; min-width: 90px; overflow: hidden;
+}
+.lang-option {
+  display: block; width: 100%; padding: .55rem .9rem;
+  font-size: .72rem; letter-spacing: .08em; text-align: left;
+  background: transparent; border: none; color: var(--warm);
+  cursor: pointer; font-family: 'Jost', sans-serif;
+  transition: background .15s, color .15s;
+}
+.lang-option:hover { background: var(--cream); color: var(--ink); }
+.lang-option.active { color: var(--red); font-weight: 500; }
+
 /* ── ANIMATIONS ── */
 @keyframes rise { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
 .hero > div { animation: rise .7s ease both; }
