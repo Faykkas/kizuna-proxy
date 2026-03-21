@@ -2,17 +2,14 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 
-
-// ─── CAROUSEL SLIDES ────────────────────────────────────────────────────────
-// Pour ajouter des photos de colis, ajoutez une entrée ici :
-// { src: "/gallery1.png", alt: "description" }
+// ─── CAROUSEL SLIDES ─────────────────────────────────────────────────────────
 const SLIDES = [
   { src: "/gallery1.png", alt: "Order prepared for shipping" },
   { src: "/gallery2.png", alt: "Parcel ready to ship" },
   { src: "/gallery3.png", alt: "Items carefully packed" },
 ];
 
-// ─── LOGO ────────────────────────────────────────────────────────────────────
+// ─── LOGO ─────────────────────────────────────────────────────────────────────
 function LogoMark() {
   return (
     <img
@@ -23,7 +20,7 @@ function LogoMark() {
   );
 }
 
-// ─── SOCIAL ICONS ────────────────────────────────────────────────────────────
+// ─── ICONS ────────────────────────────────────────────────────────────────────
 function IconInstagram({ size = 15 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
@@ -40,8 +37,30 @@ function IconTiktok({ size = 15 }: { size?: number }) {
     </svg>
   );
 }
+function StarIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff">
+      <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+    </svg>
+  );
+}
 
-// ─── CAROUSEL ────────────────────────────────────────────────────────────────
+// ─── SCROLL REVEAL ────────────────────────────────────────────────────────────
+function useScrollReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll(".reveal");
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add("revealed"); observer.unobserve(e.target); }
+      }),
+      { threshold: 0.1 }
+    );
+    els.forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+}
+
+// ─── CAROUSEL ─────────────────────────────────────────────────────────────────
 function Carousel() {
   const [current, setCurrent] = useState(0);
   const [animDir, setAnimDir] = useState<"left" | "right" | null>(null);
@@ -61,7 +80,6 @@ function Carousel() {
     goTo((current + dir + SLIDES.length) % SLIDES.length);
   }, [current, goTo]);
 
-  // auto-advance
   const startAuto = useCallback(() => {
     autoRef.current = setInterval(() => move(1), 5000);
   }, [move]);
@@ -71,7 +89,6 @@ function Carousel() {
 
   useEffect(() => { startAuto(); return stopAuto; }, [startAuto, stopAuto]);
 
-  // keyboard
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft") move(-1);
@@ -81,7 +98,6 @@ function Carousel() {
     return () => window.removeEventListener("keydown", handler);
   }, [move]);
 
-  // scroll thumb strip without hijacking page scroll
   useEffect(() => {
     const strip = thumbsRef.current;
     const active = strip?.querySelector<HTMLElement>(".thumb-active");
@@ -90,7 +106,6 @@ function Carousel() {
     }
   }, [current]);
 
-  // touch swipe
   const touchStartX = useRef(0);
   const onTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; };
   const onTouchEnd = (e: React.TouchEvent) => {
@@ -100,24 +115,18 @@ function Carousel() {
 
   return (
     <div className="carousel" onMouseEnter={stopAuto} onMouseLeave={startAuto}>
-      {/* Stage */}
-      <div
-        className="carousel-stage"
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-      >
+      <div className="carousel-stage" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         {SLIDES.map((s, i) => (
-          <div
-            key={i}
-            className={[
-              "carousel-slide",
-              i === current ? "active" : "",
-              isAnimating && i === (current - (animDir === "left" ? 1 : -1) + SLIDES.length) % SLIDES.length
-                ? animDir === "left" ? "exit-left" : "exit-right"
-                : "",
-            ].join(" ").trim()}
-          >
-            <img src={s.src} alt={s.alt} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex"); }} />
+          <div key={i} className={[
+            "carousel-slide",
+            i === current ? "active" : "",
+            isAnimating && i === (current - (animDir === "left" ? 1 : -1) + SLIDES.length) % SLIDES.length
+              ? animDir === "left" ? "exit-left" : "exit-right" : "",
+          ].join(" ").trim()}>
+            <img src={s.src} alt={s.alt} onError={(e) => {
+              (e.target as HTMLImageElement).style.display = "none";
+              (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex");
+            }} />
             <div className="img-ph" style={{ display: "none" }}>
               <span className="ph-jp">荷物</span>
               <span className="ph-lbl">{s.src.split("/").pop()}</span>
@@ -126,26 +135,23 @@ function Carousel() {
         ))}
         <div className="carousel-counter">{current + 1} / {SLIDES.length}</div>
       </div>
-
-      {/* Arrows */}
       <button className="carousel-btn prev" onClick={() => move(-1)} aria-label="Previous">
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" stroke="currentColor"><polyline points="11 4 6 9 11 14" /></svg>
       </button>
       <button className="carousel-btn next" onClick={() => move(1)} aria-label="Next">
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" stroke="currentColor"><polyline points="7 4 12 9 7 14" /></svg>
       </button>
-
-      {/* Thumbnails */}
       <div className="carousel-thumbs" ref={thumbsRef}>
         {SLIDES.map((s, i) => (
           <div key={i} className={`carousel-thumb ${i === current ? "active thumb-active" : ""}`} onClick={() => goTo(i)}>
-            <img src={s.src} alt={s.alt} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex"); }} />
+            <img src={s.src} alt={s.alt} onError={(e) => {
+              (e.target as HTMLImageElement).style.display = "none";
+              (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex");
+            }} />
             <div className="thumb-ph" style={{ display: "none" }}>荷物</div>
           </div>
         ))}
       </div>
-
-      {/* Dots (mobile) */}
       <div className="carousel-dots">
         {SLIDES.map((_, i) => (
           <div key={i} className={`carousel-dot ${i === current ? "active" : ""}`} onClick={() => goTo(i)} />
@@ -155,9 +161,8 @@ function Carousel() {
   );
 }
 
-// ─── FORM ────────────────────────────────────────────────────────────────────
+// ─── FORM ─────────────────────────────────────────────────────────────────────
 const FORMSPREE_ID = "https://formspree.io/f/mlgpvrvo";
-
 type FormState = { name: string; email: string; contact: string; platform: string; itemLink: string; country: string; message: string; };
 const emptyForm: FormState = { name: "", email: "", contact: "", platform: "", itemLink: "", country: "", message: "" };
 
@@ -191,17 +196,13 @@ function RequestForm() {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          contact: form.contact,
-          platform: form.platform,
-          item_link: form.itemLink,
-          country: form.country,
-          message: form.message,
+          name: form.name, email: form.email, contact: form.contact,
+          platform: form.platform, item_link: form.itemLink,
+          country: form.country, message: form.message,
         }),
       });
       if (res.ok) { setStatus("success"); setForm(emptyForm); }
-      else { setStatus("error"); }
+      else setStatus("error");
     } catch { setStatus("error"); }
   }
 
@@ -255,9 +256,7 @@ function RequestForm() {
         <textarea rows={6} placeholder="Describe the item in detail — size, quantity, budget, condition, and any other important information…" value={form.message} onChange={e => update("message", e.target.value)} />
         {errors.message && <span className="f-err">{errors.message}</span>}
       </div>
-      {status === "error" && (
-        <p style={{ fontSize: ".78rem", color: "var(--red)", marginBottom: ".5rem" }}>Something went wrong. Please try again.</p>
-      )}
+      {status === "error" && <p style={{ fontSize: ".78rem", color: "var(--red)", marginBottom: ".5rem" }}>Something went wrong. Please try again.</p>}
       <div className="f-actions">
         <span className="f-note">Each request is reviewed personally.</span>
         <button type="button" className="btn btn-red" onClick={handleSubmit} disabled={status === "sending"}>
@@ -268,36 +267,15 @@ function RequestForm() {
   );
 }
 
-// ─── FAQ ─────────────────────────────────────────────────────────────────────
+// ─── FAQ ──────────────────────────────────────────────────────────────────────
 const FAQ_ITEMS = [
-  {
-    q: "What is a proxy service?",
-    a: "A proxy service means we purchase items on your behalf from Japan — whether online or directly in physical stores in Tokyo. We act as your trusted local representative, bridging the gap between you and Japan."
-  },
-  {
-    q: "What payment methods do you accept?",
-    a: "We accept PayPal only — either Goods & Services or Friends & Family. If you pay via Goods & Services (buyer protection), an additional 4% fee applies to cover PayPal's commission. Please note: we always ship to the address registered on your PayPal account, so make sure your delivery address matches your PayPal address before placing a request."
-  },
-  {
-    q: "How long does it take to find an item?",
-    a: "For online orders, we generally search and purchase within the same day. However, during periods of high demand, it may take a little longer. For physical store visits or special requests, timing is assessed case by case — every situation is different and we always communicate with you directly."
-  },
-  {
-    q: "Can you visit any store in Japan?",
-    a: "We cover stores across Tokyo. If an item requires travel outside of Tokyo, additional costs will apply to account for the extra travel time and transportation. We will always let you know in advance."
-  },
-  {
-    q: "Can you buy from any online platform?",
-    a: "We can purchase from most Japanese online platforms. However, we reserve the right to decline requests from websites that appear suspicious or unsafe — we will never share our personal address with clearly untrustworthy sites. If a site seems borderline, we will discuss it with you and proceed only with your agreement and mutual understanding."
-  },
-  {
-    q: "How is shipping handled?",
-    a: "Once all your items are ready, we discuss the shipping method together. Costs depend on the weight, size, and your destination country. Everything is fully transparent and you choose the option that works best for you."
-  },
-  {
-    q: "Do you offer discounts for multiple items?",
-    a: "Yes — for larger orders we can offer a reduced service fee. Simply include all the items in your initial request message and we will come back to you with a tailored quote."
-  },
+  { q: "What is a proxy service?", a: "A proxy service means we purchase items on your behalf from Japan — whether online or directly in physical stores in Tokyo. We act as your trusted local representative, bridging the gap between you and Japan." },
+  { q: "What payment methods do you accept?", a: "We accept PayPal only — either Goods & Services or Friends & Family. If you pay via Goods & Services (buyer protection), an additional 4% fee applies to cover PayPal's commission. Please note: we always ship to the address registered on your PayPal account, so make sure your delivery address matches your PayPal address before placing a request." },
+  { q: "How long does it take to find an item?", a: "For online orders, we generally search and purchase within the same day. However, during periods of high demand, it may take a little longer. For physical store visits or special requests, timing is assessed case by case — every situation is different and we always communicate with you directly." },
+  { q: "Can you visit any store in Japan?", a: "We cover stores across Tokyo. If an item requires travel outside of Tokyo, additional costs will apply to account for the extra travel time and transportation. We will always let you know in advance." },
+  { q: "Can you buy from any online platform?", a: "We can purchase from most Japanese online platforms. However, we reserve the right to decline requests from websites that appear suspicious or unsafe — we will never share our personal address with clearly untrustworthy sites. If a site seems borderline, we will discuss it with you and proceed only with your agreement and mutual understanding." },
+  { q: "How is shipping handled?", a: "Once all your items are ready, we discuss the shipping method together. Costs depend on the weight, size, and your destination country. Everything is fully transparent and you choose the option that works best for you." },
+  { q: "Do you offer discounts for multiple items?", a: "Yes — for larger orders we can offer a reduced service fee. Simply include all the items in your initial request message and we will come back to you with a tailored quote." },
 ];
 
 function FaqSection() {
@@ -319,7 +297,7 @@ function FaqSection() {
   );
 }
 
-// ─── BACK TO TOP ─────────────────────────────────────────────────────────────
+// ─── BACK TO TOP ──────────────────────────────────────────────────────────────
 function BackToTop() {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -344,46 +322,6 @@ function BackToTop() {
   );
 }
 
-// ─── SCROLL ANIMATION HOOK ───────────────────────────────────────────────────
-function useScrollReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll(".reveal");
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("revealed"); observer.unobserve(e.target); } }),
-      { threshold: 0.12 }
-    );
-    els.forEach(el => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-}
-
-// ─── ANIMATED COUNTER ────────────────────────────────────────────────────────
-function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      observer.disconnect();
-      let start = 0;
-      const duration = 1800;
-      const step = (timestamp: number) => {
-        if (!start) start = timestamp;
-        const progress = Math.min((timestamp - start) / duration, 1);
-        const ease = 1 - Math.pow(1 - progress, 3);
-        setCount(Math.floor(ease * target));
-        if (progress < 1) requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    }, { threshold: 0.5 });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [target]);
-  return <span ref={ref}>{count}{suffix}</span>;
-}
-
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -398,9 +336,54 @@ export default function Home() {
     { href: "#faq", label: "FAQ" },
   ];
 
+  const whatWeBuy = [
+    {
+      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Mercari_Logo.svg/1200px-Mercari_Logo.svg.png",
+      imgBg: "#e8f5e9",
+      title: "Mercari Japan",
+      desc: "Japan's largest secondhand marketplace. Vintage clothing, rare sneakers, electronics, toys — thousands of listings unavailable outside Japan.",
+      tags: ["メルカリ", "Secondhand", "Rare finds", "Vintage"],
+    },
+    {
+      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Yahoo%21_Japan_logo.svg/1200px-Yahoo%21_Japan_logo.svg.png",
+      imgBg: "#fff8e1",
+      title: "Yahoo Auctions Japan",
+      desc: "Bid on millions of listings daily — collectibles, manga, retro games, fashion, and hard-to-find items straight from Japanese sellers.",
+      tags: ["ヤフオク", "Auctions", "Collectibles", "Manga"],
+    },
+    {
+      img: "https://images.stockcake.com/public/5/5/e/55e2b46e-8db5-424f-9c86-5d8e3041e86a_large/colorful-sneaker-collection-stockcake.jpg",
+      imgBg: "#f3e5f5",
+      title: "Limited & Exclusive Drops",
+      desc: "Nike Japan exclusives, Supreme collabs, BAPE — we queue and go in-store to secure limited releases you cannot get elsewhere.",
+      tags: ["Nike Japan", "Supreme", "BAPE", "Streetwear"],
+    },
+    {
+      img: "https://images.pokemoncenter.com/content/dam/pokemoncenter/en-us/assets/homepage/241105_PokemonCards_ModuleA_US.jpg",
+      imgBg: "#e3f2fd",
+      title: "Pokémon & Anime Goods",
+      desc: "Japanese Pokémon card sets, exclusive booster packs, One Piece figures, Dragon Ball merch, artbooks — straight from Japanese retailers.",
+      tags: ["Pokémon Cards", "One Piece", "Dragon Ball", "Figures"],
+    },
+    {
+      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/NintendoSwitchLogo.svg/1200px-NintendoSwitchLogo.svg.png",
+      imgBg: "#fce4ec",
+      title: "Games & Electronics",
+      desc: "Nintendo Switch Japan-exclusive titles, retro consoles, limited bundles, PlayStation Japan releases, and electronics only found in Japan.",
+      tags: ["Nintendo", "PlayStation", "Retro games", "Exclusives"],
+    },
+    {
+      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Akihabara_dsc04764.jpg/1280px-Akihabara_dsc04764.jpg",
+      imgBg: "#e8eaf6",
+      title: "Tokyo Store Visits",
+      desc: "Akihabara, Shibuya, Harajuku, Nakano Broadway — we physically visit any store in Tokyo to find exactly what you are looking for.",
+      tags: ["Akihabara", "Shibuya", "Harajuku", "In-store"],
+    },
+  ];
+
   return (
     <>
-      {/* ── NAV ── */}
+      {/* NAV */}
       <nav>
         <div className="nav-inner">
           <a href="#" className="logo">
@@ -428,7 +411,7 @@ export default function Home() {
         )}
       </nav>
 
-      {/* ── HERO ── */}
+      {/* HERO */}
       <div className="hero">
         <div>
           <div className="eyebrow"><div className="eyebrow-line" /><span>Franco-Japanese proxy service</span></div>
@@ -457,10 +440,10 @@ export default function Home() {
         </div>
         <div className="hero-visual">
           <div className="hero-img">
-            <img src="/Slide1.png" alt="Tokyo" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex"); }} />
+            <img src="/Slide1.png" alt="Kizuna Proxy" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex"); }} />
             <div className="img-ph" style={{ display: "none" }}>
               <span className="ph-jp">東京</span>
-              <span className="ph-lbl">slide1.jpg</span>
+              <span className="ph-lbl">Slide1.png</span>
             </div>
           </div>
         </div>
@@ -468,35 +451,8 @@ export default function Home() {
 
       <div className="wrap"><hr className="hr" /></div>
 
-      {/* ── STATS BAR ── */}
-      <div className="stats-bar reveal">
-        <div className="wrap">
-          <div className="stats-inner">
-            <div className="stat-item">
-              <strong><Counter target={150} suffix="+" /></strong>
-              <span>Orders completed</span>
-            </div>
-            <div className="stat-sep" />
-            <div className="stat-item">
-              <strong><Counter target={25} suffix="+" /></strong>
-              <span>Countries served</span>
-            </div>
-            <div className="stat-sep" />
-            <div className="stat-item">
-              <strong><Counter target={100} suffix="%" /></strong>
-              <span>Transparent pricing</span>
-            </div>
-            <div className="stat-sep" />
-            <div className="stat-item">
-              <strong>Same day</strong>
-              <span>Response time</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── HOW IT WORKS ── */}
-      <section id="how-it-works" className="section">
+      {/* HOW IT WORKS */}
+      <section id="how-it-works" className="section reveal">
         <div className="wrap">
           <div className="sec-header">
             <p className="sec-label">How it works</p>
@@ -520,8 +476,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── ABOUT ── */}
-      <section id="about" className="section">
+      {/* ABOUT */}
+      <section id="about" className="section reveal">
         <div className="wrap">
           <div className="sec-header">
             <p className="sec-label">About us</p>
@@ -544,14 +500,14 @@ export default function Home() {
               <img src="/Slide2.png" alt="About Kizuna Proxy" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex"); }} />
               <div className="img-ph" style={{ display: "none" }}>
                 <span className="ph-jp" style={{ fontSize: "2.5rem" }}>絆</span>
-                <span className="ph-lbl">slide2.jpg</span>
+                <span className="ph-lbl">Slide2.png</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── WHAT WE BUY ── */}
+      {/* WHAT WE BUY */}
       <section id="what-we-buy" className="section reveal">
         <div className="wrap">
           <div className="sec-header">
@@ -560,20 +516,17 @@ export default function Home() {
             <p className="sec-desc">From online marketplaces to physical stores in Tokyo — if it exists in Japan, we can get it for you.</p>
           </div>
           <div className="wbuy-grid">
-            {[
-              { icon: "🛒", title: "Mercari Japan", desc: "Japan's largest secondhand marketplace. Find rare items, vintage goods, and great deals unavailable outside Japan.", tags: ["メルカリ", "Secondhand", "Rare finds"] },
-              { icon: "🏷️", title: "Yahoo Auctions Japan", desc: "Bid on millions of listings — collectibles, electronics, fashion, toys, and more, directly from Japanese sellers.", tags: ["ヤフオク", "Auctions", "Collectibles"] },
-              { icon: "👟", title: "Limited & Exclusive Releases", desc: "Sneakers, streetwear, collabs, pop-up exclusives — we queue, we go in-store, we secure what you need.", tags: ["Sneakers", "Streetwear", "Limited drops"] },
-              { icon: "🎌", title: "Anime & Manga Goods", desc: "Figures, artbooks, limited edition sets, doujinshi, official merchandise — straight from Japanese retailers.", tags: ["Figures", "Manga", "Merch"] },
-              { icon: "🎮", title: "Games & Electronics", desc: "Japanese game releases, retro consoles, exclusive bundles, and electronics only available in the Japanese market.", tags: ["Nintendo", "Sony", "Retro"] },
-              { icon: "🏪", title: "Tokyo Store Visits", desc: "Akihabara, Shibuya, Harajuku — we physically visit any store in Tokyo to find exactly what you are looking for.", tags: ["Akihabara", "Shibuya", "In-store"] },
-            ].map((item, i) => (
-              <div key={i} className="wbuy-card reveal" style={{ animationDelay: `${i * 0.08}s` }}>
-                <div className="wbuy-icon">{item.icon}</div>
-                <h3>{item.title}</h3>
-                <p>{item.desc}</p>
-                <div className="wbuy-tags">
-                  {item.tags.map(t => <span key={t} className="wbuy-tag">{t}</span>)}
+            {whatWeBuy.map((item, i) => (
+              <div key={i} className="wbuy-card">
+                <div className="wbuy-img" style={{ background: item.imgBg }}>
+                  <img src={item.img} alt={item.title} />
+                </div>
+                <div className="wbuy-body">
+                  <h3>{item.title}</h3>
+                  <p>{item.desc}</p>
+                  <div className="wbuy-tags">
+                    {item.tags.map(t => <span key={t} className="wbuy-tag">{t}</span>)}
+                  </div>
                 </div>
               </div>
             ))}
@@ -581,8 +534,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── PRICING ── */}
-      <section id="pricing" className="section">
+      {/* PRICING */}
+      <section id="pricing" className="section reveal">
         <div className="wrap">
           <div className="sec-header">
             <p className="sec-label">Pricing</p>
@@ -597,8 +550,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── GALLERY ── */}
-      <section id="photos" className="section" style={{ background: "var(--cream)" }}>
+      {/* GALLERY */}
+      <section id="photos" className="section reveal" style={{ background: "var(--cream)" }}>
         <div className="wrap">
           <div className="sec-header">
             <p className="sec-label">Gallery</p>
@@ -609,8 +562,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── REQUEST ── */}
-      <section id="request-wrap">
+      {/* REQUEST */}
+      <section id="request-wrap" className="reveal">
         <div className="wrap">
           <div className="sec-header">
             <p className="sec-label">Request</p>
@@ -637,8 +590,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FAQ ── */}
-      <section id="faq" className="section" style={{ background: "var(--cream)" }}>
+      {/* FAQ */}
+      <section id="faq" className="section reveal" style={{ background: "var(--cream)" }}>
         <div className="wrap">
           <div className="sec-header">
             <p className="sec-label">FAQ</p>
@@ -649,7 +602,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
+      {/* FOOTER */}
       <footer>
         <div className="footer-inner">
           <div className="footer-logo"><span className="r">Kizuna</span> Proxy</div>
@@ -667,15 +620,17 @@ export default function Home() {
 
       <BackToTop />
 
-      {/* ── FLOATING TRUSTPILOT ── */}
+      {/* FLOATING TRUSTPILOT */}
       <a
         href="https://fr.trustpilot.com/review/kizunaproxy.com"
         target="_blank"
         rel="noopener noreferrer"
         className="trustpilot-float"
-        aria-label="Trustpilot"
+        aria-label="See our reviews on Trustpilot"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        <div className="tp-stars">
+          <StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarIcon />
+        </div>
         <span>Reviews</span>
       </a>
     </>
