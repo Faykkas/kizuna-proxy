@@ -98,50 +98,56 @@ function useDarkMode(): [boolean, () => void] {
 // ─── CAROUSEL ─────────────────────────────────────────────────────────────────
 function Carousel() {
   const [current, setCurrent] = useState(0);
-  const [animDir, setAnimDir] = useState<"left" | "right" | null>(null);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const thumbsRef = useRef<HTMLDivElement>(null);
+  const currentRef = useRef(0);
   const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const thumbsRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef(0);
 
   const goTo = useCallback((next: number) => {
-    if (isAnimating || next === current) return;
-    setAnimDir(next > current ? "left" : "right");
-    setIsAnimating(true);
-    setCurrent(next);
-    setTimeout(() => { setIsAnimating(false); setAnimDir(null); }, 580);
-  }, [isAnimating, current]);
+    const n = (next + SLIDES.length) % SLIDES.length;
+    currentRef.current = n;
+    setCurrent(n);
+  }, []);
 
   const move = useCallback((dir: number) => {
-    goTo((current + dir + SLIDES.length) % SLIDES.length);
-  }, [current, goTo]);
+    goTo(currentRef.current + dir);
+  }, [goTo]);
 
-  const startAuto = useCallback(() => { autoRef.current = setInterval(() => move(1), 5000); }, [move]);
-  const stopAuto = useCallback(() => { if (autoRef.current) clearInterval(autoRef.current); }, []);
-
-  useEffect(() => { startAuto(); return stopAuto; }, [startAuto, stopAuto]);
   useEffect(() => {
-    const h = (e: KeyboardEvent) => { if (e.key === "ArrowLeft") move(-1); if (e.key === "ArrowRight") move(1); };
+    autoRef.current = setInterval(() => move(1), 5000);
+    return () => { if (autoRef.current) clearInterval(autoRef.current); };
+  }, [move]);
+
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") move(-1);
+      if (e.key === "ArrowRight") move(1);
+    };
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
   }, [move]);
+
   useEffect(() => {
     const strip = thumbsRef.current;
     const active = strip?.querySelector<HTMLElement>(".thumb-active");
     if (strip && active) strip.scrollLeft = active.offsetLeft - strip.offsetWidth / 2 + active.offsetWidth / 2;
   }, [current]);
 
-  const touchStartX = useRef(0);
+  const pauseAuto = () => { if (autoRef.current) clearInterval(autoRef.current); };
+  const resumeAuto = () => { autoRef.current = setInterval(() => move(1), 5000); };
+
   return (
-    <div className="carousel" onMouseEnter={stopAuto} onMouseLeave={startAuto}>
+    <div className="carousel" onMouseEnter={pauseAuto} onMouseLeave={resumeAuto}>
       <div className="carousel-stage"
         onTouchStart={e => { touchStartX.current = e.touches[0].clientX; }}
         onTouchEnd={e => { const dx = e.changedTouches[0].clientX - touchStartX.current; if (Math.abs(dx) > 40) move(dx < 0 ? 1 : -1); }}>
         {SLIDES.map((s, i) => (
-          <div key={i} className={["carousel-slide", i === current ? "active" : "",
-            isAnimating && i === (current - (animDir === "left" ? 1 : -1) + SLIDES.length) % SLIDES.length
-              ? animDir === "left" ? "exit-left" : "exit-right" : ""].join(" ").trim()}>
-            <img src={s.src} alt={s.alt} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex"); }} />
-            <div className="img-ph" style={{ display: "none" }}><span className="ph-jp">荷物</span><span className="ph-lbl">{s.src.split("/").pop()}</span></div>
+          <div key={i} className={`carousel-slide${i === current ? " active" : ""}`}>
+            <img src={s.src} alt={s.alt} onError={(e) => {
+              (e.target as HTMLImageElement).style.display = "none";
+              (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex");
+            }} />
+            <div className="img-ph" style={{ display: "none" }}><span className="ph-jp">荷物</span></div>
             <div className="carousel-caption">
               <strong>{s.title}</strong>
               <span>{s.sub}</span>
@@ -158,14 +164,17 @@ function Carousel() {
       </button>
       <div className="carousel-thumbs" ref={thumbsRef}>
         {SLIDES.map((s, i) => (
-          <div key={i} className={`carousel-thumb ${i === current ? "active thumb-active" : ""}`} onClick={() => goTo(i)}>
-            <img src={s.src} alt={s.alt} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex"); }} />
+          <div key={i} className={`carousel-thumb${i === current ? " active thumb-active" : ""}`} onClick={() => goTo(i)}>
+            <img src={s.src} alt={s.alt} onError={(e) => {
+              (e.target as HTMLImageElement).style.display = "none";
+              (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex");
+            }} />
             <div className="thumb-ph" style={{ display: "none" }}>荷物</div>
           </div>
         ))}
       </div>
       <div className="carousel-dots">
-        {SLIDES.map((_, i) => <div key={i} className={`carousel-dot ${i === current ? "active" : ""}`} onClick={() => goTo(i)} />)}
+        {SLIDES.map((_, i) => <div key={i} className={`carousel-dot${i === current ? " active" : ""}`} onClick={() => goTo(i)} />)}
       </div>
     </div>
   );
@@ -313,6 +322,17 @@ export default function Home() {
 
   return (
     <>
+      {/* ANNOUNCEMENT BANNER */}
+      <div className="announce-bar">
+        <div className="announce-inner">
+          <span className="announce-pill">Coming soon</span>
+          <span className="announce-text">
+            🍡 Japanese snack boxes — curated in Tokyo, delivered to your door.
+          </span>
+          <span className="announce-sub">Join the waitlist →</span>
+        </div>
+      </div>
+
       {/* NAV */}
       <nav>
         <div className="nav-inner">
@@ -365,6 +385,33 @@ export default function Home() {
           </div>
         )}
       </nav>
+
+      {/* TRUST BAR - top of page */}
+      <div className="trust-bar">
+        <div className="wrap">
+          <div className="trust-inner">
+            <div className="trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>100% secure payments</span>
+            </div>
+            <div className="trust-sep" />
+            <div className="trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>Reply within 24 hours</span>
+            </div>
+            <div className="trust-sep" />
+            <div className="trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              <span>PayPal buyer protection</span>
+            </div>
+            <div className="trust-sep" />
+            <div className="trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <span>Worldwide shipping</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* HERO */}
       <div className="hero">
@@ -422,33 +469,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TRUST BADGES */}
-      <div className="trust-bar reveal">
-        <div className="wrap">
-          <div className="trust-inner">
-            <div className="trust-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span>100% secure payments</span>
-            </div>
-            <div className="trust-sep" />
-            <div className="trust-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              <span>Reply within 24 hours</span>
-            </div>
-            <div className="trust-sep" />
-            <div className="trust-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-              <span>PayPal buyer protection</span>
-            </div>
-            <div className="trust-sep" />
-            <div className="trust-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-              <span>Worldwide shipping</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* REVIEWS */}
       <section id="reviews" className="section reveal">
         <div className="wrap">
@@ -459,22 +479,23 @@ export default function Home() {
           </div>
           <div className="reviews-grid">
             {[
-              { name: "Lucas M.", country: "🇫🇷 France", item: "Nike Japan exclusive sneakers", text: "Super fast response, found the exact pair I wanted within hours. Packed perfectly and shipped with tracking. Will definitely order again!", stars: 5 },
-              { name: "Sarah K.", country: "🇺🇸 USA", item: "Pokémon Japanese booster packs", text: "I've tried other proxy services before but Kizuna is on another level. Personal, fast, and totally transparent about every cost.", stars: 5 },
-              { name: "Marco B.", country: "🇮🇹 Italy", item: "Mercari vintage streetwear", text: "They found three rare pieces I had been looking for months. Communication was excellent throughout the whole process.", stars: 5 },
-              { name: "Elena V.", country: "🇬🇷 Greece", item: "Lacoste × Harry Potter T-shirts", text: "Couldn't believe they managed to get these Japan-exclusive items shipped all the way to Greece. Photos of the package before shipping was a nice touch!", stars: 5 },
-              { name: "David L.", country: "🇨🇦 Canada", item: "Ancora fountain pen & ink", text: "Ordered some stationery from a Tokyo store. They visited in person and got everything on my list. Incredible service.", stars: 5 },
-              { name: "Yuki T.", country: "🇩🇪 Germany", item: "Yahoo Auctions collectibles", text: "Bidded on several Yahoo Auctions items, won all of them, and they handled the entire process smoothly. Highly recommend.", stars: 5 },
+              { name: "Thomas R.", country: "🇫🇷 France", item: "Nike Japan exclusive", date: "January 14, 2026", text: "Response was quick, got confirmation the same day. The only thing is I had to wait a bit longer than expected for the shipping quote but overall really happy with the result. Package arrived in perfect condition." },
+              { name: "Jessica M.", country: "🇺🇸 USA", item: "Pokémon Japanese cards", date: "February 3, 2026", text: "Found the card sets I was looking for, couldn't get them anywhere else. Communication was clear and costs were explained before anything. Would have liked a bit more photos of the package but honestly a solid service." },
+              { name: "Matteo C.", country: "🇮🇹 Italy", item: "Vintage streetwear – Mercari", date: "February 21, 2026", text: "They found exactly what I described. Kept me updated throughout which I appreciated. Not the cheapest option out there but you're paying for someone who actually speaks Japanese and handles everything properly." },
+              { name: "Yuki T.", country: "🇩🇪 Germany", item: "Yahoo Auctions collectibles", date: "March 8, 2026", text: "Used them for multiple Yahoo Auctions items at once. They won everything and handled all the Japanese communication. Took about a week total from request to shipping confirmation. Really smooth experience overall." },
             ].map((r, i) => (
               <div key={i} className="review-card">
-                <div className="review-stars">{"★".repeat(r.stars)}</div>
+                <div className="review-stars">★★★★★</div>
                 <p className="review-text">&ldquo;{r.text}&rdquo;</p>
                 <div className="review-footer">
                   <div>
                     <strong className="review-name">{r.name}</strong>
                     <span className="review-country">{r.country}</span>
                   </div>
-                  <span className="review-item">{r.item}</span>
+                  <div style={{ textAlign: "right" }}>
+                    <span className="review-item">{r.item}</span>
+                    <span className="review-date">{r.date}</span>
+                  </div>
                 </div>
               </div>
             ))}
