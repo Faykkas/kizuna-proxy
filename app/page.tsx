@@ -7,7 +7,7 @@ import type { Lang, T } from "./translations";
 
 // ─── CAROUSEL SLIDES ─────────────────────────────────────────────────────────
 const SLIDES = [
-  { src: "/ancora_order.jpg",      alt: "Ancora order", title: "Ancora Japan", sub: "Fountain pen ink · Shipped to Canada" },
+  { src: "/Ancora_order.jpg",      alt: "Ancora order", title: "Ancora Japan", sub: "Fountain pen ink · Shipped to Canada" },
   { src: "/yugioh_order.jpg",      alt: "Yu-Gi-Oh order", title: "Yu-Gi-Oh!", sub: "Rare cards · Shipped to USA" },
   { src: "/Jojo_order.jpg",        alt: "JoJo order", title: "JoJo's Bizarre Adventure", sub: "T-shirt · Shipped to USA" },
   { src: "/Harrypotter_order.jpg", alt: "Harry Potter order", title: "Lacoste × Harry Potter", sub: "T-shirts · Shipped to Greece" },
@@ -302,6 +302,7 @@ export default function Home() {
     { href: "#how-it-works", label: t.nav.howItWorks },
     { href: "#about", label: t.nav.about },
     { href: "#what-we-buy", label: t.nav.whatWeBuy },
+    { href: "#reviews", label: "Reviews" },
     { href: "#pricing", label: t.nav.pricing },
     { href: "#photos", label: t.nav.gallery },
     { href: "#faq", label: t.nav.faq },
@@ -368,7 +369,6 @@ export default function Home() {
       {/* HERO */}
       <div className="hero">
         <div>
-          <div className="eyebrow"><div className="eyebrow-line" /><span>{t.hero.eyebrow}</span></div>
           <h1>
             {t.hero.title1}<br />
             <em>{t.hero.title2}</em>
@@ -417,6 +417,66 @@ export default function Home() {
               { n: "03", title: t.howItWorks.step3Title, body: t.howItWorks.step3Body },
             ].map(s => (
               <div key={s.n} className="step"><div className="step-bar" /><div className="step-num">{s.n}</div><h3>{s.title}</h3><p>{s.body}</p></div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TRUST BADGES */}
+      <div className="trust-bar reveal">
+        <div className="wrap">
+          <div className="trust-inner">
+            <div className="trust-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>100% secure payments</span>
+            </div>
+            <div className="trust-sep" />
+            <div className="trust-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>Reply within 24 hours</span>
+            </div>
+            <div className="trust-sep" />
+            <div className="trust-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              <span>PayPal buyer protection</span>
+            </div>
+            <div className="trust-sep" />
+            <div className="trust-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <span>Worldwide shipping</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* REVIEWS */}
+      <section id="reviews" className="section reveal">
+        <div className="wrap">
+          <div className="sec-header">
+            <p className="sec-label">Reviews</p>
+            <h2>What our <em>clients say</em></h2>
+            <p className="sec-desc">Real orders, real people, real experiences from around the world.</p>
+          </div>
+          <div className="reviews-grid">
+            {[
+              { name: "Lucas M.", country: "🇫🇷 France", item: "Nike Japan exclusive sneakers", text: "Super fast response, found the exact pair I wanted within hours. Packed perfectly and shipped with tracking. Will definitely order again!", stars: 5 },
+              { name: "Sarah K.", country: "🇺🇸 USA", item: "Pokémon Japanese booster packs", text: "I've tried other proxy services before but Kizuna is on another level. Personal, fast, and totally transparent about every cost.", stars: 5 },
+              { name: "Marco B.", country: "🇮🇹 Italy", item: "Mercari vintage streetwear", text: "They found three rare pieces I had been looking for months. Communication was excellent throughout the whole process.", stars: 5 },
+              { name: "Elena V.", country: "🇬🇷 Greece", item: "Lacoste × Harry Potter T-shirts", text: "Couldn't believe they managed to get these Japan-exclusive items shipped all the way to Greece. Photos of the package before shipping was a nice touch!", stars: 5 },
+              { name: "David L.", country: "🇨🇦 Canada", item: "Ancora fountain pen & ink", text: "Ordered some stationery from a Tokyo store. They visited in person and got everything on my list. Incredible service.", stars: 5 },
+              { name: "Yuki T.", country: "🇩🇪 Germany", item: "Yahoo Auctions collectibles", text: "Bidded on several Yahoo Auctions items, won all of them, and they handled the entire process smoothly. Highly recommend.", stars: 5 },
+            ].map((r, i) => (
+              <div key={i} className="review-card">
+                <div className="review-stars">{"★".repeat(r.stars)}</div>
+                <p className="review-text">&ldquo;{r.text}&rdquo;</p>
+                <div className="review-footer">
+                  <div>
+                    <strong className="review-name">{r.name}</strong>
+                    <span className="review-country">{r.country}</span>
+                  </div>
+                  <span className="review-item">{r.item}</span>
+                </div>
+              </div>
             ))}
           </div>
         </div>
