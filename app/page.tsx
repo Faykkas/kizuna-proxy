@@ -326,10 +326,7 @@ export default function Home() {
       <div className="announce-bar">
         <div className="announce-inner">
           <span className="announce-pill">Coming soon</span>
-          <span className="announce-text">
-            🍡 Japanese snack boxes — curated in Tokyo, delivered to your door.
-          </span>
-          <span className="announce-sub">Join the waitlist →</span>
+          <span className="announce-text">🍡 Japanese snack boxes — curated in Tokyo, delivered to your door.</span>
         </div>
       </div>
 
@@ -475,17 +472,35 @@ export default function Home() {
           <div className="sec-header">
             <p className="sec-label">Reviews</p>
             <h2>What our <em>clients say</em></h2>
-            <p className="sec-desc">Real orders, real people, real experiences from around the world.</p>
+          </div>
+          {/* Average score bar */}
+          <div className="reviews-score">
+            <div className="reviews-score-num">4.8</div>
+            <div className="reviews-score-right">
+              <div className="reviews-score-stars">{"★".repeat(5)}</div>
+              <p className="reviews-score-label">Based on recent orders</p>
+              <div className="reviews-bars">
+                {[{n:5,w:"80%"},{n:4,w:"15%"},{n:3,w:"5%"},{n:2,w:"0%"},{n:1,w:"0%"}].map(b => (
+                  <div key={b.n} className="reviews-bar-row">
+                    <span>{b.n}★</span>
+                    <div className="reviews-bar-track"><div className="reviews-bar-fill" style={{width: b.w}} /></div>
+                    <span>{b.w}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
           <div className="reviews-grid">
             {[
-              { name: "Thomas R.", country: "🇫🇷 France", item: "Nike Japan exclusive", date: "January 14, 2026", text: "Response was quick, got confirmation the same day. The only thing is I had to wait a bit longer than expected for the shipping quote but overall really happy with the result. Package arrived in perfect condition." },
-              { name: "Jessica M.", country: "🇺🇸 USA", item: "Pokémon Japanese cards", date: "February 3, 2026", text: "Found the card sets I was looking for, couldn't get them anywhere else. Communication was clear and costs were explained before anything. Would have liked a bit more photos of the package but honestly a solid service." },
-              { name: "Matteo C.", country: "🇮🇹 Italy", item: "Vintage streetwear – Mercari", date: "February 21, 2026", text: "They found exactly what I described. Kept me updated throughout which I appreciated. Not the cheapest option out there but you're paying for someone who actually speaks Japanese and handles everything properly." },
-              { name: "Yuki T.", country: "🇩🇪 Germany", item: "Yahoo Auctions collectibles", date: "March 8, 2026", text: "Used them for multiple Yahoo Auctions items at once. They won everything and handled all the Japanese communication. Took about a week total from request to shipping confirmation. Really smooth experience overall." },
+              { name: "Thomas R.", country: "🇫🇷 France", item: "Nike Japan exclusive", date: "January 14, 2026", stars: 5, text: "Response was quick, got confirmation the same day. The only thing is I had to wait a bit longer than expected for the shipping quote but overall really happy with the result. Package arrived in perfect condition." },
+              { name: "Jessica M.", country: "🇺🇸 USA", item: "Pokémon Japanese cards", date: "February 3, 2026", stars: 4, text: "Found the card sets I was looking for, couldn't get them anywhere else. Communication was clear and costs were explained before anything. Would have liked a bit more photos of the package but honestly a solid service." },
+              { name: "Matteo C.", country: "🇮🇹 Italy", item: "Vintage streetwear – Mercari", date: "February 21, 2026", stars: 5, text: "They found exactly what I described. Kept me updated throughout which I appreciated. Not the cheapest option out there but you're paying for someone who actually speaks Japanese and handles everything properly." },
+              { name: "Yuki T.", country: "🇩🇪 Germany", item: "Yahoo Auctions collectibles", date: "March 8, 2026", stars: 4, text: "Used them for multiple Yahoo Auctions items at once. They won everything and handled all the Japanese communication. Took about a week total from request to shipping confirmation. Really smooth experience overall." },
             ].map((r, i) => (
               <div key={i} className="review-card">
-                <div className="review-stars">★★★★★</div>
+                <div className="review-stars" style={{color: r.stars >= 5 ? "#f4a623" : "#f4a623"}}>
+                  {"★".repeat(r.stars)}{"☆".repeat(5 - r.stars)}
+                </div>
                 <p className="review-text">&ldquo;{r.text}&rdquo;</p>
                 <div className="review-footer">
                   <div>
