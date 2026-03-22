@@ -7,9 +7,10 @@ import type { Lang, T } from "./translations";
 
 // ─── CAROUSEL SLIDES ─────────────────────────────────────────────────────────
 const SLIDES = [
-  { src: "/gallery1.png", alt: "Order prepared for shipping" },
-  { src: "/gallery2.png", alt: "Parcel ready to ship" },
-  { src: "/gallery3.png", alt: "Items carefully packed" },
+  { src: "/ancora_order.jpg",      alt: "Ancora order", title: "Ancora Japan", sub: "Fountain pen ink · Shipped to Canada" },
+  { src: "/yugioh_order.jpg",      alt: "Yu-Gi-Oh order", title: "Yu-Gi-Oh!", sub: "Rare cards · Shipped to USA" },
+  { src: "/Jojo_order.jpg",        alt: "JoJo order", title: "JoJo's Bizarre Adventure", sub: "T-shirt · Shipped to USA" },
+  { src: "/Harrypotter_order.jpg", alt: "Harry Potter order", title: "Lacoste × Harry Potter", sub: "T-shirts · Shipped to Greece" },
 ];
 
 // ─── LOGO ─────────────────────────────────────────────────────────────────────
@@ -141,6 +142,10 @@ function Carousel() {
               ? animDir === "left" ? "exit-left" : "exit-right" : ""].join(" ").trim()}>
             <img src={s.src} alt={s.alt} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex"); }} />
             <div className="img-ph" style={{ display: "none" }}><span className="ph-jp">荷物</span><span className="ph-lbl">{s.src.split("/").pop()}</span></div>
+            <div className="carousel-caption">
+              <strong>{s.title}</strong>
+              <span>{s.sub}</span>
+            </div>
           </div>
         ))}
         <div className="carousel-counter">{current + 1} / {SLIDES.length}</div>
@@ -547,12 +552,6 @@ export default function Home() {
       </footer>
 
       <BackToTop />
-
-      {/* FLOATING TRUSTPILOT */}
-      <a href="https://fr.trustpilot.com/review/kizunaproxy.com" target="_blank" rel="noopener noreferrer" className="trustpilot-float" aria-label="See our reviews on Trustpilot">
-        <div className="tp-stars"><StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarIcon /></div>
-        <span>{t.trustpilot}</span>
-      </a>
     </>
   );
 }

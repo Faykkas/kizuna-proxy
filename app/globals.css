@@ -219,6 +219,24 @@ h2 em { font-style: italic; color: var(--red); }
 .social-links.hero-social .social-link { width: 32px; height: 32px; background: transparent; border-color: var(--border); color: var(--warm); }
 .social-links.hero-social .social-link:hover { border-color: var(--ink); color: var(--ink); }
 
+/* slide caption overlay */
+.carousel-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(13,11,9,.72);
+  backdrop-filter: blur(4px);
+  padding: 1rem 1.5rem;
+  display: flex; flex-direction: column; gap: .2rem;
+}
+.carousel-caption strong {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 600;
+  color: #fff; line-height: 1.2;
+}
+.carousel-caption span {
+  font-size: .72rem; letter-spacing: .1em;
+  text-transform: uppercase; color: rgba(255,255,255,.6);
+}
+
 /* ── REQUEST ── */
 #request-wrap { padding: 6rem 0; background: var(--paper); }
 .req-layout { display: grid; grid-template-columns: 320px 1fr; gap: 5rem; margin-top: 3.5rem; align-items: start; }
@@ -327,9 +345,18 @@ html.dark .nav-cta { background: var(--red) !important; }
 html.dark .mobile-menu { background: var(--paper); }
 /* sections with hardcoded dark bg — override back */
 html.dark #pricing { background: #0a0806; }
-html.dark #pricing .p-card { background: rgba(240,236,230,.03); }
+html.dark #pricing h2 { color: var(--cream); }
+html.dark #pricing .sec-label { color: rgba(240,236,230,.35); }
+html.dark #pricing .sec-label::before { background: rgba(240,236,230,.25); }
+html.dark #pricing .sec-desc { color: rgba(240,236,230,.5); }
+html.dark #pricing .p-card { background: rgba(240,236,230,.04); }
+html.dark #pricing .p-card:hover { background: rgba(240,236,230,.07); }
 html.dark #pricing .pricing-grid { background: rgba(240,236,230,.06); border-color: rgba(240,236,230,.08); }
-html.dark #pricing .p-note { background: rgba(240,236,230,.02); border-color: rgba(240,236,230,.06); color: rgba(240,236,230,.4); }
+html.dark #pricing .p-tag { color: rgba(240,236,230,.4); }
+html.dark #pricing .p-price { color: #f0ece6; }
+html.dark #pricing .p-unit { color: rgba(240,236,230,.35); }
+html.dark #pricing .p-desc { color: rgba(240,236,230,.55); }
+html.dark #pricing .p-note { background: rgba(240,236,230,.02); border-color: rgba(240,236,230,.07); color: rgba(240,236,230,.4); }
 html.dark footer { background: #0a0806; }
 html.dark footer p { color: rgba(240,236,230,.3); }
 html.dark .footer-logo { color: rgba(240,236,230,.5); }
