@@ -282,6 +282,24 @@ h2 em { font-style: italic; color: var(--red); }
   text-transform: uppercase; color: rgba(255,255,255,.6);
 }
 
+/* event card */
+.p-event-card { display: flex; align-items: center; gap: 1.5rem; margin-top: 1.5rem; background: var(--cream); border: 1px solid var(--border); border-left: 3px solid var(--red); border-radius: 2px; padding: 1.5rem 2rem; flex-wrap: wrap; }
+.p-event-icon { flex-shrink: 0; }
+.p-event-body { flex: 1; min-width: 200px; }
+.p-event-body strong { display: block; font-size: .9rem; font-weight: 600; color: var(--ink); margin-bottom: .35rem; font-family: 'Jost', sans-serif; }
+.p-event-body p { font-size: .83rem; line-height: 1.7; color: var(--warm); font-weight: 300; margin: 0; }
+.p-event-dm { color: var(--red); font-weight: 500; cursor: pointer; }
+.p-event-btn { flex-shrink: 0; background: var(--ink); color: var(--white); padding: .5rem 1.2rem; border-radius: 1px; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; font-family: 'Jost', sans-serif; transition: background .2s; white-space: nowrap; }
+.p-event-btn:hover { background: var(--red); }
+html.dark .p-event-card { background: var(--mist); }
+
+/* ── COUNTRIES BAR ── */
+.countries-bar { padding: 2rem 0; background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.countries-label { font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; color: var(--warm); margin-bottom: 1rem; text-align: center; }
+.countries-flags { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .6rem; }
+.country-flag { font-size: 1.6rem; line-height: 1; transition: transform .2s; cursor: default; }
+.country-flag:hover { transform: scale(1.25); }
+.countries-more { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--warm); padding: .3rem .7rem; border: 1px solid var(--border); border-radius: 1px; }
 /* ── REQUEST ── */
 #request-wrap { padding: 6rem 0; background: var(--paper); }
 .req-layout { display: grid; grid-template-columns: 320px 1fr; gap: 5rem; margin-top: 3.5rem; align-items: start; }
@@ -498,6 +516,26 @@ html.dark .about-img { box-shadow: 0 16px 40px rgba(0,0,0,.3); }
 html.dark .reviews-score { background: var(--white); }
 html.dark .rcarousel-card { background: var(--white); }
 html.dark .rcarousel-btn { background: var(--white); }
+
+/* ── EVENT CARD ── */
+.p-event-card { display: flex; align-items: center; gap: 1.5rem; margin-top: 1.5rem; padding: 1.5rem 2rem; background: var(--cream); border: 1px solid var(--border); border-left: 3px solid var(--red); border-radius: 2px; flex-wrap: wrap; }
+.p-event-icon { flex-shrink: 0; }
+.p-event-body { flex: 1; min-width: 200px; }
+.p-event-body strong { display: block; font-size: .85rem; font-weight: 600; color: var(--ink); margin-bottom: .35rem; letter-spacing: .02em; }
+.p-event-body p { font-size: .82rem; line-height: 1.7; color: var(--warm); font-weight: 300; margin: 0; }
+.p-event-dm { color: var(--red); font-weight: 400; }
+.p-event-btn { flex-shrink: 0; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; background: var(--ink); color: var(--white); padding: .5rem 1.1rem; border-radius: 1px; text-decoration: none; font-family: 'Jost', sans-serif; font-weight: 500; white-space: nowrap; transition: background .2s; }
+.p-event-btn:hover { background: var(--red); }
+html.dark .p-event-card { background: var(--mist); border-color: rgba(240,236,230,.1); border-left-color: var(--red); }
+
+/* ── COUNTRIES BAR ── */
+.countries-bar { padding: 2.5rem 0; background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.countries-label { font-size: .65rem; letter-spacing: .16em; text-transform: uppercase; color: var(--warm); text-align: center; margin-bottom: 1.2rem; }
+.countries-flags { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; align-items: center; }
+.country-flag { font-size: 1.6rem; line-height: 1; filter: drop-shadow(0 1px 3px rgba(13,11,9,.1)); transition: transform .2s; cursor: default; }
+.country-flag:hover { transform: scale(1.25) translateY(-2px); }
+.countries-more { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--warm); margin-left: .3rem; }
+html.dark .countries-bar { background: var(--white); }
 
 /* ── ANIMATIONS ── */
 @keyframes rise { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }

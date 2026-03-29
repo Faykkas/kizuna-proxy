@@ -395,6 +395,61 @@ function ReviewsCarousel() {
   );
 }
 
+// ─── ANIMATED PRICE ──────────────────────────────────────────────────────────
+function AnimatedPrice({ value, symbol = "¥" }: { value: number; symbol?: string }) {
+  const [display, setDisplay] = useState(0);
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      let start = null;
+      const duration = 1200;
+      const step = (ts) => {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        setDisplay(Math.floor(ease * value));
+        if (p < 1) requestAnimationFrame(step);
+        else setDisplay(value);
+      };
+      requestAnimationFrame(step);
+    }, { threshold: 0.5 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [value]);
+  return <span ref={ref}>{symbol}{display.toLocaleString()}</span>;
+}
+
+// ─── ANIMATED PRICE ──────────────────────────────────────────────────────────
+function AnimatedPrice({ target, prefix = "" }: { target: number; prefix?: string }) {
+  const [val, setVal] = useState(0);
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      obs.disconnect();
+      const duration = 1400;
+      let start = 0;
+      const step = (ts) => {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        setVal(Math.floor(ease * target));
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }, { threshold: 0.5 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [target]);
+  return <span ref={ref}>{prefix}{val.toLocaleString()}</span>;
+}
+
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -658,12 +713,50 @@ export default function Home() {
             <p className="sec-desc">{t.pricing.desc}</p>
           </div>
           <div className="pricing-grid">
-            <div className="p-card online"><div className="p-accent" /><p className="p-tag">{t.pricing.onlineTag}</p><p className="p-price">¥1,500</p><p className="p-unit">{t.pricing.perItem}</p><p className="p-desc">{t.pricing.onlineDesc}</p></div>
-            <div className="p-card store"><div className="p-accent" /><p className="p-tag">{t.pricing.storeTag}</p><p className="p-price">¥3,000</p><p className="p-unit">{t.pricing.perItem}</p><p className="p-desc">{t.pricing.storeDesc}</p></div>
+            <div className="p-card online">
+              <div className="p-accent" />
+              <p className="p-tag">{t.pricing.onlineTag}</p>
+              <p className="p-price">¥<AnimatedPrice target={1500} /></p>
+              <p className="p-unit">{t.pricing.perItem}</p>
+              <p className="p-desc">{t.pricing.onlineDesc}</p>
+            </div>
+            <div className="p-card store">
+              <div className="p-accent" />
+              <p className="p-tag">{t.pricing.storeTag}</p>
+              <p className="p-price">¥<AnimatedPrice target={3000} /></p>
+              <p className="p-unit">{t.pricing.perItem}</p>
+              <p className="p-desc">{t.pricing.storeDesc}</p>
+            </div>
           </div>
+
+          {/* Event card */}
+          <div className="p-event-card">
+            <div className="p-event-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div className="p-event-body">
+              <strong>Tokyo store events & exclusive releases</strong>
+              <p>Limited drops, pop-up events, special collaborations — we attend in person for you. Pricing varies depending on the event. <span className="p-event-dm">Contact us privately for details →</span></p>
+            </div>
+            <a href="#request-wrap" className="p-event-btn">Ask us</a>
+          </div>
+
           <p className="p-note">{t.pricing.note}</p>
         </div>
       </section>
+
+      {/* COUNTRIES */}
+      <div className="countries-bar reveal">
+        <div className="wrap">
+          <p className="countries-label">Delivered to</p>
+          <div className="countries-flags">
+            {["🇫🇷","🇺🇸","🇨🇦","🇬🇷","🇩🇪","🇮🇹","🇪🇸","🇬🇧","🇦🇺","🇧🇪","🇳🇱","🇨🇭","🇵🇹","🇸🇪","🇵🇱","🇧🇷","🇲🇽","🇯🇵","🇰🇷","🇮🇩"].map((flag, i) => (
+              <span key={i} className="country-flag" title={flag}>{flag}</span>
+            ))}
+            <span className="countries-more">& more</span>
+          </div>
+        </div>
+      </div>
 
       {/* GALLERY */}
       <section id="photos" className="section reveal" style={{ background: "var(--cream)" }}>
