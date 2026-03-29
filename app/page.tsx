@@ -302,7 +302,7 @@ const REAL_REVIEWS = [
   },
   {
     name: "u/Calm-Leather-1018",
-    country: "🇬🇧 UK",
+    country: "🇺🇸 USA",
     stars: 5,
     link: "https://www.reddit.com/r/internationalshopper/comments/1s4ktd9/service_review_faycas/",
     title: "Service review",
@@ -310,7 +310,7 @@ const REAL_REVIEWS = [
   },
   {
     name: "u/Salty-Lemon8781",
-    country: "🇺🇸 USA",
+    country: "🇨🇦 Canada",
     stars: 5,
     link: "https://www.reddit.com/r/internationalshopper/comments/1s2zphf/positive_review_for_ufaycas/",
     title: "Positive review",
@@ -326,7 +326,7 @@ const REAL_REVIEWS = [
   },
   {
     name: "u/BamBim09",
-    country: "🌍 International",
+    country: "🇮🇩 Indonesia",
     stars: 5,
     link: "https://www.reddit.com/r/internationalshopper/comments/1s5uh7d/trustworthy_japan_international_shopper_u_faycas/",
     title: "Trustworthy Japan shopper",
