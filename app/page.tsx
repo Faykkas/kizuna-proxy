@@ -293,7 +293,7 @@ function BackToTop() {
 // ─── REAL REVIEWS DATA ───────────────────────────────────────────────────────
 const REAL_REVIEWS = [
   {
-    name: "u/Electrical_Ad4590",
+    name: "u/grimmia",
     country: "🇬🇷 Greece",
     stars: 5,
     link: "https://www.reddit.com/r/internationalshopper/comments/1s4x1fw/wonderful_experience_with_ufaycas_from_jp_to_gr/",
@@ -301,7 +301,7 @@ const REAL_REVIEWS = [
     text: "She handled personal shopping for me in Tokyo and visited the Sonic Store, the Pokémon Center, and the Nintendo Store with absolute success! We even did live shopping through a video call, and it genuinely felt like I was there with her. They were extremely polite, professional, and offered very good prices. Communication was clear and immediate, which made me trust them completely. I highly recommend them without any hesitation.",
   },
   {
-    name: "u/StarlightNova_",
+    name: "u/Calm-Leather-1018",
     country: "🇬🇧 UK",
     stars: 5,
     link: "https://www.reddit.com/r/internationalshopper/comments/1s4ktd9/service_review_faycas/",
@@ -309,7 +309,7 @@ const REAL_REVIEWS = [
     text: "I've never used a proxy seller before but there were some Japanese exclusive collab items I wanted from a fashion brand and luckily I came in contact with them. The process was simple and I never felt as though I was overpaying compared to using one of the many popular proxy sites. If you want your Japanese merch, think u/Faycas as a reliable proxy seller ❤️",
   },
   {
-    name: "u/PurpleOwlCollector",
+    name: "u/Salty-Lemon8781",
     country: "🇺🇸 USA",
     stars: 5,
     link: "https://www.reddit.com/r/internationalshopper/comments/1s2zphf/positive_review_for_ufaycas/",
@@ -317,7 +317,7 @@ const REAL_REVIEWS = [
     text: "Faycas and his girlfriend are the best if you need an item purchased/shipped from Japan. They are extremely helpful, polite, trustworthy, and just great people in general. They arranged the purchase of a vintage item for me, took great care to pack it, and they made the whole process very easy. I will use their services again ❤️",
   },
   {
-    name: "u/biscoff_obsessed",
+    name: "u/No_Seaworthiness7119",
     country: "🇺🇸 USA",
     stars: 5,
     link: "https://www.reddit.com/r/internationalshopper/comments/1s693xk/review_for_faycas_japan_us/",
@@ -325,7 +325,7 @@ const REAL_REVIEWS = [
     text: "Had a wonderful experience! The service was very fast and the shipment arrived quickly, with no issues and the items were so carefully packaged. Timeline: 3/15 ordered → 3/18 shipped → 3/24 delivered. This was a flawless experience and I cannot recommend the service highly enough. (If you've ever tried these cookies, they're amazing. Have u/Faycas ship you a box!)",
   },
   {
-    name: "u/MangaCollector_JP",
+    name: "u/BamBim09",
     country: "🌍 International",
     stars: 5,
     link: "https://www.reddit.com/r/internationalshopper/comments/1s5uh7d/trustworthy_japan_international_shopper_u_faycas/",
