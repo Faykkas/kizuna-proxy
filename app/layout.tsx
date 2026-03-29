@@ -67,8 +67,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "knowsLanguage": ["fr", "ja", "en"],
           "aggregateRating": {
             "@type": "AggregateRating",
-            "ratingValue": "4.8",
-            "reviewCount": "4",
+            "ratingValue": "5.0",
+            "reviewCount": "5",
             "bestRating": "5",
             "worstRating": "1"
           },
