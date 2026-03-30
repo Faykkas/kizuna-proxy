@@ -396,34 +396,6 @@ function ReviewsCarousel() {
 }
 
 // ─── ANIMATED PRICE ──────────────────────────────────────────────────────────
-function AnimatedPrice({ value, symbol = "¥" }: { value: number; symbol?: string }) {
-  const [display, setDisplay] = useState(0);
-  const ref = useRef(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      observer.disconnect();
-      let start = null;
-      const duration = 1200;
-      const step = (ts) => {
-        if (!start) start = ts;
-        const p = Math.min((ts - start) / duration, 1);
-        const ease = 1 - Math.pow(1 - p, 3);
-        setDisplay(Math.floor(ease * value));
-        if (p < 1) requestAnimationFrame(step);
-        else setDisplay(value);
-      };
-      requestAnimationFrame(step);
-    }, { threshold: 0.5 });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [value]);
-  return <span ref={ref}>{symbol}{display.toLocaleString()}</span>;
-}
-
-// ─── ANIMATED PRICE ──────────────────────────────────────────────────────────
 function AnimatedPrice({ target, prefix = "" }: { target: number; prefix?: string }) {
   const [val, setVal] = useState(0);
   const ref = useRef(null);
@@ -472,6 +444,7 @@ export default function Home() {
     { href: "#about", label: t.nav.about },
     { href: "#what-we-buy", label: t.nav.whatWeBuy },
     { href: "#reviews", label: "Reviews" },
+    { href: "/events", label: "Events 🎌" },
     { href: "#pricing", label: t.nav.pricing },
     { href: "#photos", label: t.nav.gallery },
     { href: "#faq", label: t.nav.faq },
@@ -735,10 +708,10 @@ export default function Home() {
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
             <div className="p-event-body">
-              <strong>Tokyo store events & exclusive releases</strong>
-              <p>Limited drops, pop-up events, special collaborations — we attend in person for you. Pricing varies depending on the event. <span className="p-event-dm">Contact us privately for details →</span></p>
+              <strong>Tokyo Events & Exclusive Releases</strong>
+              <p>Pokémon Center, Nintendo Store, Supreme drops, pop-ups — we attend in person for you. Pricing varies by event. <span className="p-event-dm">Contact us privately for details.</span></p>
             </div>
-            <a href="#request-wrap" className="p-event-btn">Ask us</a>
+            <a href="/events" className="p-event-btn">See all events →</a>
           </div>
 
           <p className="p-note">{t.pricing.note}</p>

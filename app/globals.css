@@ -592,3 +592,27 @@ html.dark .countries-bar { background: var(--white); }
 .blog-cta p { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--ink); font-weight: 400; margin: 0; }
 html.dark .blog-page { background: var(--cream); }
 html.dark .blog-cta { background: var(--white); }
+
+/* ── EVENTS PAGE ── */
+.ev-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin: 2rem 0; }
+.ev-card { background: var(--white); border: 1px solid var(--border); border-radius: 2px; padding: 1.8rem; transition: transform .2s, box-shadow .2s; }
+.ev-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(13,11,9,.07); }
+.ev-icon { font-size: 1.8rem; margin-bottom: .8rem; }
+.ev-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 600; color: var(--ink); margin-bottom: .5rem; }
+.ev-card p { font-size: .85rem; line-height: 1.75; color: var(--warm); font-weight: 300; margin: 0; }
+.ev-steps { display: flex; flex-direction: column; gap: 0; margin: 1.5rem 0; }
+.ev-step { display: flex; gap: 1.5rem; align-items: flex-start; padding: 1.5rem 0; border-bottom: 1px solid var(--border); }
+.ev-step:first-child { padding-top: 0; }
+.ev-step-num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; color: var(--red); line-height: 1; flex-shrink: 0; width: 48px; }
+.ev-step strong { display: block; font-size: .88rem; font-weight: 600; color: var(--ink); margin-bottom: .3rem; letter-spacing: .02em; }
+.ev-step p { font-size: .85rem; line-height: 1.75; color: var(--warm); font-weight: 300; margin: 0; }
+.ev-pricing-note { display: flex; gap: 1.2rem; align-items: flex-start; background: var(--paper); border: 1px solid var(--border); border-left: 3px solid var(--red); border-radius: 2px; padding: 1.5rem 1.8rem; margin: 1.5rem 0; }
+.ev-pricing-note strong { display: block; font-size: .88rem; font-weight: 600; color: var(--ink); margin-bottom: .3rem; }
+.ev-pricing-note p { font-size: .85rem; line-height: 1.75; color: var(--warm); font-weight: 300; margin: 0; }
+.ev-faq { display: flex; flex-direction: column; gap: 0; margin: 1.5rem 0; }
+.ev-faq-item { padding: 1.3rem 0; border-bottom: 1px solid var(--border); }
+.ev-faq-item strong { display: block; font-size: .9rem; font-weight: 600; color: var(--ink); margin-bottom: .4rem; }
+.ev-faq-item p { font-size: .85rem; line-height: 1.75; color: var(--warm); font-weight: 300; margin: 0; }
+html.dark .ev-card { background: var(--white); }
+html.dark .ev-pricing-note { background: var(--mist); }
+@media (max-width: 768px) { .ev-grid { grid-template-columns: 1fr; } }
