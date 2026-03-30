@@ -290,6 +290,39 @@ function BackToTop() {
   );
 }
 
+// ─── EVENTS FLOAT ─────────────────────────────────────────────────────────────
+function EventsFloat() {
+  const [visible, setVisible] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    // Appear after 4 seconds or after scrolling 300px
+    const timer = setTimeout(() => { if (!dismissed) setVisible(true); }, 4000);
+    const onScroll = () => { if (window.scrollY > 300 && !dismissed) setVisible(true); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => { clearTimeout(timer); window.removeEventListener("scroll", onScroll); };
+  }, [dismissed]);
+
+  if (dismissed) return null;
+
+  return (
+    <div className={`events-float${visible ? " visible" : ""}`}>
+      <button className="events-float-close" onClick={() => { setVisible(false); setTimeout(() => setDismissed(true), 400); }} aria-label="Close">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div className="events-float-icon">🎌</div>
+      <div className="events-float-body">
+        <strong>Tokyo Events</strong>
+        <p>Pokémon Center, Nintendo, Supreme drops & more — we attend in person.</p>
+        <a href="/events" className="events-float-btn">
+          Learn more
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </div>
+  );
+}
+
 // ─── REAL REVIEWS DATA ───────────────────────────────────────────────────────
 const REAL_REVIEWS = [
   {
@@ -444,7 +477,6 @@ export default function Home() {
     { href: "#about", label: t.nav.about },
     { href: "#what-we-buy", label: t.nav.whatWeBuy },
     { href: "#reviews", label: "Reviews" },
-    { href: "/events", label: "Events 🎌" },
     { href: "#pricing", label: t.nav.pricing },
     { href: "#photos", label: t.nav.gallery },
     { href: "#faq", label: t.nav.faq },
@@ -799,6 +831,7 @@ export default function Home() {
         </div>
       </footer>
 
+      <EventsFloat />
       <BackToTop />
     </>
   );
