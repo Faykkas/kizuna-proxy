@@ -7,10 +7,13 @@ import type { Lang, T } from "./translations";
 
 // ─── CAROUSEL SLIDES ─────────────────────────────────────────────────────────
 const SLIDES = [
-  { src: "/Ancora_order.jpg",      alt: "Ancora order", title: "Ancora Japan", sub: "Fountain pen ink · Shipped to Canada" },
-  { src: "/yugioh_order.jpg",      alt: "Yu-Gi-Oh order", title: "Yu-Gi-Oh!", sub: "Rare cards · Shipped to USA" },
-  { src: "/Jojo_order.jpg",        alt: "JoJo order", title: "JoJo's Bizarre Adventure", sub: "T-shirt · Shipped to USA" },
-  { src: "/Harrypotter_order.jpg", alt: "Harry Potter order", title: "Lacoste × Harry Potter", sub: "T-shirts · Shipped to Greece" },
+  { src: "/Ancora_order.jpg",      alt: "Ancora order",      title: "Ancora Japan",                sub: "Fountain pen ink · Shipped to Canada" },
+  { src: "/yugioh_order.jpg",      alt: "Yu-Gi-Oh order",    title: "Yu-Gi-Oh!",                   sub: "Rare cards · Shipped to USA" },
+  { src: "/Jojo_order.jpg",        alt: "JoJo order",        title: "JoJo's Bizarre Adventure",    sub: "T-shirt · Shipped to USA" },
+  { src: "/Harrypotter_order.jpg", alt: "Harry Potter order",title: "Lacoste × Harry Potter",      sub: "T-shirts · Shipped to Greece" },
+  { src: "/call_order.jpg",        alt: "Call of the Night", title: "Call of the Night — Event",   sub: "Tokyo exclusive · Shipped to USA" },
+  { src: "/daruma_order.jpg",      alt: "Daruma order",      title: "Daruma × 3",                  sub: "Traditional Tokyo · Shipped to Canada" },
+  { src: "/bushiroad_order.jpg",   alt: "Bushiroad order",   title: "Bushiroad Apparel",           sub: "Official merch · Shipped to Switzerland" },
 ];
 
 // ─── LOGO ─────────────────────────────────────────────────────────────────────
