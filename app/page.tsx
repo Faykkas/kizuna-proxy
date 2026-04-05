@@ -10,13 +10,16 @@ const CalendarSection = dynamic(() => import("./calendar"), { ssr: false, loadin
 
 // ─── CAROUSEL SLIDES ─────────────────────────────────────────────────────────
 const SLIDES = [
-  { src: "/Ancora_order.jpg",      alt: "Ancora order",      title: "Ancora Japan",                sub: "Fountain pen ink · Shipped to Canada" },
-  { src: "/yugioh_order.jpg",      alt: "Yu-Gi-Oh order",    title: "Yu-Gi-Oh!",                   sub: "Rare cards · Shipped to USA" },
-  { src: "/Jojo_order.jpg",        alt: "JoJo order",        title: "JoJo's Bizarre Adventure",    sub: "T-shirt · Shipped to USA" },
-  { src: "/Harrypotter_order.jpg", alt: "Harry Potter order",title: "Lacoste × Harry Potter",      sub: "T-shirts · Shipped to Greece" },
-  { src: "/call_order.jpg",        alt: "Call of the Night", title: "Call of the Night — Event",   sub: "Tokyo exclusive · Shipped to USA" },
-  { src: "/daruma_order.jpg",      alt: "Daruma order",      title: "Daruma × 3",                  sub: "Traditional Tokyo · Shipped to Canada" },
-  { src: "/bushiroad_order.jpg",   alt: "Bushiroad order",   title: "Bushiroad Apparel",           sub: "Official merch · Shipped to Switzerland" },
+  { src: "/Ancora_order.jpg",        alt: "Ancora order",        title: "Ancora Japan",                 sub: "Fountain pen ink · Shipped to Canada" },
+  { src: "/yugioh_order.jpg",        alt: "Yu-Gi-Oh order",      title: "Yu-Gi-Oh!",                    sub: "Rare cards · Shipped to USA" },
+  { src: "/Jojo_order.jpg",          alt: "JoJo order",          title: "JoJo's Bizarre Adventure",     sub: "T-shirt · Shipped to USA" },
+  { src: "/Harrypotter_order.jpg",   alt: "Harry Potter order",  title: "Lacoste × Harry Potter",       sub: "T-shirts · Shipped to Greece" },
+  { src: "/call_order.jpg",          alt: "Call of the Night",   title: "Call of the Night — Event",    sub: "Tokyo exclusive · Shipped to USA" },
+  { src: "/daruma_order.jpg",        alt: "Daruma order",        title: "Daruma × 3",                   sub: "Traditional Tokyo · Shipped to Canada" },
+  { src: "/bushiroad_order.jpg",     alt: "Bushiroad order",     title: "Bushiroad Apparel",            sub: "Official merch · Shipped to Switzerland" },
+  { src: "/order_magicharm.jpg",     alt: "Magic Charm order",   title: "Pullovers & Goodies",          sub: "Magic Charm · Shipped to USA" },
+  { src: "/butter_butler.jpg",       alt: "Butter Butler order", title: "Butter Butler Chocolates",     sub: "Japanese sweets · Shipped to USA" },
+  { src: "/kpop_card.jpg",           alt: "Ateez K-pop cards",   title: "Ateez — K-pop Cards",          sub: "Official trading cards · Shipped to USA" },
 ];
 
 // ─── LOGO ─────────────────────────────────────────────────────────────────────
