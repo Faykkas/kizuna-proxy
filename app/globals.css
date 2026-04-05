@@ -35,49 +35,42 @@ body::after {
 /* ── ANNOUNCEMENT BANNER ── */
 .announce-bar {
   background: var(--ink);
-  padding: .6rem 1rem;
-  text-align: center;
-  position: relative;
+  padding: .55rem 0;
   overflow: hidden;
+  position: relative;
 }
-.announce-bar::before {
+.announce-bar::before,
+.announce-bar::after {
   content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(184,42,36,.15) 50%, transparent 100%);
-  animation: shimmer 3s ease-in-out infinite;
+  position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2;
+  pointer-events: none;
 }
-@keyframes shimmer {
-  0%, 100% { transform: translateX(-100%); }
-  50% { transform: translateX(100%); }
+.announce-bar::before { left: 0; background: linear-gradient(to right, var(--ink), transparent); }
+.announce-bar::after  { right: 0; background: linear-gradient(to left, var(--ink), transparent); }
+.announce-scroll-wrap { overflow: hidden; }
+.announce-scroll-track {
+  display: flex; align-items: center;
+  width: max-content;
+  animation: ticker 28s linear infinite;
 }
-.announce-inner {
-  display: flex; align-items: center; justify-content: center;
-  gap: .75rem; flex-wrap: wrap; position: relative; z-index: 1;
+.announce-scroll-track:hover { animation-play-state: paused; }
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
+.announce-scroll-item { display: flex; align-items: center; gap: .75rem; padding: 0 2.5rem; white-space: nowrap; }
 .announce-pill {
   font-size: .58rem; letter-spacing: .14em; text-transform: uppercase;
   background: var(--red); color: #fff;
-  padding: .2rem .6rem; border-radius: 1px;
-  font-family: 'Jost', sans-serif; font-weight: 500;
-  animation: pulse-pill 2s ease-in-out infinite;
+  padding: .18rem .55rem; border-radius: 1px;
+  font-family: 'Jost', sans-serif; font-weight: 500; flex-shrink: 0;
 }
-@keyframes pulse-pill {
-  0%, 100% { opacity: 1; }
-  50% { opacity: .75; }
-}
-.announce-text {
-  font-size: .75rem; color: rgba(250,248,244,.75);
-  font-family: 'Jost', sans-serif; font-weight: 300;
-  letter-spacing: .04em;
-}
-.announce-sub {
-  font-size: .7rem; color: var(--red);
-  font-family: 'Jost', sans-serif; font-weight: 500;
-  letter-spacing: .06em; cursor: pointer;
-  transition: color .2s;
-}
-.announce-sub:hover { color: #d43d36; }
+.announce-text { font-size: .75rem; color: rgba(250,248,244,.65); font-family: 'Jost', sans-serif; font-weight: 300; }
+.announce-text strong { color: #fff; font-weight: 600; }
+.announce-sep { color: rgba(250,248,244,.2); font-size: 1rem; }
 html.dark .announce-bar { background: #0a0806; }
+html.dark .announce-bar::before { background: linear-gradient(to right, #0a0806, transparent); }
+html.dark .announce-bar::after  { background: linear-gradient(to left,  #0a0806, transparent); }
 
 /* ── NAV ── */
 nav {

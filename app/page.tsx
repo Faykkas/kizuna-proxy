@@ -559,9 +559,16 @@ export default function Home() {
     <>
       {/* ANNOUNCEMENT BANNER */}
       <div className="announce-bar">
-        <div className="announce-inner">
-          <span className="announce-pill">Coming soon</span>
-          <span className="announce-text">🍡 Japanese snack boxes — curated in Tokyo, delivered to your door.</span>
+        <div className="announce-scroll-wrap">
+          <div className="announce-scroll-track">
+            {[0,1,2,3].map(i => (
+              <span key={i} className="announce-scroll-item">
+                <span className="announce-pill">{t.announce.pill}</span>
+                <span className="announce-text">⚠️ {t.announce.text} <strong>{t.announce.from}</strong> {t.announce.to !== t.announce.from ? <>→ <strong>{t.announce.to}</strong></> : ""} {t.announce.text2}</span>
+                <span className="announce-sep">·</span>
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
