@@ -563,8 +563,8 @@ export default function Home() {
           <div className="announce-scroll-track">
             {[0,1,2,3].map(i => (
               <span key={i} className="announce-scroll-item">
-                <span className="announce-pill">{t.announce.pill}</span>
-                <span className="announce-text">⚠️ {t.announce.text} <strong>{t.announce.from}</strong> {t.announce.to !== t.announce.from ? <>→ <strong>{t.announce.to}</strong></> : ""} {t.announce.text2}</span>
+                <span className="announce-pill">{t.announce?.pill || "Notice"}</span>
+                <span className="announce-text">⚠️ {t.announce?.text || "Orders will be paused from"} <strong>{t.announce?.from || "April 20"}</strong> → <strong>{t.announce?.to || "June 1 included"}</strong> {t.announce?.text2 || "— no new requests will be accepted during this period."}</span>
                 <span className="announce-sep">·</span>
               </span>
             ))}
