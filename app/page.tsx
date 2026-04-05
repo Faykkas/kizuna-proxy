@@ -108,82 +108,76 @@ function useDarkMode(): [boolean, () => void] {
 function Carousel() {
   const [current, setCurrent] = useState(0);
   const currentRef = useRef(0);
-  const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const thumbsRef = useRef<HTMLDivElement>(null);
+  const autoRef = useRef(null);
   const touchStartX = useRef(0);
 
-  const goTo = useCallback((next: number) => {
-    const n = (next + SLIDES.length) % SLIDES.length;
-    currentRef.current = n;
-    setCurrent(n);
+  const goTo = useCallback((n) => {
+    const next = (n + SLIDES.length) % SLIDES.length;
+    currentRef.current = next;
+    setCurrent(next);
   }, []);
 
-  const move = useCallback((dir: number) => {
-    goTo(currentRef.current + dir);
-  }, [goTo]);
+  const move = useCallback((dir) => { goTo(currentRef.current + dir); }, [goTo]);
 
   useEffect(() => {
-    autoRef.current = setInterval(() => move(1), 5000);
-    return () => { if (autoRef.current) clearInterval(autoRef.current); };
+    autoRef.current = setInterval(() => move(1), 6000);
+    return () => clearInterval(autoRef.current);
   }, [move]);
 
-  useEffect(() => {
-    const h = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") move(-1);
-      if (e.key === "ArrowRight") move(1);
-    };
-    window.addEventListener("keydown", h);
-    return () => window.removeEventListener("keydown", h);
-  }, [move]);
+  const pause  = () => clearInterval(autoRef.current);
+  const resume = () => { autoRef.current = setInterval(() => move(1), 6000); };
 
-  useEffect(() => {
-    const strip = thumbsRef.current;
-    const active = strip?.querySelector<HTMLElement>(".thumb-active");
-    if (strip && active) strip.scrollLeft = active.offsetLeft - strip.offsetWidth / 2 + active.offsetWidth / 2;
-  }, [current]);
-
-  const pauseAuto = () => { if (autoRef.current) clearInterval(autoRef.current); };
-  const resumeAuto = () => { autoRef.current = setInterval(() => move(1), 5000); };
+  const prev = (current - 1 + SLIDES.length) % SLIDES.length;
+  const next = (current + 1) % SLIDES.length;
 
   return (
-    <div className="carousel" onMouseEnter={pauseAuto} onMouseLeave={resumeAuto}>
-      <div className="carousel-stage"
-        onTouchStart={e => { touchStartX.current = e.touches[0].clientX; }}
-        onTouchEnd={e => { const dx = e.changedTouches[0].clientX - touchStartX.current; if (Math.abs(dx) > 40) move(dx < 0 ? 1 : -1); }}>
-        {SLIDES.map((s, i) => (
-          <div key={i} className={`carousel-slide${i === current ? " active" : ""}`}>
-            <img src={s.src} alt={s.alt} onError={(e) => {
-              (e.target as HTMLImageElement).style.display = "none";
-              (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex");
-            }} />
-            <div className="img-ph" style={{ display: "none" }}><span className="ph-jp">荷物</span></div>
-            <div className="carousel-caption">
-              <strong>{s.title}</strong>
-              <span>{s.sub}</span>
+    <div className="filmstrip" onMouseEnter={pause} onMouseLeave={resume}
+      onTouchStart={e => { touchStartX.current = e.touches[0].clientX; }}
+      onTouchEnd={e => { const dx = e.changedTouches[0].clientX - touchStartX.current; if (Math.abs(dx) > 40) move(dx < 0 ? 1 : -1); }}>
+
+      {/* Side previews + main */}
+      <div className="filmstrip-stage">
+        {/* Prev preview */}
+        <div className="filmstrip-side filmstrip-prev" onClick={() => move(-1)}>
+          <img src={SLIDES[prev].src} alt={SLIDES[prev].alt} onError={e => { (e.target as HTMLImageElement).style.opacity = "0"; }} />
+          <div className="filmstrip-side-overlay" />
+        </div>
+
+        {/* Main slide */}
+        <div className="filmstrip-main">
+          {SLIDES.map((s, i) => (
+            <div key={i} className={`filmstrip-slide${i === current ? " active" : ""}`}>
+              <img src={s.src} alt={s.alt} onError={e => { (e.target as HTMLImageElement).style.opacity = "0"; }} />
+              <div className="filmstrip-caption">
+                <div className="filmstrip-caption-inner">
+                  <strong>{s.title}</strong>
+                  <span>{s.sub}</span>
+                </div>
+                <div className="filmstrip-counter">{current + 1} / {SLIDES.length}</div>
+              </div>
             </div>
-          </div>
-        ))}
-        <div className="carousel-counter">{current + 1} / {SLIDES.length}</div>
+          ))}
+          {/* Arrows on main */}
+          <button className="filmstrip-btn filmstrip-btn-prev" onClick={() => move(-1)} aria-label="Previous">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button className="filmstrip-btn filmstrip-btn-next" onClick={() => move(1)} aria-label="Next">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+
+        {/* Next preview */}
+        <div className="filmstrip-side filmstrip-next" onClick={() => move(1)}>
+          <img src={SLIDES[next].src} alt={SLIDES[next].alt} onError={e => { (e.target as HTMLImageElement).style.opacity = "0"; }} />
+          <div className="filmstrip-side-overlay" />
+        </div>
       </div>
-      <button className="carousel-btn prev" onClick={() => move(-1)} aria-label="Previous">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" stroke="currentColor"><polyline points="11 4 6 9 11 14" /></svg>
-      </button>
-      <button className="carousel-btn next" onClick={() => move(1)} aria-label="Next">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" stroke="currentColor"><polyline points="7 4 12 9 7 14" /></svg>
-      </button>
-      <div className="carousel-thumbs" ref={thumbsRef}>
-        {SLIDES.map((s, i) => (
-          <div key={i} className={`carousel-thumb${i === current ? " active thumb-active" : ""}`} onClick={() => goTo(i)}>
-            <img src={s.src} alt={s.alt} onError={(e) => {
-              (e.target as HTMLImageElement).style.display = "none";
-              (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style", "display:flex");
-            }} />
-            <div className="thumb-ph" style={{ display: "none" }}>荷物</div>
-          </div>
+
+      {/* Dots */}
+      <div className="filmstrip-dots">
+        {SLIDES.map((_, i) => (
+          <button key={i} className={`filmstrip-dot${i === current ? " active" : ""}`} onClick={() => goTo(i)} aria-label={`Slide ${i + 1}`} />
         ))}
-      </div>
-      <div className="carousel-dots">
-        {SLIDES.map((_, i) => <div key={i} className={`carousel-dot${i === current ? " active" : ""}`} onClick={() => goTo(i)} />)}
       </div>
     </div>
   );
@@ -562,16 +556,12 @@ export default function Home() {
     <>
       {/* ANNOUNCEMENT BANNER */}
       <div className="announce-bar">
-        <div className="announce-scroll-wrap">
-          <div className="announce-scroll-track">
-            {[0,1,2,3].map(i => (
-              <span key={i} className="announce-scroll-item">
-                <span className="announce-pill">{t.announce?.pill || "Notice"}</span>
-                <span className="announce-text">⚠️ {t.announce?.text || "Orders will be paused from"} <strong>{t.announce?.from || "April 20"}</strong> → <strong>{t.announce?.to || "June 1 included"}</strong> {t.announce?.text2 || "— no new requests will be accepted during this period."}</span>
-                <span className="announce-sep">·</span>
-              </span>
-            ))}
-          </div>
+        <div className="announce-inner">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{color:"var(--red)",flexShrink:0}}>
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span className="announce-pill">{t.announce?.pill || "Notice"}</span>
+          <span className="announce-text">{t.announce?.text || "Orders will be paused from"} <strong>{t.announce?.from || "April 20"}</strong> → <strong>{t.announce?.to || "June 1 included"}</strong> {t.announce?.text2 || "— no new requests will be accepted during this period."}</span>
         </div>
       </div>
 
@@ -860,7 +850,7 @@ export default function Home() {
       </div>
 
       {/* GALLERY */}
-      <section id="photos" className="section reveal" style={{ background: "var(--cream)" }}>
+      <section id="photos" className="section reveal" style={{ background: "var(--ink)" }}>
         <div className="wrap">
           <div className="sec-header">
             <p className="sec-label">{t.gallery.label}</p>

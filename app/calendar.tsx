@@ -35,10 +35,8 @@ export default function Calendar({ upcomingLabel = "Upcoming", noEventsLabel = "
     load();
   }, []);
 
-  // Build calendar grid
   const firstDay = new Date(year, month, 1);
   const lastDay  = new Date(year, month + 1, 0);
-  // Monday-first: 0=Mon ... 6=Sun
   const startOffset = (firstDay.getDay() + 6) % 7;
   const totalCells  = startOffset + lastDay.getDate();
   const rows = Math.ceil(totalCells / 7);
@@ -51,32 +49,16 @@ export default function Calendar({ upcomingLabel = "Upcoming", noEventsLabel = "
     return events.filter(e => e.date === dateStr(d));
   }
 
-  const selectedEvents = selected
-    ? events.filter(e => e.date === selected)
-    : [];
-
-  const prevMonth = () => {
-    if (month === 0) { setYear(y => y - 1); setMonth(11); }
-    else setMonth(m => m - 1);
-    setSelected(null);
-  };
-  const nextMonth = () => {
-    if (month === 11) { setYear(y => y + 1); setMonth(0); }
-    else setMonth(m => m + 1);
-    setSelected(null);
-  };
-
-  // Upcoming events list
+  const selectedEvents = selected ? events.filter(e => e.date === selected) : [];
   const todayStr = today.toISOString().split("T")[0];
-  const upcoming = events
-    .filter(e => e.date >= todayStr)
-    .slice(0, 5);
+  const upcoming = events.filter(e => e.date >= todayStr).slice(0, 5);
+
+  const prevMonth = () => { if (month === 0) { setYear(y => y - 1); setMonth(11); } else setMonth(m => m - 1); setSelected(null); };
+  const nextMonth = () => { if (month === 11) { setYear(y => y + 1); setMonth(0); } else setMonth(m => m + 1); setSelected(null); };
 
   return (
     <div className="cal-wrap">
-      {/* Calendar grid */}
       <div className="cal-box">
-        {/* Header */}
         <div className="cal-header">
           <button className="cal-nav-btn" onClick={prevMonth} aria-label="Previous month">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -86,13 +68,9 @@ export default function Calendar({ upcomingLabel = "Upcoming", noEventsLabel = "
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
-
-        {/* Day names */}
         <div className="cal-days-header">
           {DAYS.map(d => <div key={d} className="cal-day-name">{d}</div>)}
         </div>
-
-        {/* Grid */}
         {loading ? (
           <div className="cal-loading">Loading…</div>
         ) : (
@@ -105,42 +83,19 @@ export default function Calendar({ upcomingLabel = "Upcoming", noEventsLabel = "
               const isToday = ds === todayStr;
               const isSel   = ds === selected;
               const isPast  = valid && ds < todayStr;
-
               return (
-                <div
-                  key={i}
-                  className={[
-                    "cal-cell",
-                    !valid    ? "cal-cell-empty" : "",
-                    isToday   ? "cal-cell-today"  : "",
-                    isSel     ? "cal-cell-sel"    : "",
-                    isPast    ? "cal-cell-past"   : "",
-                  ].join(" ")}
-                  onClick={() => valid && setSelected(isSel ? null : ds)}
-                >
-                  {valid && (
-                    <>
-                      <span className="cal-day-num">{dayNum}</span>
-                      <div className="cal-dots">
-                        {dayEvs.slice(0, 3).map((ev, j) => (
-                          <span
-                            key={j}
-                            className="cal-dot"
-                            style={{ background: TYPE_COLORS[ev.type]?.bg }}
-                          />
-                        ))}
-                      </div>
-                    </>
-                  )}
+                <div key={i} className={["cal-cell", !valid ? "cal-cell-empty" : "", isToday ? "cal-cell-today" : "", isSel ? "cal-cell-sel" : "", isPast ? "cal-cell-past" : ""].join(" ")} onClick={() => valid && setSelected(isSel ? null : ds)}>
+                  {valid && (<>
+                    <span className="cal-day-num">{dayNum}</span>
+                    <div className="cal-dots">{dayEvs.slice(0,3).map((ev,j) => <span key={j} className="cal-dot" style={{ background: TYPE_COLORS[ev.type]?.bg }} />)}</div>
+                  </>)}
                 </div>
               );
             })}
           </div>
         )}
-
-        {/* Legend */}
         <div className="cal-legend">
-          {Object.entries(TYPE_COLORS).map(([k, v]) => (
+          {Object.entries(TYPE_COLORS).map(([k,v]) => (
             <div key={k} className="cal-legend-item">
               <span className="cal-legend-dot" style={{ background: v.bg }} />
               <span>{v.label}</span>
@@ -148,23 +103,16 @@ export default function Calendar({ upcomingLabel = "Upcoming", noEventsLabel = "
           ))}
         </div>
       </div>
-
-      {/* Right panel */}
       <div className="cal-side">
-        {/* Selected day detail */}
         {selected && (
           <div className="cal-detail">
-            <p className="cal-detail-date">
-              {new Date(selected + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
-            </p>
+            <p className="cal-detail-date">{new Date(selected + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}</p>
             {selectedEvents.length === 0 ? (
               <p className="cal-detail-empty">{noEventsLabel}</p>
             ) : (
               selectedEvents.map(ev => (
                 <div key={ev.id} className="cal-event-card">
-                  <div className="cal-event-type" style={{ background: TYPE_COLORS[ev.type]?.bg }}>
-                    {TYPE_COLORS[ev.type]?.label}
-                  </div>
+                  <div className="cal-event-type" style={{ background: TYPE_COLORS[ev.type]?.bg }}>{TYPE_COLORS[ev.type]?.label}</div>
                   <strong className="cal-event-title">{ev.title}</strong>
                   {ev.store && <span className="cal-event-store">📍 {ev.store}</span>}
                   {ev.description && <p className="cal-event-desc">{ev.description}</p>}
@@ -173,19 +121,13 @@ export default function Calendar({ upcomingLabel = "Upcoming", noEventsLabel = "
             )}
           </div>
         )}
-
-        {/* Upcoming events */}
         <div className="cal-upcoming">
           <p className="cal-upcoming-title">{upcomingLabel}</p>
           {upcoming.length === 0 ? (
-            <p className="cal-detail-empty">{noUpcomingLabel}</p>
+            <p className="cal-detail-empty" style={{padding:"1rem 1.2rem"}}>{noUpcomingLabel}</p>
           ) : (
             upcoming.map(ev => (
-              <div
-                key={ev.id}
-                className="cal-upcoming-item"
-                onClick={() => setSelected(ev.date)}
-              >
+              <div key={ev.id} className="cal-upcoming-item" onClick={() => setSelected(ev.date)}>
                 <div className="cal-upcoming-bar" style={{ background: TYPE_COLORS[ev.type]?.bg }} />
                 <div>
                   <strong>{ev.title}</strong>
