@@ -2,8 +2,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { supabase } from "../lib/supabase";
-import type { CalendarEvent } from "../lib/supabase";
+import { supabase } from "./lib/supabase";
+import type { CalendarEvent } from "./lib/supabase";
 
 const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
