@@ -375,7 +375,7 @@ const REAL_REVIEWS = [
     name: "u/Snupkin",
     country: "🇨🇦 Canada",
     stars: 5,
-    link: "https://www.reddit.com/r/internationalshopper/",
+    link: "https://www.reddit.com/r/internationalshopper/comments/1saw3vr/reviewfeedback_supremely_positive_experience_with/",
     title: "Supremely positive experience",
     text: "Made a request to purchase a local product in store from Japan and ship to Canada. Very helpful and made the process smooth and painless. Fast responses, flexible shipping, securely packaged fragile items, progress updates, friendly service — the whole experience was great and I felt they went above and beyond in their service. Will definitely rely on them again.",
   },
@@ -383,7 +383,7 @@ const REAL_REVIEWS = [
     name: "u/ItsBlueDew",
     country: "🇺🇸 USA",
     stars: 5,
-    link: "https://www.reddit.com/r/internationalshopper/",
+    link: "https://www.reddit.com/r/internationalshopper/comments/1sc0rk4/review_of_ufaycas_kizuna_proxy/",
     title: "Excellent experience — trading cards",
     text: "I had an overall excellent experience using their service. Any questions I had, they were able to answer. I purchased a box of trading cards and it was packaged very well. Photos were sent to me when they arrived at the store, got the product, and even checked other stores to see if they had more. I would buy from them again and probably will in the near future. Highly recommend their services.",
   },
@@ -547,14 +547,9 @@ export default function Home() {
   const t = translations[lang];
 
   const navLinks = [
-    { href: "#how-it-works", label: t.nav.howItWorks },
     { href: "#calendar", label: t.calendar.label },
-    { href: "#about", label: t.nav.about },
-    { href: "#what-we-buy", label: t.nav.whatWeBuy },
-    { href: "#reviews", label: "Reviews" },
     { href: "#pricing", label: t.nav.pricing },
-    { href: "#photos", label: t.nav.gallery },
-    { href: "#faq", label: t.nav.faq },
+    { href: "/events", label: "Events 🎌" },
   ];
 
   const wbuyImgs = ["/buy-mercari.png", "/buy-yahoo.png", "/buy-sneakers.jpg", "/buy-pokemon.jpg", "/buy-nintendo.png", "/buy-akihabara.jpg"];
@@ -904,17 +899,49 @@ export default function Home() {
 
       {/* FOOTER */}
       <footer>
-        <div className="footer-inner">
-          <div className="footer-logo"><span className="r">Kizuna</span> Proxy</div>
-          <p>{t.footer.rights}</p>
-          <div style={{ display: "flex", alignItems: "center", gap: ".75rem", flexWrap: "wrap" }}>
-            <p>contact@kizunaproxy.com</p>
-            <span style={{ width: "1px", height: "12px", background: "rgba(250,248,244,.15)" }} />
-            <div className="social-links">
+        <div className="footer-grid">
+          {/* Brand */}
+          <div className="footer-brand">
+            <div className="footer-logo"><span className="r">Kizuna</span> Proxy</div>
+            <p className="footer-tagline">Tokyo-based proxy service.<br />Your trusted link to Japan.</p>
+            <div className="social-links" style={{ marginTop: "1rem" }}>
               <a className="social-link" href="https://www.instagram.com/kizuna_proxy/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><IconInstagram size={14} /></a>
               <a className="social-link" href="https://www.tiktok.com/@kizunaproxy" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><IconTiktok size={14} /></a>
             </div>
           </div>
+          {/* Navigate */}
+          <div className="footer-col">
+            <p className="footer-col-title">Navigate</p>
+            <a href="#how-it-works" className="footer-link">{t.nav.howItWorks}</a>
+            <a href="#about" className="footer-link">{t.nav.about}</a>
+            <a href="#what-we-buy" className="footer-link">{t.nav.whatWeBuy}</a>
+            <a href="#calendar" className="footer-link">{t.calendar.label}</a>
+            <a href="#pricing" className="footer-link">{t.nav.pricing}</a>
+            <a href="#photos" className="footer-link">{t.nav.gallery}</a>
+          </div>
+          {/* Info */}
+          <div className="footer-col">
+            <p className="footer-col-title">Info</p>
+            <a href="#reviews" className="footer-link">Reviews</a>
+            <a href="#faq" className="footer-link">{t.nav.faq}</a>
+            <a href="/events" className="footer-link">Tokyo Events 🎌</a>
+            <a href="/blog/how-to-buy-from-mercari-japan" className="footer-link">Mercari Japan Guide</a>
+            <a href="/blog/best-pokemon-cards-japan-2026" className="footer-link">Pokémon Cards Japan</a>
+            <a href="/blog/yahoo-auctions-japan-guide" className="footer-link">Yahoo Auctions Guide</a>
+          </div>
+          {/* Contact */}
+          <div className="footer-col">
+            <p className="footer-col-title">Contact</p>
+            <a href="#request-wrap" className="footer-link">{t.nav.request}</a>
+            <a href="mailto:contact@kizunaproxy.com" className="footer-link">contact@kizunaproxy.com</a>
+            <a href="https://wa.me/33788432501" target="_blank" rel="noopener noreferrer" className="footer-link">WhatsApp</a>
+            <a href="https://discord.com/users/Faykas" target="_blank" rel="noopener noreferrer" className="footer-link">Discord</a>
+            <a href="https://fr.trustpilot.com/review/kizunaproxy.com" target="_blank" rel="noopener noreferrer" className="footer-link">Trustpilot</a>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p>{t.footer.rights}</p>
+          <p>kizunaproxy.com</p>
         </div>
       </footer>
 
