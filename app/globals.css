@@ -321,11 +321,19 @@ html.dark .p-event-card { background: var(--mist); }
 .f-note { font-size: .7rem; color: var(--warm); flex: 1; min-width: 160px; }
 
 /* ── FOOTER ── */
-footer { background: var(--ink); padding: 2.5rem 2rem; }
-.footer-inner { max-width: 1160px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; }
-.footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 600; color: rgba(250,248,244,.5); }
+footer { background: var(--ink); }
+.footer-grid { max-width: 1160px; margin: 0 auto; padding: 4rem 2rem 3rem; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 3rem; }
+.footer-brand {}
+.footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: rgba(250,248,244,.8); margin-bottom: .6rem; }
 .footer-logo .r { color: var(--red); }
-footer p { font-size: .7rem; letter-spacing: .06em; color: rgba(250,248,244,.28); }
+.footer-tagline { font-size: .78rem; line-height: 1.7; color: rgba(250,248,244,.3); font-weight: 300; margin-bottom: 0; }
+.footer-col-title { font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: rgba(250,248,244,.25); margin-bottom: .9rem; font-weight: 500; }
+.footer-link { display: block; font-size: .78rem; color: rgba(250,248,244,.45); text-decoration: none; margin-bottom: .5rem; transition: color .2s; font-weight: 300; }
+.footer-link:hover { color: rgba(250,248,244,.85); }
+.footer-bottom { max-width: 1160px; margin: 0 auto; padding: 1.2rem 2rem; border-top: 1px solid rgba(250,248,244,.06); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+.footer-bottom p { font-size: .68rem; letter-spacing: .06em; color: rgba(250,248,244,.2); margin: 0; }
+@media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; } }
+@media (max-width: 540px) { .footer-grid { grid-template-columns: 1fr; } }
 
 /* ── FLOATING TRUSTPILOT ── */
 .trustpilot-float {
@@ -489,8 +497,10 @@ html.dark #pricing .p-unit { color: var(--warm); }
 html.dark #pricing .p-desc { color: var(--warm); }
 html.dark #pricing .p-note { background: var(--cream); border-color: rgba(240,236,230,.1); color: var(--warm); }
 html.dark footer { background: #0a0806; }
-html.dark footer p { color: rgba(240,236,230,.3); }
-html.dark .footer-logo { color: rgba(240,236,230,.5); }
+html.dark .footer-link { color: rgba(240,236,230,.35); }
+html.dark .footer-link:hover { color: rgba(240,236,230,.75); }
+html.dark .footer-tagline { color: rgba(240,236,230,.25); }
+html.dark .footer-bottom p { color: rgba(240,236,230,.15); }
 html.dark .social-link { border-color: rgba(240,236,230,.12); color: rgba(240,236,230,.5); background: rgba(240,236,230,.04); }
 /* cards & forms */
 html.dark .about-pull { background: rgba(184,42,36,.08); }
