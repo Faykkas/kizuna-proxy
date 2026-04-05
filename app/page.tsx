@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { translations, detectLang, LANG_LABELS } from "./translations";
 import type { Lang, T } from "./translations";
 
-const CalendarSection = dynamic(() => import("./Calendar"), { ssr: false, loading: () => <div style={{padding:"3rem",textAlign:"center",color:"var(--warm)"}}>Loading calendar…</div> });
+const CalendarSection = dynamic(() => import("./calendar"), { ssr: false, loading: () => <div style={{padding:"3rem",textAlign:"center",color:"var(--warm)"}}>Loading calendar…</div> });
 
 // ─── CAROUSEL SLIDES ─────────────────────────────────────────────────────────
 const SLIDES = [
