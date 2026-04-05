@@ -850,7 +850,7 @@ export default function Home() {
       </div>
 
       {/* GALLERY */}
-      <section id="photos" className="section reveal" style={{ background: "var(--ink)" }}>
+      <section id="photos" className="section reveal" style={{ background: "var(--cream)" }}>
         <div className="wrap">
           <div className="sec-header">
             <p className="sec-label">{t.gallery.label}</p>
