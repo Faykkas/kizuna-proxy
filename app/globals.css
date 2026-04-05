@@ -697,6 +697,8 @@ html.dark .ev-pricing-note { background: var(--mist); }
 @media (max-width: 768px) { .ev-grid { grid-template-columns: 1fr; } }
 
 /* ── CALENDAR ── */
+.cal-tz-note { display: inline-flex; align-items: center; gap: .45rem; background: var(--paper); border: 1px solid var(--border); border-radius: 1px; padding: .4rem .9rem; font-size: .72rem; color: var(--warm); margin-bottom: 1.5rem; }
+.cal-tz-note strong { color: var(--ink); font-weight: 500; }
 .cal-wrap { display: grid; grid-template-columns: 1fr 280px; gap: 1.5rem; margin-top: 3rem; align-items: start; }
 .cal-box { background: var(--white); border: 1px solid var(--border); border-radius: 2px; overflow: hidden; }
 .cal-header { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); }

@@ -709,6 +709,10 @@ export default function Home() {
             <h2>{t.calendar.title} <em>{t.calendar.titleEm}</em></h2>
             <p className="sec-desc">{t.calendar.desc}</p>
           </div>
+          <div className="cal-tz-note">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>{t.calendar.tzNote} <strong>Japan Standard Time (JST, UTC+9)</strong></span>
+          </div>
           <CalendarSection upcomingLabel={t.calendar.upcoming} noEventsLabel={t.calendar.noEvents} noUpcomingLabel={t.calendar.noUpcoming} />
         </div>
       </section>
