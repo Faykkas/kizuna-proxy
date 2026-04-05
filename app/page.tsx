@@ -371,6 +371,22 @@ const REAL_REVIEWS = [
     title: "Trustworthy Japan shopper",
     text: "I was finding a book that came out in 2011 and they immediately found the one that still had its bonus included, which is very rare. Got only positive experience. Fast response, nice person... I am thinking of buying with them again next month.",
   },
+  {
+    name: "u/Snupkin",
+    country: "🇨🇦 Canada",
+    stars: 5,
+    link: "https://www.reddit.com/r/internationalshopper/",
+    title: "Supremely positive experience",
+    text: "Made a request to purchase a local product in store from Japan and ship to Canada. Very helpful and made the process smooth and painless. Fast responses, flexible shipping, securely packaged fragile items, progress updates, friendly service — the whole experience was great and I felt they went above and beyond in their service. Will definitely rely on them again.",
+  },
+  {
+    name: "u/ItsBlueDew",
+    country: "🇺🇸 USA",
+    stars: 5,
+    link: "https://www.reddit.com/r/internationalshopper/",
+    title: "Excellent experience — trading cards",
+    text: "I had an overall excellent experience using their service. Any questions I had, they were able to answer. I purchased a box of trading cards and it was packaged very well. Photos were sent to me when they arrived at the store, got the product, and even checked other stores to see if they had more. I would buy from them again and probably will in the near future. Highly recommend their services.",
+  },
 ];
 
 // ─── REVIEWS CAROUSEL ────────────────────────────────────────────────────────
