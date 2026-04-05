@@ -14,7 +14,7 @@ const TYPE_COLORS = {
   unavailable: { bg: "#8a7f74", text: "#fff", label: "Unavailable" },
 };
 
-export default function Calendar() {
+export default function Calendar({ upcomingLabel = "Upcoming", noEventsLabel = "No events on this day.", noUpcomingLabel = "No upcoming events." }: { upcomingLabel?: string; noEventsLabel?: string; noUpcomingLabel?: string }) {
   const today = new Date();
   const [year, setYear]   = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
@@ -158,7 +158,7 @@ export default function Calendar() {
               {new Date(selected + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
             </p>
             {selectedEvents.length === 0 ? (
-              <p className="cal-detail-empty">No events on this day.</p>
+              <p className="cal-detail-empty">{noEventsLabel}</p>
             ) : (
               selectedEvents.map(ev => (
                 <div key={ev.id} className="cal-event-card">
@@ -176,9 +176,9 @@ export default function Calendar() {
 
         {/* Upcoming events */}
         <div className="cal-upcoming">
-          <p className="cal-upcoming-title">Upcoming</p>
+          <p className="cal-upcoming-title">{upcomingLabel}</p>
           {upcoming.length === 0 ? (
-            <p className="cal-detail-empty">No upcoming events.</p>
+            <p className="cal-detail-empty">{noUpcomingLabel}</p>
           ) : (
             upcoming.map(ev => (
               <div

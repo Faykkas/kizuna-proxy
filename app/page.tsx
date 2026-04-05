@@ -532,10 +532,10 @@ export default function Home() {
 
   const navLinks = [
     { href: "#how-it-works", label: t.nav.howItWorks },
+    { href: "#calendar", label: t.calendar.label },
     { href: "#about", label: t.nav.about },
     { href: "#what-we-buy", label: t.nav.whatWeBuy },
     { href: "#reviews", label: "Reviews" },
-    { href: "#calendar", label: "Calendar" },
     { href: "#pricing", label: t.nav.pricing },
     { href: "#photos", label: t.nav.gallery },
     { href: "#faq", label: t.nav.faq },
@@ -690,6 +690,18 @@ export default function Home() {
         </div>
       </section>
 
+      {/* CALENDAR */}
+      <section id="calendar" className="section reveal">
+        <div className="wrap">
+          <div className="sec-header">
+            <p className="sec-label">{t.calendar.label}</p>
+            <h2>{t.calendar.title} <em>{t.calendar.titleEm}</em></h2>
+            <p className="sec-desc">{t.calendar.desc}</p>
+          </div>
+          <CalendarSection upcomingLabel={t.calendar.upcoming} noEventsLabel={t.calendar.noEvents} noUpcomingLabel={t.calendar.noUpcoming} />
+        </div>
+      </section>
+
       {/* REVIEWS */}
       <section id="reviews" className="section reveal">
         <div className="wrap">
@@ -821,18 +833,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      {/* CALENDAR */}
-      <section id="calendar" className="section reveal">
-        <div className="wrap">
-          <div className="sec-header">
-            <p className="sec-label">Calendar</p>
-            <h2>Availability &amp; <em>Events</em></h2>
-            <p className="sec-desc">Our availability and upcoming Tokyo events — click a day for details.</p>
-          </div>
-          <CalendarSection />
-        </div>
-      </section>
 
       {/* GALLERY */}
       <section id="photos" className="section reveal" style={{ background: "var(--cream)" }}>
