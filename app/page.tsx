@@ -421,7 +421,7 @@ export default function Home() {
       <nav>
         <div className="nav-inner">
           <a href="#" className="logo">
-            <div className="logo-mark"><span>絆</span></div>
+            <img src="/logo.png" alt="Kizuna Proxy" style={{height:"42px",width:"auto",objectFit:"contain"}} />
             <div>
               <div className="logo-name"><span className="g">Kizuna</span> Proxy</div>
               <div className="logo-sub">Tokyo Proxy Service</div>
@@ -498,7 +498,6 @@ export default function Home() {
           />
           <div className="hero-img-ph" style={{display:"none"}}>
             <span className="jp">東京</span>
-            <span className="lbl">Slide1.png</span>
           </div>
           <div className="hero-badge">
             <div className="hero-badge-num">5.0</div>
@@ -660,6 +659,41 @@ export default function Home() {
             <a href="/events" className="p-event-btn">See Events →</a>
           </div>
           <p className="p-note">{t.pricing?.note}</p>
+
+          {/* SHIPPING */}
+          <div className="shipping-section">
+            <div className="shipping-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.6" strokeLinecap="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              <span>Shipping partners</span>
+            </div>
+            <div className="shipping-grid">
+              <div className="shipping-card">
+                <div className="shipping-carrier">
+                  <div className="carrier-badge ems">EMS</div>
+                  <div className="carrier-name">Japan Post EMS</div>
+                </div>
+                <p className="shipping-desc">Express Mail Service — fast, tracked, affordable. Available worldwide. <strong>For USA shipments: maximum declared value of $100 as gift.</strong> Above this threshold, we recommend switching to FedEx or DHL to avoid customs issues.</p>
+              </div>
+              <div className="shipping-card">
+                <div className="shipping-carrier">
+                  <div className="carrier-badge fedex">FedEx</div>
+                  <div className="carrier-name">FedEx International</div>
+                </div>
+                <p className="shipping-desc">Recommended for high-value orders to the USA and Canada. Full tracking, faster customs clearance, no declared value restriction. Ideal for orders above $100.</p>
+              </div>
+              <div className="shipping-card">
+                <div className="shipping-carrier">
+                  <div className="carrier-badge dhl">DHL</div>
+                  <div className="carrier-name">DHL Express</div>
+                </div>
+                <p className="shipping-desc">Premium express worldwide delivery. Excellent coverage across Europe. Fast customs processing, door-to-door tracking, and reliable delivery times.</p>
+              </div>
+            </div>
+            <p className="shipping-note">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Shipping method and costs are always discussed together before any payment. We choose the best option for your order based on value, destination, and delivery time.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -732,7 +766,7 @@ export default function Home() {
         <div className="footer-grid">
           <div>
             <div className="footer-logo-wrap">
-              <div className="logo-mark" style={{width:"32px",height:"32px"}}><span style={{fontSize:".9rem"}}>絆</span></div>
+              <img src="/logo.png" alt="Kizuna Proxy" style={{height:"32px",width:"auto",objectFit:"contain"}} />
               <div className="footer-logo"><span className="g">Kizuna</span> Proxy</div>
             </div>
             <p className="footer-tagline">Tokyo-based proxy service.<br />Your trusted link to Japan.</p>

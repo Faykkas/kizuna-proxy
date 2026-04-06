@@ -302,7 +302,7 @@ export default function EventsPage() {
       <nav>
         <div className="nav-inner">
           <a href="/" className="logo">
-            <div className="logo-mark"><span>絆</span></div>
+            <img src="/logo.png" alt="Kizuna Proxy" style={{height:"42px",width:"auto",objectFit:"contain"}} />
             <div>
               <div className="logo-name"><span className="g">Kizuna</span> Proxy</div>
               <div className="logo-sub">Tokyo Proxy Service</div>
@@ -403,7 +403,7 @@ export default function EventsPage() {
         <div className="footer-grid">
           <div>
             <div className="footer-logo-wrap">
-              <div className="logo-mark" style={{width:"32px",height:"32px"}}><span style={{fontSize:".9rem"}}>絆</span></div>
+              <img src="/logo.png" alt="Kizuna Proxy" style={{height:"32px",width:"auto",objectFit:"contain"}} />
               <div className="footer-logo"><span className="g">Kizuna</span> Proxy</div>
             </div>
             <p className="footer-tagline">Tokyo-based proxy service.<br />Your trusted link to Japan.</p>
