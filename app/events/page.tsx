@@ -2,48 +2,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { translations, detectLang, LANG_LABELS } from "../translations";
-import type { Metadata } from "next";
-
-// ─── DARK MODE ────────────────────────────────────────────────────────────────
-function useDarkMode() {
-  const [dark, setDark] = useState(false);
-  useEffect(() => {
-    const saved = localStorage.getItem("kizuna-theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDark = saved ? saved === "dark" : prefersDark;
-    setDark(isDark);
-    document.documentElement.classList.toggle("dark", isDark);
-  }, []);
-  const toggle = useCallback(() => {
-    setDark(d => {
-      const next = !d;
-      document.documentElement.classList.toggle("dark", next);
-      localStorage.setItem("kizuna-theme", next ? "dark" : "light");
-      return next;
-    });
-  }, []);
-  return [dark, toggle];
-}
-
-function IconSun() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-      <circle cx="12" cy="12" r="5"/>
-      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-    </svg>
-  );
-}
-function IconMoon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-    </svg>
-  );
-}
+import { detectLang, LANG_LABELS } from "../translations";
 
 // ─── EVENTS CONTENT ───────────────────────────────────────────────────────────
 const EVENTS_CONTENT = {
@@ -323,7 +282,6 @@ const EVENTS_CONTENT = {
 
 // ─── EVENTS PAGE ──────────────────────────────────────────────────────────────
 export default function EventsPage() {
-  const [dark, toggleDark] = useDarkMode();
   const [lang, setLang] = useState("en");
   const [langOpen, setLangOpen] = useState(false);
 
@@ -343,27 +301,19 @@ export default function EventsPage() {
       {/* NAV */}
       <nav>
         <div className="nav-inner">
-          <a href="/" className="logo" style={{ textDecoration: "none" }}>
-            <img src="/logo.png" alt="Kizuna Proxy"
-              style={{ height: "46px", width: "auto", objectFit: "contain", mixBlendMode: dark ? "normal" : "multiply" }} />
-            <div className="logo-wordmark">
-              <div className="logo-name"><span className="r">Kizuna</span> Proxy</div>
+          <a href="/" className="logo">
+            <div className="logo-mark"><span>絆</span></div>
+            <div>
+              <div className="logo-name"><span className="g">Kizuna</span> Proxy</div>
               <div className="logo-sub">Tokyo Proxy Service</div>
             </div>
           </a>
           <div style={{ display: "flex", alignItems: "center", gap: ".75rem" }}>
-            <a href="/#request-wrap" className="nav-cta" style={{ fontSize: ".64rem", letterSpacing: ".08em" }}>
-              Request an item
-            </a>
-            {/* Dark mode */}
-            <button className="icon-btn" onClick={toggleDark} aria-label="Toggle dark mode">
-              {dark ? <IconSun /> : <IconMoon />}
-            </button>
-            {/* Language */}
+            <a href="/#request-wrap" className="nav-cta">Request an item</a>
             <div className="lang-selector">
               <button className="icon-btn lang-btn" onClick={() => setLangOpen(v => !v)}>
-                <span>{LANG_LABELS[lang]}</span>
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                <span style={{fontSize:".65rem",letterSpacing:".1em"}}>{LANG_LABELS[lang]}</span>
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
               </button>
               {langOpen && (
                 <>
@@ -419,7 +369,7 @@ export default function EventsPage() {
           <hr className="blog-hr" />
 
           <div className="ev-pricing-note">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.6" strokeLinecap="round">
               <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
             </svg>
             <div>
@@ -430,7 +380,7 @@ export default function EventsPage() {
 
           <div className="blog-cta" style={{ marginTop: "2rem" }}>
             <p>{c.ctaText}</p>
-            <a href="/#request-wrap" className="btn btn-red">{c.ctaBtn}</a>
+            <a href="/#request-wrap" className="btn btn-gold">{c.ctaBtn}</a>
           </div>
 
           <hr className="blog-hr" />
@@ -450,9 +400,35 @@ export default function EventsPage() {
 
       {/* FOOTER */}
       <footer>
-        <div className="footer-inner">
-          <div className="footer-logo"><span className="r">Kizuna</span> Proxy</div>
-          <p>© 2026 — <a href="/" style={{ color: "inherit", textDecoration: "none", opacity: .6 }}>Back to home</a></p>
+        <div className="footer-grid">
+          <div>
+            <div className="footer-logo-wrap">
+              <div className="logo-mark" style={{width:"32px",height:"32px"}}><span style={{fontSize:".9rem"}}>絆</span></div>
+              <div className="footer-logo"><span className="g">Kizuna</span> Proxy</div>
+            </div>
+            <p className="footer-tagline">Tokyo-based proxy service.<br />Your trusted link to Japan.</p>
+          </div>
+          <div>
+            <p className="footer-col-title">Navigate</p>
+            <a href="/" className="footer-link">Home</a>
+            <a href="/#request-wrap" className="footer-link">Request an item</a>
+            <a href="/#pricing" className="footer-link">Pricing</a>
+          </div>
+          <div>
+            <p className="footer-col-title">Events</p>
+            <a href="/events" className="footer-link">Tokyo Events</a>
+            <a href="/#calendar" className="footer-link">Availability</a>
+          </div>
+          <div>
+            <p className="footer-col-title">Contact</p>
+            <a href="mailto:contact@kizunaproxy.com" className="footer-link">contact@kizunaproxy.com</a>
+            <a href="https://wa.me/33788432501" target="_blank" rel="noopener noreferrer" className="footer-link">WhatsApp</a>
+            <a href="https://discord.com/users/Faykas" target="_blank" rel="noopener noreferrer" className="footer-link">Discord</a>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p>© 2026 Kizuna Proxy</p>
+          <p><a href="/" className="footer-link" style={{display:"inline"}}>← Back to home</a></p>
         </div>
       </footer>
     </>
