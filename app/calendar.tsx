@@ -5,16 +5,45 @@ import { useState, useEffect } from "react";
 import { supabase } from "./lib/supabase";
 import type { CalendarEvent } from "./lib/supabase";
 
-const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const MONTHS_BY_LANG = {
+  en: ["January","February","March","April","May","June","July","August","September","October","November","December"],
+  fr: ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"],
+  ja: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+  es: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],
+  it: ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"],
+  de: ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],
+  ko: ["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],
+  zh: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+};
+
+const DAYS_BY_LANG = {
+  en: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+  fr: ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"],
+  ja: ["月","火","水","木","金","土","日"],
+  es: ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"],
+  it: ["Lun","Mar","Mer","Gio","Ven","Sab","Dom"],
+  de: ["Mo","Di","Mi","Do","Fr","Sa","So"],
+  ko: ["월","화","수","목","금","토","일"],
+  zh: ["一","二","三","四","五","六","日"],
+};
 
 const TYPE_COLORS = {
-  event:       { bg: "#b82a24", text: "#fff", label: "Event" },
+  event:       { bg: "#b8976a", text: "#fff", label: "Event" },
   available:   { bg: "#3a7d44", text: "#fff", label: "Available" },
   unavailable: { bg: "#8a7f74", text: "#fff", label: "Unavailable" },
 };
 
-export default function Calendar({ upcomingLabel = "Upcoming", noEventsLabel = "No events on this day.", noUpcomingLabel = "No upcoming events." }: { upcomingLabel?: string; noEventsLabel?: string; noUpcomingLabel?: string }) {
+export default function Calendar({
+  upcomingLabel = "Upcoming",
+  noEventsLabel = "No events on this day.",
+  noUpcomingLabel = "No upcoming events.",
+  lang = "en",
+}: {
+  upcomingLabel?: string;
+  noEventsLabel?: string;
+  noUpcomingLabel?: string;
+  lang?: string;
+}) {
   const today = new Date();
   const [year, setYear]   = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
@@ -55,6 +84,9 @@ export default function Calendar({ upcomingLabel = "Upcoming", noEventsLabel = "
 
   const prevMonth = () => { if (month === 0) { setYear(y => y - 1); setMonth(11); } else setMonth(m => m - 1); setSelected(null); };
   const nextMonth = () => { if (month === 11) { setYear(y => y + 1); setMonth(0); } else setMonth(m => m + 1); setSelected(null); };
+
+  const MONTHS = MONTHS_BY_LANG[lang] || MONTHS_BY_LANG.en;
+  const DAYS   = DAYS_BY_LANG[lang]   || DAYS_BY_LANG.en;
 
   return (
     <div className="cal-wrap">

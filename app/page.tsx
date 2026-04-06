@@ -565,6 +565,7 @@ export default function Home() {
             upcomingLabel={t.calendar?.upcoming}
             noEventsLabel={t.calendar?.noEvents}
             noUpcomingLabel={t.calendar?.noUpcoming}
+            lang={lang}
           />
         </div>
       </section>
