@@ -665,43 +665,33 @@ export default function Home() {
                   <div className="carrier-badge ems">EMS</div>
                   <div className="carrier-name">{t.shipping?.ems || "Japan Post EMS"}</div>
                 </div>
-                <p className="shipping-desc">{t.shipping?.emsDesc} <strong>{t.shipping?.emsWarning}</strong></p>
+                <p className="shipping-desc">
+                  {t.shipping?.emsDesc || "Express Mail Service — fast, tracked, affordable. Available worldwide."}
+                  {" "}<strong>{t.shipping?.emsWarning || "For USA shipments: maximum declared value of $100 as gift. Above this threshold, we recommend FedEx or DHL."}</strong>
+                </p>
               </div>
               <div className="shipping-card">
                 <div className="shipping-carrier">
                   <div className="carrier-badge fedex">FedEx</div>
                   <div className="carrier-name">{t.shipping?.fedex || "FedEx International"}</div>
                 </div>
-                <p className="shipping-desc">{t.shipping?.fedexDesc}</p>
+                <p className="shipping-desc">{t.shipping?.fedexDesc || "Recommended for high-value orders to USA and Canada. Full tracking, faster customs clearance, no declared value restriction."}</p>
               </div>
               <div className="shipping-card">
                 <div className="shipping-carrier">
                   <div className="carrier-badge dhl">DHL</div>
                   <div className="carrier-name">{t.shipping?.dhl || "DHL Express"}</div>
                 </div>
-                <p className="shipping-desc">{t.shipping?.dhlDesc}</p>
+                <p className="shipping-desc">{t.shipping?.dhlDesc || "Premium express worldwide delivery. Excellent coverage across Europe. Fast customs processing, door-to-door tracking."}</p>
               </div>
             </div>
             <p className="shipping-note">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              {t.shipping?.note}
+              {t.shipping?.note || "Shipping method and costs are always discussed together before any payment. We choose the best option based on value, destination, and delivery time."}
             </p>
           </div>
         </div>
       </section>
-
-      {/* COUNTRIES */}
-      <div className="countries-bar reveal">
-        <div className="wrap">
-          <p className="countries-label">Delivered worldwide</p>
-          <div className="countries-flags">
-            {["🇫🇷","🇺🇸","🇨🇦","🇬🇷","🇩🇪","🇮🇹","🇪🇸","🇬🇧","🇦🇺","🇧🇪","🇳🇱","🇨🇭","🇵🇹","🇸🇪","🇵🇱","🇧🇷","🇲🇽","🇯🇵","🇰🇷","🇮🇩"].map((flag, i) => (
-              <span key={i} className="country-flag">{flag}</span>
-            ))}
-            <span className="countries-more">& more</span>
-          </div>
-        </div>
-      </div>
 
       {/* GALLERY */}
       <section id="photos" className="section reveal">

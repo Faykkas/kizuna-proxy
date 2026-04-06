@@ -201,7 +201,7 @@ nav { position: sticky; top: 0; z-index: 100; background: rgba(247,243,237,.96);
    REVIEWS
    ══════════════════════════════════════════════════════════ */
 #reviews { background: var(--ink); }
-#reviews .sec-label { color: rgba(184,151,106,.6); }
+#reviews .sec-label { color: var(--gold); }
 #reviews .sec-label::before { background: var(--gold); }
 #reviews h2 { color: var(--beige); }
 #reviews .desc { color: rgba(247,243,237,.4); }
