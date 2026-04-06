@@ -209,39 +209,28 @@ nav { position: sticky; top: 0; z-index: 100; background: rgba(247,243,237,.96);
 #reviews .sec-label { color: rgba(184,151,106,.6); }
 #reviews .sec-label::before { background: var(--gold); }
 #reviews h2 { color: var(--beige); }
-#reviews .desc { color: rgba(247,243,237,.4); }
-.reviews-score { display: flex; align-items: flex-start; gap: 3rem; margin-bottom: 3rem; padding: 2rem 2.5rem; background: rgba(247,243,237,.04); border: 1px solid rgba(184,151,106,.15); }
-.reviews-score-num { font-family: 'Cormorant Garamond', serif; font-size: 4.5rem; font-weight: 300; color: var(--beige); line-height: 1; }
-.reviews-score-right { flex: 1; }
-.reviews-score-stars { color: var(--gold); font-size: 1.1rem; letter-spacing: .08em; margin-bottom: .3rem; }
-.reviews-score-label { font-size: .65rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(247,243,237,.3); margin-bottom: 1rem; }
-.reviews-bars { display: flex; flex-direction: column; gap: .3rem; }
-.reviews-bar-row { display: flex; align-items: center; gap: .6rem; }
-.reviews-bar-row span { font-size: .65rem; color: rgba(247,243,237,.3); min-width: 22px; }
-.reviews-bar-row span:last-child { min-width: 30px; text-align: right; }
-.reviews-bar-track { flex: 1; height: 4px; background: rgba(247,243,237,.08); border-radius: 2px; overflow: hidden; }
-.reviews-bar-fill { height: 100%; background: var(--gold); border-radius: 2px; }
-.reviews-source-btn { display: inline-flex; align-items: center; gap: .5rem; padding: .5rem 1rem; border: 1px solid rgba(184,151,106,.2); color: rgba(247,243,237,.4); font-size: .65rem; letter-spacing: .08em; transition: border-color .2s, color .2s; align-self: center; white-space: nowrap; }
-.reviews-source-btn:hover { border-color: var(--gold); color: var(--gold); }
-.rcarousel { margin-top: 0; }
-.rcarousel-track { position: relative; min-height: 260px; }
-.rcarousel-card { position: absolute; inset: 0; opacity: 0; pointer-events: none; transition: opacity .5s ease; border: 1px solid rgba(184,151,106,.12); padding: 2rem 2.2rem; display: flex; flex-direction: column; gap: 1rem; background: rgba(247,243,237,.03); }
-.rcarousel-card.active { opacity: 1; pointer-events: auto; position: relative; }
-.rcard-top { display: flex; align-items: center; justify-content: space-between; }
-.rcard-stars { color: var(--gold); font-size: 1rem; letter-spacing: .05em; }
-.rcard-source { display: inline-flex; align-items: center; gap: .35rem; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(247,243,237,.25); transition: color .2s; }
-.rcard-source:hover { color: var(--gold); }
-.rcard-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--beige); }
-.rcard-text { font-size: .88rem; line-height: 1.8; color: rgba(247,243,237,.45); font-weight: 300; font-style: italic; flex: 1; }
-.rcard-footer { display: flex; align-items: center; gap: .75rem; padding-top: 1rem; border-top: 1px solid rgba(184,151,106,.12); }
-.rcard-name { font-size: .82rem; font-weight: 500; color: var(--beige); }
-.rcard-country { font-size: .72rem; color: rgba(247,243,237,.3); }
-.rcarousel-nav { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
-.rcarousel-btn { width: 34px; height: 34px; border: 1px solid rgba(184,151,106,.2); background: transparent; color: rgba(247,243,237,.4); display: flex; align-items: center; justify-content: center; transition: background .2s, border-color .2s, color .2s; }
-.rcarousel-btn:hover { background: var(--gold); border-color: var(--gold); color: var(--white); }
-.rcarousel-dots { display: flex; gap: .5rem; }
-.rcarousel-dot { width: 6px; height: 6px; border-radius: 50%; border: none; background: rgba(247,243,237,.15); cursor: pointer; padding: 0; transition: background .2s; }
-.rcarousel-dot.active { background: var(--gold); }
+.reviews-header { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(184,151,106,.15); flex-wrap: wrap; }
+.reviews-score-block { display: flex; align-items: center; gap: 1.5rem; }
+.reviews-big-num { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 300; color: var(--beige); line-height: 1; }
+.reviews-big-stars { color: var(--gold); font-size: 1.2rem; letter-spacing: .08em; margin-bottom: .25rem; }
+.reviews-big-label { font-size: .65rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(247,243,237,.35); }
+.reviews-count { font-size: .72rem; color: rgba(247,243,237,.25); margin-top: .2rem; font-weight: 300; }
+.reviews-reddit-badge { display: inline-flex; align-items: center; gap: .6rem; padding: .65rem 1.2rem; border: 1px solid rgba(255,69,0,.25); color: rgba(247,243,237,.5); font-size: .72rem; letter-spacing: .06em; transition: border-color .2s, color .2s; }
+.reviews-reddit-badge:hover { border-color: rgba(255,69,0,.6); color: rgba(247,243,237,.8); }
+.reviews-cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(184,151,106,.1); border: 1px solid rgba(184,151,106,.1); }
+.review-card-new { background: var(--ink); padding: 2rem; display: flex; flex-direction: column; gap: .9rem; transition: background .2s; text-decoration: none; }
+.review-card-new:hover { background: rgba(247,243,237,.03); }
+.rcn-top { display: flex; align-items: center; justify-content: space-between; }
+.rcn-stars { color: var(--gold); font-size: .95rem; letter-spacing: .05em; }
+.rcn-country { font-size: .72rem; color: rgba(247,243,237,.3); }
+.rcn-title { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 600; color: var(--beige); line-height: 1.3; }
+.rcn-text { font-size: .8rem; line-height: 1.8; color: rgba(247,243,237,.4); font-weight: 300; font-style: italic; flex: 1; }
+.rcn-footer { display: flex; align-items: center; gap: .7rem; padding-top: .9rem; border-top: 1px solid rgba(184,151,106,.1); }
+.rcn-avatar { width: 30px; height: 30px; border-radius: 50%; background: rgba(184,151,106,.15); border: 1px solid rgba(184,151,106,.2); display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 500; color: var(--gold); flex-shrink: 0; }
+.rcn-name { font-size: .78rem; font-weight: 500; color: rgba(247,243,237,.6); }
+.rcn-source { font-size: .62rem; color: rgba(247,243,237,.25); letter-spacing: .06em; }
+@media (max-width: 1024px) { .reviews-cards-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .reviews-cards-grid { grid-template-columns: 1fr; } }
 
 /* ══════════════════════════════════════════════════════════
    PRICING
