@@ -462,47 +462,40 @@ export default function Home() {
       </nav>
 
       {/* HERO */}
-      <section className="hero">
-        <div className="hero-left">
+      <section className="hero-center">
+        <div className="hero-center-inner">
           <div className="hero-kana">絆</div>
           <div className="hero-eyebrow">
             <div className="hero-eyebrow-line" />
             <span>{t.hero.eyebrow}</span>
+            <div className="hero-eyebrow-line" />
           </div>
-          <h1>{t.hero.title1}<br /><em>{t.hero.title2}</em></h1>
-          <div className="hero-social-row">
-            <span className="social-label">{t.hero.followUs}</span>
-            <a className="hero-social-link" href="https://www.instagram.com/kizuna_proxy/" target="_blank" rel="noopener noreferrer"><IconInstagram /></a>
-            <a className="hero-social-link" href="https://www.tiktok.com/@kizunaproxy" target="_blank" rel="noopener noreferrer"><IconTiktok /></a>
-          </div>
+          <h1>{t.hero.title1} <em>{t.hero.title2}</em></h1>
           <p className="hero-desc">{t.hero.desc}</p>
-          <div className="hero-btns">
+          <div className="hero-btns hero-btns-center">
             <a href="#request-wrap" className="btn btn-gold">{t.hero.cta}</a>
             <a href="#pricing" className="btn btn-outline">{t.hero.ctaSecondary}</a>
           </div>
-          <div className="hero-stats">
-            <div className="hero-stat"><strong>7</strong><span>Reviews</span></div>
-            <div className="hero-stat"><strong>5.0</strong><span>Rating</span></div>
-            <div className="hero-stat"><strong>20+</strong><span>Countries</span></div>
+          <div className="hero-stats hero-stats-center">
+            <div className="hero-stat">
+              <strong>7</strong>
+              <span>Reviews</span>
+            </div>
+            <div className="hero-stat-sep" />
+            <div className="hero-stat">
+              <strong>5.0 ★</strong>
+              <span>Rating</span>
+            </div>
+            <div className="hero-stat-sep" />
+            <div className="hero-stat">
+              <strong>20+</strong>
+              <span>Countries</span>
+            </div>
           </div>
-        </div>
-        <div className="hero-right">
-          <img
-            src="/Slide1.png"
-            alt="Kizuna Proxy — Tokyo"
-            className="hero-img"
-            onError={e => {
-              (e.target as HTMLImageElement).style.display = "none";
-              (e.target as HTMLImageElement).nextElementSibling?.setAttribute("style","display:flex");
-            }}
-          />
-          <div className="hero-img-ph" style={{display:"none"}}>
-            <span className="jp">東京</span>
-          </div>
-          <div className="hero-badge">
-            <div className="hero-badge-num">5.0</div>
-            <div className="hero-badge-stars">★★★★★</div>
-            <div className="hero-badge-lbl">Verified on Reddit</div>
+          <div className="hero-social-row hero-social-center">
+            <span className="social-label">{t.hero.followUs}</span>
+            <a className="hero-social-link" href="https://www.instagram.com/kizuna_proxy/" target="_blank" rel="noopener noreferrer"><IconInstagram /></a>
+            <a className="hero-social-link" href="https://www.tiktok.com/@kizunaproxy" target="_blank" rel="noopener noreferrer"><IconTiktok /></a>
           </div>
         </div>
       </section>
