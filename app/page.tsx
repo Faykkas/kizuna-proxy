@@ -664,34 +664,34 @@ export default function Home() {
           <div className="shipping-section">
             <div className="shipping-title">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.6" strokeLinecap="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-              <span>Shipping partners</span>
+              <span>{t.shipping?.label || "Shipping partners"}</span>
             </div>
             <div className="shipping-grid">
               <div className="shipping-card">
                 <div className="shipping-carrier">
                   <div className="carrier-badge ems">EMS</div>
-                  <div className="carrier-name">Japan Post EMS</div>
+                  <div className="carrier-name">{t.shipping?.ems || "Japan Post EMS"}</div>
                 </div>
-                <p className="shipping-desc">Express Mail Service — fast, tracked, affordable. Available worldwide. <strong>For USA shipments: maximum declared value of $100 as gift.</strong> Above this threshold, we recommend switching to FedEx or DHL to avoid customs issues.</p>
+                <p className="shipping-desc">{t.shipping?.emsDesc} <strong>{t.shipping?.emsWarning}</strong></p>
               </div>
               <div className="shipping-card">
                 <div className="shipping-carrier">
                   <div className="carrier-badge fedex">FedEx</div>
-                  <div className="carrier-name">FedEx International</div>
+                  <div className="carrier-name">{t.shipping?.fedex || "FedEx International"}</div>
                 </div>
-                <p className="shipping-desc">Recommended for high-value orders to the USA and Canada. Full tracking, faster customs clearance, no declared value restriction. Ideal for orders above $100.</p>
+                <p className="shipping-desc">{t.shipping?.fedexDesc}</p>
               </div>
               <div className="shipping-card">
                 <div className="shipping-carrier">
                   <div className="carrier-badge dhl">DHL</div>
-                  <div className="carrier-name">DHL Express</div>
+                  <div className="carrier-name">{t.shipping?.dhl || "DHL Express"}</div>
                 </div>
-                <p className="shipping-desc">Premium express worldwide delivery. Excellent coverage across Europe. Fast customs processing, door-to-door tracking, and reliable delivery times.</p>
+                <p className="shipping-desc">{t.shipping?.dhlDesc}</p>
               </div>
             </div>
             <p className="shipping-note">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              Shipping method and costs are always discussed together before any payment. We choose the best option for your order based on value, destination, and delivery time.
+              {t.shipping?.note}
             </p>
           </div>
         </div>

@@ -8,6 +8,7 @@ import { detectLang, LANG_LABELS } from "../translations";
 const EVENTS_CONTENT = {
   en: {
     eyebrow: "Tokyo Events · Exclusive Access",
+    ctaNav: "Request an item",
     title: "Tokyo Events &",
     titleEm: "Exclusive Releases",
     lead: "Some of the most sought-after items in Japan are never listed online — they only exist at specific events, pop-ups, and store openings. We are on the ground in Tokyo and attend these for you.",
@@ -42,6 +43,7 @@ const EVENTS_CONTENT = {
   },
   fr: {
     eyebrow: "Événements Tokyo · Accès Exclusif",
+    ctaNav: "Faire une demande",
     title: "Événements Tokyo &",
     titleEm: "Sorties Exclusives",
     lead: "Les articles les plus recherchés au Japon n'existent parfois que lors d'événements spéciaux, pop-ups et ouvertures de boutiques. Nous sommes sur place à Tokyo et y participons pour vous.",
@@ -76,6 +78,7 @@ const EVENTS_CONTENT = {
   },
   ja: {
     eyebrow: "東京イベント · 限定アクセス",
+    ctaNav: "商品をリクエスト",
     title: "東京イベント &",
     titleEm: "限定リリース",
     lead: "日本で最も人気のあるアイテムの多くは、特定のイベントやポップアップ、ストアオープン時にしか手に入りません。私たちは東京に拠点を置き、代わりに参加します。",
@@ -110,6 +113,7 @@ const EVENTS_CONTENT = {
   },
   es: {
     eyebrow: "Eventos Tokio · Acceso Exclusivo",
+    ctaNav: "Solicitar un artículo",
     title: "Eventos en Tokio &",
     titleEm: "Lanzamientos Exclusivos",
     lead: "Los artículos más buscados de Japón a veces solo existen en eventos especiales, pop-ups y aperturas de tiendas. Estamos en Tokio y asistimos por ti.",
@@ -144,6 +148,7 @@ const EVENTS_CONTENT = {
   },
   de: {
     eyebrow: "Tokio Events · Exklusiver Zugang",
+    ctaNav: "Artikel anfragen",
     title: "Tokio Events &",
     titleEm: "Exklusive Releases",
     lead: "Die begehrtesten Artikel in Japan gibt es manchmal nur bei speziellen Events, Pop-ups und Store-Eröffnungen. Wir sind vor Ort in Tokio und nehmen für dich teil.",
@@ -178,6 +183,7 @@ const EVENTS_CONTENT = {
   },
   it: {
     eyebrow: "Eventi Tokyo · Accesso Esclusivo",
+    ctaNav: "Richiedi un articolo",
     title: "Eventi a Tokyo &",
     titleEm: "Uscite Esclusive",
     lead: "Gli articoli più ricercati in Giappone esistono a volte solo in eventi speciali, pop-up e aperture di negozi. Siamo sul posto a Tokyo e partecipiamo per te.",
@@ -212,6 +218,7 @@ const EVENTS_CONTENT = {
   },
   ko: {
     eyebrow: "도쿄 이벤트 · 독점 접근",
+    ctaNav: "아이템 요청",
     title: "도쿄 이벤트 &",
     titleEm: "한정 발매",
     lead: "일본에서 가장 인기 있는 아이템들은 특정 이벤트, 팝업, 매장 오픈에서만 구할 수 있습니다. 저희가 도쿄 현장에서 대신 참가해 드립니다.",
@@ -246,6 +253,7 @@ const EVENTS_CONTENT = {
   },
   zh: {
     eyebrow: "东京活动 · 独家渠道",
+    ctaNav: "请求商品",
     title: "东京活动 &",
     titleEm: "限定发售",
     lead: "日本最受追捧的商品有时只在特定活动、快闪店和门店开业时才有。我们在东京现场，代您参与。",
@@ -309,7 +317,7 @@ export default function EventsPage() {
             </div>
           </a>
           <div style={{ display: "flex", alignItems: "center", gap: ".75rem" }}>
-            <a href="/#request-wrap" className="nav-cta">Request an item</a>
+            <a href="/#request-wrap" className="nav-cta">{c.ctaNav || "Request an item"}</a>
             <div className="lang-selector">
               <button className="icon-btn lang-btn" onClick={() => setLangOpen(v => !v)}>
                 <span style={{fontSize:".65rem",letterSpacing:".1em"}}>{LANG_LABELS[lang]}</span>
