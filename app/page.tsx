@@ -556,6 +556,17 @@ export default function Home() {
         </div>
       </div>
 
+      {/* NEWS */}
+      <section id="news" className="section-sm reveal">
+        <div className="wrap">
+          <div className="sec-head" style={{marginBottom:"2rem"}}>
+            <p className="sec-label">{t.news?.label || "Latest news"}</p>
+            <h2>{t.news?.title || "Updates &"} <em>{t.news?.titleEm || "announcements"}</em></h2>
+          </div>
+          <NewsSection />
+        </div>
+      </section>
+
       {/* SERVICES */}
       <section id="services" className="section reveal">
         <div className="wrap">
@@ -769,17 +780,6 @@ export default function Home() {
             </div>
             <RequestForm t={t} />
           </div>
-        </div>
-      </section>
-
-      {/* NEWS */}
-      <section id="news" className="section reveal">
-        <div className="wrap">
-          <div className="sec-head">
-            <p className="sec-label">Latest news</p>
-            <h2>Updates & <em>announcements</em></h2>
-          </div>
-          <NewsSection />
         </div>
       </section>
 
