@@ -54,10 +54,26 @@ export default function NewsSection() {
 
   if (news.length === 0) return null;
 
+  const featured = news[0];
+  const rest = news.slice(1);
+
   return (
     <div className="news-grid">
-      {news.map((item, i) => (
-        <div key={item.id} className={`news-card${i === 0 ? " news-card-featured" : ""}`}>
+      {/* Featured — full width only if there are more items */}
+      <div className={`news-card${rest.length > 0 ? " news-card-featured" : ""}`}>
+        <div className="news-card-top">
+          <span className="news-badge" style={{ background: CATEGORY_CONFIG[featured.category]?.color }}>
+            {CATEGORY_CONFIG[featured.category]?.label}
+          </span>
+          <span className="news-date">{timeAgo(featured.published_at)}</span>
+        </div>
+        <h3 className="news-title">{featured.title}</h3>
+        <p className="news-content">{featured.content}</p>
+      </div>
+
+      {/* Rest — only render if they exist */}
+      {rest.map(item => (
+        <div key={item.id} className="news-card">
           <div className="news-card-top">
             <span className="news-badge" style={{ background: CATEGORY_CONFIG[item.category]?.color }}>
               {CATEGORY_CONFIG[item.category]?.label}
