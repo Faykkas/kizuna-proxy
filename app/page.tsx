@@ -11,6 +11,11 @@ const CalendarSection = dynamic(() => import("./calendar"), {
   loading: () => <div style={{padding:"3rem",textAlign:"center",color:"var(--warm)"}}>Loading…</div>
 });
 
+const NewsSection = dynamic(() => import("./news"), {
+  ssr: false,
+  loading: () => <div style={{padding:"2rem",textAlign:"center",color:"var(--warm)"}}>Loading…</div>
+});
+
 // ─── SLIDES ──────────────────────────────────────────────────────────────────
 const SLIDES = [
   { src: "/Ancora_order.jpg",      alt: "Ancora order",        title: "Ancora Japan",               sub: "Fountain pen ink · Canada" },
@@ -699,6 +704,13 @@ export default function Home() {
               </div>
               <div className="shipping-card">
                 <div className="shipping-carrier">
+                  <div className="carrier-badge yamato">ヤマト</div>
+                  <div className="carrier-name">{t.shipping?.yamato || "Yamato Transport (TA-Q-BIN)"}</div>
+                </div>
+                <p className="shipping-desc">{t.shipping?.yamatoDesc || "Economical option for USA shipments above $100. Slower than FedEx/DHL but significantly cheaper for heavy or bulky packages."}</p>
+              </div>
+              <div className="shipping-card">
+                <div className="shipping-carrier">
                   <div className="carrier-badge fedex">FedEx</div>
                   <div className="carrier-name">{t.shipping?.fedex || "FedEx International"}</div>
                 </div>
@@ -757,6 +769,17 @@ export default function Home() {
             </div>
             <RequestForm t={t} />
           </div>
+        </div>
+      </section>
+
+      {/* NEWS */}
+      <section id="news" className="section reveal">
+        <div className="wrap">
+          <div className="sec-head">
+            <p className="sec-label">Latest news</p>
+            <h2>Updates & <em>announcements</em></h2>
+          </div>
+          <NewsSection />
         </div>
       </section>
 
