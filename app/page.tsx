@@ -332,45 +332,51 @@ function BackToTop() {
 
 // ─── CUSTOM CHAT BUTTON ──────────────────────────────────────────────────────
 function ChatButton() {
-  const [unread, setUnread] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (typeof window !== "undefined" && window.Tawk_API?.getUnreadCount) {
-        setUnread(window.Tawk_API.getUnreadCount());
-      }
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
 
   function toggleChat() {
     if (typeof window === "undefined" || !window.Tawk_API) return;
     if (isOpen) {
-      window.Tawk_API.hideWidget();
       window.Tawk_API.minimize();
       setIsOpen(false);
     } else {
-      window.Tawk_API.showWidget();
       window.Tawk_API.maximize();
       setIsOpen(true);
-      setUnread(0);
     }
+    // Always keep the default widget hidden
+    setTimeout(() => {
+      if (window.Tawk_API?.hideWidget) window.Tawk_API.hideWidget();
+    }, 100);
   }
 
+  // Keep hiding the default widget continuously
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (typeof window !== "undefined" && window.Tawk_API?.hideWidget) {
+        window.Tawk_API.hideWidget();
+      }
+    }, 500);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <button className={`chat-btn${isOpen ? " open" : ""}`} onClick={toggleChat} aria-label="Open chat">
-      {unread > 0 && <span className="chat-badge">{unread}</span>}
+    <button
+      className={`chat-btn${isOpen ? " open" : ""}`}
+      onClick={toggleChat}
+      aria-label="Open support chat"
+    >
       {isOpen ? (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
           <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
         </svg>
       ) : (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
+        <>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span className="chat-btn-label">Support</span>
+        </>
       )}
-      {!isOpen && <span className="chat-btn-label">Support</span>}
     </button>
   );
 }
