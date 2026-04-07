@@ -343,6 +343,7 @@ footer { background: var(--ink); }
    FLOATS
    ══════════════════════════════════════════════════════════ */
 /* ── CUSTOM CHAT BUTTON ── */
+iframe[src*="tawk"], #tawk-bubble-container, .tawk-min-container { display: none !important; opacity: 0 !important; pointer-events: none !important; }
 .chat-btn { position: fixed; bottom: 2rem; right: 2rem; z-index: 200; display: flex; align-items: center; gap: .55rem; background: var(--ink); color: var(--gold); border: 1px solid rgba(184,151,106,.25); padding: .7rem 1.2rem .7rem .9rem; border-radius: 2px; box-shadow: 0 4px 24px rgba(22,18,14,.2); transition: background .2s, transform .2s, border-radius .2s; cursor: pointer; font-family: 'Jost', sans-serif; }
 .chat-btn:hover { background: var(--gold-d); color: var(--white); transform: translateY(-2px); }
 .chat-btn.open { background: var(--gold-d); color: var(--white); padding: .85rem; border-radius: 50%; }
@@ -358,9 +359,7 @@ footer { background: var(--ink); }
 .events-float-body p { font-size: .7rem; line-height: 1.55; color: rgba(247,243,237,.4); font-weight: 300; margin: 0 0 .7rem; }
 .events-float-btn { display: inline-flex; align-items: center; gap: .3rem; font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); font-weight: 500; transition: gap .2s; border-bottom: 1px solid rgba(184,151,106,.3); padding-bottom: .1rem; }
 .events-float-btn:hover { gap: .5rem; }
-.back-to-top { position: fixed; bottom: 5rem; right: 2.2rem; z-index: 200; width: 36px; height: 36px; background: var(--paper); border: 1px solid var(--border-gold); color: var(--warm); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .3s, background .2s; border-radius: 1px; }
-.back-to-top.visible { opacity: 1; pointer-events: auto; }
-.back-to-top:hover { background: var(--ink); color: var(--gold); }
+.back-to-top { display: none; }
 
 /* ══════════════════════════════════════════════════════════
    PHOTO PLACEHOLDER
