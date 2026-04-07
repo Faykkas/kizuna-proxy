@@ -465,18 +465,18 @@ function useSakuraCanvas() {
     type Stroke = { pts:{x:number;y:number}[]; prog:number; op:number; hold:number; phase:string; w:number; };
 
     function buildWord(): Stroke[] {
-      const lw = Math.min(W * .075, 48);
+      const lw = Math.min(W * .13, 85);  // bigger
       const lh = lw * 1.4;
-      const gap = lw * .45;
+      const gap = lw * .3;
       const totalW = WORD.length * lw + (WORD.length - 1) * gap;
       let ox = (W - totalW) / 2;
-      const sy = H * .28;
+      const sy = H * .55;  // bottom half of hero
       const all: Stroke[] = [];
       WORD.forEach(letter => {
         (LETTERS[letter] || []).forEach(stroke => {
           all.push({
             pts: stroke.map(p => ({ x: ox + p.x * lw, y: sy + p.y * lh })),
-            prog: 0, op: 0, hold: 0, phase: 'wait', w: 1.6 + Math.random() * .8,
+            prog: 0, op: 0, hold: 0, phase: 'wait', w: 1.2 + Math.random() * .6,
           });
         });
         ox += lw + gap;
@@ -608,7 +608,7 @@ function useSakuraCanvas() {
       wordStrokes.forEach(s => {
         if (s.phase === 'draw') {
           s.prog += .06;
-          s.op = Math.min(s.op + .025, .7);
+          s.op = Math.min(s.op + .025, .18);  // max 18% opacity - decorative
           if (s.prog >= s.pts.length - 1) { s.prog = s.pts.length - 1; s.phase = 'hold'; }
         }
         if (s.phase !== 'wait') drawStroke(s);
