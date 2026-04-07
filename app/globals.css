@@ -342,15 +342,12 @@ footer { background: var(--ink); }
 /* ══════════════════════════════════════════════════════════
    FLOATS
    ══════════════════════════════════════════════════════════ */
-.contact-float { position: fixed; bottom: 2rem; right: 5.5rem; z-index: 200; display: flex; flex-direction: column; align-items: flex-end; gap: .6rem; }
-.contact-float-btns { display: flex; flex-direction: column; gap: .5rem; align-items: flex-end; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .3s, transform .3s; }
-.contact-float-btns.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
-.contact-float-item { display: flex; align-items: center; gap: .6rem; padding: .5rem 1rem .5rem .7rem; border-radius: 50px; color: #fff; font-size: .76rem; font-weight: 500; letter-spacing: .03em; box-shadow: 0 4px 16px rgba(0,0,0,.15); transition: transform .2s; white-space: nowrap; }
-.contact-float-item:hover { transform: translateX(-3px); }
-.contact-float-item.whatsapp { background: #25d366; }
-.contact-float-item.discord { background: #5865f2; }
-.contact-float-toggle { width: 46px; height: 46px; border-radius: 50%; background: var(--ink); border: 1px solid rgba(184,151,106,.3); color: var(--gold); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(22,18,14,.2); transition: background .2s; }
-.contact-float-toggle:hover, .contact-float-toggle.open { background: var(--gold-d); color: var(--white); }
+/* ── CUSTOM CHAT BUTTON ── */
+.chat-btn { position: fixed; bottom: 2rem; right: 2rem; z-index: 200; display: flex; align-items: center; gap: .55rem; background: var(--ink); color: var(--gold); border: 1px solid rgba(184,151,106,.25); padding: .7rem 1.2rem .7rem .9rem; border-radius: 2px; box-shadow: 0 4px 24px rgba(22,18,14,.2); transition: background .2s, transform .2s, border-radius .2s; cursor: pointer; font-family: 'Jost', sans-serif; }
+.chat-btn:hover { background: var(--gold-d); color: var(--white); transform: translateY(-2px); }
+.chat-btn.open { background: var(--gold-d); color: var(--white); padding: .85rem; border-radius: 50%; }
+.chat-btn-label { font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; }
+.chat-badge { position: absolute; top: -.35rem; right: -.35rem; background: var(--red); color: #fff; font-size: .58rem; font-weight: 700; min-width: 17px; height: 17px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
 .events-float { position: fixed; bottom: 5.5rem; left: 1.5rem; z-index: 200; width: 248px; background: var(--ink); border-radius: 2px; border-left: 3px solid var(--gold); padding: 1.1rem 1.2rem 1.1rem 1rem; display: flex; align-items: flex-start; gap: .8rem; box-shadow: 0 12px 40px rgba(22,18,14,.25); opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .45s, transform .45s; }
 .events-float.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .events-float-close { position: absolute; top: .5rem; right: .5rem; width: 18px; height: 18px; border-radius: 50%; background: transparent; border: none; color: rgba(247,243,237,.3); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: color .2s; }
@@ -361,9 +358,9 @@ footer { background: var(--ink); }
 .events-float-body p { font-size: .7rem; line-height: 1.55; color: rgba(247,243,237,.4); font-weight: 300; margin: 0 0 .7rem; }
 .events-float-btn { display: inline-flex; align-items: center; gap: .3rem; font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); font-weight: 500; transition: gap .2s; border-bottom: 1px solid rgba(184,151,106,.3); padding-bottom: .1rem; }
 .events-float-btn:hover { gap: .5rem; }
-.back-to-top { position: fixed; bottom: 2rem; right: 2rem; z-index: 200; width: 42px; height: 42px; background: var(--ink); border: 1px solid rgba(184,151,106,.25); color: var(--gold); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .3s, background .2s; }
+.back-to-top { position: fixed; bottom: 5rem; right: 2.2rem; z-index: 200; width: 36px; height: 36px; background: var(--paper); border: 1px solid var(--border-gold); color: var(--warm); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .3s, background .2s; border-radius: 1px; }
 .back-to-top.visible { opacity: 1; pointer-events: auto; }
-.back-to-top:hover { background: var(--gold-d); color: var(--white); }
+.back-to-top:hover { background: var(--ink); color: var(--gold); }
 
 /* ══════════════════════════════════════════════════════════
    PHOTO PLACEHOLDER
