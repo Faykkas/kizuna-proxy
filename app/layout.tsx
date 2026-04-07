@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Kizuna Proxy — Buy Items from Japan | Mercari, Yahoo Auctions, Tokyo Stores",
-  description: "Franco-Japanese proxy service. We buy any item from Japan on your behalf — Mercari Japan, Yahoo Auctions, limited sneakers, Pokémon cards, anime figures, rare collectibles, Tokyo store visits. Fast, transparent, personal. Reply within 24 hours.",
+  description: "Japan proxy service. We buy any item from Japan on your behalf — Mercari, Yahoo Auctions, limited sneakers, Pokémon cards, anime figures, rare collectibles, Tokyo store visits. Worldwide shipping. Reply within 24 hours.",
   keywords: [
     "proxy japan", "japan proxy service", "buy from japan", "mercari japan proxy",
     "yahoo auctions japan proxy", "japan proxy shopping", "anime figures japan",
@@ -21,13 +21,13 @@ export const metadata: Metadata = {
     url: "https://kizunaproxy.com",
     siteName: "Kizuna Proxy",
     title: "Kizuna Proxy — Your Trusted Link to Japan",
-    description: "Buy any item from Japan — Mercari, Yahoo Auctions, Tokyo stores, Pokémon cards, limited sneakers. Personal Franco-Japanese proxy service. Reply within 24h.",
-    images: [{ url: "https://kizunaproxy.com/og-image.png", width: 1200, height: 630, alt: "Kizuna Proxy — Your Link to Japan" }],
+    description: "Buy any item from Japan, shipped worldwide. Mercari, Yahoo Auctions, Tokyo stores, Pokémon cards, limited sneakers, rare collectibles. Fast, transparent, personal service. Reply within 24h.",
+    images: [{ url: "https://kizunaproxy.com/og-image.png", width: 1200, height: 630, alt: "Kizuna Proxy — Buy from Japan, shipped worldwide" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Kizuna Proxy — Buy Items from Japan",
-    description: "Franco-Japanese proxy service. Mercari, Yahoo Auctions, Tokyo stores, Pokémon cards, limited sneakers. Reply within 24h.",
+    description: "Japan proxy service. Mercari, Yahoo Auctions, Tokyo stores, Pokémon cards, limited sneakers. Worldwide shipping. Reply within 24h.",
     images: ["https://kizunaproxy.com/og-image.png"],
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
@@ -58,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "@context": "https://schema.org",
           "@type": "LocalBusiness",
           "name": "Kizuna Proxy",
-          "description": "Franco-Japanese proxy service. Buy any item from Japan — Mercari, Yahoo Auctions, Tokyo store visits, Pokémon cards, limited sneakers, anime figures.",
+          "description": "Japan proxy service. Buy any item from Japan — Mercari, Yahoo Auctions, Tokyo store visits, Pokémon cards, limited sneakers, anime figures. Worldwide shipping.",
           "url": "https://kizunaproxy.com",
           "email": "contact@kizunaproxy.com",
           "areaServed": "Worldwide",
