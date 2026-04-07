@@ -465,12 +465,12 @@ function useSakuraCanvas() {
     type Stroke = { pts:{x:number;y:number}[]; prog:number; op:number; hold:number; phase:string; w:number; };
 
     function buildWord(): Stroke[] {
-      const lw = Math.min(W * .13, 85);  // bigger
+      const lw = Math.min(W * .13, 85);
       const lh = lw * 1.4;
       const gap = lw * .3;
       const totalW = WORD.length * lw + (WORD.length - 1) * gap;
       let ox = (W - totalW) / 2;
-      const sy = H * .55;  // bottom half of hero
+      const sy = H * .04;  // very top
       const all: Stroke[] = [];
       WORD.forEach(letter => {
         (LETTERS[letter] || []).forEach(stroke => {
@@ -608,7 +608,7 @@ function useSakuraCanvas() {
       wordStrokes.forEach(s => {
         if (s.phase === 'draw') {
           s.prog += .06;
-          s.op = Math.min(s.op + .025, .18);  // max 18% opacity - decorative
+          s.op = Math.min(s.op + .025, .55);
           if (s.prog >= s.pts.length - 1) { s.prog = s.pts.length - 1; s.phase = 'hold'; }
         }
         if (s.phase !== 'wait') drawStroke(s);

@@ -104,7 +104,7 @@ nav { position: sticky; top: 0; z-index: 100; background: rgba(247,243,237,.96);
 /* ══════════════════════════════════════════════════════════
    HERO — CENTERED
    ══════════════════════════════════════════════════════════ */
-.hero-center { position: relative; background: var(--beige); padding: 7rem 2rem 6rem; overflow: hidden; text-align: center; }
+.hero-center { position: relative; background: var(--beige); padding: 10rem 2rem 6rem; overflow: hidden; text-align: center; }
 .hero-center::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, var(--gold-l)); }
 .hero-center::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 1px; height: 60px; background: linear-gradient(to top, transparent, var(--gold-l)); }
 .hero-center-inner { max-width: 780px; margin: 0 auto; position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
