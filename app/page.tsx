@@ -412,6 +412,135 @@ function EventsFloat() {
   );
 }
 
+// ─── SAKURA CANVAS ───────────────────────────────────────────────────────────
+function useSakuraCanvas() {
+  useEffect(() => {
+    const canvas = document.getElementById("hero-canvas") as HTMLCanvasElement;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let raf: number;
+    let W = 0, H = 0;
+
+    function resize() {
+      W = canvas.offsetWidth;
+      H = canvas.offsetHeight;
+      canvas.width  = W * window.devicePixelRatio;
+      canvas.height = H * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
+    // Sakura petals
+    const PETAL_COUNT = 28;
+    const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
+      x: Math.random() * 1200,
+      y: Math.random() * 800 - 200,
+      size: 4 + Math.random() * 6,
+      speed: 0.4 + Math.random() * 0.6,
+      drift: (Math.random() - 0.5) * 0.4,
+      angle: Math.random() * Math.PI * 2,
+      spin: (Math.random() - 0.5) * 0.025,
+      opacity: 0.15 + Math.random() * 0.25,
+    }));
+
+    // Floating kanji characters
+    const KANJI = ["絆","縁","和","雅","粋","侘","寂","禅","道","美"];
+    const chars = Array.from({ length: 6 }, (_, i) => ({
+      char: KANJI[i % KANJI.length],
+      x: 80 + (i * 200) + Math.random() * 100,
+      y: 80 + Math.random() * 500,
+      size: 40 + Math.random() * 60,
+      opacity: 0.025 + Math.random() * 0.03,
+      drift: (Math.random() - 0.5) * 0.15,
+      floatOffset: Math.random() * Math.PI * 2,
+    }));
+
+    // Thin geometric lines
+    const lines = Array.from({ length: 5 }, (_, i) => ({
+      x1: Math.random() * 400,
+      y1: Math.random() * 600,
+      x2: Math.random() * 400 + 800,
+      y2: Math.random() * 600,
+      opacity: 0.04 + Math.random() * 0.04,
+      phase: Math.random() * Math.PI * 2,
+    }));
+
+    function drawPetal(x: number, y: number, size: number, angle: number, opacity: number) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.globalAlpha = opacity;
+      ctx.fillStyle = "#c9a07a";
+      ctx.beginPath();
+      ctx.moveTo(0, -size);
+      ctx.bezierCurveTo(size * 0.8, -size * 0.5, size * 0.8, size * 0.5, 0, size * 0.3);
+      ctx.bezierCurveTo(-size * 0.8, size * 0.5, -size * 0.8, -size * 0.5, 0, -size);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    let t = 0;
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      t += 0.008;
+
+      // Draw kanji watermarks
+      ctx.font = "300 var(--size) 'Cormorant Garamond', serif";
+      chars.forEach(c => {
+        const floatY = Math.sin(t * 0.5 + c.floatOffset) * 8;
+        ctx.save();
+        ctx.globalAlpha = c.opacity;
+        ctx.fillStyle = "#b8976a";
+        ctx.font = `300 ${c.size}px 'Cormorant Garamond', serif`;
+        ctx.fillText(c.char, c.x, c.y + floatY);
+        c.x += c.drift;
+        if (c.x > W + 100) c.x = -100;
+        if (c.x < -100) c.x = W + 100;
+        ctx.restore();
+      });
+
+      // Draw thin lines
+      lines.forEach(l => {
+        const wave = Math.sin(t + l.phase) * 30;
+        ctx.save();
+        ctx.globalAlpha = l.opacity;
+        ctx.strokeStyle = "#b8976a";
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(l.x1, l.y1 + wave);
+        ctx.lineTo(l.x2, l.y2 - wave);
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      // Draw petals
+      petals.forEach(p => {
+        drawPetal(p.x, p.y, p.size, p.angle, p.opacity);
+        p.y += p.speed;
+        p.x += p.drift + Math.sin(t + p.angle) * 0.3;
+        p.angle += p.spin;
+        if (p.y > H + 20) {
+          p.y = -20;
+          p.x = Math.random() * W;
+        }
+        if (p.x > W + 20) p.x = -20;
+        if (p.x < -20) p.x = W + 20;
+      });
+
+      raf = requestAnimationFrame(draw);
+    }
+    draw();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+}
+
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -420,6 +549,7 @@ export default function Home() {
   const [lang, setLang] = useState("en");
 
   useScrollReveal();
+  useSakuraCanvas();
 
   useEffect(() => {
     const saved = localStorage.getItem("kizuna-lang");
@@ -494,6 +624,7 @@ export default function Home() {
 
       {/* HERO */}
       <section className="hero-center">
+        <canvas id="hero-canvas" style={{position:"absolute",inset:0,width:"100%",height:"100%",pointerEvents:"none",zIndex:0}} />
         <div className="hero-center-inner">
           <div className="hero-kana">絆</div>
           <div className="hero-eyebrow">
