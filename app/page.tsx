@@ -791,7 +791,6 @@ export default function Home() {
       </footer>
 
       <EventsFloat />
-      <ContactFloat />
       <BackToTop />
     </>
   );
