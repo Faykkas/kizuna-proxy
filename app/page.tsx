@@ -412,7 +412,7 @@ function EventsFloat() {
   );
 }
 
-// ─── SAKURA CANVAS ───────────────────────────────────────────────────────────
+// ─── SAKURA + CALLIGRAPHY CANVAS ─────────────────────────────────────────────
 function useSakuraCanvas() {
   useEffect(() => {
     const canvas = document.getElementById("hero-canvas") as HTMLCanvasElement;
@@ -433,39 +433,18 @@ function useSakuraCanvas() {
     resize();
     window.addEventListener("resize", resize);
 
-    // Sakura petals
-    const PETAL_COUNT = 28;
-    const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
-      x: Math.random() * 1200,
-      y: Math.random() * 800 - 200,
-      size: 4 + Math.random() * 6,
-      speed: 0.4 + Math.random() * 0.6,
-      drift: (Math.random() - 0.5) * 0.4,
-      angle: Math.random() * Math.PI * 2,
-      spin: (Math.random() - 0.5) * 0.025,
-      opacity: 0.15 + Math.random() * 0.25,
-    }));
-
-    // Floating kanji characters
-    const KANJI = ["絆","縁","和","雅","粋","侘","寂","禅","道","美"];
-    const chars = Array.from({ length: 6 }, (_, i) => ({
-      char: KANJI[i % KANJI.length],
-      x: 80 + (i * 200) + Math.random() * 100,
-      y: 80 + Math.random() * 500,
-      size: 40 + Math.random() * 60,
-      opacity: 0.025 + Math.random() * 0.03,
-      drift: (Math.random() - 0.5) * 0.15,
-      floatOffset: Math.random() * Math.PI * 2,
-    }));
-
-    // Thin geometric lines
-    const lines = Array.from({ length: 5 }, (_, i) => ({
-      x1: Math.random() * 400,
-      y1: Math.random() * 600,
-      x2: Math.random() * 400 + 800,
-      y2: Math.random() * 600,
-      opacity: 0.04 + Math.random() * 0.04,
-      phase: Math.random() * Math.PI * 2,
+    // ── PETALS ──────────────────────────────────────────────────────────────
+    const petals = Array.from({ length: 22 }, () => ({
+      x:       Math.random() * 1400,
+      y:       Math.random() * 900 - 150,
+      size:    3 + Math.random() * 5,
+      speedY:  0.35 + Math.random() * 0.5,
+      speedX:  (Math.random() - 0.5) * 0.3,
+      angle:   Math.random() * Math.PI * 2,
+      spin:    (Math.random() - 0.5) * 0.02,
+      sway:    Math.random() * Math.PI * 2,
+      swaySpd: 0.012 + Math.random() * 0.01,
+      opacity: 0.12 + Math.random() * 0.22,
     }));
 
     function drawPetal(x: number, y: number, size: number, angle: number, opacity: number) {
@@ -473,65 +452,155 @@ function useSakuraCanvas() {
       ctx.translate(x, y);
       ctx.rotate(angle);
       ctx.globalAlpha = opacity;
-      ctx.fillStyle = "#c9a07a";
+      // Petal gradient
+      const g = ctx.createRadialGradient(0, -size * 0.3, 0, 0, 0, size);
+      g.addColorStop(0, "#dbb896");
+      g.addColorStop(1, "#c9956a");
+      ctx.fillStyle = g;
       ctx.beginPath();
       ctx.moveTo(0, -size);
-      ctx.bezierCurveTo(size * 0.8, -size * 0.5, size * 0.8, size * 0.5, 0, size * 0.3);
-      ctx.bezierCurveTo(-size * 0.8, size * 0.5, -size * 0.8, -size * 0.5, 0, -size);
+      ctx.bezierCurveTo( size * 0.7, -size * 0.4,  size * 0.7,  size * 0.4, 0,  size * 0.25);
+      ctx.bezierCurveTo(-size * 0.7,  size * 0.4, -size * 0.7, -size * 0.4, 0, -size);
       ctx.fill();
+      ctx.restore();
+    }
+
+    // ── CALLIGRAPHY STROKES ──────────────────────────────────────────────────
+    type Stroke = {
+      points: {x:number;y:number}[];
+      progress: number;
+      maxProgress: number;
+      fadeIn: number;
+      fadeOut: number;
+      phase: "drawing"|"holding"|"fading"|"dead";
+      opacity: number;
+      width: number;
+      holdTimer: number;
+    };
+
+    const strokes: Stroke[] = [];
+    let strokeTimer = 0;
+
+    // Pre-defined stroke paths (normalized 0-1, will be scaled to canvas)
+    const STROKE_TEMPLATES = [
+      // Horizontal sweep
+      [{x:.05,y:.35},{x:.18,y:.33},{x:.35,y:.34},{x:.52,y:.36},{x:.65,y:.35}],
+      // Diagonal down-right
+      [{x:.1,y:.2},{x:.18,y:.28},{x:.27,y:.38},{x:.33,y:.5},{x:.36,y:.62}],
+      // Gentle arc
+      [{x:.55,y:.15},{x:.62,y:.22},{x:.68,y:.32},{x:.71,y:.44},{x:.7,y:.56}],
+      // Short vertical
+      [{x:.82,y:.25},{x:.81,y:.35},{x:.80,y:.48},{x:.80,y:.60}],
+      // Wide horizontal sweep
+      [{x:.08,y:.65},{x:.2,y:.62},{x:.38,y:.60},{x:.55,y:.61},{x:.68,y:.63}],
+      // Diagonal up-right
+      [{x:.15,y:.72},{x:.24,y:.65},{x:.35,y:.57},{x:.44,y:.52}],
+      // Short arc right side
+      [{x:.7,y:.7},{x:.76,y:.65},{x:.82,y:.63},{x:.88,y:.65},{x:.9,y:.72}],
+    ];
+
+    function spawnStroke() {
+      const template = STROKE_TEMPLATES[Math.floor(Math.random() * STROKE_TEMPLATES.length)];
+      // Offset slightly
+      const ox = (Math.random() - 0.5) * 0.15;
+      const oy = (Math.random() - 0.5) * 0.2;
+      const points = template.map(p => ({
+        x: (p.x + ox) * W,
+        y: (p.y + oy) * H,
+      }));
+      strokes.push({
+        points,
+        progress: 0,
+        maxProgress: points.length - 1,
+        fadeIn: 0,
+        fadeOut: 0,
+        phase: "drawing",
+        opacity: 0,
+        width: 0.6 + Math.random() * 1.2,
+        holdTimer: 0,
+      });
+    }
+
+    function drawStroke(s: Stroke) {
+      if (s.points.length < 2) return;
+      const totalSegs = s.points.length - 1;
+      const drawn = Math.min(s.progress, totalSegs);
+
+      ctx.save();
+      ctx.globalAlpha = s.opacity;
+      ctx.strokeStyle = "#b8976a";
+      ctx.lineWidth = s.width;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.beginPath();
+      ctx.moveTo(s.points[0].x, s.points[0].y);
+
+      for (let i = 0; i < drawn; i++) {
+        const frac = Math.min(drawn - i, 1);
+        const p0 = s.points[i];
+        const p1 = s.points[i + 1];
+        if (frac >= 1) {
+          ctx.lineTo(p1.x, p1.y);
+        } else {
+          ctx.lineTo(
+            p0.x + (p1.x - p0.x) * frac,
+            p0.y + (p1.y - p0.y) * frac
+          );
+        }
+      }
+      ctx.stroke();
       ctx.restore();
     }
 
     let t = 0;
     function draw() {
       ctx.clearRect(0, 0, W, H);
-      t += 0.008;
+      t += 0.012;
+      strokeTimer += 0.012;
 
-      // Draw kanji watermarks
-      ctx.font = "300 var(--size) 'Cormorant Garamond', serif";
-      chars.forEach(c => {
-        const floatY = Math.sin(t * 0.5 + c.floatOffset) * 8;
-        ctx.save();
-        ctx.globalAlpha = c.opacity;
-        ctx.fillStyle = "#b8976a";
-        ctx.font = `300 ${c.size}px 'Cormorant Garamond', serif`;
-        ctx.fillText(c.char, c.x, c.y + floatY);
-        c.x += c.drift;
-        if (c.x > W + 100) c.x = -100;
-        if (c.x < -100) c.x = W + 100;
-        ctx.restore();
-      });
+      // Spawn new stroke every ~5 seconds
+      if (strokeTimer > 5 + Math.random() * 3) {
+        strokeTimer = 0;
+        if (strokes.length < 4) spawnStroke();
+      }
 
-      // Draw thin lines
-      lines.forEach(l => {
-        const wave = Math.sin(t + l.phase) * 30;
-        ctx.save();
-        ctx.globalAlpha = l.opacity;
-        ctx.strokeStyle = "#b8976a";
-        ctx.lineWidth = 0.5;
-        ctx.beginPath();
-        ctx.moveTo(l.x1, l.y1 + wave);
-        ctx.lineTo(l.x2, l.y2 - wave);
-        ctx.stroke();
-        ctx.restore();
-      });
+      // Update + draw strokes
+      for (let i = strokes.length - 1; i >= 0; i--) {
+        const s = strokes[i];
+        if (s.phase === "drawing") {
+          s.progress += 0.03;
+          s.opacity = Math.min(s.opacity + 0.015, 0.12);
+          if (s.progress >= s.maxProgress) {
+            s.progress = s.maxProgress;
+            s.phase = "holding";
+          }
+        } else if (s.phase === "holding") {
+          s.holdTimer += 0.012;
+          if (s.holdTimer > 3.5) s.phase = "fading";
+        } else if (s.phase === "fading") {
+          s.opacity -= 0.004;
+          if (s.opacity <= 0) { strokes.splice(i, 1); continue; }
+        }
+        drawStroke(s);
+      }
 
       // Draw petals
       petals.forEach(p => {
-        drawPetal(p.x, p.y, p.size, p.angle, p.opacity);
-        p.y += p.speed;
-        p.x += p.drift + Math.sin(t + p.angle) * 0.3;
+        p.sway += p.swaySpd;
+        p.y     += p.speedY;
+        p.x     += p.speedX + Math.sin(p.sway) * 0.5;
         p.angle += p.spin;
-        if (p.y > H + 20) {
-          p.y = -20;
-          p.x = Math.random() * W;
-        }
-        if (p.x > W + 20) p.x = -20;
-        if (p.x < -20) p.x = W + 20;
+        drawPetal(p.x, p.y, p.size, p.angle, p.opacity);
+        if (p.y > H + 20) { p.y = -20; p.x = Math.random() * W; }
+        if (p.x > W + 20)  p.x = -20;
+        if (p.x < -20)     p.x = W + 20;
       });
 
       raf = requestAnimationFrame(draw);
     }
+
+    // Kick off first stroke after 1s
+    setTimeout(spawnStroke, 1000);
     draw();
 
     return () => {
