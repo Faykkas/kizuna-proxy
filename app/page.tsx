@@ -942,6 +942,10 @@ export default function Home() {
               <p className="p-price">¥<AnimatedPrice target={1500} /></p>
               <p className="p-unit">{t.pricing?.perItem}</p>
               <p className="p-desc">{t.pricing?.onlineDesc}</p>
+              <div className="p-threshold">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{flexShrink:0,color:"var(--gold-d)"}}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span>{t.pricing?.onlineThreshold || "For purchases above ¥15,000 — 10% of the item price applies instead of the flat fee."}</span>
+              </div>
             </div>
             <div className="p-card">
               <div className="p-accent" />
