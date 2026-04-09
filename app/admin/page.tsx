@@ -363,7 +363,9 @@ function GalleryTab() {
   async function save() {
     if (!form.title || !form.image_url) { setMsg("Title and image are required."); return; }
     setSaving(true);
-    const p = { title:form.title, subtitle:form.subtitle, image_url:form.image_url, sort_order:Number(form.sort_order)||0 };
+    // Auto sort_order = last item + 1 if not editing
+    const nextOrder = editing ? Number(form.sort_order) : (items.length > 0 ? Math.max(...items.map(i => i.sort_order)) + 1 : 0);
+    const p = { title:form.title, subtitle:form.subtitle, image_url:form.image_url, sort_order: nextOrder };
     if (editing) await supabase.from("gallery").update(p).eq("id",editing);
     else await supabase.from("gallery").insert(p);
     setSaving(false); setForm(emptyGallery); setEditing(null);
@@ -380,11 +382,13 @@ function GalleryTab() {
   }
 
   async function moveOrder(id, dir) {
-    const idx = items.findIndex(i=>i.id===id);
-    const swap = items[idx+dir];
-    if (!swap) return;
-    await supabase.from("gallery").update({sort_order:swap.sort_order}).eq("id",id);
-    await supabase.from("gallery").update({sort_order:items[idx].sort_order}).eq("id",swap.id);
+    const idx = items.findIndex(i => i.id === id);
+    const target = items[idx + dir];
+    if (!target) return;
+    const currOrder = items[idx].sort_order;
+    const targetOrder = target.sort_order;
+    await supabase.from("gallery").update({ sort_order: targetOrder }).eq("id", id);
+    await supabase.from("gallery").update({ sort_order: currOrder }).eq("id", target.id);
     load();
   }
 
@@ -411,7 +415,9 @@ function GalleryTab() {
               {uploading ? "⏳ Uploading…" : "📁 Upload image"}
             </button>
           </div>
-          <div><label style={lbl}>Sort order</label><input style={inp} type="number" value={form.sort_order} onChange={e=>setForm(f=>({...f,sort_order:e.target.value}))} placeholder="0 = first" /></div>
+          <div style={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",background:"var(--paper)",border:"1px solid var(--border-gold)",padding:"1rem",fontSize:".75rem",color:"var(--warm)",textAlign:"center",lineHeight:1.6}}>
+            Photos are added at the end automatically.<br/>Use ↑↓ to reorder.
+          </div>
         </div>
         {form.image_url && (
           <div style={{marginBottom:"1rem"}}>
