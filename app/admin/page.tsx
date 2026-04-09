@@ -158,7 +158,13 @@ function AnnounceTab() {
 
   async function save() {
     setSaving(true);
-    await supabase.from("announce").update({ ...data, updated_at: new Date().toISOString() }).eq("id", data.id);
+    await supabase.from("announce").update({
+      text_en: data.text_en,
+      from_date: data.from_date,
+      to_date: data.to_date,
+      active: data.active,
+      updated_at: new Date().toISOString()
+    }).eq("id", data.id);
     setSaving(false);
     setMsg("✓ Banner updated.");
     setTimeout(() => setMsg(""), 3000);
@@ -167,34 +173,49 @@ function AnnounceTab() {
   if (!data) return <div style={{ padding:"2rem", color:"var(--warm)", fontSize:".85rem" }}>Loading…</div>;
 
   return (
-    <>
-      <div style={card}>
-        <p style={{ ...cardHeader, marginBottom:"1.5rem" }}>Announcement Banner</p>
-        <div style={{ display:"flex", alignItems:"center", gap:"1rem", marginBottom:"1.5rem", padding:"1rem", background: data.active?"rgba(58,125,68,.08)":"rgba(138,127,116,.08)", border:`1px solid ${data.active?"#3a7d44":"var(--border-gold)"}`, borderRadius:"1px" }}>
-          <label style={{ display:"flex", alignItems:"center", gap:".6rem", cursor:"pointer", fontSize:".82rem", color:"var(--ink)", fontWeight:500 }}>
-            <input type="checkbox" checked={data.active} onChange={e => setData(d => ({...d, active:e.target.checked}))} style={{ width:"16px", height:"16px", accentColor:"var(--gold)" }} />
-            {data.active ? "🟢 Banner is VISIBLE on site" : "⚫ Banner is HIDDEN"}
-          </label>
+    <div style={card}>
+      <p style={{...cardHeader, marginBottom:"1.5rem"}}>Announcement Banner</p>
+
+      {/* Toggle */}
+      <div style={{ display:"flex", alignItems:"center", gap:"1rem", marginBottom:"1.5rem", padding:"1rem 1.2rem", background: data.active?"rgba(58,125,68,.07)":"rgba(138,127,116,.07)", border:`1px solid ${data.active?"#3a7d44":"var(--border-gold)"}` }}>
+        <label style={{ display:"flex", alignItems:"center", gap:".7rem", cursor:"pointer", fontSize:".85rem", color:"var(--ink)", fontWeight:500, userSelect:"none" }}>
+          <input type="checkbox" checked={data.active} onChange={e => setData(d => ({...d, active: e.target.checked}))}
+            style={{ width:"18px", height:"18px", accentColor:"#3a7d44", cursor:"pointer" }} />
+          {data.active ? "🟢 Banner visible on site" : "⚫ Banner hidden"}
+        </label>
+      </div>
+
+      {/* Message */}
+      <div style={{ marginBottom:"1rem" }}>
+        <label style={lbl}>Message</label>
+        <input style={inp} value={data.text_en || ""} onChange={e => setData(d => ({...d, text_en: e.target.value}))}
+          placeholder="Orders paused from April 20 to June 1" />
+        <p style={{ fontSize:".7rem", color:"var(--mist)", marginTop:".4rem" }}>This message appears at the top of your site.</p>
+      </div>
+
+      {/* Dates */}
+      <div style={row2}>
+        <div>
+          <label style={lbl}>From</label>
+          <input style={inp} value={data.from_date || ""} onChange={e => setData(d => ({...d, from_date: e.target.value}))} placeholder="April 20" />
         </div>
-        <div style={row2}>
-          <div><label style={lbl}>From date</label><input style={inp} value={data.from_date} onChange={e => setData(d => ({...d,from_date:e.target.value}))} placeholder="April 20" /></div>
-          <div><label style={lbl}>To date</label><input style={inp} value={data.to_date} onChange={e => setData(d => ({...d,to_date:e.target.value}))} placeholder="June 1 included" /></div>
-        </div>
-        <p style={{ fontSize:".7rem", letterSpacing:".12em", textTransform:"uppercase", color:"var(--warm)", marginBottom:"1rem", marginTop:".5rem" }}>Translations</p>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:".75rem" }}>
-          {LANGS.map(l => (
-            <div key={l}>
-              <label style={lbl}>{LANG_NAMES[l]}</label>
-              <input style={inp} value={data[`text_${l}`] || ""} onChange={e => setData(d => ({...d,[`text_${l}`]:e.target.value}))} placeholder={`Text in ${LANG_NAMES[l]}`} />
-            </div>
-          ))}
-        </div>
-        {msg && <p style={{...msg_ok, marginTop:"1rem"}}>{msg}</p>}
-        <div style={{ marginTop:"1.2rem" }}>
-          <button onClick={save} disabled={saving} style={btnPrimary}>{saving ? "Saving…" : "Save banner"}</button>
+        <div>
+          <label style={lbl}>To</label>
+          <input style={inp} value={data.to_date || ""} onChange={e => setData(d => ({...d, to_date: e.target.value}))} placeholder="June 1" />
         </div>
       </div>
-    </>
+
+      {/* Preview */}
+      {data.active && (
+        <div style={{ margin:"1rem 0", padding:".7rem 1.2rem", background:"#16120e", borderLeft:"3px solid #b8976a", fontSize:".78rem", color:"rgba(247,243,237,.7)", display:"flex", gap:".6rem", alignItems:"center" }}>
+          <span style={{ background:"#8b1a1a", color:"#fff", fontSize:".6rem", letterSpacing:".12em", textTransform:"uppercase", padding:".12rem .45rem", flexShrink:0 }}>Notice</span>
+          <span>{data.text_en} <strong style={{color:"rgba(247,243,237,.95)"}}>{data.from_date}</strong> → <strong style={{color:"rgba(247,243,237,.95)"}}>{data.to_date}</strong></span>
+        </div>
+      )}
+
+      {msg && <p style={msg_ok}>{msg}</p>}
+      <button onClick={save} disabled={saving} style={btnPrimary}>{saving ? "Saving…" : "Save"}</button>
+    </div>
   );
 }
 
