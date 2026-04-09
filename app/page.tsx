@@ -731,7 +731,7 @@ export default function Home() {
           </div>
           <div className="hero-stats hero-stats-center">
             <div className="hero-stat">
-              <strong>7</strong>
+              <strong>9</strong>
               <span>Reviews</span>
             </div>
             <div className="hero-stat-sep" />
@@ -849,7 +849,7 @@ export default function Home() {
               <div>
                 <div className="reviews-big-stars">★★★★★</div>
                 <div className="reviews-big-label">{t.reviews?.basedOn}</div>
-                <div className="reviews-count">7 verified reviews</div>
+                <div className="reviews-count">9 verified reviews</div>
               </div>
             </div>
             <a href="https://www.reddit.com/r/internationalshopper/" target="_blank" rel="noopener noreferrer" className="reviews-reddit-badge">
@@ -879,10 +879,34 @@ export default function Home() {
               </a>
             ))}
           </div>
+
+          {/* Trustpilot */}
+          <a
+            href="https://fr.trustpilot.com/review/kizunaproxy.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="trustpilot-bar"
+          >
+            <div className="tp-left">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{color:"#00b67a",flexShrink:0}}>
+                <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+              </svg>
+              <span className="tp-name">Trustpilot</span>
+            </div>
+            <div className="tp-stars">
+              {[1,2,3,4,5].map(s => (
+                <div key={s} className="tp-star">★</div>
+              ))}
+            </div>
+            <div className="tp-info">
+              <strong>9</strong> reviews
+            </div>
+            <div className="tp-cta">
+              See all reviews →
+            </div>
+          </a>
         </div>
       </section>
-
-      {/* PRICING */}
       <section id="pricing" className="section reveal">
         <div className="wrap">
           <div className="sec-head">
