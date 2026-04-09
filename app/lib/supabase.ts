@@ -15,3 +15,20 @@ export type CalendarEvent = {
   store?: string;
   created_at: string;
 };
+
+export type Announce = {
+  id: string;
+  text_en: string; text_fr: string; text_ja: string;
+  text_es: string; text_it: string; text_de: string;
+  text_ko: string; text_zh: string;
+  from_date: string; to_date: string;
+  active: boolean;
+};
+
+export type GalleryItem = {
+  id: string;
+  title: string;
+  subtitle: string;
+  image_url: string;
+  sort_order: number;
+};

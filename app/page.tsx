@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { translations, detectLang, LANG_LABELS } from "./translations";
 import type { Lang, T } from "./translations";
+import { supabase } from "./lib/supabase";
 
 const CalendarSection = dynamic(() => import("./calendar"), {
   ssr: false,
@@ -88,7 +89,7 @@ function useDarkMode() {
 }
 
 // ─── FILMSTRIP CAROUSEL ───────────────────────────────────────────────────────
-function Carousel() {
+function Carousel({ slides = SLIDES }: { slides?: typeof SLIDES }) {
   const [current, setCurrent] = useState(0);
   const currentRef = useRef(0);
   const autoRef = useRef(null);
@@ -638,6 +639,8 @@ export default function Home() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [lang, setLang] = useState("en");
+  const [announce, setAnnounce] = useState(null);
+  const [gallery, setGallery] = useState([]);
 
   useScrollReveal();
   useSakuraCanvas();
@@ -646,6 +649,20 @@ export default function Home() {
     const saved = localStorage.getItem("kizuna-lang");
     if (saved) setLang(saved);
     else setLang(detectLang());
+  }, []);
+
+  // Load announce banner from Supabase
+  useEffect(() => {
+    supabase.from("announce").select("*").limit(1).single().then(({ data }) => {
+      if (data) setAnnounce(data);
+    });
+  }, []);
+
+  // Load gallery from Supabase
+  useEffect(() => {
+    supabase.from("gallery").select("*").order("sort_order").then(({ data }) => {
+      if (data && data.length > 0) setGallery(data);
+    });
   }, []);
 
   const t = translations[lang];
@@ -661,13 +678,17 @@ export default function Home() {
   return (
     <>
       {/* ANNOUNCE */}
-      <div className="announce-bar">
-        <div className="announce-inner">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{color:"var(--gold)",flexShrink:0}}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <span className="announce-pill">{t.announce?.pill || "Notice"}</span>
-          <span className="announce-text">{t.announce?.text || "Orders will be paused from"} <strong>{t.announce?.from || "April 20"}</strong> → <strong>{t.announce?.to || "June 1 included"}</strong> {t.announce?.text2 || "— no new requests will be accepted during this period."}</span>
+      {announce?.active && (
+        <div className="announce-bar">
+          <div className="announce-inner">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{color:"var(--gold)",flexShrink:0}}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span className="announce-pill">{t.announce?.pill || "Notice"}</span>
+            <span className="announce-text">
+              {announce[`text_${lang}`] || announce.text_en} <strong>{announce.from_date}</strong> → <strong>{announce.to_date}</strong>
+            </span>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* NAV */}
       <nav>
@@ -997,7 +1018,8 @@ export default function Home() {
             <h2>{t.gallery?.title} <em>{t.gallery?.titleEm}</em></h2>
             <p className="desc">{t.gallery?.desc}</p>
           </div>
-          <Carousel />
+          {/* Use Supabase gallery if available, else fallback to static SLIDES */}
+          <Carousel slides={gallery.length > 0 ? gallery.map(g => ({ src: g.image_url, alt: g.title, title: g.title, sub: g.subtitle || "" })) : SLIDES} />
         </div>
       </section>
 
