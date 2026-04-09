@@ -111,7 +111,7 @@ export default function AdminPage() {
         </div>
         <p style={{ fontSize:".8rem", color:"var(--warm)", marginBottom:"1.5rem" }}>Sign in to manage your site</p>
         <label style={lbl}>Email</label>
-        <input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === "Enter" && supabase.auth.signInWithPassword({email,password:pw})} placeholder="contact@kizunaproxy.com" style={{ ...inp, marginBottom:".75rem" }} autoFocus />
+        <input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === "Enter" && supabase.auth.signInWithPassword({email,password:pw})} placeholder="kizunaproxy@gmail.com" style={{ ...inp, marginBottom:".75rem" }} autoFocus />
         <label style={lbl}>Password</label>
         <input type="password" value={pw} onChange={e => setPw(e.target.value)} onKeyDown={e => { if (e.key === "Enter") supabase.auth.signInWithPassword({email,password:pw}).then(({error}) => { if(error) setLoginErr(error.message); }); }} placeholder="••••••••" style={{ ...inp, marginBottom:".5rem", borderColor: loginErr ? "var(--red)" : undefined }} />
         {loginErr && <p style={{ fontSize:".72rem", color:"var(--red)", marginBottom:".5rem" }}>{loginErr}</p>}
