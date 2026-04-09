@@ -96,11 +96,15 @@ function Carousel({ slides = SLIDES }: { slides?: typeof SLIDES }) {
   const touchStartX = useRef(0);
 
   const goTo = useCallback((n) => {
-    const next = (n + SLIDES.length) % SLIDES.length;
+    const next = (n + slides.length) % slides.length;
     currentRef.current = next;
     setCurrent(next);
-  }, []);
+  }, [slides.length]);
   const move = useCallback((dir) => goTo(currentRef.current + dir), [goTo]);
+
+  useEffect(() => {
+    setCurrent(0); currentRef.current = 0;
+  }, [slides]);
 
   useEffect(() => {
     autoRef.current = setInterval(() => move(1), 6000);
@@ -109,8 +113,8 @@ function Carousel({ slides = SLIDES }: { slides?: typeof SLIDES }) {
 
   const pause  = () => clearInterval(autoRef.current);
   const resume = () => { autoRef.current = setInterval(() => move(1), 6000); };
-  const prev   = (current - 1 + SLIDES.length) % SLIDES.length;
-  const next   = (current + 1) % SLIDES.length;
+  const prev   = (current - 1 + slides.length) % slides.length;
+  const next   = (current + 1) % slides.length;
 
   return (
     <div className="filmstrip" onMouseEnter={pause} onMouseLeave={resume}
@@ -118,11 +122,11 @@ function Carousel({ slides = SLIDES }: { slides?: typeof SLIDES }) {
       onTouchEnd={e => { const dx = e.changedTouches[0].clientX - touchStartX.current; if (Math.abs(dx) > 40) move(dx < 0 ? 1 : -1); }}>
       <div className="filmstrip-stage">
         <div className="filmstrip-side" onClick={() => move(-1)}>
-          <img src={SLIDES[prev].src} alt={SLIDES[prev].alt} onError={e => { (e.target as HTMLImageElement).style.opacity="0"; }} />
+          <img src={slides[prev].src} alt={slides[prev].alt} onError={e => { (e.target as HTMLImageElement).style.opacity="0"; }} />
           <div className="filmstrip-prev-overlay" />
         </div>
         <div className="filmstrip-main">
-          {SLIDES.map((s, i) => (
+          {slides.map((s, i) => (
             <div key={i} className={`filmstrip-slide${i === current ? " active" : ""}`}>
               <img src={s.src} alt={s.alt} onError={e => { (e.target as HTMLImageElement).style.opacity="0"; }} />
               <div className="filmstrip-caption">
@@ -130,7 +134,7 @@ function Carousel({ slides = SLIDES }: { slides?: typeof SLIDES }) {
                   <strong>{s.title}</strong>
                   <span>{s.sub}</span>
                 </div>
-                <div className="filmstrip-counter">{current + 1} / {SLIDES.length}</div>
+                <div className="filmstrip-counter">{current + 1} / {slides.length}</div>
               </div>
             </div>
           ))}
@@ -142,12 +146,12 @@ function Carousel({ slides = SLIDES }: { slides?: typeof SLIDES }) {
           </button>
         </div>
         <div className="filmstrip-side" onClick={() => move(1)}>
-          <img src={SLIDES[next].src} alt={SLIDES[next].alt} onError={e => { (e.target as HTMLImageElement).style.opacity="0"; }} />
+          <img src={slides[next].src} alt={slides[next].alt} onError={e => { (e.target as HTMLImageElement).style.opacity="0"; }} />
           <div className="filmstrip-next-overlay" />
         </div>
       </div>
       <div className="filmstrip-dots">
-        {SLIDES.map((_, i) => <button key={i} className={`filmstrip-dot${i === current ? " active" : ""}`} onClick={() => goTo(i)} aria-label={`Slide ${i+1}`} />)}
+        {slides.map((_, i) => <button key={i} className={`filmstrip-dot${i === current ? " active" : ""}`} onClick={() => goTo(i)} aria-label={`Slide ${i+1}`} />)}
       </div>
     </div>
   );
@@ -660,8 +664,11 @@ export default function Home() {
 
   // Load gallery from Supabase
   useEffect(() => {
-    supabase.from("gallery").select("*").order("sort_order").then(({ data }) => {
-      if (data && data.length > 0) setGallery(data);
+    supabase.from("gallery").select("*").order("sort_order").then(({ data, error }) => {
+      if (data && data.length > 0) {
+        setGallery(data);
+      }
+      // If empty or error, SLIDES fallback is used automatically via the Carousel prop
     });
   }, []);
 
