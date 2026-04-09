@@ -60,7 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "name": "Kizuna Proxy",
           "description": "Japan proxy service. Buy any item from Japan — Mercari, Yahoo Auctions, Tokyo store visits, Pokémon cards, limited sneakers, anime figures. Worldwide shipping.",
           "url": "https://kizunaproxy.com",
-          "email": "contact@kizunaproxy.com",
+          "email": "kizunaproxy@gmail.com",
           "areaServed": "Worldwide",
           "serviceType": "Proxy Shopping Service",
           "priceRange": "¥1500–¥3000",

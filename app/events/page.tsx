@@ -429,7 +429,7 @@ export default function EventsPage() {
           </div>
           <div>
             <p className="footer-col-title">Contact</p>
-            <a href="mailto:contact@kizunaproxy.com" className="footer-link">contact@kizunaproxy.com</a>
+            <a href="mailto:kizunaproxy@gmail.com" className="footer-link">kizunaproxy@gmail.com</a>
             <a href="https://wa.me/33788432501" target="_blank" rel="noopener noreferrer" className="footer-link">WhatsApp</a>
             <a href="https://discord.com/users/Faykas" target="_blank" rel="noopener noreferrer" className="footer-link">Discord</a>
           </div>
