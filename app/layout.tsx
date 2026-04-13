@@ -68,7 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "aggregateRating": {
             "@type": "AggregateRating",
             "ratingValue": "5.0",
-            "reviewCount": "9",
+            "reviewCount": "10",
             "bestRating": "5",
             "worstRating": "1"
           },

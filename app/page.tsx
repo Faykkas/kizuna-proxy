@@ -33,6 +33,7 @@ const SLIDES = [
 
 // ─── REAL REVIEWS ────────────────────────────────────────────────────────────
 const REAL_REVIEWS = [
+  { name: "u/ikorean123",           country: "🇯🇵 to 🇺🇸 USA", stars: 5, link: "https://www.reddit.com/r/internationalshopper/comments/1sirfdi/positive_review_for_ufaycas_to/", title: "Positive review for u/faycas", text: "If you guys want the best proxy service for any products from Japan, I highly recommend using u/Faycas and their proxy service, kizuna proxy. They were very attentive and took great care in getting my products shipped over, communicating/updating me throughout the whole process. They were also very considerate of my big order so I was only charged a percentage of their regular fee per product that I ordered. I will be using them again for any products I want from Japan. 🙏🥰" },
   { name: "u/grimmia",             country: "🇬🇷 Greece",    stars: 5, link: "https://www.reddit.com/r/internationalshopper/comments/1s4x1fw/", title: "Wonderful experience — JP to GR", text: "She handled personal shopping for me in Tokyo and visited the Sonic Store, the Pokémon Center, and the Nintendo Store with absolute success! We even did live shopping through a video call, and it genuinely felt like I was there with her. Extremely polite, professional, very good prices. Communication was clear and immediate, which made me trust them completely." },
   { name: "u/Calm-Leather-1018",   country: "🇺🇸 USA",      stars: 5, link: "https://www.reddit.com/r/internationalshopper/comments/1s4ktd9/", title: "Service review", text: "I've never used a proxy seller before but there were some Japanese exclusive collab items I wanted from a fashion brand and luckily I came in contact with them. The process was simple and I never felt as though I was overpaying. If you want your Japanese merch, think u/Faycas as a reliable proxy seller ❤️" },
   { name: "u/Salty-Lemon8781",     country: "🇨🇦 Canada",   stars: 5, link: "https://www.reddit.com/r/internationalshopper/comments/1s2zphf/", title: "Positive review", text: "Faycas and his girlfriend are the best if you need an item purchased/shipped from Japan. They are extremely helpful, polite, trustworthy, and just great people in general. They arranged the purchase of a vintage item for me, took great care to pack it, and made the whole process very easy. I will use their services again ❤️" },
@@ -761,7 +762,7 @@ export default function Home() {
           </div>
           <div className="hero-stats hero-stats-center">
             <div className="hero-stat">
-              <strong>9</strong>
+              <strong>10</strong>
               <span>Reviews</span>
             </div>
             <div className="hero-stat-sep" />
@@ -879,7 +880,7 @@ export default function Home() {
               <div>
                 <div className="reviews-big-stars">★★★★★</div>
                 <div className="reviews-big-label">{t.reviews?.basedOn}</div>
-                <div className="reviews-count">9 verified reviews</div>
+                <div className="reviews-count">10 verified reviews</div>
               </div>
             </div>
             <a href="https://www.reddit.com/r/internationalshopper/" target="_blank" rel="noopener noreferrer" className="reviews-reddit-badge">
@@ -929,7 +930,7 @@ export default function Home() {
               ))}
             </div>
             <div className="tp-info">
-              <strong>9</strong> reviews
+              <strong>10</strong> reviews
             </div>
             <div className="tp-cta">
               See all reviews →
@@ -940,30 +941,50 @@ export default function Home() {
       <section id="pricing" className="section reveal">
         <div className="wrap">
           <div className="sec-head">
-            <p className="sec-label">{t.pricing?.label}</p>
-            <h2>{t.pricing?.title} <em>{t.pricing?.titleEm}</em></h2>
-            <p className="desc">{t.pricing?.desc}</p>
+            <p className="sec-label">Pricing</p>
+            <h2>Fully <em>personalised</em></h2>
+            <p className="desc">Every request is unique — our pricing adapts to your order. Contact us for a custom quote.</p>
           </div>
-          <div className="pricing-grid">
-            <div className="p-card">
-              <div className="p-accent" />
-              <p className="p-tag">{t.pricing?.onlineTag}</p>
-              <p className="p-price">¥<AnimatedPrice target={1500} /></p>
-              <p className="p-unit">{t.pricing?.perItem}</p>
-              <p className="p-desc">{t.pricing?.onlineDesc}</p>
-              <div className="p-threshold">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{flexShrink:0,color:"var(--gold-d)"}}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                <span>{t.pricing?.onlineThreshold || "For purchases above ¥15,000 — 10% of the item price applies instead of the flat fee."}</span>
+
+          {/* 3 value cards */}
+          <div className="pricing-custom-grid">
+            <div className="pcg-card">
+              <div className="pcg-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.6" strokeLinecap="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="2"/></svg>
               </div>
+              <h3>No hidden fees</h3>
+              <p>Every cost is communicated clearly before any payment. What we quote is what you pay.</p>
             </div>
-            <div className="p-card">
-              <div className="p-accent" />
-              <p className="p-tag">{t.pricing?.storeTag}</p>
-              <p className="p-price">¥<AnimatedPrice target={3000} /></p>
-              <p className="p-unit">{t.pricing?.perItem}</p>
-              <p className="p-desc">{t.pricing?.storeDesc}</p>
+            <div className="pcg-card">
+              <div className="pcg-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.6" strokeLinecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <h3>Adapted to your order</h3>
+              <p>One item or a large haul — we study each request individually and offer the fairest rate.</p>
+            </div>
+            <div className="pcg-card">
+              <div className="pcg-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <h3>Get a quote in 24h</h3>
+              <p>Send us your request and we reply with a detailed, honest quote — no commitment required.</p>
             </div>
           </div>
+
+          {/* CTA */}
+          <div className="pcg-cta">
+            <div className="pcg-cta-left">
+              <strong>Ready to place a request?</strong>
+              <p>Describe your item and we'll get back to you with a personalised quote as soon as possible.</p>
+            </div>
+            <a href="mailto:kizunaproxy@gmail.com" className="btn btn-gold">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Contact us
+            </a>
+            <a href="#request-wrap" className="btn btn-outline">Use the form</a>
+          </div>
+
+          {/* Events */}
           <div className="p-event-card">
             <div style={{flexShrink:0}}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.6" strokeLinecap="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
@@ -974,7 +995,6 @@ export default function Home() {
             </div>
             <a href="/events" className="p-event-btn">See Events →</a>
           </div>
-          <p className="p-note">{t.pricing?.note}</p>
 
           {/* SHIPPING */}
           <div className="shipping-section">
@@ -988,10 +1008,7 @@ export default function Home() {
                   <div className="carrier-badge ems">EMS</div>
                   <div className="carrier-name">{t.shipping?.ems || "Japan Post EMS"}</div>
                 </div>
-                <p className="shipping-desc">
-                  {t.shipping?.emsDesc || "Express Mail Service — fast, tracked, affordable. Available worldwide."}
-                  {" "}<strong>{t.shipping?.emsWarning || "For USA shipments: maximum declared value of $100 as gift. Above this threshold, we recommend FedEx or DHL."}</strong>
-                </p>
+                <p className="shipping-desc">{t.shipping?.emsDesc || "Express Mail Service — fast, tracked, affordable. Available worldwide."} <strong>{t.shipping?.emsWarning || "For USA shipments: maximum declared value of $100 as gift. Above this threshold, we recommend FedEx or DHL."}</strong></p>
               </div>
               <div className="shipping-card">
                 <div className="shipping-carrier">
@@ -1121,7 +1138,6 @@ export default function Home() {
       </footer>
 
       <EventsFloat />
-      <ChatButton />
       <BackToTop />
     </>
   );
