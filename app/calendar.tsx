@@ -27,9 +27,9 @@ const DAYS_BY_LANG = {
 };
 
 const TYPES = {
-  event:       { bg: "#b8976a", light: "rgba(184,151,106,.12)", label: "Event",       icon: "🎌" },
-  available:   { bg: "#2d6a4f", light: "rgba(45,106,79,.1)",    label: "Available",   icon: "✓"  },
-  unavailable: { bg: "#8a7f74", light: "rgba(138,127,116,.1)",  label: "Unavailable", icon: "✗"  },
+  event:       { bg: "#b8976a", light: "rgba(184,151,106,.1)",  label: "Event",       icon: "🎌" },
+  available:   { bg: "#2d6a4f", light: "rgba(45,106,79,.08)",   label: "Available",   icon: "✓"  },
+  unavailable: { bg: "#16120e", light: "rgba(22,18,14,.06)",    label: "Unavailable", icon: "✗"  },
 };
 
 export default function Calendar({
@@ -118,7 +118,6 @@ export default function Calendar({
               return (
                 <div key={i}
                   className={["kcal-cell", !ok?"kcal-empty":"kcal-valid", isToday?"kcal-today":"", isSel?"kcal-sel":"", isPast?"kcal-past":""].filter(Boolean).join(" ")}
-                  style={mainEv && !isPast ? {background: TYPES[mainEv.type]?.light} : {}}
                   onClick={()=>ok&&setSel(isSel?null:str)}
                 >
                   {ok && (
@@ -128,8 +127,9 @@ export default function Calendar({
                         <div className="kcal-ev-pills">
                           {evs.slice(0,2).map((ev,j)=>(
                             <span key={j} className="kcal-ev-pill"
-                              style={{background: TYPES[ev.type]?.bg, color:"#fff"}}>
-                              {ev.title.length>14 ? ev.title.slice(0,13)+"…" : ev.title}
+                              style={{color: TYPES[ev.type]?.bg}}>
+                              <span style={{width:"5px",height:"5px",borderRadius:"50%",background:TYPES[ev.type]?.bg,flexShrink:0,display:"inline-block"}}/>
+                              {ev.title.length>12 ? ev.title.slice(0,11)+"…" : ev.title}
                             </span>
                           ))}
                           {evs.length>2 && <span className="kcal-ev-more">+{evs.length-2}</span>}
