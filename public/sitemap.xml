@@ -2,11 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
-  <url>
-    <loc>https://kizunaproxy.com</loc>
-    <lastmod>2026-04-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+  <url><loc>https://kizunaproxy.com</loc><lastmod>2026-04-14</lastmod><changefreq>weekly</changefreq><priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kizunaproxy.com"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://kizunaproxy.com"/>
     <xhtml:link rel="alternate" hreflang="ja" href="https://kizunaproxy.com"/>
@@ -18,32 +14,21 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://kizunaproxy.com"/>
   </url>
 
-  <url>
-    <loc>https://kizunaproxy.com/events</loc>
-    <lastmod>2026-04-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
+  <url><loc>https://kizunaproxy.com/events</loc><lastmod>2026-04-14</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kizunaproxy.com/reviews</loc><lastmod>2026-04-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
-  <url>
-    <loc>https://kizunaproxy.com/blog/how-to-buy-from-mercari-japan</loc>
-    <lastmod>2026-04-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://kizunaproxy.com/blog/best-pokemon-cards-japan-2026</loc>
-    <lastmod>2026-04-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://kizunaproxy.com/blog/yahoo-auctions-japan-guide</loc>
-    <lastmod>2026-04-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <!-- Blog articles -->
+  <url><loc>https://kizunaproxy.com/blog/how-to-buy-from-mercari-japan</loc><lastmod>2026-04-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kizunaproxy.com/blog/best-pokemon-cards-japan-2026</loc><lastmod>2026-04-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kizunaproxy.com/blog/yahoo-auctions-japan-guide</loc><lastmod>2026-04-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kizunaproxy.com/blog/supreme-japan-drops-guide</loc><lastmod>2026-04-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kizunaproxy.com/blog/nike-japan-exclusives-guide</loc><lastmod>2026-04-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kizunaproxy.com/blog/anime-figures-japan-guide</loc><lastmod>2026-04-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kizunaproxy.com/blog/pokemon-center-tokyo-exclusives</loc><lastmod>2026-04-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kizunaproxy.com/blog/best-items-mercari-japan-2026</loc><lastmod>2026-04-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kizunaproxy.com/blog/japan-shipping-guide-2026</loc><lastmod>2026-04-14</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kizunaproxy.com/blog/japanese-trading-cards-guide-2026</loc><lastmod>2026-04-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kizunaproxy.com/blog/nintendo-japan-exclusives-guide</loc><lastmod>2026-04-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kizunaproxy.com/blog/japanese-streetwear-guide</loc><lastmod>2026-04-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
 </urlset>
