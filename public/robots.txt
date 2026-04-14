@@ -1,9 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /admin
 
-# Sitemap
 Sitemap: https://kizunaproxy.com/sitemap.xml
-
-# Block unnecessary paths
-Disallow: /api/
-Disallow: /_next/
