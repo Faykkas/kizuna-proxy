@@ -15,7 +15,6 @@ const MONTHS_BY_LANG = {
   ko: ["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],
   zh: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
 };
-
 const DAYS_BY_LANG = {
   en: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
   fr: ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"],
@@ -27,10 +26,10 @@ const DAYS_BY_LANG = {
   zh: ["一","二","三","四","五","六","日"],
 };
 
-const TYPE_COLORS = {
-  event:       { bg: "#b8976a", text: "#fff", label: "Event" },
-  available:   { bg: "#3a7d44", text: "#fff", label: "Available" },
-  unavailable: { bg: "#8a7f74", text: "#fff", label: "Unavailable" },
+const TYPES = {
+  event:       { bg: "#b8976a", light: "rgba(184,151,106,.12)", label: "Event",       icon: "🎌" },
+  available:   { bg: "#2d6a4f", light: "rgba(45,106,79,.1)",    label: "Available",   icon: "✓"  },
+  unavailable: { bg: "#8a7f74", light: "rgba(138,127,116,.1)",  label: "Unavailable", icon: "✗"  },
 };
 
 export default function Calendar({
@@ -44,131 +43,174 @@ export default function Calendar({
   noUpcomingLabel?: string;
   lang?: string;
 }) {
-  const today = new Date();
-  const [year, setYear]   = useState(today.getFullYear());
-  const [month, setMonth] = useState(today.getMonth());
+  const [today] = useState(() => new Date());
+  const [year, setYear]     = useState(() => new Date().getFullYear());
+  const [month, setMonth]   = useState(() => new Date().getMonth());
   const [events, setEvents] = useState<CalendarEvent[]>([]);
-  const [selected, setSelected] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [selected, setSel]  = useState<string|null>(null);
+  const [loading, setLoad]  = useState(true);
 
   useEffect(() => {
-    async function load() {
-      setLoading(true);
-      const { data } = await supabase
-        .from("events")
-        .select("*")
-        .order("date", { ascending: true });
-      setEvents(data || []);
-      setLoading(false);
-    }
-    load();
+    supabase.from("events").select("*").order("date",{ascending:true}).then(({data}) => {
+      setEvents(data||[]); setLoad(false);
+    });
   }, []);
-
-  const firstDay = new Date(year, month, 1);
-  const lastDay  = new Date(year, month + 1, 0);
-  const startOffset = (firstDay.getDay() + 6) % 7;
-  const totalCells  = startOffset + lastDay.getDate();
-  const rows = Math.ceil(totalCells / 7);
-
-  function dateStr(d: number) {
-    return `${year}-${String(month + 1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-  }
-
-  function eventsOnDay(d: number) {
-    return events.filter(e => e.date === dateStr(d));
-  }
-
-  const selectedEvents = selected ? events.filter(e => e.date === selected) : [];
-  const todayStr = today.toISOString().split("T")[0];
-  const upcoming = events.filter(e => e.date >= todayStr).slice(0, 5);
-
-  const prevMonth = () => { if (month === 0) { setYear(y => y - 1); setMonth(11); } else setMonth(m => m - 1); setSelected(null); };
-  const nextMonth = () => { if (month === 11) { setYear(y => y + 1); setMonth(0); } else setMonth(m => m + 1); setSelected(null); };
 
   const MONTHS = MONTHS_BY_LANG[lang] || MONTHS_BY_LANG.en;
   const DAYS   = DAYS_BY_LANG[lang]   || DAYS_BY_LANG.en;
 
+  const firstDay    = new Date(year, month, 1);
+  const lastDay     = new Date(year, month+1, 0);
+  const startOffset = (firstDay.getDay()+6)%7;
+  const rows        = Math.ceil((startOffset+lastDay.getDate())/7);
+  const todayStr    = today.toISOString().split("T")[0];
+  const upcoming    = events.filter(e=>e.date>=todayStr).slice(0,5);
+  const selEvs      = selected ? events.filter(e=>e.date===selected) : [];
+
+  function ds(d:number){ return `${year}-${String(month+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`; }
+  function dayEvs(d:number){ return events.filter(e=>e.date===ds(d)); }
+  const prev = ()=>{ if(month===0){setYear(y=>y-1);setMonth(11);}else setMonth(m=>m-1); setSel(null); };
+  const next = ()=>{ if(month===11){setYear(y=>y+1);setMonth(0);}else setMonth(m=>m+1); setSel(null); };
+
   return (
-    <div className="cal-wrap">
-      <div className="cal-box">
-        <div className="cal-header">
-          <button className="cal-nav-btn" onClick={prevMonth} aria-label="Previous month">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+    <div className="kcal-wrap">
+
+      {/* ── MAIN CALENDAR ── */}
+      <div className="kcal-main">
+
+        {/* Header */}
+        <div className="kcal-header">
+          <button className="kcal-nav-btn" onClick={prev} aria-label="Previous">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
-          <span className="cal-month-label">{MONTHS[month]} {year}</span>
-          <button className="cal-nav-btn" onClick={nextMonth} aria-label="Next month">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <div className="kcal-header-center">
+            <span className="kcal-month-name">{MONTHS[month]}</span>
+            <span className="kcal-year">{year}</span>
+          </div>
+          <button className="kcal-nav-btn" onClick={next} aria-label="Next">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
-        <div className="cal-days-header">
-          {DAYS.map(d => <div key={d} className="cal-day-name">{d}</div>)}
+
+        {/* Day headers */}
+        <div className="kcal-days-header">
+          {DAYS.map(d=><div key={d} className="kcal-day-lbl">{d}</div>)}
         </div>
+
+        {/* Grid */}
         {loading ? (
-          <div className="cal-loading">Loading…</div>
+          <div className="kcal-spinner">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.5" strokeLinecap="round">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            </svg>
+          </div>
         ) : (
-          <div className="cal-grid">
-            {Array.from({ length: rows * 7 }).map((_, i) => {
-              const dayNum = i - startOffset + 1;
-              const valid  = dayNum >= 1 && dayNum <= lastDay.getDate();
-              const ds     = valid ? dateStr(dayNum) : "";
-              const dayEvs = valid ? eventsOnDay(dayNum) : [];
-              const isToday = ds === todayStr;
-              const isSel   = ds === selected;
-              const isPast  = valid && ds < todayStr;
+          <div className="kcal-grid">
+            {Array.from({length: rows*7}).map((_,i)=>{
+              const d   = i - startOffset + 1;
+              const ok  = d>=1 && d<=lastDay.getDate();
+              const str = ok ? ds(d) : "";
+              const evs = ok ? dayEvs(d) : [];
+              const isToday = str===todayStr;
+              const isSel   = str===selected;
+              const isPast  = ok && str<todayStr;
+              const mainEv  = evs[0];
               return (
-                <div key={i} className={["cal-cell", !valid ? "cal-cell-empty" : "", isToday ? "cal-cell-today" : "", isSel ? "cal-cell-sel" : "", isPast ? "cal-cell-past" : ""].join(" ")} onClick={() => valid && setSelected(isSel ? null : ds)}>
-                  {valid && (<>
-                    <span className="cal-day-num">{dayNum}</span>
-                    <div className="cal-dots">{dayEvs.slice(0,3).map((ev,j) => <span key={j} className="cal-dot" style={{ background: TYPE_COLORS[ev.type]?.bg }} />)}</div>
-                  </>)}
+                <div key={i}
+                  className={["kcal-cell", !ok?"kcal-empty":"kcal-valid", isToday?"kcal-today":"", isSel?"kcal-sel":"", isPast?"kcal-past":""].filter(Boolean).join(" ")}
+                  style={mainEv && !isPast ? {background: TYPES[mainEv.type]?.light} : {}}
+                  onClick={()=>ok&&setSel(isSel?null:str)}
+                >
+                  {ok && (
+                    <>
+                      <span className="kcal-num">{d}</span>
+                      {evs.length>0 && (
+                        <div className="kcal-ev-pills">
+                          {evs.slice(0,2).map((ev,j)=>(
+                            <span key={j} className="kcal-ev-pill"
+                              style={{background: TYPES[ev.type]?.bg, color:"#fff"}}>
+                              {ev.title.length>14 ? ev.title.slice(0,13)+"…" : ev.title}
+                            </span>
+                          ))}
+                          {evs.length>2 && <span className="kcal-ev-more">+{evs.length-2}</span>}
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
               );
             })}
           </div>
         )}
-        <div className="cal-legend">
-          {Object.entries(TYPE_COLORS).map(([k,v]) => (
-            <div key={k} className="cal-legend-item">
-              <span className="cal-legend-dot" style={{ background: v.bg }} />
+
+        {/* Legend */}
+        <div className="kcal-legend">
+          {Object.entries(TYPES).map(([k,v])=>(
+            <div key={k} className="kcal-legend-item">
+              <span className="kcal-legend-dot" style={{background:v.bg}}/>
               <span>{v.label}</span>
             </div>
           ))}
+          <span className="kcal-tz">JST · UTC+9</span>
         </div>
       </div>
-      <div className="cal-side">
-        {selected && (
-          <div className="cal-detail">
-            <p className="cal-detail-date">{new Date(selected + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}</p>
-            {selectedEvents.length === 0 ? (
-              <p className="cal-detail-empty">{noEventsLabel}</p>
-            ) : (
-              selectedEvents.map(ev => (
-                <div key={ev.id} className="cal-event-card">
-                  <div className="cal-event-type" style={{ background: TYPE_COLORS[ev.type]?.bg }}>{TYPE_COLORS[ev.type]?.label}</div>
-                  <strong className="cal-event-title">{ev.title}</strong>
-                  {ev.store && <span className="cal-event-store">📍 {ev.store}</span>}
-                  {ev.description && <p className="cal-event-desc">{ev.description}</p>}
-                </div>
-              ))
-            )}
-          </div>
-        )}
-        <div className="cal-upcoming">
-          <p className="cal-upcoming-title">{upcomingLabel}</p>
-          {upcoming.length === 0 ? (
-            <p className="cal-detail-empty" style={{padding:"1rem 1.2rem"}}>{noUpcomingLabel}</p>
+
+      {/* ── SIDE PANEL ── */}
+      <div className="kcal-side">
+
+        {/* Selected day */}
+        <div className="kcal-detail-box">
+          {!selected ? (
+            <div className="kcal-hint">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.2" strokeLinecap="round" opacity=".5">
+                <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              <p>Select a day<br/>to see details</p>
+            </div>
           ) : (
-            upcoming.map(ev => (
-              <div key={ev.id} className="cal-upcoming-item" onClick={() => setSelected(ev.date)}>
-                <div className="cal-upcoming-bar" style={{ background: TYPE_COLORS[ev.type]?.bg }} />
-                <div>
-                  <strong>{ev.title}</strong>
-                  <span>{new Date(ev.date + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
-                </div>
+            <>
+              <div className="kcal-sel-date">
+                {new Date(selected+"T12:00:00").toLocaleDateString(
+                  lang==="ja"?"ja-JP":lang==="ko"?"ko-KR":lang==="zh"?"zh-CN":"en-US",
+                  {weekday:"long",month:"long",day:"numeric"}
+                )}
               </div>
-            ))
+              {selEvs.length===0 ? (
+                <p className="kcal-no-ev">{noEventsLabel}</p>
+              ) : selEvs.map(ev=>(
+                <div key={ev.id} className="kcal-ev-detail">
+                  <span className="kcal-ev-tag" style={{background:TYPES[ev.type]?.bg}}>
+                    {TYPES[ev.type]?.icon} {TYPES[ev.type]?.label}
+                  </span>
+                  <strong className="kcal-ev-name">{ev.title}</strong>
+                  {ev.store && <span className="kcal-ev-place">📍 {ev.store}</span>}
+                  {ev.description && <p className="kcal-ev-body">{ev.description}</p>}
+                </div>
+              ))}
+            </>
           )}
         </div>
+
+        {/* Upcoming */}
+        <div className="kcal-upcoming-box">
+          <div className="kcal-upcoming-head">{upcomingLabel}</div>
+          {upcoming.length===0 ? (
+            <p className="kcal-no-ev" style={{padding:"1rem 1.2rem"}}>{noUpcomingLabel}</p>
+          ) : upcoming.map(ev=>(
+            <div key={ev.id} className="kcal-upcoming-row" onClick={()=>setSel(ev.date)}>
+              <div className="kcal-upcoming-bar" style={{background:TYPES[ev.type]?.bg}}/>
+              <div className="kcal-upcoming-info">
+                <strong>{ev.title}</strong>
+                {ev.store && <span>📍 {ev.store}</span>}
+              </div>
+              <div className="kcal-upcoming-dt">
+                {new Date(ev.date+"T12:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric"})}
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
     </div>
   );

@@ -1009,14 +1009,13 @@ export default function Home() {
                   <div className="carrier-badge ems">EMS</div>
                   <div className="carrier-name">{t.shipping?.ems || "Japan Post EMS"}</div>
                 </div>
-                <p className="shipping-desc">{t.shipping?.emsDesc || "Express Mail Service — fast, tracked, affordable. Available worldwide."} <strong>{t.shipping?.emsWarning || "For USA shipments: maximum declared value of $100 as gift. Above this threshold, we recommend FedEx or DHL."}</strong></p>
+                <p className="shipping-desc">{t.shipping?.emsDesc || "Express Mail Service — fast, tracked, affordable. Now available to new markets worldwide."}</p>
               </div>
               <div className="shipping-card">
                 <div className="shipping-carrier">
                   <div className="carrier-badge yamato">ヤマト</div>
                   <div className="carrier-name">{t.shipping?.yamato || "Yamato Transport (TA-Q-BIN)"}</div>
                 </div>
-                <p className="shipping-desc">{t.shipping?.yamatoDesc || "Economical option for USA shipments above $100. Slower than FedEx/DHL but significantly cheaper for heavy or bulky packages."}</p>
               </div>
               <div className="shipping-card">
                 <div className="shipping-carrier">
@@ -1114,14 +1113,19 @@ export default function Home() {
             <a href="#reviews" className="footer-link">Reviews</a>
             <a href="#pricing" className="footer-link">{t.nav.pricing}</a>
             <a href="#photos" className="footer-link">{t.nav.gallery}</a>
+            <a href="/events" className="footer-link">Tokyo Events 🎌</a>
           </div>
           <div>
-            <p className="footer-col-title">Info</p>
-            <a href="/events" className="footer-link">Tokyo Events 🎌</a>
-            <a href="#faq" className="footer-link">{t.nav.faq}</a>
+            <p className="footer-col-title">Guides</p>
             <a href="/blog/how-to-buy-from-mercari-japan" className="footer-link">Mercari Japan Guide</a>
-            <a href="/blog/best-pokemon-cards-japan-2026" className="footer-link">Pokémon Cards Japan</a>
             <a href="/blog/yahoo-auctions-japan-guide" className="footer-link">Yahoo Auctions Guide</a>
+            <a href="/blog/best-pokemon-cards-japan-2026" className="footer-link">Pokémon Cards Japan</a>
+            <a href="/blog/pokemon-center-tokyo-exclusives" className="footer-link">Pokémon Center Tokyo</a>
+            <a href="/blog/supreme-japan-drops-guide" className="footer-link">Supreme Japan Drops</a>
+            <a href="/blog/nike-japan-exclusives-guide" className="footer-link">Nike Japan Exclusives</a>
+            <a href="/blog/anime-figures-japan-guide" className="footer-link">Anime Figures Japan</a>
+            <a href="/blog/japanese-trading-cards-guide-2026" className="footer-link">Trading Cards Japan</a>
+            <a href="/blog/japan-shipping-guide-2026" className="footer-link">Shipping Guide 2026</a>
           </div>
           <div>
             <p className="footer-col-title">Contact</p>
