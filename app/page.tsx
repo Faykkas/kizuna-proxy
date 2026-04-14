@@ -34,6 +34,7 @@ const SLIDES = [
 // ─── REAL REVIEWS ────────────────────────────────────────────────────────────
 const REAL_REVIEWS = [
   { name: "u/ikorean123",           country: "🇯🇵 to 🇺🇸 USA", stars: 5, link: "https://www.reddit.com/r/internationalshopper/comments/1sirfdi/positive_review_for_ufaycas_to/", title: "Positive review for u/faycas", text: "If you guys want the best proxy service for any products from Japan, I highly recommend using u/Faycas and their proxy service, kizuna proxy. They were very attentive and took great care in getting my products shipped over, communicating/updating me throughout the whole process. They were also very considerate of my big order so I was only charged a percentage of their regular fee per product that I ordered. I will be using them again for any products I want from Japan. 🙏🥰" },
+  { name: "u/Crrexxx",              country: "🇺🇸 USA",        stars: 5, link: "https://www.reddit.com/r/internationalshopper/comments/1skxcu7/comment/og4i6wv/?context=1", title: "Sweet and helpful service", text: "I would like to thank u/Faycas for helping me buy items from Japan to the US! They were so sweet and helpful. Plus the packaging was carefully wrapped and secure. I will definitely be using their services again!" },
   { name: "u/grimmia",             country: "🇬🇷 Greece",    stars: 5, link: "https://www.reddit.com/r/internationalshopper/comments/1s4x1fw/", title: "Wonderful experience — JP to GR", text: "She handled personal shopping for me in Tokyo and visited the Sonic Store, the Pokémon Center, and the Nintendo Store with absolute success! We even did live shopping through a video call, and it genuinely felt like I was there with her. Extremely polite, professional, very good prices. Communication was clear and immediate, which made me trust them completely." },
   { name: "u/Calm-Leather-1018",   country: "🇺🇸 USA",      stars: 5, link: "https://www.reddit.com/r/internationalshopper/comments/1s4ktd9/", title: "Service review", text: "I've never used a proxy seller before but there were some Japanese exclusive collab items I wanted from a fashion brand and luckily I came in contact with them. The process was simple and I never felt as though I was overpaying. If you want your Japanese merch, think u/Faycas as a reliable proxy seller ❤️" },
   { name: "u/Salty-Lemon8781",     country: "🇨🇦 Canada",   stars: 5, link: "https://www.reddit.com/r/internationalshopper/comments/1s2zphf/", title: "Positive review", text: "Faycas and his girlfriend are the best if you need an item purchased/shipped from Japan. They are extremely helpful, polite, trustworthy, and just great people in general. They arranged the purchase of a vintage item for me, took great care to pack it, and made the whole process very easy. I will use their services again ❤️" },
@@ -762,7 +763,7 @@ export default function Home() {
           </div>
           <div className="hero-stats hero-stats-center">
             <div className="hero-stat">
-              <strong>10</strong>
+              <strong>11</strong>
               <span>Reviews</span>
             </div>
             <div className="hero-stat-sep" />
@@ -880,7 +881,7 @@ export default function Home() {
               <div>
                 <div className="reviews-big-stars">★★★★★</div>
                 <div className="reviews-big-label">{t.reviews?.basedOn}</div>
-                <div className="reviews-count">10 verified reviews</div>
+                <div className="reviews-count">11 verified reviews</div>
               </div>
             </div>
             <a href="https://www.reddit.com/r/internationalshopper/" target="_blank" rel="noopener noreferrer" className="reviews-reddit-badge">
@@ -930,7 +931,7 @@ export default function Home() {
               ))}
             </div>
             <div className="tp-info">
-              <strong>10</strong> reviews
+              <strong>11</strong> reviews
             </div>
             <div className="tp-cta">
               See all reviews →
