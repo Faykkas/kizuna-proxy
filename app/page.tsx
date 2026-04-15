@@ -1133,6 +1133,64 @@ export default function Home() {
         </div>
       </section>
 
+      {/* HOW IT WORKS */}
+      <section id="how-it-works" className="section reveal">
+        <div className="wrap">
+          <div className="sec-head">
+            <p className="sec-label">{t.howItWorks?.label}</p>
+            <h2>{t.howItWorks?.title} <em>{t.howItWorks?.titleEm || ""}</em></h2>
+            <p className="desc">{t.howItWorks?.desc}</p>
+          </div>
+          <div className="hiw-steps">
+            {[
+              { n:"01", title: t.howItWorks?.step1Title, body: t.howItWorks?.step1Body,
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> },
+              { n:"02", title: t.howItWorks?.step2Title, body: t.howItWorks?.step2Body,
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.6" strokeLinecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> },
+              { n:"03", title: t.howItWorks?.step3Title, body: t.howItWorks?.step3Body,
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.6" strokeLinecap="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> },
+            ].map((step, i) => (
+              <div key={i} className="hiw-step">
+                <div className="hiw-step-num">{step.n}</div>
+                <div className="hiw-step-icon">{step.icon}</div>
+                <div className="hiw-step-body">
+                  <strong>{step.title}</strong>
+                  <p>{step.body}</p>
+                </div>
+                {i < 2 && <div className="hiw-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold-l)" strokeWidth="1.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* WHY KIZUNA */}
+      <section id="why-kizuna" className="section reveal" style={{background:"var(--ink)"}}>
+        <div className="wrap">
+          <div className="sec-head">
+            <p className="sec-label" style={{color:"var(--gold)"}}>Why Kizuna</p>
+            <h2 style={{color:"var(--beige)"}}>Personal service, <em>not a platform</em></h2>
+            <p className="desc" style={{color:"rgba(247,243,237,.45)"}}>Big proxy services are automated platforms. We are real people in Tokyo — here's why that matters.</p>
+          </div>
+          <div className="why-grid">
+            {[
+              { icon:"👤", title:"Real person, not a bot", desc:"Every request is read and handled by us personally. You speak directly with the person buying your item — not a support ticket system." },
+              { icon:"📍", title:"Based in Tokyo", desc:"We are physically in Tokyo. We visit stores, attend events, and check items in person. No warehouse intermediaries, no delays." },
+              { icon:"🎌", title:"Fluent in Japanese", desc:"We communicate directly with Japanese sellers — no translation delays, no misunderstandings, no cancelled orders due to language barriers." },
+              { icon:"💬", title:"Direct communication", desc:"WhatsApp, Discord, email — you reach us directly and get a real answer within 24 hours. No chatbots, no automated responses." },
+              { icon:"🔍", title:"We find what others can't", desc:"Physical store visits, live shopping calls, exclusive events — we go places automated proxy services simply cannot reach." },
+              { icon:"🌍", title:"Shipped to 20+ countries", desc:"Trusted by customers in USA, Canada, France, Germany, Greece, Indonesia and more. Worldwide shipping with full transparency on costs." },
+            ].map((item, i) => (
+              <div key={i} className="why-card">
+                <div className="why-icon">{item.icon}</div>
+                <strong className="why-title">{item.title}</strong>
+                <p className="why-desc">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* GALLERY */}
       <section id="photos" className="section reveal">
         <div className="wrap">
@@ -1202,10 +1260,11 @@ export default function Home() {
           <div>
             <p className="footer-col-title">Navigate</p>
             <a href="#services" className="footer-link">{t.whatWeBuy?.label}</a>
+            <a href="#how-it-works" className="footer-link">How it works</a>
             <a href="#calendar" className="footer-link">{t.calendar?.label}</a>
             <a href="#reviews" className="footer-link">Reviews</a>
             <a href="#pricing" className="footer-link">{t.nav.pricing}</a>
-            <a href="#photos" className="footer-link">{t.nav.gallery}</a>
+            <a href="/faq" className="footer-link">FAQ</a>
             <a href="/events" className="footer-link">Tokyo Events 🎌</a>
           </div>
           <div>
