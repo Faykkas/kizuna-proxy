@@ -127,7 +127,7 @@ export default function Calendar({
                         <div className="kcal-ev-pills">
                           {evs.slice(0,2).map((ev,j)=>(
                             <span key={j} className="kcal-ev-pill"
-                              style={{color: TYPES[ev.type]?.bg}}>
+                              style={{color: TYPES[ev.type]?.bg, background: `${TYPES[ev.type]?.bg}18`}}>
                               <span style={{width:"5px",height:"5px",borderRadius:"50%",background:TYPES[ev.type]?.bg,flexShrink:0,display:"inline-block"}}/>
                               {ev.title.length>12 ? ev.title.slice(0,11)+"…" : ev.title}
                             </span>
