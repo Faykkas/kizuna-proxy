@@ -438,7 +438,7 @@ function useSakuraCanvas() {
     resize();
     window.addEventListener("resize", resize);
 
-    const G1='#c9a96e', G2='#b8976a', G4='#a07840';
+    const G1='#e83050', G2='#C8102E', G4='#a00d24';
 
     // ── KIZUNA LETTER PATHS ────────────────────────────────────────────────
     const LETTERS: Record<string, {x:number;y:number}[][]> = {
@@ -513,7 +513,7 @@ function useSakuraCanvas() {
       cx.save(); cx.translate(x, y); cx.rotate(a);
       cx.globalAlpha = op;
       const g = cx.createRadialGradient(0, -sz*.25, 0, 0, 0, sz*1.1);
-      g.addColorStop(0, '#f0dfc0'); g.addColorStop(.5, G1); g.addColorStop(1, G4);
+      g.addColorStop(0, '#fce4ea'); g.addColorStop(.5, '#F4A7B9'); g.addColorStop(1, '#e8839a');
       cx.fillStyle = g;
       cx.beginPath();
       cx.moveTo(0, -sz);
@@ -576,8 +576,8 @@ function useSakuraCanvas() {
 
       // Radial warm glow
       const rg = cx.createRadialGradient(W*.5, H*.4, 0, W*.5, H*.4, W*.7);
-      rg.addColorStop(0, 'rgba(232,213,176,0.07)');
-      rg.addColorStop(1, 'rgba(184,151,106,0.0)');
+      rg.addColorStop(0, 'rgba(200,16,46,0.06)');
+      rg.addColorStop(1, 'rgba(26,39,68,0.0)');
       cx.fillStyle = rg; cx.fillRect(0, 0, W, H);
 
       // Mon circles

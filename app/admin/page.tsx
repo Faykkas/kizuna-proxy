@@ -26,7 +26,7 @@ const emptyGallery = { title:"", subtitle:"", image_url:"", sort_order:0 };
 // ─── STYLES ──────────────────────────────────────────────────────────────────
 const lbl = { fontSize:".63rem", letterSpacing:".14em", textTransform:"uppercase" as const, color:"var(--warm)", display:"block", marginBottom:".4rem" };
 const inp = { width:"100%", padding:".7rem 1rem", border:"1px solid var(--border-gold)", borderRadius:"1px", fontSize:".88rem", fontFamily:"'Jost',sans-serif", background:"var(--beige)", color:"var(--ink)", outline:"none", boxSizing:"border-box" as const };
-const btnPrimary = { background:"var(--gold-d)", color:"#fff", border:"none", padding:".6rem 1.4rem", borderRadius:"1px", fontSize:".7rem", letterSpacing:".12em", textTransform:"uppercase" as const, fontFamily:"'Jost',sans-serif", cursor:"pointer", fontWeight:500 };
+const btnPrimary = { background:"var(--red)", color:"#fff", border:"none", padding:".6rem 1.4rem", borderRadius:"1px", fontSize:".7rem", letterSpacing:".12em", textTransform:"uppercase" as const, fontFamily:"'Jost',sans-serif", cursor:"pointer", fontWeight:500 };
 const btnGhost = { background:"transparent", color:"var(--warm)", border:"1px solid var(--border-gold)", padding:".6rem 1.2rem", borderRadius:"1px", fontSize:".7rem", letterSpacing:".12em", textTransform:"uppercase" as const, fontFamily:"'Jost',sans-serif", cursor:"pointer" };
 const btnSmall = { border:"1px solid var(--border-gold)", padding:".3rem .7rem", borderRadius:"1px", fontSize:".68rem", fontFamily:"'Jost',sans-serif", cursor:"pointer", color:"var(--ink)", background:"var(--beige)" };
 const btnDanger = { border:"none", padding:".3rem .7rem", borderRadius:"1px", fontSize:".68rem", fontFamily:"'Jost',sans-serif", cursor:"pointer", color:"#b91c1c", background:"#fee2e2" };
@@ -86,7 +86,7 @@ export default function AdminPage() {
     <div style={{ minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center", background:"var(--beige)" }}>
       <div style={{ background:"var(--white)", border:"1px solid var(--border-gold)", padding:"2.5rem", width:"100%", maxWidth:"360px", boxShadow:"0 8px 32px rgba(13,11,9,.08)" }}>
         <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.5rem", fontWeight:600, color:"var(--ink)", marginBottom:".3rem" }}>
-          <span style={{ color:"var(--gold)" }}>Kizuna</span> Admin
+          <span style={{ color:"var(--red)" }}>Kizuna</span> Admin
         </div>
         <p style={{ fontSize:".8rem", color:"var(--warm)", marginBottom:"1.5rem" }}>Sign in to manage your site</p>
         {locked && <div style={{ background:"#fee2e2", border:"1px solid #fca5a5", padding:".75rem 1rem", marginBottom:"1rem", fontSize:".78rem", color:"#b91c1c", borderRadius:"1px" }}>🔒 Account locked. Try again in {lockTimer}s.</div>}
@@ -115,7 +115,7 @@ export default function AdminPage() {
         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"2rem", flexWrap:"wrap", gap:"1rem" }}>
           <div>
             <h1 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:300, color:"var(--ink)" }}>
-              <span style={{ color:"var(--gold)" }}>Kizuna</span> Admin
+              <span style={{ color:"var(--red)" }}>Kizuna</span> Admin
             </h1>
             <p style={{ fontSize:".8rem", color:"var(--warm)" }}>Logged in as {session.user.email}</p>
           </div>
@@ -128,7 +128,7 @@ export default function AdminPage() {
         {/* Tabs */}
         <div style={{ display:"flex", gap:"1px", marginBottom:"2rem", background:"var(--border-gold)", border:"1px solid var(--border-gold)", width:"fit-content" }}>
           {TABS.map(t => (
-            <button key={t.id} onClick={() => setTab(t.id)} style={{...btnGhost, border:"none", background:tab===t.id?"var(--ink)":"var(--beige)", color:tab===t.id?"var(--gold)":"var(--warm)", borderRadius:0, padding:".6rem 1.3rem"}}>
+            <button key={t.id} onClick={() => setTab(t.id)} style={{...btnGhost, border:"none", background:tab===t.id?"var(--ink)":"var(--beige)", color:tab===t.id?"var(--red)":"var(--warm)", borderRadius:0, padding:".6rem 1.3rem"}}>
               {t.label}
             </button>
           ))}

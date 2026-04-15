@@ -27,9 +27,9 @@ const DAYS_BY_LANG = {
 };
 
 const TYPES = {
-  event:       { bg: "#b8976a", light: "rgba(184,151,106,.1)",  label: "Event",       icon: "🎌" },
-  available:   { bg: "#2d6a4f", light: "rgba(45,106,79,.08)",   label: "Available",   icon: "✓"  },
-  unavailable: { bg: "#16120e", light: "rgba(22,18,14,.06)",    label: "Unavailable", icon: "✗"  },
+  event:       { bg: "#C8102E", light: "rgba(200,16,46,.08)",  label: "Event",       icon: "🎌" },
+  available:   { bg: "#1a6934", light: "rgba(26,105,52,.08)",  label: "Available",   icon: "✓"  },
+  unavailable: { bg: "#1a2744", light: "rgba(26,39,68,.06)",   label: "Unavailable", icon: "✗"  },
 };
 
 export default function Calendar({
