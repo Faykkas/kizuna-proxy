@@ -1146,19 +1146,19 @@ export default function Home() {
       <section id="why-kizuna" className="section reveal" style={{background:"var(--ink)"}}>
         <div className="wrap">
           <div className="sec-head">
-            <p className="sec-label" style={{color:"var(--gold)"}}>Why Kizuna</p>
-            <h2 style={{color:"var(--beige)"}}>Personal service, <em>not a platform</em></h2>
-            <p className="desc" style={{color:"rgba(247,243,237,.45)"}}>Big proxy services are automated platforms. We are real people in Tokyo — here's why that matters.</p>
+            <p className="sec-label" style={{color:"var(--red)"}}>{t.howItWorks?.whyKizuna?.label || "Why Kizuna"}</p>
+            <h2 style={{color:"var(--beige)"}}>{t.howItWorks?.whyKizuna?.title || "Personal service,"} <em style={{color:"var(--red)"}}>{t.howItWorks?.whyKizuna?.titleEm || "not a platform"}</em></h2>
+            <p className="desc" style={{color:"rgba(255,255,255,.5)"}}>{t.howItWorks?.whyKizuna?.desc || "Big proxy services are automated platforms. We are real people in Tokyo — here's why that matters."}</p>
           </div>
           <div className="why-grid">
-            {[
-              { icon:"👤", title:"Real person, not a bot", desc:"Every request is read and handled by us personally. You speak directly with the person buying your item — not a support ticket system." },
-              { icon:"📍", title:"Based in Tokyo", desc:"We are physically in Tokyo. We visit stores, attend events, and check items in person. No warehouse intermediaries, no delays." },
-              { icon:"🎌", title:"Fluent in Japanese", desc:"We communicate directly with Japanese sellers — no translation delays, no misunderstandings, no cancelled orders due to language barriers." },
-              { icon:"💬", title:"Direct communication", desc:"WhatsApp, Discord, email — you reach us directly and get a real answer within 24 hours. No chatbots, no automated responses." },
-              { icon:"🔍", title:"We find what others can't", desc:"Physical store visits, live shopping calls, exclusive events — we go places automated proxy services simply cannot reach." },
-              { icon:"🌍", title:"Shipped to 20+ countries", desc:"Trusted by customers in USA, Canada, France, Germany, Greece, Indonesia and more. Worldwide shipping with full transparency on costs." },
-            ].map((item, i) => (
+            {(t.howItWorks?.whyKizuna?.cards || [
+              { icon:"👤", title:"Real person, not a bot", desc:"Every request is handled by us personally." },
+              { icon:"📍", title:"Based in Tokyo", desc:"We are physically in Tokyo. We visit stores and attend events in person." },
+              { icon:"🎌", title:"Fluent in Japanese", desc:"We communicate directly with Japanese sellers — no translation delays." },
+              { icon:"💬", title:"Direct communication", desc:"WhatsApp, Discord, email — real answers within 24 hours." },
+              { icon:"🔍", title:"We find what others can't", desc:"Physical store visits, live shopping calls, exclusive events." },
+              { icon:"🌍", title:"Shipped to 20+ countries", desc:"Trusted by customers in USA, Canada, France, Germany, Greece, Indonesia and more." },
+            ]).map((item, i) => (
               <div key={i} className="why-card">
                 <div className="why-icon">{item.icon}</div>
                 <strong className="why-title">{item.title}</strong>

@@ -49,6 +49,18 @@ export const translations = {
       step1Title: "Send your request", step1Body: "Share the item link, photo, title, or any details about what you are looking for in Japan. The more precise, the better we can assist.",
       step2Title: "Confirm & pay", step2Body: "We review the request together, confirm every detail, then you pay the item price plus the agreed service fee before we proceed.",
       step3Title: "Receive your item", step3Body: "Once ready, we choose the shipping method together. All costs remain fully transparent and easy to verify at every stage.",
+      whyKizuna: {
+        label: "Why Kizuna", title: "Personal service,", titleEm: "not a platform",
+        desc: "Big proxy services are automated platforms. We are real people in Tokyo — here's why that matters.",
+        cards: [
+          { icon: "👤", title: "Real person, not a bot", desc: "Every request is handled by us personally. You speak directly with the person buying your item." },
+          { icon: "📍", title: "Based in Tokyo", desc: "We are physically in Tokyo. We visit stores, attend events, and check items in person." },
+          { icon: "🎌", title: "Fluent in Japanese", desc: "We communicate directly with Japanese sellers — no translation delays, no misunderstandings." },
+          { icon: "💬", title: "Direct communication", desc: "WhatsApp, Discord, email — real answers within 24 hours. No chatbots, no automated responses." },
+          { icon: "🔍", title: "We find what others can't", desc: "Physical store visits, live shopping calls, exclusive events — we go where automated services cannot." },
+          { icon: "🌍", title: "Shipped to 20+ countries", desc: "Trusted by customers in USA, Canada, France, Germany, Greece, Indonesia and more." },
+        ]
+      },
     },
     about: {
       label: "About us",
@@ -204,6 +216,18 @@ export const translations = {
       step1Title: "Envoyez votre demande", step1Body: "Partagez le lien, la photo ou les détails de l'article que vous cherchez. Plus c'est précis, mieux on peut vous aider.",
       step2Title: "Confirmez & payez", step2Body: "Nous étudions la demande ensemble, confirmons chaque détail, puis vous payez le prix de l'article et nos frais avant de procéder.",
       step3Title: "Recevez votre colis", step3Body: "Une fois prêt, nous choisissons ensemble le mode d'envoi. Tous les coûts restent transparents et vérifiables.",
+      whyKizuna: {
+        label: "Pourquoi Kizuna", title: "Un service humain,", titleEm: "pas une plateforme",
+        desc: "Les grands services proxy sont automatisés. Nous sommes de vraies personnes à Tokyo — voilà pourquoi ça compte.",
+        cards: [
+          { icon: "👤", title: "Une vraie personne", desc: "Chaque demande est traitée personnellement. Vous parlez directement avec la personne qui achète votre article." },
+          { icon: "📍", title: "Basés à Tokyo", desc: "Nous sommes physiquement à Tokyo. Nous visitons les boutiques, assistons aux événements, et vérifions les articles en personne." },
+          { icon: "🎌", title: "Japonais courant", desc: "Nous communiquons directement avec les vendeurs japonais — pas de délai de traduction, pas de malentendu." },
+          { icon: "💬", title: "Contact direct", desc: "WhatsApp, Discord, email — une vraie réponse sous 24h. Pas de chatbot, pas de réponse automatique." },
+          { icon: "🔍", title: "On trouve ce que les autres ne peuvent pas", desc: "Visites en boutique, shopping en direct, événements exclusifs — on va là où les services automatisés ne peuvent pas aller." },
+          { icon: "🌍", title: "Livraison dans 20+ pays", desc: "Clients en USA, Canada, France, Allemagne, Grèce, Indonésie et bien d'autres." },
+        ]
+      },
     },
     about: {
       label: "À propos",
@@ -359,6 +383,18 @@ export const translations = {
       step1Title: "依頼を送る", step1Body: "商品リンク、写真、タイトル、またはお探しの商品の詳細をお知らせください。",
       step2Title: "確認・お支払い", step2Body: "内容を確認し、商品代金と代行手数料をお支払いいただいた後、購入を進めます。",
       step3Title: "商品を受け取る", step3Body: "準備ができたら、一緒に発送方法を選びます。すべての費用は透明です。",
+      whyKizuna: {
+        label: "なぜKizunaか", title: "個人サービス、", titleEm: "プラットフォームではない",
+        desc: "大手プロキシサービスは自動化されています。私たちは東京にいる本物の人間です。",
+        cards: [
+          { icon: "👤", title: "ボットではなく実在の人間", desc: "すべてのリクエストは私たちが個人的に対応します。" },
+          { icon: "📍", title: "東京在住", desc: "実際に東京にいます。店舗訪問、イベント参加、商品確認をその場で行います。" },
+          { icon: "🎌", title: "日本語ネイティブ", desc: "日本語で直接出品者と交渉します。翻訳の遅れや誤解がありません。" },
+          { icon: "💬", title: "直接連絡", desc: "WhatsApp、Discord、メール — 24時間以内に本物の返答をします。" },
+          { icon: "🔍", title: "他では見つからないものも", desc: "実店舗訪問、ライブショッピング、限定イベント対応。" },
+          { icon: "🌍", title: "20カ国以上に発送", desc: "USA、カナダ、フランス、ドイツ、ギリシャ、インドネシアなど多数のお客様に信頼されています。" },
+        ]
+      },
     },
     about: {
       label: "私たちについて",
@@ -514,6 +550,18 @@ export const translations = {
       step1Title: "Envía tu solicitud", step1Body: "Comparte el enlace, foto o detalles del artículo que buscas en Japón.",
       step2Title: "Confirma y paga", step2Body: "Revisamos la solicitud juntos y pagas el precio del artículo más nuestra tarifa antes de proceder.",
       step3Title: "Recibe tu artículo", step3Body: "Una vez listo, elegimos juntos el método de envío. Todos los costos son transparentes.",
+      whyKizuna: {
+        label: "Por qué Kizuna", title: "Servicio personal,", titleEm: "no una plataforma",
+        desc: "Los grandes servicios proxy son plataformas automatizadas. Somos personas reales en Tokio.",
+        cards: [
+          { icon: "👤", title: "Persona real, no un bot", desc: "Cada solicitud es gestionada por nosotros personalmente." },
+          { icon: "📍", title: "Con sede en Tokio", desc: "Estamos físicamente en Tokio. Visitamos tiendas y asistimos a eventos en persona." },
+          { icon: "🎌", title: "Japonés fluido", desc: "Nos comunicamos directamente con los vendedores japoneses sin demoras de traducción." },
+          { icon: "💬", title: "Comunicación directa", desc: "WhatsApp, Discord, email — respuestas reales en menos de 24h." },
+          { icon: "🔍", title: "Encontramos lo que otros no pueden", desc: "Visitas a tiendas físicas, compras en vivo, eventos exclusivos." },
+          { icon: "🌍", title: "Envíos a 20+ países", desc: "Clientes en USA, Canadá, Francia, Alemania, Grecia, Indonesia y más." },
+        ]
+      },
     },
     about: {
       label: "Nosotros", title: "Un servicio personal basado en la", titleEm: "confianza",
@@ -642,6 +690,18 @@ export const translations = {
       step1Title: "Invia la tua richiesta", step1Body: "Condividi il link, la foto o i dettagli dell'articolo che cerchi in Giappone.",
       step2Title: "Conferma e paga", step2Body: "Esaminiamo insieme la richiesta e paghi il prezzo dell'articolo più la nostra tariffa.",
       step3Title: "Ricevi il tuo articolo", step3Body: "Una volta pronto, scegliamo insieme il metodo di spedizione. Tutti i costi sono trasparenti.",
+      whyKizuna: {
+        label: "Perché Kizuna", title: "Servizio personale,", titleEm: "non una piattaforma",
+        desc: "I grandi servizi proxy sono piattaforme automatizzate. Siamo persone reali a Tokyo.",
+        cards: [
+          { icon: "👤", title: "Persona reale, non un bot", desc: "Ogni richiesta è gestita personalmente da noi." },
+          { icon: "📍", title: "Con sede a Tokyo", desc: "Siamo fisicamente a Tokyo. Visitiamo negozi e partecipiamo a eventi di persona." },
+          { icon: "🎌", title: "Giapponese fluente", desc: "Comunichiamo direttamente con i venditori giapponesi senza ritardi di traduzione." },
+          { icon: "💬", title: "Comunicazione diretta", desc: "WhatsApp, Discord, email — risposte reali entro 24 ore." },
+          { icon: "🔍", title: "Troviamo ciò che altri non possono", desc: "Visite ai negozi fisici, acquisti in diretta, eventi esclusivi." },
+          { icon: "🌍", title: "Spedizioni in 20+ paesi", desc: "Clienti in USA, Canada, Francia, Germania, Grecia, Indonesia e altro." },
+        ]
+      },
     },
     about: {
       label: "Chi siamo", title: "Un servizio personale basato sulla", titleEm: "fiducia",
@@ -770,6 +830,18 @@ export const translations = {
       step1Title: "Anfrage senden", step1Body: "Teile den Link, das Foto oder die Details des Artikels, den du in Japan suchst.",
       step2Title: "Bestätigen & bezahlen", step2Body: "Wir prüfen die Anfrage gemeinsam und du bezahlst den Artikelpreis plus unsere Gebühr.",
       step3Title: "Artikel empfangen", step3Body: "Sobald bereit, wählen wir gemeinsam die Versandmethode. Alle Kosten bleiben transparent.",
+      whyKizuna: {
+        label: "Warum Kizuna", title: "Persönlicher Service,", titleEm: "keine Plattform",
+        desc: "Große Proxy-Services sind automatisierte Plattformen. Wir sind echte Menschen in Tokio.",
+        cards: [
+          { icon: "👤", title: "Echte Person, kein Bot", desc: "Jede Anfrage wird persönlich von uns bearbeitet." },
+          { icon: "📍", title: "In Tokio ansässig", desc: "Wir sind physisch in Tokio. Wir besuchen Geschäfte und nehmen persönlich an Events teil." },
+          { icon: "🎌", title: "Fließendes Japanisch", desc: "Wir kommunizieren direkt mit japanischen Verkäufern ohne Übersetzungsverzögerungen." },
+          { icon: "💬", title: "Direkte Kommunikation", desc: "WhatsApp, Discord, E-Mail — echte Antworten innerhalb von 24 Stunden." },
+          { icon: "🔍", title: "Wir finden, was andere nicht können", desc: "Ladenbesuche, Live-Shopping, exklusive Events." },
+          { icon: "🌍", title: "Versand in 20+ Länder", desc: "Kunden in USA, Kanada, Frankreich, Deutschland, Griechenland, Indonesien und mehr." },
+        ]
+      },
     },
     about: {
       label: "Über uns", title: "Ein persönlicher Service basierend auf", titleEm: "Vertrauen",
@@ -898,6 +970,18 @@ export const translations = {
       step1Title: "의뢰 보내기", step1Body: "찾고 있는 상품의 링크, 사진, 제목, 또는 세부 정보를 공유해 주세요.",
       step2Title: "확인 및 결제", step2Body: "함께 의뢰 내용을 검토한 후, 상품 가격과 수수료를 결제하시면 진행합니다.",
       step3Title: "상품 수령", step3Body: "준비가 완료되면 함께 배송 방법을 선택합니다. 모든 비용은 투명하게 공개됩니다.",
+      whyKizuna: {
+        label: "왜 Kizuna인가", title: "개인 서비스,", titleEm: "플랫폼이 아닌",
+        desc: "대형 프록시 서비스는 자동화된 플랫폼입니다. 저희는 도쿄에 있는 실제 사람들입니다.",
+        cards: [
+          { icon: "👤", title: "봇이 아닌 실제 사람", desc: "모든 요청은 저희가 직접 처리합니다." },
+          { icon: "📍", title: "도쿄 기반", desc: "저희는 실제로 도쿄에 있습니다. 매장 방문, 이벤트 참석을 직접 합니다." },
+          { icon: "🎌", title: "유창한 일본어", desc: "일본 판매자와 직접 소통합니다. 번역 지연이나 오해가 없습니다." },
+          { icon: "💬", title: "직접 소통", desc: "WhatsApp, Discord, 이메일 — 24시간 내 실제 답변." },
+          { icon: "🔍", title: "다른 서비스가 못 찾는 것도", desc: "실제 매장 방문, 라이브 쇼핑, 독점 이벤트 대응." },
+          { icon: "🌍", title: "20개국 이상 배송", desc: "미국, 캐나다, 프랑스, 독일, 그리스, 인도네시아 등 고객들의 신뢰를 받고 있습니다." },
+        ]
+      },
     },
     about: {
       label: "소개", title: "신뢰를 바탕으로 한", titleEm: "개인 서비스",
@@ -1026,6 +1110,18 @@ export const translations = {
       step1Title: "提交需求", step1Body: "分享您想要商品的链接、图片、标题或详细信息。越详细，我们越能为您提供帮助。",
       step2Title: "确认并付款", step2Body: "我们一起确认需求细节，您支付商品价格及服务费后，我们开始购买。",
       step3Title: "收到商品", step3Body: "准备好后，我们一起选择配送方式。所有费用完全透明。",
+      whyKizuna: {
+        label: "为什么选择Kizuna", title: "个人化服务，", titleEm: "而非平台",
+        desc: "大型代购服务是自动化平台。我们是真实在东京的人——这就是区别所在。",
+        cards: [
+          { icon: "👤", title: "真人服务，非机器人", desc: "每个请求都由我们亲自处理。" },
+          { icon: "📍", title: "驻扎东京", desc: "我们实际身处东京，亲自到访店铺、参加活动、查看商品。" },
+          { icon: "🎌", title: "流利日语", desc: "直接与日本卖家沟通，无翻译延迟，无误解。" },
+          { icon: "💬", title: "直接联系", desc: "WhatsApp、Discord、邮件——24小时内真实回复。" },
+          { icon: "🔍", title: "找到别人找不到的", desc: "实体店访问、直播购物、独家活动。" },
+          { icon: "🌍", title: "发货至20多个国家", desc: "美国、加拿大、法国、德国、希腊、印度尼西亚等地客户的信赖之选。" },
+        ]
+      },
     },
     about: {
       label: "关于我们", title: "建立在信任基础上的", titleEm: "个人化服务",
