@@ -487,37 +487,6 @@ iframe[src*="tawk"], #tawk-bubble-container, .tawk-min-container { display: none
 .tp-info { font-size: .8rem; color: var(--warm); font-weight: 300; }
 .tp-info strong { color: var(--ink); font-weight: 600; }
 .tp-cta { margin-left: auto; font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: #00b67a; font-weight: 500; white-space: nowrap; }
-/* ══════════════════════════════════════════════════════════
-   ZIGZAG LAYOUT
-   ══════════════════════════════════════════════════════════ */
-.zz-section { padding: 5rem 0; }
-.zz-row { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-.zz-reverse { direction: rtl; }
-.zz-reverse > * { direction: ltr; }
-.zz-text { display: flex; flex-direction: column; gap: 0; }
-.zz-text .sec-label { margin-bottom: .75rem; }
-.zz-text h2 { margin-bottom: 1rem; }
-.zz-text .desc { color: var(--warm); font-weight: 300; line-height: 1.85; }
-.zz-media { position: relative; }
-.zz-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.2rem; }
-.zz-tag { font-size: .62rem; letter-spacing: .08em; padding: .3rem .75rem; border: 1px solid var(--border-gold); color: var(--warm); background: var(--white); }
-.zz-quote { border-left: 3px solid var(--red); padding: 1rem 1.5rem; background: var(--beige); margin-top: 1.5rem; }
-.zz-quote p { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 300; font-style: italic; color: var(--ink); line-height: 1.7; margin: 0 0 .5rem; }
-.zz-quote cite { font-size: .72rem; color: var(--warm); letter-spacing: .06em; font-style: normal; }
-
-/* Image grid for services section */
-.zz-img-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: .5rem; aspect-ratio: 1; }
-.zz-img-item { overflow: hidden; background: var(--sand); }
-.zz-img-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
-.zz-img-item:hover img { transform: scale(1.04); }
-.zz-img-big { grid-column: span 2; }
-
-@media (max-width: 900px) {
-  .zz-row { grid-template-columns: 1fr; gap: 2.5rem; }
-  .zz-reverse { direction: ltr; }
-  .zz-img-grid { aspect-ratio: auto; height: 280px; }
-}
-
 /* ── SEARCH WIDGET ── */
 .search-widget-section { background: var(--beige); padding: 2.5rem 0; border-bottom: 1px solid var(--border-gold); }
 .sw-wrap { background: var(--white); border: 1px solid var(--border-gold); padding: 2rem 2.5rem; }

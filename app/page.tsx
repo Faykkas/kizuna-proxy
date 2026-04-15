@@ -896,55 +896,15 @@ export default function Home() {
         </div>
       </div>
 
-      {/* SEARCH — zigzag: text left, widget right */}
-      <section className="zz-section reveal" style={{background:"var(--white)"}}>
+      {/* SEARCH WIDGET */}
+      <section className="search-widget-section">
         <div className="wrap">
-          <div className="zz-row">
-            <div className="zz-text">
-              <p className="sec-label">Search</p>
-              <h2>{t.search?.title || "Search Japanese"} <em>{t.search?.titleEm || "marketplaces"}</em></h2>
-              <p className="desc">{t.search?.desc || "Find any item across 6 major Japanese platforms. Copy the link and send it to us — we'll take care of the rest."}</p>
-              <a href="#request-wrap" className="btn btn-dark" style={{display:"inline-flex",alignItems:"center",gap:".5rem",marginTop:"1.5rem"}}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                {t.nav?.request || "Request an item"}
-              </a>
-            </div>
-            <div className="zz-media">
-              <SearchWidget lang={lang} t={t} />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* NEWS + SERVICES — zigzag: services image left, text right */}
-      <section id="services" className="zz-section reveal" style={{background:"var(--beige)"}}>
-        <div className="wrap">
-          <div className="zz-row zz-reverse">
-            <div className="zz-media">
-              <div className="zz-img-grid">
-                {["Ancora_order.jpg","yugioh_order.jpg","Jojo_order.jpg","Harrypotter_order.jpg"].map((img,i) => (
-                  <div key={i} className={`zz-img-item${i===0?" zz-img-big":""}`}>
-                    <img src={`/${img}`} alt="" onError={e=>{(e.target as HTMLImageElement).style.opacity="0"}} />
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="zz-text">
-              <p className="sec-label">{t.whatWeBuy?.label}</p>
-              <h2>{t.whatWeBuy?.title} <em>{t.whatWeBuy?.titleEm}</em></h2>
-              <p className="desc">{t.whatWeBuy?.desc}</p>
-              <div className="zz-tags">
-                {["Mercari Japan","Yahoo Auctions","Pokémon Center","Nintendo Store","Supreme Drops","Akihabara"].map(tag => (
-                  <span key={tag} className="zz-tag">{tag}</span>
-                ))}
-              </div>
-            </div>
-          </div>
+          <SearchWidget lang={lang} t={t} />
         </div>
       </section>
 
       {/* NEWS */}
-      <section id="news" className="section-sm reveal" style={{background:"var(--white)"}}>
+      <section id="news" className="section-sm reveal">
         <div className="wrap">
           <div className="sec-head" style={{marginBottom:"2rem"}}>
             <p className="sec-label">{t.news?.label || "Latest news"}</p>
@@ -954,112 +914,101 @@ export default function Home() {
         </div>
       </section>
 
-
-      {/* CALENDAR — zigzag: calendar left (large), text+upcoming right */}
-      <section id="calendar" className="section reveal" style={{background:"var(--beige)"}}>
+      {/* SERVICES */}
+      <section id="services" className="section reveal">
         <div className="wrap">
-          <div className="zz-row zz-reverse" style={{alignItems:"flex-start"}}>
-            <div className="zz-media" style={{flex:1.5}}>
-              <div className="cal-tz-note" style={{marginBottom:"1.5rem"}}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                <span>{t.calendar?.tzNote} <strong>Japan Standard Time (JST, UTC+9)</strong></span>
+          <div className="sec-head">
+            <p className="sec-label">{t.whatWeBuy?.label}</p>
+            <h2>{t.whatWeBuy?.title} <em>{t.whatWeBuy?.titleEm}</em></h2>
+            <p className="desc">{t.whatWeBuy?.desc}</p>
+          </div>
+          <div className="services-grid">
+            {(t.whatWeBuy?.items || []).map((item, i) => (
+              <div key={i} className="svc-card">
+                <div className="svc-num">0{i+1}</div>
+                <div className="svc-icon">{["🛒","🏷️","👟","🎴","🎮","🏪"][i]}</div>
+                <div className="svc-title">{item.title}</div>
+                <div className="svc-desc">{item.desc}</div>
+                <div className="svc-arrow">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </div>
               </div>
-              <CalendarSection
-                upcomingLabel={t.calendar?.upcoming}
-                noEventsLabel={t.calendar?.noEvents}
-                noUpcomingLabel={t.calendar?.noUpcoming}
-                lang={lang}
-              />
-            </div>
-            <div className="zz-text" style={{flex:.8}}>
-              <p className="sec-label">{t.calendar?.label}</p>
-              <h2>{t.calendar?.title} <em>{t.calendar?.titleEm}</em></h2>
-              <p className="desc">{t.calendar?.desc}</p>
-              <a href="/events" className="btn btn-dark" style={{display:"inline-flex",alignItems:"center",gap:".5rem",marginTop:"1.5rem"}}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                See all events
-              </a>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* REVIEWS — zigzag: score+quote left, cards right */}
-      <section id="reviews" className="section reveal" style={{background:"var(--white)"}}>
+      {/* CALENDAR */}
+      <section id="calendar" className="section reveal">
         <div className="wrap">
-          <div className="zz-row">
-            <div className="zz-text">
-              <p className="sec-label">{t.reviews?.label}</p>
-              <h2>{t.reviews?.title} <em>{t.reviews?.titleEm}</em></h2>
-              <div style={{margin:"2rem 0"}}>
-                <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"4.5rem",fontWeight:300,color:"var(--ink)",lineHeight:1}}>5.0</div>
-                <div style={{color:"var(--red)",fontSize:"1.4rem",letterSpacing:".1em",margin:".4rem 0"}}>★★★★★</div>
-                <div style={{fontSize:".7rem",letterSpacing:".14em",textTransform:"uppercase",color:"var(--warm)"}}>11 verified reviews</div>
+          <div className="sec-head">
+            <p className="sec-label">{t.calendar?.label}</p>
+            <h2>{t.calendar?.title} <em>{t.calendar?.titleEm}</em></h2>
+            <p className="desc">{t.calendar?.desc}</p>
+          </div>
+          <div className="cal-tz-note">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>{t.calendar?.tzNote} <strong>Japan Standard Time (JST, UTC+9)</strong></span>
+          </div>
+          <CalendarSection
+            upcomingLabel={t.calendar?.upcoming}
+            noEventsLabel={t.calendar?.noEvents}
+            noUpcomingLabel={t.calendar?.noUpcoming}
+            lang={lang}
+          />
+        </div>
+      </section>
+
+      {/* REVIEWS */}
+      <section id="reviews" className="section reveal">
+        <div className="wrap">
+          <div className="sec-head">
+            <p className="sec-label">{t.reviews?.label}</p>
+            <h2>{t.reviews?.title} <em>{t.reviews?.titleEm}</em></h2>
+          </div>
+          <div className="reviews-header">
+            <div className="reviews-score-block">
+              <div className="reviews-big-num">5.0</div>
+              <div>
+                <div className="reviews-big-stars">★★★★★</div>
+                <div className="reviews-big-label">{t.reviews?.basedOn}</div>
+                <div className="reviews-count">11 verified reviews</div>
               </div>
-              <blockquote className="zz-quote">
-                <p>"Best proxy service for any products from Japan. Very attentive, communicated throughout."</p>
-                <cite>— u/ikorean123, 🇺🇸 USA</cite>
-              </blockquote>
-              <a href="https://www.reddit.com/r/internationalshopper/" target="_blank" rel="noopener noreferrer" className="reviews-reddit-badge" style={{marginTop:"1.5rem",display:"inline-flex"}}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{color:"#ff4500"}}><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
-                Verified on Reddit
-              </a>
             </div>
-            <div className="zz-media">
-              <div className="reviews-cards-grid" style={{gridTemplateColumns:"1fr"}}>
-                {REAL_REVIEWS.slice(0,4).map((r, i) => (
-                  <a key={i} href={r.link} target="_blank" rel="noopener noreferrer" className="review-card-new">
-                    <div className="rcn-top">
-                      <div className="rcn-stars">{"★".repeat(r.stars)}</div>
-                      <div className="rcn-country">{r.country}</div>
-                    </div>
-                    <h3 className="rcn-title">{r.title}</h3>
-                    <p className="rcn-text">&ldquo;{r.text}&rdquo;</p>
-                    <div className="rcn-footer">
-                      <div className="rcn-avatar">{r.name.replace("u/","").charAt(0).toUpperCase()}</div>
-                      <div>
-                        <div className="rcn-name">{r.name}</div>
-                        <div className="rcn-source">via Reddit</div>
-                      </div>
-                    </div>
-                  </a>
-                ))}
-              </div>
-              {/* Trustpilot */}
-              <a href="https://fr.trustpilot.com/review/kizunaproxy.com" target="_blank" rel="noopener noreferrer" className="trustpilot-bar">
-                <div className="tp-left">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style={{color:"#00b67a",flexShrink:0}}><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
-                  <span className="tp-name">Trustpilot</span>
+            <a href="https://www.reddit.com/r/internationalshopper/" target="_blank" rel="noopener noreferrer" className="reviews-reddit-badge">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style={{color:"#ff4500"}}><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+              <span>All reviews verified on Reddit</span>
+            </a>
+          </div>
+          <div className="reviews-cards-grid">
+            {REAL_REVIEWS.map((r, i) => (
+              <a key={i} href={r.link} target="_blank" rel="noopener noreferrer" className="review-card-new">
+                <div className="rcn-top">
+                  <div className="rcn-stars">{"★".repeat(r.stars)}</div>
+                  <div className="rcn-country">{r.country}</div>
                 </div>
-                <div className="tp-stars">{[1,2,3,4,5].map(s=><div key={s} className="tp-star">★</div>)}</div>
-                <div className="tp-info"><strong>11</strong> reviews</div>
-                <div className="tp-cta">See all →</div>
+                <h3 className="rcn-title">{r.title}</h3>
+                <p className="rcn-text">&ldquo;{r.text}&rdquo;</p>
+                <div className="rcn-footer">
+                  <div className="rcn-avatar">{r.name.replace("u/","").charAt(0).toUpperCase()}</div>
+                  <div>
+                    <div className="rcn-name">{r.name}</div>
+                    <div className="rcn-source">via Reddit</div>
+                  </div>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{marginLeft:"auto",color:"var(--red)",opacity:.5}}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </div>
               </a>
-            </div>
+            ))}
           </div>
-          {/* All reviews */}
-          <div style={{marginTop:"3rem"}}>
-            <p style={{fontSize:".7rem",letterSpacing:".14em",textTransform:"uppercase",color:"var(--warm)",marginBottom:"1.5rem",textAlign:"center"}}>All {REAL_REVIEWS.length} verified reviews</p>
-            <div className="reviews-cards-grid">
-              {REAL_REVIEWS.slice(4).map((r, i) => (
-                <a key={i} href={r.link} target="_blank" rel="noopener noreferrer" className="review-card-new">
-                  <div className="rcn-top">
-                    <div className="rcn-stars">{"★".repeat(r.stars)}</div>
-                    <div className="rcn-country">{r.country}</div>
-                  </div>
-                  <h3 className="rcn-title">{r.title}</h3>
-                  <p className="rcn-text">&ldquo;{r.text}&rdquo;</p>
-                  <div className="rcn-footer">
-                    <div className="rcn-avatar">{r.name.replace("u/","").charAt(0).toUpperCase()}</div>
-                    <div>
-                      <div className="rcn-name">{r.name}</div>
-                      <div className="rcn-source">via Reddit</div>
-                    </div>
-                  </div>
-                </a>
-              ))}
+          <a href="https://fr.trustpilot.com/review/kizunaproxy.com" target="_blank" rel="noopener noreferrer" className="trustpilot-bar">
+            <div className="tp-left">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{color:"#00b67a",flexShrink:0}}><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+              <span className="tp-name">Trustpilot</span>
             </div>
-          </div>
+            <div className="tp-stars">{[1,2,3,4,5].map(s=><div key={s} className="tp-star">★</div>)}</div>
+            <div className="tp-info"><strong>11</strong> reviews</div>
+            <div className="tp-cta">See all reviews →</div>
+          </a>
         </div>
       </section>
       <section id="pricing" className="section reveal">
