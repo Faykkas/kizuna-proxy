@@ -871,28 +871,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TRUST BAR */}
+      {/* TRUST BAR — platforms */}
       <div className="trust-bar">
         <div className="trust-inner">
-          <div className="trust-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span>100% secure payments</span>
-          </div>
-          <div className="trust-sep" />
-          <div className="trust-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <span>Reply within 24h</span>
-          </div>
-          <div className="trust-sep" />
-          <div className="trust-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-            <span>PayPal buyer protection</span>
-          </div>
-          <div className="trust-sep" />
-          <div className="trust-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            <span>Worldwide shipping</span>
-          </div>
+          <span className="trust-label">We buy from</span>
+          {[
+            { name:"Mercari", color:"#FF0211", letter:"m" },
+            { name:"Yahoo Auctions", color:"#720099", letter:"Y!" },
+            { name:"Rakuten", color:"#BF0000", letter:"R" },
+            { name:"Amazon JP", color:"#FF9900", letter:"a" },
+            { name:"Pokémon Center", color:"#FFCB00", letter:"P" },
+            { name:"Nintendo", color:"#E4000F", letter:"N" },
+          ].map(p => (
+            <div key={p.name} className="trust-platform">
+              <div className="trust-platform-icon" style={{background:p.color}}>
+                <span>{p.letter}</span>
+              </div>
+              <span>{p.name}</span>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -1168,6 +1165,51 @@ export default function Home() {
         </div>
       </section>
 
+      {/* WORLD MAP */}
+      <section id="world-map" className="section reveal" style={{background:"var(--paper)"}}>
+        <div className="wrap">
+          <div className="sec-head">
+            <p className="sec-label">Our reach</p>
+            <h2>Delivered to <em>20+ countries</em></h2>
+            <p className="desc">Every order shipped with care — from Tokyo to your door.</p>
+          </div>
+          <div className="world-wrap">
+            <svg className="world-map-svg" viewBox="0 0 900 440" xmlns="http://www.w3.org/2000/svg">
+              <path d="M80 80 L200 70 L220 120 L210 180 L190 200 L170 230 L140 220 L110 190 L90 150Z" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" strokeWidth="1"/>
+              <path d="M155 240 L200 235 L215 270 L210 330 L190 370 L165 360 L150 320 L145 280Z" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" strokeWidth="1"/>
+              <path d="M390 60 L460 55 L475 90 L460 120 L430 130 L400 120 L385 95Z" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" strokeWidth="1"/>
+              <path d="M400 140 L460 135 L470 200 L455 270 L430 300 L410 290 L395 240 L385 180Z" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" strokeWidth="1"/>
+              <path d="M480 50 L680 45 L700 100 L690 160 L650 180 L580 170 L520 150 L490 120 L475 80Z" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" strokeWidth="1"/>
+              <path d="M688 78 L706 73 L716 93 L709 113 L696 108 L686 93Z" fill="rgba(224,48,64,.35)" stroke="rgba(224,48,64,.6)" strokeWidth="1.5"/>
+              <path d="M660 260 L730 255 L745 290 L725 310 L690 305 L665 285Z" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" strokeWidth="1"/>
+              {[
+                {cx:150,cy:130,d:"2.2s"},{cx:140,cy:100,d:"2.5s"},{cx:415,cy:90,d:"1.9s"},
+                {cx:435,cy:80,d:"2.3s"},{cx:455,cy:105,d:"2.1s"},{cx:405,cy:72,d:"2.4s"},
+                {cx:640,cy:200,d:"2.6s"},{cx:670,cy:105,d:"2s"},{cx:695,cy:275,d:"2.7s"},
+                {cx:445,cy:100,d:"1.8s"},{cx:460,cy:68,d:"2.2s"},
+              ].map((dot,i) => (
+                <g key={i}>
+                  <circle cx={dot.cx} cy={dot.cy} r="4" fill="var(--red)" opacity=".9">
+                    <animate attributeName="r" values="4;7;4" dur={dot.d} repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx={dot.cx} cy={dot.cy} r="10" fill="var(--red)" opacity=".15">
+                    <animate attributeName="r" values="6;16;6" dur={dot.d} repeatCount="indefinite"/>
+                  </circle>
+                </g>
+              ))}
+              <circle cx="700" cy="90" r="6" fill="var(--red)">
+                <animate attributeName="opacity" values="1;.4;1" dur="1.5s" repeatCount="indefinite"/>
+              </circle>
+            </svg>
+            <div className="world-countries">
+              {["🇺🇸 USA","🇨🇦 Canada","🇫🇷 France","🇩🇪 Germany","🇬🇧 UK","🇮🇹 Italy","🇬🇷 Greece","🇨🇭 Switzerland","🇮🇩 Indonesia","🇰🇷 Korea","🇦🇺 Australia","+ more"].map(c => (
+                <span key={c} className="country-tag">{c}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* BLOG GUIDES */}
       <section className="section reveal" style={{background:"var(--beige)"}}>
         <div className="wrap">
@@ -1305,6 +1347,25 @@ export default function Home() {
 
       <EventsFloat />
       <BackToTop />
+      {/* Floating CTA */}
+      <button
+        onClick={() => {
+          const el = document.getElementById('request-wrap');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }}
+        style={{
+          position:'fixed', bottom:'1.5rem', left:'1.5rem',
+          background:'var(--red)', color:'#fff',
+          padding:'.7rem 1.4rem', borderRadius:'8px',
+          fontSize:'.65rem', fontWeight:500, letterSpacing:'.1em', textTransform:'uppercase',
+          border:'none', cursor:'pointer', zIndex:90,
+          boxShadow:'0 8px 24px rgba(224,48,64,.3)',
+          display:'flex', alignItems:'center', gap:'.5rem',
+        }}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        {t.nav?.request || "Get a quote"}
+      </button>
     </>
   );
 }
