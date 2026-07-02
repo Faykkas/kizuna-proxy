@@ -1139,28 +1139,59 @@ export default function Home() {
       </section>
 
       {/* WHY KIZUNA */}
-      <section id="why-kizuna" className="section reveal" style={{background:"var(--ink)"}}>
+      <section id="why-kizuna" className="section reveal" style={{background:"var(--paper)"}}>
         <div className="wrap">
           <div className="sec-head">
-            <p className="sec-label" style={{color:"var(--red)"}}>{t.howItWorks?.whyKizuna?.label || "Why Kizuna"}</p>
-            <h2 style={{color:"var(--beige)"}}>{t.howItWorks?.whyKizuna?.title || "Personal service,"} <em style={{color:"var(--red)"}}>{t.howItWorks?.whyKizuna?.titleEm || "not a platform"}</em></h2>
-            <p className="desc" style={{color:"rgba(255,255,255,.5)"}}>{t.howItWorks?.whyKizuna?.desc || "Big proxy services are automated platforms. We are real people in Tokyo — here's why that matters."}</p>
+            <p className="sec-label">{t.howItWorks?.whyKizuna?.label || "Why Kizuna"}</p>
+            <h2>{t.howItWorks?.whyKizuna?.title || "Personal service,"} <em>{t.howItWorks?.whyKizuna?.titleEm || "not a platform"}</em></h2>
+            <p className="desc">{t.howItWorks?.whyKizuna?.desc || "Big proxy services are automated platforms. We are real people in Tokyo — here's why that matters."}</p>
           </div>
-          <div className="why-grid">
-            {(t.howItWorks?.whyKizuna?.cards || [
-              { icon:"👤", title:"Real person, not a bot", desc:"Every request is handled by us personally." },
-              { icon:"📍", title:"Based in Tokyo", desc:"We are physically in Tokyo. We visit stores and attend events in person." },
-              { icon:"🎌", title:"Fluent in Japanese", desc:"We communicate directly with Japanese sellers — no translation delays." },
-              { icon:"💬", title:"Direct communication", desc:"WhatsApp, Discord, email — real answers within 24 hours." },
-              { icon:"🔍", title:"We find what others can't", desc:"Physical store visits, live shopping calls, exclusive events." },
-              { icon:"🌍", title:"Shipped to 20+ countries", desc:"Trusted by customers in USA, Canada, France, Germany, Greece, Indonesia and more." },
-            ]).map((item, i) => (
-              <div key={i} className="why-card">
-                <div className="why-icon">{item.icon}</div>
-                <strong className="why-title">{item.title}</strong>
-                <p className="why-desc">{item.desc}</p>
+
+          {/* Why grid — styled like hiw-steps */}
+          <div className="why-grid-v2">
+            {[
+              { n:"01", svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>, title: t.howItWorks?.whyKizuna?.cards?.[0]?.title || "Real person, not a bot", desc: t.howItWorks?.whyKizuna?.cards?.[0]?.desc || "Every request handled personally. You speak directly with us.", stat: "< 24h", statLabel: "reply time" },
+              { n:"02", svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>, title: t.howItWorks?.whyKizuna?.cards?.[1]?.title || "Based in Tokyo", desc: t.howItWorks?.whyKizuna?.cards?.[1]?.desc || "We visit stores, attend events, check items in person.", stat: "Ginza", statLabel: "Tokyo" },
+              { n:"03", svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>, title: t.howItWorks?.whyKizuna?.cards?.[3]?.title || "Direct communication", desc: t.howItWorks?.whyKizuna?.cards?.[3]?.desc || "WhatsApp, Discord, email — real answers, no bots.", stat: "24/7", statLabel: "available" },
+              { n:"04", svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>, title: t.howItWorks?.whyKizuna?.cards?.[2]?.title || "Fluent in Japanese", desc: t.howItWorks?.whyKizuna?.cards?.[2]?.desc || "We negotiate directly with sellers. No translation delays.", stat: "日本語", statLabel: "native" },
+              { n:"05", svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>, title: t.howItWorks?.whyKizuna?.cards?.[4]?.title || "We find what others can't", desc: t.howItWorks?.whyKizuna?.cards?.[4]?.desc || "Store visits, live shopping, exclusive events.", stat: "100%", statLabel: "dedication" },
+              { n:"06", svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>, title: t.howItWorks?.whyKizuna?.cards?.[5]?.title || "Shipped to 20+ countries", desc: t.howItWorks?.whyKizuna?.cards?.[5]?.desc || "USA, Canada, Europe, Asia — worldwide shipping.", stat: "20+", statLabel: "countries" },
+            ].map((item, i) => (
+              <div key={i} className="why-card-v2">
+                <div className="why-card-v2-top">
+                  <span className="why-card-v2-n">{item.n}</span>
+                  <div className="why-card-v2-stat">
+                    <strong>{item.stat}</strong>
+                    <span>{item.statLabel}</span>
+                  </div>
+                </div>
+                <div className="why-card-v2-icon">{item.svg}</div>
+                <strong className="why-card-v2-title">{item.title}</strong>
+                <p className="why-card-v2-desc">{item.desc}</p>
               </div>
             ))}
+          </div>
+
+          {/* Live ticker — commandes récentes */}
+          <div className="order-ticker">
+            <div className="ticker-label">
+              <span className="ticker-dot"/>
+              Recent orders
+            </div>
+            <div className="ticker-track">
+              {[
+                "🎴 Pokémon cards — Akihabara → 🇺🇸 USA",
+                "👟 Nike Japan collab → 🇫🇷 France",
+                "🎮 Nintendo Switch exclusive → 🇨🇦 Canada",
+                "👕 Supreme Japan drop → 🇩🇪 Germany",
+                "🗿 Anime figure — Good Smile → 🇬🇷 Greece",
+                "📚 Vintage manga set — Mercari → 🇬🇧 UK",
+                "🎴 One Piece TCG box → 🇮🇩 Indonesia",
+                "👟 Asics Japan collab → 🇰🇷 Korea",
+              ].map((item, i) => (
+                <span key={i} className="ticker-item">{item}</span>
+              ))}
+            </div>
           </div>
         </div>
       </section>
