@@ -1341,11 +1341,3 @@ export const translations = {
 };
 
 export type T = (typeof translations)["en"];
-,
-        ticker: "Commandes récentes",
-        ticker: "最近の注文",
-        ticker: "Pedidos recientes",
-        ticker: "Ordini recenti",
-        ticker: "Aktuelle Bestellungen",
-        ticker: "최근 주문",
-        ticker: "近期订单"
