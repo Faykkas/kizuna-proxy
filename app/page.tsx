@@ -1305,7 +1305,7 @@ export default function Home() {
             <p className="footer-col-title">Contact</p>
             <a href="#request-wrap" className="footer-link">{t.nav.request}</a>
             <a href="mailto:kizunaproxy@gmail.com" className="footer-link">kizunaproxy@gmail.com</a>
-            <a href="https://wa.me/33788432501" target="_blank" rel="noopener noreferrer" className="footer-link">WhatsApp</a>
+            <a href="https://wa.me/819044595569" target="_blank" rel="noopener noreferrer" className="footer-link">WhatsApp</a>
             <a href="https://discord.com/users/Faykas" target="_blank" rel="noopener noreferrer" className="footer-link">Discord</a>
             <a href="https://fr.trustpilot.com/review/kizunaproxy.com" target="_blank" rel="noopener noreferrer" className="footer-link">Trustpilot</a>
           </div>
