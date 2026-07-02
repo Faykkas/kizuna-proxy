@@ -59,7 +59,8 @@ export const translations = {
           { icon: "💬", title: "Direct communication", desc: "WhatsApp, Discord, email — real answers within 24 hours. No chatbots, no automated responses." },
           { icon: "🔍", title: "We find what others can't", desc: "Physical store visits, live shopping calls, exclusive events — we go where automated services cannot." },
           { icon: "🌍", title: "Shipped to 20+ countries", desc: "Trusted by customers in USA, Canada, France, Germany, Greece, Indonesia and more." },
-        ]
+        ],
+        ticker: "Recent orders"
       },
     },
     about: {
@@ -1340,3 +1341,11 @@ export const translations = {
 };
 
 export type T = (typeof translations)["en"];
+,
+        ticker: "Commandes récentes",
+        ticker: "最近の注文",
+        ticker: "Pedidos recientes",
+        ticker: "Ordini recenti",
+        ticker: "Aktuelle Bestellungen",
+        ticker: "최근 주문",
+        ticker: "近期订单"

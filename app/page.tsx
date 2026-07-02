@@ -1121,30 +1121,33 @@ export default function Home() {
 
           {/* Why Kizuna — merged */}
           <div className="why-merged-head">
-            <p className="sec-label">{t.whyKizuna?.label || "Why Kizuna"}</p>
-            <h2>{t.whyKizuna?.title || "Personal service,"} <em>{t.whyKizuna?.titleEm || "not a platform"}</em></h2>
-            <p className="desc">{t.whyKizuna?.desc || "Big proxy services are automated. We are real people in Tokyo."}</p>
+            <p className="sec-label">{t.howItWorks?.whyKizuna?.label || t.whyKizuna?.label || "Why Kizuna"}</p>
+            <h2>{t.howItWorks?.whyKizuna?.title || t.whyKizuna?.title || "Personal service,"} <em>{t.howItWorks?.whyKizuna?.titleEm || t.whyKizuna?.titleEm || "not a platform"}</em></h2>
+            <p className="desc">{t.howItWorks?.whyKizuna?.desc || t.whyKizuna?.desc || "Big proxy services are automated."}</p>
           </div>
           <div className="why-grid-v2">
-            {WHY_CARDS_DATA.map((item, i) => (
-              <div key={i} className="why-card-v2">
-                <div className="why-card-v2-top">
-                  <span className="why-card-v2-n">{item.n}</span>
-                  <div className="why-card-v2-stat">
-                    <strong>{item.stat}</strong>
-                    <span>{item.statL}</span>
+            {WHY_CARDS_DATA.map((item, i) => {
+              const tCard = t.howItWorks?.whyKizuna?.cards?.[i];
+              return (
+                <div key={i} className="why-card-v2">
+                  <div className="why-card-v2-top">
+                    <span className="why-card-v2-n">{item.n}</span>
+                    <div className="why-card-v2-stat">
+                      <strong>{item.stat}</strong>
+                      <span>{item.statL}</span>
+                    </div>
                   </div>
+                  <div className="why-card-v2-icon"><WhyIcon i={i} /></div>
+                  <strong className="why-card-v2-title">{tCard?.title || item.title}</strong>
+                  <p className="why-card-v2-desc">{tCard?.desc || item.desc}</p>
                 </div>
-                <div className="why-card-v2-icon"><WhyIcon i={i} /></div>
-                <strong className="why-card-v2-title">{item.title}</strong>
-                <p className="why-card-v2-desc">{item.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Ticker */}
           <div className="order-ticker">
-            <div className="ticker-label"><span className="ticker-dot"/>{t.whyKizuna?.ticker || "Recent orders"}</div>
+            <div className="ticker-label"><span className="ticker-dot"/>{t.howItWorks?.whyKizuna?.ticker || t.whyKizuna?.ticker || "Recent orders"}</div>
             <div className="ticker-track">
               <div className="ticker-inner">
                 {TICKER_ITEMS.concat(TICKER_ITEMS).map((item, i) => (
