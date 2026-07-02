@@ -280,7 +280,7 @@ function RequestForm({ t }) {
 
   if (status === "success") return (
     <div className="req-form" style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", minHeight:"320px", gap:"1rem", textAlign:"center" }}>
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.5" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.5" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
       <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.4rem", color:"var(--ink)" }}>{r.successTitle}</p>
       <p style={{ fontSize:".9rem", color:"var(--warm)", fontWeight:300 }}>{r.successDesc}</p>
       <button className="btn btn-outline" onClick={() => setStatus("idle")}>{r.successBtn}</button>
@@ -413,6 +413,7 @@ function EventsFloat() {
       <div className="events-float-body">
         <strong>Tokyo Events</strong>
         <p>Pokémon Center, Nintendo, Supreme drops & more — we attend in person.</p>
+        <p style={{color:"var(--red)",fontSize:".6rem",fontWeight:500,marginTop:"-.3rem"}}>⚡ High demand — book early to avoid delays.</p>
         <a href="/events" className="events-float-btn">Learn more <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg></a>
       </div>
     </div>
@@ -870,29 +871,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TRUST BAR — platforms */}
-      <div className="trust-bar">
-        <div className="trust-inner">
-          <span className="trust-label">We buy from</span>
-          {[
-            { name:"Mercari", color:"#FF0211", letter:"m" },
-            { name:"Yahoo Auctions", color:"#720099", letter:"Y!" },
-            { name:"Rakuten", color:"#BF0000", letter:"R" },
-            { name:"Amazon JP", color:"#FF9900", letter:"a" },
-            { name:"Pokémon Center", color:"#FFCB00", letter:"P" },
-            { name:"Nintendo", color:"#E4000F", letter:"N" },
-          ].map(p => (
-            <div key={p.name} className="trust-platform">
-              <div className="trust-platform-icon" style={{background:p.color}}>
-                <span>{p.letter}</span>
-              </div>
-              <span>{p.name}</span>
-            </div>
-          ))}
-        </div>
-      </div>
 
-      {/* SEARCH WIDGET */}
+            {/* SEARCH WIDGET */}
       <section className="search-widget-section">
         <div className="wrap">
           <SearchWidget lang={lang} t={t} />
@@ -934,55 +914,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TOKYO EVENTS HIGHLIGHT */}
-      <section className="section-sm reveal tokyo-events-section">
-        <div className="wrap">
-          <div className="tokyo-events-banner">
-            <div className="tokyo-events-left">
-              <span className="tokyo-events-badge">🎌 Tokyo Exclusive</span>
-              <h2 className="tokyo-events-title">We attend <em>any event</em> in Tokyo</h2>
-              <p className="tokyo-events-desc">Pop-ups, limited drops, store openings, Pokémon Center exclusives, Supreme drops, Nintendo events — if it happens in Tokyo, we can be there for you.</p>
-              <div className="tokyo-events-tags">
-                {["Pokémon Center 🔴","Supreme Japan 🖤","Nintendo Store 🔴","Atmos Tokyo 👟","Akihabara 🎮","Wonder Festival 🗿","Comiket 📚","Any pop-up ✨"].map(t => (
-                  <span key={t} className="tokyo-tag">{t}</span>
-                ))}
-              </div>
-              <a href="/events" className="btn btn-gold" style={{marginTop:"1.5rem",display:"inline-flex",alignItems:"center",gap:".5rem"}}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                See upcoming events
-              </a>
-            </div>
-            <div className="tokyo-events-right">
-              <div className="tokyo-events-stats">
-                <div className="tokyo-stat">
-                  <strong>Any</strong>
-                  <span>Tokyo store or event</span>
-                </div>
-                <div className="tokyo-stat-sep"/>
-                <div className="tokyo-stat">
-                  <strong>Live</strong>
-                  <span>Video call shopping</span>
-                </div>
-                <div className="tokyo-stat-sep"/>
-                <div className="tokyo-stat">
-                  <strong>Photos</strong>
-                  <span>Before shipping</span>
-                </div>
-              </div>
-              <div className="tokyo-events-card">
-                <div className="tec-icon">📸</div>
-                <strong>Live shopping available</strong>
-                <p>We can walk through any Tokyo store on a live video call so you can pick exactly what you want — as if you were there yourself.</p>
-              </div>
-              <div className="tokyo-events-card">
-                <div className="tec-icon">⚡</div>
-                <strong>Same-day for online drops</strong>
-                <p>For online releases (Supreme, Pokémon, Nike) we checkout the moment the drop goes live at JST.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* CALENDAR */}
       <section id="calendar" className="section reveal">
@@ -1068,25 +999,31 @@ export default function Home() {
           <div className="pricing-custom-grid">
             <div className="pcg-card">
               <div className="pcg-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.6" strokeLinecap="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="2"/></svg>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="2"/></svg>
               </div>
               <h3>No hidden fees</h3>
               <p>Every cost is communicated clearly before any payment. What we quote is what you pay.</p>
             </div>
             <div className="pcg-card">
               <div className="pcg-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.6" strokeLinecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
               </div>
               <h3>Adapted to your order</h3>
               <p>One item or a large haul — we study each request individually and offer the fairest rate.</p>
             </div>
             <div className="pcg-card">
               <div className="pcg-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               </div>
               <h3>Get a quote in 24h</h3>
               <p>Send us your request and we reply with a detailed, honest quote — no commitment required.</p>
             </div>
+          </div>
+
+          {/* Weekly shipping notice */}
+          <div className="shipping-notice">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span><strong>Weekly shipping</strong> — packages are consolidated and shipped once a week from Tokyo. Order early in the week for the fastest dispatch.</span>
           </div>
 
           {/* CTA */}
@@ -1101,12 +1038,6 @@ export default function Home() {
             </a>
             <a href="#request-wrap" className="btn btn-outline">Use the form</a>
           </div>
-
-          {/* Events */}
-          <div className="p-event-card">
-            <div style={{flexShrink:0}}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.6" strokeLinecap="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-            </div>
             <div className="p-event-body">
               <strong>Tokyo Events & Exclusive Releases</strong>
               <p>Pokémon Center, Nintendo Store, Supreme drops, pop-ups — we attend in person for you. <span className="p-event-dm">Pricing varies by event — contact us privately.</span></p>
@@ -1117,7 +1048,7 @@ export default function Home() {
           {/* SHIPPING */}
           <div className="shipping-section">
             <div className="shipping-title">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.6" strokeLinecap="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
               <span>{t.shipping?.label || "Shipping partners"}</span>
             </div>
             <div className="shipping-grid">
@@ -1185,34 +1116,27 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
 
-      {/* WHY KIZUNA */}
-      <section id="why-kizuna" className="section reveal" style={{background:"var(--paper)"}}>
-        <div className="wrap">
-          <div className="sec-head">
-            <p className="sec-label">{t.howItWorks?.whyKizuna?.label || "Why Kizuna"}</p>
-            <h2>{t.howItWorks?.whyKizuna?.title || "Personal service,"} <em>{t.howItWorks?.whyKizuna?.titleEm || "not a platform"}</em></h2>
-            <p className="desc">{t.howItWorks?.whyKizuna?.desc || "Big proxy services are automated platforms. We are real people in Tokyo — here's why that matters."}</p>
+
+          {/* Why Kizuna — merged */}
+          <div className="why-merged-head">
+            <p className="sec-label" style={{marginTop:"4rem"}}>Why Kizuna</p>
+            <h2>Personal service, <em>not a platform</em></h2>
+            <p className="desc">Big proxy services are automated. We are real people in Tokyo.</p>
           </div>
-
-          {/* Why grid — styled like hiw-steps */}
-          <div className="why-grid-v2">
+          <div className="why-grid-v2" style={{marginTop:"2rem"}}>
             {[
-              { n:"01", svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>, title: t.howItWorks?.whyKizuna?.cards?.[0]?.title || "Real person, not a bot", desc: t.howItWorks?.whyKizuna?.cards?.[0]?.desc || "Every request handled personally. You speak directly with us.", stat: "< 24h", statLabel: "reply time" },
-              { n:"02", svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>, title: t.howItWorks?.whyKizuna?.cards?.[1]?.title || "Based in Tokyo", desc: t.howItWorks?.whyKizuna?.cards?.[1]?.desc || "We visit stores, attend events, check items in person.", stat: "Ginza", statLabel: "Tokyo" },
-              { n:"03", svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>, title: t.howItWorks?.whyKizuna?.cards?.[3]?.title || "Direct communication", desc: t.howItWorks?.whyKizuna?.cards?.[3]?.desc || "WhatsApp, Discord, email — real answers, no bots.", stat: "24/7", statLabel: "available" },
-              { n:"04", svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>, title: t.howItWorks?.whyKizuna?.cards?.[2]?.title || "Fluent in Japanese", desc: t.howItWorks?.whyKizuna?.cards?.[2]?.desc || "We negotiate directly with sellers. No translation delays.", stat: "日本語", statLabel: "native" },
-              { n:"05", svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>, title: t.howItWorks?.whyKizuna?.cards?.[4]?.title || "We find what others can't", desc: t.howItWorks?.whyKizuna?.cards?.[4]?.desc || "Store visits, live shopping, exclusive events.", stat: "100%", statLabel: "dedication" },
-              { n:"06", svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>, title: t.howItWorks?.whyKizuna?.cards?.[5]?.title || "Shipped to 20+ countries", desc: t.howItWorks?.whyKizuna?.cards?.[5]?.desc || "USA, Canada, Europe, Asia — worldwide shipping.", stat: "20+", statLabel: "countries" },
-            ].map((item, i) => (
+              {n:"01",stat:"< 24h",statL:"reply time",title:"Real person, not a bot",desc:"Every request handled personally — you speak directly with us.",svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>},
+              {n:"02",stat:"Ginza",statL:"Tokyo",title:"Based in Tokyo",desc:"We visit stores, attend events, and check items in person.",svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>},
+              {n:"03",stat:"24/7",statL:"available",title:"Direct communication",desc:"WhatsApp, Discord, email — real answers, no bots.",svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>},
+              {n:"04",stat:"日本語",statL:"native",title:"Fluent in Japanese",desc:"We negotiate directly with sellers — no translation delays.",svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 2H3v16h5l3 3 3-3h7V2z"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="13" y2="13"/></svg>},
+              {n:"05",stat:"100%",statL:"dedication",title:"We find what others can't",desc:"Store visits, live shopping, exclusive events.",svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>},
+              {n:"06",stat:"20+",statL:"countries",title:"Shipped worldwide",desc:"USA, Canada, Europe, Asia — we ship everywhere.",svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>},
+            ].map((item,i) => (
               <div key={i} className="why-card-v2">
                 <div className="why-card-v2-top">
                   <span className="why-card-v2-n">{item.n}</span>
-                  <div className="why-card-v2-stat">
-                    <strong>{item.stat}</strong>
-                    <span>{item.statLabel}</span>
-                  </div>
+                  <div className="why-card-v2-stat"><strong>{item.stat}</strong><span>{item.statL}</span></div>
                 </div>
                 <div className="why-card-v2-icon">{item.svg}</div>
                 <strong className="why-card-v2-title">{item.title}</strong>
@@ -1220,40 +1144,14 @@ export default function Home() {
               </div>
             ))}
           </div>
-
-          {/* Live ticker — commandes récentes */}
-          <div className="order-ticker">
-            <div className="ticker-label">
-              <span className="ticker-dot"/>
-              Recent orders
-            </div>
+          <div className="order-ticker" style={{marginTop:"2rem"}}>
+            <div className="ticker-label"><span className="ticker-dot"/>Recent orders</div>
             <div className="ticker-track">
               <div className="ticker-inner">
-                {[
-                  "🎴 Pokémon cards — Akihabara → 🇺🇸 USA",
-                  "👟 Nike Japan collab → 🇫🇷 France",
-                  "🎮 Nintendo Switch exclusive → 🇨🇦 Canada",
-                  "👕 Supreme Japan drop → 🇩🇪 Germany",
-                  "🗿 Anime figure — Good Smile → 🇬🇷 Greece",
-                  "📚 Vintage manga — Mercari → 🇬🇧 UK",
-                  "🎴 One Piece TCG box → 🇮🇩 Indonesia",
-                  "👟 Asics Japan collab → 🇰🇷 Korea",
-                  "🎴 Pokémon cards — Akihabara → 🇺🇸 USA",
-                  "👟 Nike Japan collab → 🇫🇷 France",
-                  "🎮 Nintendo Switch exclusive → 🇨🇦 Canada",
-                  "👕 Supreme Japan drop → 🇩🇪 Germany",
-                  "🗿 Anime figure — Good Smile → 🇬🇷 Greece",
-                  "📚 Vintage manga — Mercari → 🇬🇧 UK",
-                  "🎴 One Piece TCG box → 🇮🇩 Indonesia",
-                  "👟 Asics Japan collab → 🇰🇷 Korea",
-                ].map((item, i) => (
-                  <span key={i} className="ticker-item">{item}</span>
-                ))}
+                {["🎴 Pokémon cards → 🇺🇸","👟 Nike Japan → 🇫🇷","🎮 Nintendo exclusive → 🇨🇦","👕 Supreme drop → 🇩🇪","🗿 Anime figure → 🇬🇷","📚 Vintage manga → 🇬🇧","🎴 One Piece TCG → 🇮🇩","👟 Asics Japan → 🇰🇷","🎴 Pokémon cards → 🇺🇸","👟 Nike Japan → 🇫🇷","🎮 Nintendo exclusive → 🇨🇦","👕 Supreme drop → 🇩🇪","🗿 Anime figure → 🇬🇷","📚 Vintage manga → 🇬🇧","🎴 One Piece TCG → 🇮🇩","👟 Asics Japan → 🇰🇷"].map((t,i) => <span key={i} className="ticker-item">{t}</span>)}
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+          </div>      </section>
 
       {/* BLOG GUIDES */}
       <section className="section reveal" style={{background:"var(--beige)"}}>
