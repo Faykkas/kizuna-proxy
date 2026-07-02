@@ -871,28 +871,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TRUST BAR */}
+      {/* TRUST BAR — platforms */}
       <div className="trust-bar">
         <div className="trust-inner">
-          <div className="trust-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span>100% secure payments</span>
-          </div>
-          <div className="trust-sep" />
-          <div className="trust-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <span>Reply within 24h</span>
-          </div>
-          <div className="trust-sep" />
-          <div className="trust-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-            <span>PayPal buyer protection</span>
-          </div>
-          <div className="trust-sep" />
-          <div className="trust-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            <span>Worldwide shipping</span>
-          </div>
+          <span className="trust-label">We buy from</span>
+          {[
+            { name:"Mercari", color:"#FF0211", letter:"m" },
+            { name:"Yahoo Auctions", color:"#720099", letter:"Y!" },
+            { name:"Rakuten", color:"#BF0000", letter:"R" },
+            { name:"Amazon JP", color:"#FF9900", letter:"a" },
+            { name:"Pokémon Center", color:"#FFCB00", letter:"P" },
+            { name:"Nintendo", color:"#E4000F", letter:"N" },
+          ].map(p => (
+            <div key={p.name} className="trust-platform">
+              <div className="trust-platform-icon" style={{background:p.color}}>
+                <span>{p.letter}</span>
+              </div>
+              <span>{p.name}</span>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -1305,6 +1302,25 @@ export default function Home() {
 
       <EventsFloat />
       <BackToTop />
+      {/* Floating CTA */}
+      <button
+        onClick={() => {
+          const el = document.getElementById('request-wrap');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }}
+        style={{
+          position:'fixed', bottom:'1.5rem', left:'1.5rem',
+          background:'var(--red)', color:'#fff',
+          padding:'.7rem 1.4rem', borderRadius:'8px',
+          fontSize:'.65rem', fontWeight:500, letterSpacing:'.1em', textTransform:'uppercase',
+          border:'none', cursor:'pointer', zIndex:90,
+          boxShadow:'0 8px 24px rgba(224,48,64,.3)',
+          display:'flex', alignItems:'center', gap:'.5rem',
+        }}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        {t.nav?.request || "Get a quote"}
+      </button>
     </>
   );
 }
