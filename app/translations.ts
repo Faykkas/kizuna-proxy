@@ -104,7 +104,7 @@ export const translations = {
       footNote: "Your information is never shared with third parties.",
     },
     faq: {
-      label: "FAQ", title: "Common", titleEm: "questions",
+      label: "FAQ", title: "Common", titleEm: "questions", contactPrefix: "Can't find your answer?", contactEmail: "Email us", contactSuffix: "— we reply within 24 hours.", ctaTitle: "Still have a question?", ctaDesc: "We reply within 24 hours — real answers, no bots.", ctaBtn: "Contact us →",
       items: [
         { q: "How much does the service cost?", a: "Our pricing is fully personalised. Contact us for a free, transparent quote. No hidden fees. Large orders get a percentage fee instead of per-item charges." },
         { q: "Can you buy from Mercari Japan?", a: "Yes — most Mercari orders are purchased the same day. We handle all Japanese communication with sellers." },
@@ -228,7 +228,7 @@ export const translations = {
       footNote: "Vos informations ne sont jamais partagées avec des tiers.",
     },
     faq: {
-      label: "FAQ", title: "Questions", titleEm: "fréquentes",
+      label: "FAQ", title: "Questions", titleEm: "fréquentes", contactPrefix: "Vous n'avez pas trouvé votre réponse ?", contactEmail: "Écrivez-nous", contactSuffix: "— nous répondons sous 24h.", ctaTitle: "Encore une question ?", ctaDesc: "Nous répondons sous 24 heures.", ctaBtn: "Nous contacter →",
       items: [
         { q: "Combien coûte le service ?", a: "Notre tarification est entièrement personnalisée. Contactez-nous pour un devis gratuit et transparent. Pour les grandes commandes, nous appliquons un pourcentage plutôt qu'un tarif par article." },
         { q: "Pouvez-vous acheter sur Mercari Japan ?", a: "Oui — la plupart des commandes Mercari sont achetées le jour même. Nous gérons toute la communication en japonais avec les vendeurs." },
@@ -342,7 +342,7 @@ export const translations = {
       footNote: "お客様の情報は第三者と共有されません。",
     },
     faq: {
-      label: "よくある質問", title: "よくある", titleEm: "質問",
+      label: "よくある質問", title: "よくある", titleEm: "質問", contactPrefix: "答えが見つかりませんでしたか？", contactEmail: "お問い合わせ", contactSuffix: "— 24時間以内に返信します。", ctaTitle: "まだご質問がありますか？", ctaDesc: "24時間以内に本物の返答をします。", ctaBtn: "お問い合わせ →",
       items: [
         { q: "サービスの料金は？", a: "料金は完全に個別対応です。無料で透明なお見積もりはお問い合わせください。大量注文の場合は、1品ごとではなく割合での請求となります。" },
         { q: "メルカリジャパンで購入できますか？", a: "はい — ほとんどのメルカリ注文は当日中に購入します。販売者との日本語でのやり取りはすべて対応します。" },
@@ -456,7 +456,7 @@ export const translations = {
       footNote: "Tu información nunca se comparte con terceros.",
     },
     faq: {
-      label: "FAQ", title: "Preguntas", titleEm: "frecuentes",
+      label: "FAQ", title: "Preguntas", titleEm: "frecuentes", contactPrefix: "¿No encontraste tu respuesta?", contactEmail: "Escríbenos", contactSuffix: "— respondemos en 24h.", ctaTitle: "¿Tienes más preguntas?", ctaDesc: "Respondemos en 24 horas.", ctaBtn: "Contáctanos →",
       items: [
         { q: "¿Cuánto cuesta el servicio?", a: "Nuestros precios son totalmente personalizados. Contáctanos para un presupuesto gratuito y transparente." },
         { q: "¿Pueden comprar en Mercari Japan?", a: "Sí — la mayoría de los pedidos de Mercari se compran el mismo día." },
@@ -570,7 +570,7 @@ export const translations = {
       footNote: "Le tue informazioni non vengono mai condivise con terze parti.",
     },
     faq: {
-      label: "FAQ", title: "Domande", titleEm: "frequenti",
+      label: "FAQ", title: "Domande", titleEm: "frequenti", contactPrefix: "Non hai trovato risposta?", contactEmail: "Scrivici", contactSuffix: "— rispondiamo entro 24 ore.", ctaTitle: "Hai ancora domande?", ctaDesc: "Rispondiamo entro 24 ore.", ctaBtn: "Contattaci →",
       items: [
         { q: "Quanto costa il servizio?", a: "I nostri prezzi sono completamente personalizzati. Contattaci per un preventivo gratuito e trasparente." },
         { q: "Potete comprare su Mercari Japan?", a: "Sì — la maggior parte degli ordini Mercari viene acquistata lo stesso giorno." },
@@ -684,7 +684,7 @@ export const translations = {
       footNote: "Deine Informationen werden niemals an Dritte weitergegeben.",
     },
     faq: {
-      label: "FAQ", title: "Häufig gestellte", titleEm: "Fragen",
+      label: "FAQ", title: "Häufig gestellte", titleEm: "Fragen", contactPrefix: "Keine Antwort gefunden?", contactEmail: "Schreib uns", contactSuffix: "— wir antworten innerhalb von 24h.", ctaTitle: "Noch eine Frage?", ctaDesc: "Wir antworten innerhalb von 24 Stunden.", ctaBtn: "Kontakt →",
       items: [
         { q: "Was kostet der Service?", a: "Unsere Preise sind vollständig personalisiert. Kontaktiere uns für ein kostenloses, transparentes Angebot." },
         { q: "Können Sie auf Mercari Japan kaufen?", a: "Ja — die meisten Mercari-Bestellungen werden noch am selben Tag gekauft." },
@@ -798,7 +798,7 @@ export const translations = {
       footNote: "귀하의 정보는 제3자와 절대 공유되지 않습니다.",
     },
     faq: {
-      label: "FAQ", title: "자주 묻는", titleEm: "질문",
+      label: "FAQ", title: "자주 묻는", titleEm: "질문", contactPrefix: "답을 찾지 못하셨나요?", contactEmail: "이메일 문의", contactSuffix: "— 24시간 내 답변드립니다.", ctaTitle: "더 궁금한 점이 있으신가요?", ctaDesc: "24시간 내에 실제 답변을 드립니다.", ctaBtn: "문의하기 →",
       items: [
         { q: "서비스 비용은 얼마인가요?", a: "가격은 완전히 개인화되어 있습니다. 무료 투명 견적을 위해 문의해 주세요." },
         { q: "Mercari Japan에서 구매할 수 있나요?", a: "네 — 대부분의 Mercari 주문은 당일에 구매됩니다." },
@@ -912,7 +912,7 @@ export const translations = {
       footNote: "您的信息绝不会与第三方共享。",
     },
     faq: {
-      label: "常见问题", title: "常见", titleEm: "问题",
+      label: "常见问题", title: "常见", titleEm: "问题", contactPrefix: "没找到答案？", contactEmail: "联系我们", contactSuffix: "— 我们24小时内回复。", ctaTitle: "还有问题？", ctaDesc: "24小时内真实回复。", ctaBtn: "联系我们 →",
       items: [
         { q: "服务费用是多少？", a: "我们的价格完全个性化。请联系我们获取免费透明报价。" },
         { q: "可以在Mercari Japan购买吗？", a: "可以——大多数Mercari订单当天购买。我们处理所有日语沟通。" },

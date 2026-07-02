@@ -2,6 +2,7 @@
 "use client";
 import { useState } from "react";
 import { translations, detectLang } from "../translations";
+import SiteNav from "../components/SiteNav";
 
 const FAQS = {
   en: [
@@ -137,6 +138,8 @@ export default function FaqClient() {
   const faqs = FAQS[lang as keyof typeof FAQS] || FAQS.en;
 
   return (
+    <>
+    <SiteNav />
     <main style={{ minHeight: "100vh", background: "var(--beige)", padding: "7rem 2rem 8rem" }}>
       <div style={{ maxWidth: "760px", margin: "0 auto" }}>
 
@@ -201,5 +204,6 @@ export default function FaqClient() {
         </div>
       </div>
     </main>
+    </>
   );
 }
