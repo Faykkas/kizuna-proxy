@@ -728,20 +728,24 @@ function SearchWidget({ lang, t }: { lang: string; t: any }) {
 }
 
 // ─── WHY KIZUNA CARDS ────────────────────────────────────────────────────────
-const WHY_CARDS = [
-  { n:"01", stat:"< 24h", statL:"reply time", title:"Real person, not a bot", desc:"Every request handled personally — you speak directly with us.",
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> },
-  { n:"02", stat:"Ginza", statL:"Tokyo", title:"Based in Tokyo", desc:"We visit stores, attend events, and check items in person.",
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> },
-  { n:"03", stat:"24/7", statL:"available", title:"Direct communication", desc:"WhatsApp, Discord, email — real answers, no bots.",
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> },
-  { n:"04", stat:"日本語", statL:"native", title:"Fluent in Japanese", desc:"We negotiate directly with sellers — no translation delays.",
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 2H3v16h5l3 3 3-3h7V2z"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="13" y2="13"/></svg> },
-  { n:"05", stat:"100%", statL:"dedication", title:"We find what others can't", desc:"Store visits, live shopping calls, exclusive events.",
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> },
-  { n:"06", stat:"20+", statL:"countries", title:"Shipped worldwide", desc:"USA, Canada, Europe, Asia — we ship everywhere.",
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> },
+const WHY_CARDS_DATA = [
+  { n:"01", stat:"< 24h", statL:"reply time", title:"Real person, not a bot", desc:"Every request handled personally — you speak directly with us." },
+  { n:"02", stat:"Ginza", statL:"Tokyo", title:"Based in Tokyo", desc:"We visit stores, attend events, and check items in person." },
+  { n:"03", stat:"24/7", statL:"available", title:"Direct communication", desc:"WhatsApp, Discord, email — real answers, no bots." },
+  { n:"04", stat:"日本語", statL:"native", title:"Fluent in Japanese", desc:"We negotiate directly with sellers — no translation delays." },
+  { n:"05", stat:"100%", statL:"dedication", title:"We find what others can't", desc:"Store visits, live shopping calls, exclusive events." },
+  { n:"06", stat:"20+", statL:"countries", title:"Shipped worldwide", desc:"USA, Canada, Europe, Asia — we ship everywhere." },
 ];
+
+function WhyIcon({ i }: { i: number }) {
+  const s = { width:"22", height:"22", viewBox:"0 0 24 24", fill:"none", stroke:"var(--red)", strokeWidth:"1.6", strokeLinecap:"round" as const };
+  if (i===0) return <svg {...s}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>;
+  if (i===1) return <svg {...s}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>;
+  if (i===2) return <svg {...s}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>;
+  if (i===3) return <svg {...s}><path d="M21 2H3v16h5l3 3 3-3h7V2z"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="13" y2="13"/></svg>;
+  if (i===4) return <svg {...s}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>;
+  return <svg {...s}><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>;
+}
 
 const TICKER_ITEMS = [
   "🎴 Pokémon cards — Akihabara → 🇺🇸 USA",
@@ -1049,8 +1053,6 @@ export default function Home() {
               <p>Pokémon Center, Nintendo Store, Supreme drops, pop-ups — we attend in person for you. <span className="p-event-dm">Pricing varies by event — contact us privately.</span></p>
             </div>
             <a href="/events" className="p-event-btn">See Events →</a>
-          </div>
-
           {/* SHIPPING */}
           <div className="shipping-section">
             <div className="shipping-title">
@@ -1129,7 +1131,7 @@ export default function Home() {
             <p className="desc">Big proxy services are automated. We are real people in Tokyo — here's the difference.</p>
           </div>
           <div className="why-grid-v2">
-            {WHY_CARDS.map((item, i) => (
+            {WHY_CARDS_DATA.map((item, i) => (
               <div key={i} className="why-card-v2">
                 <div className="why-card-v2-top">
                   <span className="why-card-v2-n">{item.n}</span>
@@ -1138,7 +1140,7 @@ export default function Home() {
                     <span>{item.statL}</span>
                   </div>
                 </div>
-                <div className="why-card-v2-icon">{item.icon}</div>
+                <div className="why-card-v2-icon"><WhyIcon i={i} /></div>
                 <strong className="why-card-v2-title">{item.title}</strong>
                 <p className="why-card-v2-desc">{item.desc}</p>
               </div>
