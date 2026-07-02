@@ -3,6 +3,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { detectLang, LANG_LABELS } from "../translations";
+import SiteNav from "../components/SiteNav";
 
 // ─── EVENTS CONTENT ───────────────────────────────────────────────────────────
 const EVENTS_CONTENT = {
@@ -307,39 +308,7 @@ export default function EventsPage() {
   return (
     <>
       {/* NAV */}
-      <nav>
-        <div className="nav-inner">
-          <a href="/" className="logo">
-            <img src="/logo.png" alt="Kizuna Proxy" style={{height:"42px",width:"auto",objectFit:"contain"}} />
-            <div>
-              <div className="logo-name"><span className="g">Kizuna</span> Proxy</div>
-              <div className="logo-sub">Tokyo Proxy Service</div>
-            </div>
-          </a>
-          <div style={{ display: "flex", alignItems: "center", gap: ".75rem" }}>
-            <a href="/#request-wrap" className="nav-cta">{c.ctaNav || "Request an item"}</a>
-            <div className="lang-selector">
-              <button className="icon-btn lang-btn" onClick={() => setLangOpen(v => !v)}>
-                <span style={{fontSize:".65rem",letterSpacing:".1em"}}>{LANG_LABELS[lang]}</span>
-                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-              </button>
-              {langOpen && (
-                <>
-                  <div style={{ position: "fixed", inset: 0, zIndex: 199 }} onClick={() => setLangOpen(false)} />
-                  <div className="lang-dropdown">
-                    {Object.keys(LANG_LABELS).map(l => (
-                      <button key={l} className={`lang-option ${l === lang ? "active" : ""}`}
-                        onClick={() => { setLang(l); localStorage.setItem("kizuna-lang", l); setLangOpen(false); }}>
-                        {LANG_LABELS[l]}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </nav>
+      <SiteNav />
 
       {/* PAGE CONTENT */}
       <main className="blog-page">

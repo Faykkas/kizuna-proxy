@@ -709,6 +709,7 @@ iframe[src*="tawk"], #tawk-bubble-container, .tawk-min-container { display: none
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .mobile-menu-btn { display: flex; }
+  .lang-selector { display: none; }
   .hero-left { padding: 3rem 1.5rem; }
   .req-layout { grid-template-columns: 1fr; gap: 2rem; }
   .pricing-grid { grid-template-columns: 1fr; }
