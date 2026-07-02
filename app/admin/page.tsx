@@ -5,50 +5,83 @@ import { useState, useEffect, useRef } from "react";
 import { supabase } from "../lib/supabase";
 
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
-const CAL_TYPES = [
-  { value: "event",       label: "🎌 Event",      color: "#b82a24" },
-  { value: "available",   label: "✅ Available",   color: "#3a7d44" },
-  { value: "unavailable", label: "⛔ Unavailable", color: "#8a7f74" },
-];
 const NEWS_CATS = [
-  { value: "shipping", label: "🚚 Shipping",  color: "#4d148c" },
-  { value: "service",  label: "⭐ Service",   color: "#b8976a" },
-  { value: "event",    label: "🎌 Event",     color: "#1a6934" },
-  { value: "general",  label: "📢 General",   color: "#16120e" },
+  { value: "shipping", label: "🚚 Shipping", color: "#4d148c" },
+  { value: "service",  label: "⭐ Service",  color: "#e03040" },
+  { value: "event",    label: "🎌 Event",    color: "#1a6934" },
+  { value: "general",  label: "📢 General",  color: "#1a2744" },
 ];
-const LANGS = ["en","fr","ja","es","it","de","ko","zh"];
-const LANG_NAMES = { en:"English", fr:"Français", ja:"日本語", es:"Español", it:"Italiano", de:"Deutsch", ko:"한국어", zh:"中文" };
 
-const emptyEvent = { title:"", date:"", type:"event", description:"", store:"" };
-const emptyNews  = { title:"", content:"", category:"general" };
-const emptyGallery = { title:"", subtitle:"", image_url:"", sort_order:0 };
+const emptyNews    = { title: "", content: "", category: "general" };
+const emptyGallery = { title: "", subtitle: "", image_url: "", sort_order: 0 };
 
-// ─── STYLES ──────────────────────────────────────────────────────────────────
-const lbl = { fontSize:".63rem", letterSpacing:".14em", textTransform:"uppercase" as const, color:"var(--warm)", display:"block", marginBottom:".4rem" };
-const inp = { width:"100%", padding:".7rem 1rem", border:"1px solid var(--border-gold)", borderRadius:"1px", fontSize:".88rem", fontFamily:"'Jost',sans-serif", background:"var(--beige)", color:"var(--ink)", outline:"none", boxSizing:"border-box" as const };
-const btnPrimary = { background:"var(--red)", color:"#fff", border:"none", padding:".6rem 1.4rem", borderRadius:"1px", fontSize:".7rem", letterSpacing:".12em", textTransform:"uppercase" as const, fontFamily:"'Jost',sans-serif", cursor:"pointer", fontWeight:500 };
-const btnGhost = { background:"transparent", color:"var(--warm)", border:"1px solid var(--border-gold)", padding:".6rem 1.2rem", borderRadius:"1px", fontSize:".7rem", letterSpacing:".12em", textTransform:"uppercase" as const, fontFamily:"'Jost',sans-serif", cursor:"pointer" };
-const btnSmall = { border:"1px solid var(--border-gold)", padding:".3rem .7rem", borderRadius:"1px", fontSize:".68rem", fontFamily:"'Jost',sans-serif", cursor:"pointer", color:"var(--ink)", background:"var(--beige)" };
-const btnDanger = { border:"none", padding:".3rem .7rem", borderRadius:"1px", fontSize:".68rem", fontFamily:"'Jost',sans-serif", cursor:"pointer", color:"#b91c1c", background:"#fee2e2" };
-const card = { background:"var(--white)", border:"1px solid var(--border-gold)", borderRadius:"1px", padding:"2rem", marginBottom:"1.5rem" };
-const cardHeader = { padding:"1rem 1.5rem", borderBottom:"1px solid var(--border-gold)", background:"var(--beige)", fontSize:".72rem", letterSpacing:".14em", textTransform:"uppercase" as const, color:"var(--warm)", fontWeight:500, marginBottom:0 };
-const row2 = { display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1rem", marginBottom:"1rem" };
-const msg_ok = { fontSize:".78rem", color:"#3a7d44", marginBottom:".75rem" };
-const msg_err = { fontSize:".78rem", color:"var(--red)", marginBottom:".75rem" };
+// ─── DESIGN TOKENS ───────────────────────────────────────────────────────────
+const BG      = "#0f0f11";
+const SURFACE = "#1c1c1f";
+const SURFACE2= "#242427";
+const BORDER  = "rgba(255,255,255,.08)";
+const RED     = "#e03040";
+const INK     = "#f4f4f5";
+const MUTED   = "rgba(244,244,245,.45)";
+
+const lbl = {
+  fontSize: ".6rem", letterSpacing: ".14em", textTransform: "uppercase" as const,
+  color: MUTED, display: "block", marginBottom: ".4rem", fontFamily: "'Inter',sans-serif",
+};
+const inp = {
+  width: "100%", padding: ".75rem 1rem",
+  border: `1px solid ${BORDER}`, borderRadius: "8px",
+  fontSize: ".88rem", fontFamily: "'Inter',sans-serif",
+  background: SURFACE2, color: INK, outline: "none",
+  boxSizing: "border-box" as const, transition: "border-color .15s",
+};
+const btnPrimary = {
+  background: RED, color: "#fff", border: "none",
+  padding: ".65rem 1.4rem", borderRadius: "8px",
+  fontSize: ".68rem", letterSpacing: ".1em", textTransform: "uppercase" as const,
+  fontFamily: "'Inter',sans-serif", cursor: "pointer", fontWeight: 500,
+};
+const btnGhost = {
+  background: "transparent", color: MUTED,
+  border: `1px solid ${BORDER}`, padding: ".65rem 1.2rem", borderRadius: "8px",
+  fontSize: ".68rem", letterSpacing: ".1em", textTransform: "uppercase" as const,
+  fontFamily: "'Inter',sans-serif", cursor: "pointer",
+};
+const btnSmall = {
+  border: `1px solid ${BORDER}`, padding: ".3rem .7rem", borderRadius: "6px",
+  fontSize: ".65rem", fontFamily: "'Inter',sans-serif", cursor: "pointer",
+  color: INK, background: SURFACE2,
+};
+const btnDanger = {
+  border: "none", padding: ".3rem .7rem", borderRadius: "6px",
+  fontSize: ".65rem", fontFamily: "'Inter',sans-serif", cursor: "pointer",
+  color: "#ff8080", background: "rgba(224,48,64,.12)",
+};
+const card = {
+  background: SURFACE, border: `1px solid ${BORDER}`,
+  borderRadius: "12px", padding: "1.75rem", marginBottom: "1.25rem",
+};
+const cardHeader = {
+  fontSize: ".62rem", letterSpacing: ".14em", textTransform: "uppercase" as const,
+  color: MUTED, fontWeight: 500, marginBottom: "1.5rem",
+  fontFamily: "'Inter',sans-serif",
+};
+const row2 = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" };
+const msgOk  = { fontSize: ".78rem", color: "#4ade80", marginBottom: ".75rem" };
+const msgErr = { fontSize: ".78rem", color: RED, marginBottom: ".75rem" };
+const sep    = { height: "1px", background: BORDER, margin: "1.5rem 0" };
 
 // ─── ADMIN PAGE ───────────────────────────────────────────────────────────────
 export default function AdminPage() {
-  const [session, setSession] = useState(null);
-  const [email, setEmail]     = useState("");
-  const [pw, setPw]           = useState("");
+  const [session,  setSession]  = useState(null);
+  const [email,    setEmail]    = useState("");
+  const [pw,       setPw]       = useState("");
   const [loginErr, setLoginErr] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [tab, setTab]         = useState("announce");
-
-  // Security: rate limit login attempts
+  const [loading,  setLoading]  = useState(true);
+  const [tab,      setTab]      = useState("announce");
   const [attempts, setAttempts] = useState(0);
-  const [locked, setLocked]     = useState(false);
-  const [lockTimer, setLockTimer] = useState(0);
+  const [locked,   setLocked]   = useState(false);
+  const [lockTimer,setLockTimer]= useState(0);
   const lockRef = useRef(null);
 
   useEffect(() => {
@@ -68,11 +101,9 @@ export default function AdminPage() {
       setAttempts(next);
       if (next >= 5) {
         setLocked(true);
-        let t = 60;
-        setLockTimer(t);
+        let t = 60; setLockTimer(t);
         lockRef.current = setInterval(() => {
-          t--;
-          setLockTimer(t);
+          t--; setLockTimer(t);
           if (t <= 0) { clearInterval(lockRef.current); setLocked(false); setAttempts(0); }
         }, 1000);
       }
@@ -80,64 +111,88 @@ export default function AdminPage() {
     }
   }
 
-  if (loading) return <div style={{ minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center", background:"var(--beige)" }}><p style={{ color:"var(--warm)", fontSize:".85rem" }}>Loading…</p></div>;
+  if (loading) return (
+    <div style={{ minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center", background:BG }}>
+      <p style={{ color:MUTED, fontSize:".85rem" }}>Loading…</p>
+    </div>
+  );
 
+  // ── LOGIN ──
   if (!session) return (
-    <div style={{ minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center", background:"var(--beige)" }}>
-      <div style={{ background:"var(--white)", border:"1px solid var(--border-gold)", padding:"2.5rem", width:"100%", maxWidth:"360px", boxShadow:"0 8px 32px rgba(13,11,9,.08)" }}>
-        <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.5rem", fontWeight:600, color:"var(--ink)", marginBottom:".3rem" }}>
-          <span style={{ color:"var(--red)" }}>Kizuna</span> Admin
+    <div style={{ minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center", background:BG }}>
+      <div style={{ background:SURFACE, border:`1px solid ${BORDER}`, borderRadius:"16px", padding:"2.5rem", width:"100%", maxWidth:"380px" }}>
+        <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.6rem", fontWeight:600, color:INK, marginBottom:".3rem" }}>
+          <span style={{ color:RED }}>Kizuna</span> Admin
         </div>
-        <p style={{ fontSize:".8rem", color:"var(--warm)", marginBottom:"1.5rem" }}>Sign in to manage your site</p>
-        {locked && <div style={{ background:"#fee2e2", border:"1px solid #fca5a5", padding:".75rem 1rem", marginBottom:"1rem", fontSize:".78rem", color:"#b91c1c", borderRadius:"1px" }}>🔒 Account locked. Try again in {lockTimer}s.</div>}
+        <p style={{ fontSize:".8rem", color:MUTED, marginBottom:"2rem", fontFamily:"'Inter',sans-serif" }}>Sign in to manage your site</p>
+        {locked && (
+          <div style={{ background:"rgba(224,48,64,.1)", border:`1px solid rgba(224,48,64,.2)`, padding:".75rem 1rem", marginBottom:"1rem", fontSize:".78rem", color:RED, borderRadius:"8px" }}>
+            🔒 Locked. Try again in {lockTimer}s.
+          </div>
+        )}
         <label style={lbl}>Email</label>
-        <input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key==="Enter" && handleLogin()} placeholder="kizunaproxy@gmail.com" style={{...inp, marginBottom:".75rem"}} autoFocus disabled={locked} />
+        <input type="email" value={email} onChange={e=>setEmail(e.target.value)}
+          onKeyDown={e=>e.key==="Enter"&&handleLogin()}
+          placeholder="kizunaproxy@gmail.com"
+          style={{...inp, marginBottom:".75rem"}} autoFocus disabled={locked} />
         <label style={lbl}>Password</label>
-        <input type="password" value={pw} onChange={e => setPw(e.target.value)} onKeyDown={e => e.key==="Enter" && handleLogin()} placeholder="••••••••" style={{...inp, marginBottom:".5rem", borderColor:loginErr?"var(--red)":undefined}} disabled={locked} />
-        {loginErr && !locked && <p style={msg_err}>{loginErr}</p>}
-        <button onClick={handleLogin} disabled={locked} style={{...btnPrimary, width:"100%", marginTop:".5rem", opacity:locked?.5:1}}>Sign in</button>
+        <input type="password" value={pw} onChange={e=>setPw(e.target.value)}
+          onKeyDown={e=>e.key==="Enter"&&handleLogin()}
+          placeholder="••••••••"
+          style={{...inp, marginBottom:".5rem", borderColor:loginErr?RED:BORDER}} disabled={locked} />
+        {loginErr && !locked && <p style={msgErr}>{loginErr}</p>}
+        <button onClick={handleLogin} disabled={locked}
+          style={{...btnPrimary, width:"100%", marginTop:".75rem", opacity:locked?.5:1}}>
+          Sign in
+        </button>
       </div>
     </div>
   );
 
   const TABS = [
     { id:"announce", label:"📢 Banner" },
-    { id:"calendar", label:"📅 Calendar" },
     { id:"news",     label:"🗞 News" },
     { id:"gallery",  label:"🖼 Gallery" },
   ];
 
   return (
-    <div style={{ minHeight:"100vh", background:"var(--beige)", padding:"2rem" }}>
-      <div style={{ maxWidth:"960px", margin:"0 auto" }}>
+    <div style={{ minHeight:"100vh", background:BG, padding:"2rem 1.5rem" }}>
+      <div style={{ maxWidth:"920px", margin:"0 auto" }}>
 
         {/* Header */}
-        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"2rem", flexWrap:"wrap", gap:"1rem" }}>
+        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"2.5rem", flexWrap:"wrap", gap:"1rem" }}>
           <div>
-            <h1 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:300, color:"var(--ink)" }}>
-              <span style={{ color:"var(--red)" }}>Kizuna</span> Admin
+            <h1 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:300, color:INK, marginBottom:".2rem" }}>
+              <span style={{ color:RED }}>Kizuna</span> Admin
             </h1>
-            <p style={{ fontSize:".8rem", color:"var(--warm)" }}>Logged in as {session.user.email}</p>
+            <p style={{ fontSize:".75rem", color:MUTED, fontFamily:"'Inter',sans-serif" }}>{session.user.email}</p>
           </div>
           <div style={{ display:"flex", gap:".75rem", alignItems:"center" }}>
-            <a href="/" style={{ fontSize:".68rem", letterSpacing:".1em", textTransform:"uppercase", color:"var(--warm)", textDecoration:"none" }}>← Site</a>
-            <button onClick={() => supabase.auth.signOut()} style={btnGhost}>Sign out</button>
+            <a href="/" style={{ fontSize:".65rem", letterSpacing:".1em", textTransform:"uppercase", color:MUTED, textDecoration:"none", fontFamily:"'Inter',sans-serif" }}>← Back to site</a>
+            <button onClick={()=>supabase.auth.signOut()} style={btnGhost}>Sign out</button>
           </div>
         </div>
 
         {/* Tabs */}
-        <div style={{ display:"flex", gap:"1px", marginBottom:"2rem", background:"var(--border-gold)", border:"1px solid var(--border-gold)", width:"fit-content" }}>
+        <div style={{ display:"flex", gap:"4px", marginBottom:"2rem" }}>
           {TABS.map(t => (
-            <button key={t.id} onClick={() => setTab(t.id)} style={{...btnGhost, border:"none", background:tab===t.id?"var(--ink)":"var(--beige)", color:tab===t.id?"var(--red)":"var(--warm)", borderRadius:0, padding:".6rem 1.3rem"}}>
+            <button key={t.id} onClick={()=>setTab(t.id)} style={{
+              padding:".6rem 1.3rem", borderRadius:"8px", border:"none", cursor:"pointer",
+              fontFamily:"'Inter',sans-serif", fontSize:".68rem", letterSpacing:".1em",
+              textTransform:"uppercase" as const, fontWeight:500,
+              background: tab===t.id ? RED : SURFACE,
+              color: tab===t.id ? "#fff" : MUTED,
+              transition:"all .15s",
+            }}>
               {t.label}
             </button>
           ))}
         </div>
 
-        {tab === "announce" && <AnnounceTab />}
-        {tab === "calendar" && <CalendarTab />}
-        {tab === "news"     && <NewsTab />}
-        {tab === "gallery"  && <GalleryTab />}
+        {/* Tab content */}
+        {tab==="announce" && <AnnounceTab />}
+        {tab==="news"     && <NewsTab />}
+        {tab==="gallery"  && <GalleryTab />}
       </div>
     </div>
   );
@@ -145,42 +200,37 @@ export default function AdminPage() {
 
 // ─── ANNOUNCE TAB ─────────────────────────────────────────────────────────────
 function AnnounceTab() {
-  const [data, setData]     = useState(null);
+  const [data,   setData]   = useState(null);
   const [saving, setSaving] = useState(false);
-  const [msg, setMsg]       = useState("");
+  const [msg,    setMsg]    = useState("");
 
   useEffect(() => { load(); }, []);
-
   async function load() {
     const { data } = await supabase.from("announce").select("*").limit(1).single();
     if (data) setData(data);
   }
-
   async function save() {
     setSaving(true);
     await supabase.from("announce").update({
-      text_en: data.text_en,
-      from_date: data.from_date,
-      to_date: data.to_date,
-      active: data.active,
+      text_en: data.text_en, from_date: data.from_date,
+      to_date: data.to_date, active: data.active,
       updated_at: new Date().toISOString()
     }).eq("id", data.id);
     setSaving(false);
-    setMsg("✓ Banner updated.");
-    setTimeout(() => setMsg(""), 3000);
+    setMsg("✓ Banner updated."); setTimeout(()=>setMsg(""),3000);
   }
 
-  if (!data) return <div style={{ padding:"2rem", color:"var(--warm)", fontSize:".85rem" }}>Loading…</div>;
+  if (!data) return <p style={{color:MUTED,fontSize:".85rem",padding:"1rem"}}>Loading…</p>;
 
   return (
     <div style={card}>
-      <p style={{...cardHeader, marginBottom:"1.5rem"}}>Announcement Banner</p>
+      <p style={cardHeader}>📢 Announcement Banner</p>
 
       {/* Toggle */}
-      <div style={{ display:"flex", alignItems:"center", gap:"1rem", marginBottom:"1.5rem", padding:"1rem 1.2rem", background: data.active?"rgba(58,125,68,.07)":"rgba(138,127,116,.07)", border:`1px solid ${data.active?"#3a7d44":"var(--border-gold)"}` }}>
-        <label style={{ display:"flex", alignItems:"center", gap:".7rem", cursor:"pointer", fontSize:".85rem", color:"var(--ink)", fontWeight:500, userSelect:"none" }}>
-          <input type="checkbox" checked={data.active} onChange={e => setData(d => ({...d, active: e.target.checked}))}
-            style={{ width:"18px", height:"18px", accentColor:"#3a7d44", cursor:"pointer" }} />
+      <div style={{ display:"flex", alignItems:"center", gap:"1rem", marginBottom:"1.5rem", padding:"1rem 1.2rem", background:data.active?"rgba(74,222,128,.06)":"rgba(255,255,255,.03)", border:`1px solid ${data.active?"rgba(74,222,128,.2)":BORDER}`, borderRadius:"8px" }}>
+        <label style={{ display:"flex", alignItems:"center", gap:".7rem", cursor:"pointer", fontSize:".85rem", color:INK, fontWeight:500, userSelect:"none", fontFamily:"'Inter',sans-serif" }}>
+          <input type="checkbox" checked={data.active} onChange={e=>setData(d=>({...d,active:e.target.checked}))}
+            style={{ width:"18px", height:"18px", accentColor:RED, cursor:"pointer" }} />
           {data.active ? "🟢 Banner visible on site" : "⚫ Banner hidden"}
         </label>
       </div>
@@ -188,164 +238,116 @@ function AnnounceTab() {
       {/* Message */}
       <div style={{ marginBottom:"1rem" }}>
         <label style={lbl}>Message</label>
-        <input style={inp} value={data.text_en || ""} onChange={e => setData(d => ({...d, text_en: e.target.value}))}
+        <input style={inp} value={data.text_en||""} onChange={e=>setData(d=>({...d,text_en:e.target.value}))}
           placeholder="Orders paused from April 20 to June 1" />
-        <p style={{ fontSize:".7rem", color:"var(--mist)", marginTop:".4rem" }}>This message appears at the top of your site.</p>
+        <p style={{ fontSize:".68rem", color:MUTED, marginTop:".4rem", fontFamily:"'Inter',sans-serif" }}>This message appears at the top of the site.</p>
       </div>
 
       {/* Dates */}
       <div style={row2}>
         <div>
           <label style={lbl}>From</label>
-          <input style={inp} value={data.from_date || ""} onChange={e => setData(d => ({...d, from_date: e.target.value}))} placeholder="April 20" />
+          <input style={inp} value={data.from_date||""} onChange={e=>setData(d=>({...d,from_date:e.target.value}))} placeholder="April 20" />
         </div>
         <div>
           <label style={lbl}>To</label>
-          <input style={inp} value={data.to_date || ""} onChange={e => setData(d => ({...d, to_date: e.target.value}))} placeholder="June 1" />
+          <input style={inp} value={data.to_date||""} onChange={e=>setData(d=>({...d,to_date:e.target.value}))} placeholder="June 1" />
         </div>
       </div>
 
       {/* Preview */}
       {data.active && (
-        <div style={{ margin:"1rem 0", padding:".7rem 1.2rem", background:"#16120e", borderLeft:"3px solid #b8976a", fontSize:".78rem", color:"rgba(247,243,237,.7)", display:"flex", gap:".6rem", alignItems:"center" }}>
-          <span style={{ background:"#8b1a1a", color:"#fff", fontSize:".6rem", letterSpacing:".12em", textTransform:"uppercase", padding:".12rem .45rem", flexShrink:0 }}>Notice</span>
-          <span>{data.text_en} <strong style={{color:"rgba(247,243,237,.95)"}}>{data.from_date}</strong> → <strong style={{color:"rgba(247,243,237,.95)"}}>{data.to_date}</strong></span>
+        <div style={{ margin:"1rem 0", padding:".7rem 1.2rem", background:"#080809", borderLeft:`3px solid ${RED}`, fontSize:".78rem", color:"rgba(244,244,245,.7)", display:"flex", gap:".6rem", alignItems:"center", borderRadius:"0 8px 8px 0", fontFamily:"'Inter',sans-serif" }}>
+          <span style={{ background:RED, color:"#fff", fontSize:".58rem", letterSpacing:".12em", textTransform:"uppercase", padding:".12rem .45rem", flexShrink:0, borderRadius:"4px" }}>Notice</span>
+          <span>{data.text_en} {data.from_date&&<strong style={{color:INK}}>{data.from_date}</strong>}{data.to_date&&<> → <strong style={{color:INK}}>{data.to_date}</strong></>}</span>
         </div>
       )}
 
-      {msg && <p style={msg_ok}>{msg}</p>}
-      <button onClick={save} disabled={saving} style={btnPrimary}>{saving ? "Saving…" : "Save"}</button>
+      {msg && <p style={msgOk}>{msg}</p>}
+      <button onClick={save} disabled={saving} style={btnPrimary}>{saving?"Saving…":"Save"}</button>
     </div>
-  );
-}
-
-// ─── CALENDAR TAB ─────────────────────────────────────────────────────────────
-function CalendarTab() {
-  const [events, setEvents]   = useState([]);
-  const [form, setForm]       = useState(emptyEvent);
-  const [editing, setEditing] = useState(null);
-  const [saving, setSaving]   = useState(false);
-  const [msg, setMsg]         = useState("");
-
-  useEffect(() => { load(); }, []);
-  async function load() {
-    const { data } = await supabase.from("events").select("*").order("date");
-    setEvents(data || []);
-  }
-  async function save() {
-    if (!form.title || !form.date) { setMsg("Please fill title and date."); return; }
-    setSaving(true);
-    const p = { title:form.title, date:form.date, type:form.type, description:form.description, store:form.store };
-    if (editing) await supabase.from("events").update(p).eq("id", editing);
-    else await supabase.from("events").insert(p);
-    setSaving(false); setForm(emptyEvent); setEditing(null);
-    setMsg(editing ? "✓ Updated." : "✓ Added."); setTimeout(() => setMsg(""), 3000); load();
-  }
-  async function del(id) {
-    if (!confirm("Delete?")) return;
-    await supabase.from("events").delete().eq("id", id); load();
-  }
-
-  return (
-    <>
-      <div style={card}>
-        <p style={{...cardHeader, marginBottom:"1.5rem"}}>{editing ? "✏️ Edit event" : "➕ Add event"}</p>
-        <div style={row2}>
-          <div><label style={lbl}>Title *</label><input style={inp} value={form.title} onChange={e => setForm(f=>({...f,title:e.target.value}))} /></div>
-          <div><label style={lbl}>Date *</label><input style={inp} type="date" value={form.date} onChange={e => setForm(f=>({...f,date:e.target.value}))} /></div>
-        </div>
-        <div style={row2}>
-          <div><label style={lbl}>Type *</label><select style={inp} value={form.type} onChange={e => setForm(f=>({...f,type:e.target.value}))}>{CAL_TYPES.map(t=><option key={t.value} value={t.value}>{t.label}</option>)}</select></div>
-          <div><label style={lbl}>Store / Location</label><input style={inp} value={form.store} onChange={e => setForm(f=>({...f,store:e.target.value}))} /></div>
-        </div>
-        <div style={{marginBottom:"1.2rem"}}><label style={lbl}>Description</label><textarea style={{...inp,resize:"vertical",minHeight:"70px"}} value={form.description} onChange={e => setForm(f=>({...f,description:e.target.value}))} /></div>
-        {msg && <p style={msg.startsWith("✓")?msg_ok:msg_err}>{msg}</p>}
-        <div style={{display:"flex",gap:".75rem"}}>
-          <button onClick={save} disabled={saving} style={btnPrimary}>{saving?"Saving…":editing?"Update":"Add"}</button>
-          {editing && <button onClick={()=>{setEditing(null);setForm(emptyEvent);}} style={btnGhost}>Cancel</button>}
-        </div>
-      </div>
-      <div style={{background:"var(--white)",border:"1px solid var(--border-gold)"}}>
-        <p style={cardHeader}>All events ({events.length})</p>
-        {events.length===0?<p style={{padding:"2rem",fontSize:".85rem",color:"var(--warm)",textAlign:"center"}}>No events yet.</p>:events.map(ev=>(
-          <div key={ev.id} style={{display:"flex",alignItems:"center",gap:"1rem",padding:"1rem 1.5rem",borderBottom:"1px solid var(--border-gold)",flexWrap:"wrap"}}>
-            <div style={{width:"8px",height:"8px",borderRadius:"50%",background:CAL_TYPES.find(t=>t.value===ev.type)?.color,flexShrink:0}}/>
-            <div style={{flex:1,minWidth:"140px"}}>
-              <strong style={{fontSize:".88rem",color:"var(--ink)",display:"block"}}>{ev.title}</strong>
-              {ev.store&&<span style={{fontSize:".72rem",color:"var(--warm)"}}>📍 {ev.store}</span>}
-            </div>
-            <span style={{fontSize:".78rem",color:"var(--warm)"}}>{ev.date}</span>
-            <span style={{fontSize:".65rem",letterSpacing:".08em",textTransform:"uppercase",color:"#fff",background:CAL_TYPES.find(t=>t.value===ev.type)?.color,padding:".18rem .55rem"}}>{ev.type}</span>
-            <div style={{display:"flex",gap:".5rem"}}>
-              <button onClick={()=>{setEditing(ev.id);setForm({title:ev.title,date:ev.date,type:ev.type,description:ev.description||"",store:ev.store||""});window.scrollTo({top:0,behavior:"smooth"});}} style={btnSmall}>Edit</button>
-              <button onClick={()=>del(ev.id)} style={btnDanger}>Delete</button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </>
   );
 }
 
 // ─── NEWS TAB ─────────────────────────────────────────────────────────────────
 function NewsTab() {
-  const [list, setList]       = useState([]);
-  const [form, setForm]       = useState(emptyNews);
+  const [items,   setItems]   = useState([]);
+  const [form,    setForm]    = useState(emptyNews);
   const [editing, setEditing] = useState(null);
-  const [saving, setSaving]   = useState(false);
-  const [msg, setMsg]         = useState("");
+  const [saving,  setSaving]  = useState(false);
+  const [msg,     setMsg]     = useState("");
 
   useEffect(() => { load(); }, []);
   async function load() {
     const { data } = await supabase.from("news").select("*").order("published_at",{ascending:false});
-    setList(data||[]);
+    setItems(data||[]);
   }
   async function save() {
-    if (!form.title||!form.content) { setMsg("Fill title and content."); return; }
+    if (!form.title||!form.content) { setMsg("Title and content are required."); return; }
     setSaving(true);
-    const p = { title:form.title, content:form.content, category:form.category };
-    if (editing) await supabase.from("news").update(p).eq("id",editing);
-    else await supabase.from("news").insert(p);
+    if (editing) await supabase.from("news").update({...form,published_at:new Date().toISOString()}).eq("id",editing);
+    else await supabase.from("news").insert({...form,published_at:new Date().toISOString()});
     setSaving(false); setForm(emptyNews); setEditing(null);
     setMsg(editing?"✓ Updated.":"✓ Published."); setTimeout(()=>setMsg(""),3000); load();
   }
   async function del(id) {
-    if (!confirm("Delete?")) return;
+    if (!confirm("Delete this article?")) return;
     await supabase.from("news").delete().eq("id",id); load();
   }
+
+  const cat = NEWS_CATS.find(c=>c.value===form.category)||NEWS_CATS[0];
 
   return (
     <>
       <div style={card}>
-        <p style={{...cardHeader,marginBottom:"1.5rem"}}>{editing?"✏️ Edit":"➕ Publish news"}</p>
-        <div style={row2}>
-          <div><label style={lbl}>Title *</label><input style={inp} value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))} /></div>
-          <div><label style={lbl}>Category</label><select style={inp} value={form.category} onChange={e=>setForm(f=>({...f,category:e.target.value}))}>{NEWS_CATS.map(c=><option key={c.value} value={c.value}>{c.label}</option>)}</select></div>
+        <p style={cardHeader}>{editing?"✏️ Edit article":"➕ New article"}</p>
+        <div style={{marginBottom:"1rem"}}>
+          <label style={lbl}>Title *</label>
+          <input style={inp} value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))} placeholder="Weekly shipping update" />
         </div>
-        <div style={{marginBottom:"1.2rem"}}><label style={lbl}>Content *</label><textarea style={{...inp,resize:"vertical",minHeight:"100px"}} value={form.content} onChange={e=>setForm(f=>({...f,content:e.target.value}))} /></div>
-        {msg&&<p style={msg.startsWith("✓")?msg_ok:msg_err}>{msg}</p>}
+        <div style={{marginBottom:"1rem"}}>
+          <label style={lbl}>Content *</label>
+          <textarea style={{...inp,minHeight:"120px",resize:"vertical"}} value={form.content} onChange={e=>setForm(f=>({...f,content:e.target.value}))} placeholder="Details of the announcement…" />
+        </div>
+        <div style={{marginBottom:"1.25rem"}}>
+          <label style={lbl}>Category</label>
+          <div style={{display:"flex",gap:".5rem",flexWrap:"wrap"}}>
+            {NEWS_CATS.map(c=>(
+              <button key={c.value} onClick={()=>setForm(f=>({...f,category:c.value}))} style={{
+                padding:".4rem .9rem", borderRadius:"20px", border:`1px solid ${form.category===c.value?c.color:BORDER}`,
+                background:form.category===c.value?`${c.color}22`:"transparent",
+                color:form.category===c.value?c.color:MUTED,
+                fontSize:".68rem", cursor:"pointer", fontFamily:"'Inter',sans-serif", transition:"all .15s",
+              }}>{c.label}</button>
+            ))}
+          </div>
+        </div>
+        {msg&&<p style={msg.startsWith("✓")?msgOk:msgErr}>{msg}</p>}
         <div style={{display:"flex",gap:".75rem"}}>
           <button onClick={save} disabled={saving} style={btnPrimary}>{saving?"Saving…":editing?"Update":"Publish"}</button>
           {editing&&<button onClick={()=>{setEditing(null);setForm(emptyNews);}} style={btnGhost}>Cancel</button>}
         </div>
       </div>
-      <div style={{background:"var(--white)",border:"1px solid var(--border-gold)"}}>
-        <p style={cardHeader}>Published ({list.length})</p>
-        {list.length===0?<p style={{padding:"2rem",fontSize:".85rem",color:"var(--warm)",textAlign:"center"}}>No news yet.</p>:list.map(item=>(
-          <div key={item.id} style={{padding:"1.2rem 1.5rem",borderBottom:"1px solid var(--border-gold)"}}>
-            <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:"1rem",flexWrap:"wrap"}}>
-              <div style={{flex:1}}>
-                <div style={{display:"flex",gap:".6rem",marginBottom:".4rem",alignItems:"center"}}>
-                  <span style={{fontSize:".6rem",fontWeight:700,letterSpacing:".08em",textTransform:"uppercase",color:"#fff",background:NEWS_CATS.find(c=>c.value===item.category)?.color,padding:".15rem .5rem"}}>{item.category}</span>
-                  <span style={{fontSize:".7rem",color:"var(--warm)"}}>{new Date(item.published_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}</span>
-                </div>
-                <strong style={{fontSize:".9rem",color:"var(--ink)",display:"block",marginBottom:".3rem"}}>{item.title}</strong>
-                <p style={{fontSize:".8rem",color:"var(--warm)",fontWeight:300,lineHeight:1.6,margin:0}}>{item.content}</p>
-              </div>
-              <div style={{display:"flex",gap:".5rem",flexShrink:0}}>
-                <button onClick={()=>{setEditing(item.id);setForm({title:item.title,content:item.content,category:item.category});window.scrollTo({top:0,behavior:"smooth"});}} style={btnSmall}>Edit</button>
-                <button onClick={()=>del(item.id)} style={btnDanger}>Delete</button>
-              </div>
+
+      {/* Articles list */}
+      <div style={{display:"flex",flexDirection:"column",gap:"1px",background:BORDER,border:`1px solid ${BORDER}`,borderRadius:"12px",overflow:"hidden"}}>
+        {items.length===0 ? (
+          <p style={{padding:"2rem",fontSize:".85rem",color:MUTED,textAlign:"center",background:SURFACE}}>No articles yet.</p>
+        ) : items.map(item=>(
+          <div key={item.id} style={{background:SURFACE,padding:"1.1rem 1.4rem",display:"flex",alignItems:"flex-start",gap:"1rem"}}>
+            <span style={{display:"inline-block",fontSize:".58rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"#fff",background:NEWS_CATS.find(c=>c.value===item.category)?.color||"#333",padding:".18rem .55rem",borderRadius:"4px",flexShrink:0,marginTop:"2px"}}>
+              {NEWS_CATS.find(c=>c.value===item.category)?.label||item.category}
+            </span>
+            <div style={{flex:1,minWidth:0}}>
+              <strong style={{fontSize:".88rem",color:INK,display:"block",marginBottom:".25rem"}}>{item.title}</strong>
+              <p style={{fontSize:".78rem",color:MUTED,margin:0,lineHeight:1.6,overflow:"hidden",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical"}}>{item.content}</p>
+              <span style={{fontSize:".65rem",color:MUTED,marginTop:".4rem",display:"block"}}>
+                {new Date(item.published_at).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})}
+              </span>
+            </div>
+            <div style={{display:"flex",gap:".4rem",flexShrink:0}}>
+              <button onClick={()=>{setEditing(item.id);setForm({title:item.title,content:item.content,category:item.category});window.scrollTo({top:0,behavior:"smooth"});}} style={btnSmall}>Edit</button>
+              <button onClick={()=>del(item.id)} style={btnDanger}>Delete</button>
             </div>
           </div>
         ))}
@@ -356,13 +358,13 @@ function NewsTab() {
 
 // ─── GALLERY TAB ─────────────────────────────────────────────────────────────
 function GalleryTab() {
-  const [items, setItems]     = useState([]);
-  const [form, setForm]       = useState(emptyGallery);
-  const [editing, setEditing] = useState(null);
-  const [saving, setSaving]   = useState(false);
+  const [items,     setItems]     = useState([]);
+  const [form,      setForm]      = useState(emptyGallery);
+  const [editing,   setEditing]   = useState(null);
+  const [saving,    setSaving]    = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [msg, setMsg]         = useState("");
-  const fileRef               = useRef(null);
+  const [msg,       setMsg]       = useState("");
+  const fileRef = useRef(null);
 
   useEffect(() => { load(); }, []);
   async function load() {
@@ -372,21 +374,20 @@ function GalleryTab() {
 
   async function uploadImage(file) {
     setUploading(true);
-    const ext = file.name.split(".").pop();
+    const ext  = file.name.split(".").pop();
     const name = `${Date.now()}.${ext}`;
-    const { data, error } = await supabase.storage.from("gallery").upload(name, file, { upsert: true });
-    if (error) { setMsg("Upload failed: " + error.message); setUploading(false); return null; }
+    const { error } = await supabase.storage.from("gallery").upload(name, file, { upsert: true });
+    if (error) { setMsg("Upload failed: "+error.message); setUploading(false); return null; }
     const { data: { publicUrl } } = supabase.storage.from("gallery").getPublicUrl(name);
     setUploading(false);
     return publicUrl;
   }
 
   async function save() {
-    if (!form.title || !form.image_url) { setMsg("Title and image are required."); return; }
+    if (!form.title||!form.image_url) { setMsg("Title and image are required."); return; }
     setSaving(true);
-    // Auto sort_order = last item + 1 if not editing
-    const nextOrder = editing ? Number(form.sort_order) : (items.length > 0 ? Math.max(...items.map(i => i.sort_order)) + 1 : 0);
-    const p = { title:form.title, subtitle:form.subtitle, image_url:form.image_url, sort_order: nextOrder };
+    const nextOrder = editing ? Number(form.sort_order) : (items.length>0?Math.max(...items.map(i=>i.sort_order))+1:0);
+    const p = { title:form.title, subtitle:form.subtitle, image_url:form.image_url, sort_order:nextOrder };
     if (editing) await supabase.from("gallery").update(p).eq("id",editing);
     else await supabase.from("gallery").insert(p);
     setSaving(false); setForm(emptyGallery); setEditing(null);
@@ -395,7 +396,6 @@ function GalleryTab() {
 
   async function del(id, image_url) {
     if (!confirm("Delete this photo?")) return;
-    // Delete from storage too
     const filename = image_url.split("/").pop();
     await supabase.storage.from("gallery").remove([filename]);
     await supabase.from("gallery").delete().eq("id",id);
@@ -403,75 +403,71 @@ function GalleryTab() {
   }
 
   async function moveOrder(id, dir) {
-    const idx = items.findIndex(i => i.id === id);
-    const target = items[idx + dir];
+    const idx = items.findIndex(i=>i.id===id);
+    const target = items[idx+dir];
     if (!target) return;
-    const currOrder = items[idx].sort_order;
-    const targetOrder = target.sort_order;
-    await supabase.from("gallery").update({ sort_order: targetOrder }).eq("id", id);
-    await supabase.from("gallery").update({ sort_order: currOrder }).eq("id", target.id);
+    await supabase.from("gallery").update({sort_order:target.sort_order}).eq("id",id);
+    await supabase.from("gallery").update({sort_order:items[idx].sort_order}).eq("id",target.id);
     load();
   }
 
   return (
     <>
       <div style={card}>
-        <p style={{...cardHeader,marginBottom:"1.5rem"}}>{editing?"✏️ Edit photo":"➕ Add photo"}</p>
+        <p style={cardHeader}>{editing?"✏️ Edit photo":"➕ Add photo"}</p>
         <div style={row2}>
           <div><label style={lbl}>Title *</label><input style={inp} value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))} placeholder="Pokémon Center Tokyo" /></div>
           <div><label style={lbl}>Subtitle</label><input style={inp} value={form.subtitle} onChange={e=>setForm(f=>({...f,subtitle:e.target.value}))} placeholder="Rare cards · Japan" /></div>
         </div>
-        <div style={row2}>
-          <div>
-            <label style={lbl}>Image *</label>
-            <div style={{display:"flex",gap:".5rem"}}>
-              <input style={{...inp,flex:1}} value={form.image_url} onChange={e=>setForm(f=>({...f,image_url:e.target.value}))} placeholder="URL or upload below" />
-            </div>
-            <input ref={fileRef} type="file" accept="image/*" style={{display:"none"}} onChange={async e => {
-              const file = e.target.files?.[0]; if (!file) return;
-              const url = await uploadImage(file);
-              if (url) setForm(f=>({...f,image_url:url}));
-            }} />
-            <button onClick={()=>fileRef.current?.click()} style={{...btnGhost,marginTop:".5rem",fontSize:".65rem"}} disabled={uploading}>
-              {uploading ? "⏳ Uploading…" : "📁 Upload image"}
-            </button>
-          </div>
-          <div style={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",background:"var(--paper)",border:"1px solid var(--border-gold)",padding:"1rem",fontSize:".75rem",color:"var(--warm)",textAlign:"center",lineHeight:1.6}}>
-            Photos are added at the end automatically.<br/>Use ↑↓ to reorder.
-          </div>
+        <div style={{marginBottom:"1rem"}}>
+          <label style={lbl}>Image URL or upload</label>
+          <input style={{...inp,marginBottom:".5rem"}} value={form.image_url} onChange={e=>setForm(f=>({...f,image_url:e.target.value}))} placeholder="https://… or upload below" />
+          <input ref={fileRef} type="file" accept="image/*" style={{display:"none"}} onChange={async e=>{
+            const file=e.target.files?.[0]; if(!file) return;
+            const url=await uploadImage(file);
+            if(url) setForm(f=>({...f,image_url:url}));
+          }} />
+          <button onClick={()=>fileRef.current?.click()} style={{...btnGhost,fontSize:".65rem"}} disabled={uploading}>
+            {uploading?"⏳ Uploading…":"📁 Upload image"}
+          </button>
         </div>
         {form.image_url && (
           <div style={{marginBottom:"1rem"}}>
-            <img src={form.image_url} alt="preview" style={{height:"120px",objectFit:"cover",border:"1px solid var(--border-gold)"}} />
+            <img src={form.image_url} alt="preview" style={{height:"120px",objectFit:"cover",borderRadius:"8px",border:`1px solid ${BORDER}`}} />
           </div>
         )}
-        {msg&&<p style={msg.startsWith("✓")?msg_ok:msg_err}>{msg}</p>}
+        {msg&&<p style={msg.startsWith("✓")?msgOk:msgErr}>{msg}</p>}
         <div style={{display:"flex",gap:".75rem"}}>
           <button onClick={save} disabled={saving||uploading} style={btnPrimary}>{saving?"Saving…":editing?"Update":"Add photo"}</button>
           {editing&&<button onClick={()=>{setEditing(null);setForm(emptyGallery);}} style={btnGhost}>Cancel</button>}
         </div>
       </div>
 
-      <div style={{background:"var(--white)",border:"1px solid var(--border-gold)"}}>
-        <p style={cardHeader}>Gallery ({items.length} photos)</p>
-        {items.length===0?<p style={{padding:"2rem",fontSize:".85rem",color:"var(--warm)",textAlign:"center"}}>No photos yet. Add your first one above.</p>:
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:"1px",background:"var(--border-gold)"}}>
-          {items.map((item,idx)=>(
-            <div key={item.id} style={{background:"var(--white)",padding:"1rem",display:"flex",flexDirection:"column",gap:".6rem"}}>
-              <img src={item.image_url} alt={item.title} style={{width:"100%",height:"130px",objectFit:"cover",borderRadius:"1px"}} onError={e=>{(e.target as HTMLImageElement).style.opacity=".3";}} />
-              <div>
-                <strong style={{fontSize:".82rem",color:"var(--ink)",display:"block"}}>{item.title}</strong>
-                {item.subtitle&&<span style={{fontSize:".7rem",color:"var(--warm)"}}>{item.subtitle}</span>}
+      {/* Gallery grid */}
+      <div style={{background:SURFACE,border:`1px solid ${BORDER}`,borderRadius:"12px",overflow:"hidden"}}>
+        <p style={{...cardHeader,padding:"1rem 1.4rem",borderBottom:`1px solid ${BORDER}`,margin:0}}>Gallery — {items.length} photo{items.length!==1?"s":""}</p>
+        {items.length===0 ? (
+          <p style={{padding:"2rem",fontSize:".85rem",color:MUTED,textAlign:"center"}}>No photos yet. Add your first one above.</p>
+        ) : (
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))",gap:"1px",background:BORDER}}>
+            {items.map((item,idx)=>(
+              <div key={item.id} style={{background:SURFACE,padding:"1rem",display:"flex",flexDirection:"column",gap:".6rem"}}>
+                <img src={item.image_url} alt={item.title} style={{width:"100%",height:"120px",objectFit:"cover",borderRadius:"8px"}}
+                  onError={e=>{(e.target as HTMLImageElement).style.opacity=".3";}} />
+                <div>
+                  <strong style={{fontSize:".82rem",color:INK,display:"block"}}>{item.title}</strong>
+                  {item.subtitle&&<span style={{fontSize:".7rem",color:MUTED}}>{item.subtitle}</span>}
+                </div>
+                <div style={{display:"flex",gap:".4rem",flexWrap:"wrap"}}>
+                  <button onClick={()=>moveOrder(item.id,-1)} disabled={idx===0} style={{...btnSmall,padding:".25rem .5rem"}}>↑</button>
+                  <button onClick={()=>moveOrder(item.id,1)} disabled={idx===items.length-1} style={{...btnSmall,padding:".25rem .5rem"}}>↓</button>
+                  <button onClick={()=>{setEditing(item.id);setForm({title:item.title,subtitle:item.subtitle||"",image_url:item.image_url,sort_order:item.sort_order});window.scrollTo({top:0,behavior:"smooth"});}} style={btnSmall}>Edit</button>
+                  <button onClick={()=>del(item.id,item.image_url)} style={btnDanger}>Delete</button>
+                </div>
               </div>
-              <div style={{display:"flex",gap:".4rem",flexWrap:"wrap"}}>
-                <button onClick={()=>moveOrder(item.id,-1)} disabled={idx===0} style={{...btnSmall,padding:".25rem .5rem"}}>↑</button>
-                <button onClick={()=>moveOrder(item.id,1)} disabled={idx===items.length-1} style={{...btnSmall,padding:".25rem .5rem"}}>↓</button>
-                <button onClick={()=>{setEditing(item.id);setForm({title:item.title,subtitle:item.subtitle||"",image_url:item.image_url,sort_order:item.sort_order});window.scrollTo({top:0,behavior:"smooth"});}} style={btnSmall}>Edit</button>
-                <button onClick={()=>del(item.id,item.image_url)} style={btnDanger}>Delete</button>
-              </div>
-            </div>
-          ))}
-        </div>}
+            ))}
+          </div>
+        )}
       </div>
     </>
   );
