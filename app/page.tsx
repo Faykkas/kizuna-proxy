@@ -797,7 +797,8 @@ export default function Home() {
   const t = translations[lang];
 
   const navLinks = [
-    { href: "#pricing",  label: t.nav.pricing },
+    { href: "#pricing", label: t.nav.pricing },
+    { href: "/faq",     label: t.nav.faq || "FAQ" },
   ];
 
   const wbuyImgs = ["/buy-mercari.png","/buy-yahoo.png","/buy-sneakers.jpg","/buy-pokemon.jpg","/buy-nintendo.png","/buy-akihabara.jpg"];
