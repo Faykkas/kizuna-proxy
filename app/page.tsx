@@ -727,6 +727,33 @@ function SearchWidget({ lang, t }: { lang: string; t: any }) {
   );
 }
 
+// ─── WHY KIZUNA CARDS ────────────────────────────────────────────────────────
+const WHY_CARDS = [
+  { n:"01", stat:"< 24h", statL:"reply time", title:"Real person, not a bot", desc:"Every request handled personally — you speak directly with us.",
+    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> },
+  { n:"02", stat:"Ginza", statL:"Tokyo", title:"Based in Tokyo", desc:"We visit stores, attend events, and check items in person.",
+    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> },
+  { n:"03", stat:"24/7", statL:"available", title:"Direct communication", desc:"WhatsApp, Discord, email — real answers, no bots.",
+    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> },
+  { n:"04", stat:"日本語", statL:"native", title:"Fluent in Japanese", desc:"We negotiate directly with sellers — no translation delays.",
+    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 2H3v16h5l3 3 3-3h7V2z"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="13" y2="13"/></svg> },
+  { n:"05", stat:"100%", statL:"dedication", title:"We find what others can't", desc:"Store visits, live shopping calls, exclusive events.",
+    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> },
+  { n:"06", stat:"20+", statL:"countries", title:"Shipped worldwide", desc:"USA, Canada, Europe, Asia — we ship everywhere.",
+    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> },
+];
+
+const TICKER_ITEMS = [
+  "🎴 Pokémon cards — Akihabara → 🇺🇸 USA",
+  "👟 Nike Japan collab → 🇫🇷 France",
+  "🎮 Nintendo exclusive → 🇨🇦 Canada",
+  "👕 Supreme Japan drop → 🇩🇪 Germany",
+  "🗿 Anime figure — Good Smile → 🇬🇷 Greece",
+  "📚 Vintage manga — Mercari → 🇬🇧 UK",
+  "🎴 One Piece TCG box → 🇮🇩 Indonesia",
+  "👟 Asics Japan collab → 🇰🇷 Korea",
+];
+
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -764,7 +791,6 @@ export default function Home() {
   const t = translations[lang];
 
   const navLinks = [
-    { href: "#calendar", label: t.calendar?.label || "Availability" },
     { href: "#pricing",  label: t.nav.pricing },
   ];
 
@@ -915,26 +941,6 @@ export default function Home() {
       </section>
 
 
-      {/* CALENDAR */}
-      <section id="calendar" className="section reveal">
-        <div className="wrap">
-          <div className="sec-head">
-            <p className="sec-label">{t.calendar?.label}</p>
-            <h2>{t.calendar?.title} <em>{t.calendar?.titleEm}</em></h2>
-            <p className="desc">{t.calendar?.desc}</p>
-          </div>
-          <div className="cal-tz-note">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <span>{t.calendar?.tzNote} <strong>Japan Standard Time (JST, UTC+9)</strong></span>
-          </div>
-          <CalendarSection
-            upcomingLabel={t.calendar?.upcoming}
-            noEventsLabel={t.calendar?.noEvents}
-            noUpcomingLabel={t.calendar?.noUpcoming}
-            lang={lang}
-          />
-        </div>
-      </section>
 
       {/* REVIEWS */}
       <section id="reviews" className="section reveal">
@@ -1115,43 +1121,43 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </div>
-
 
           {/* Why Kizuna — merged */}
           <div className="why-merged-head">
-            <p className="sec-label" style={{marginTop:"4rem"}}>Why Kizuna</p>
+            <p className="sec-label">Why Kizuna</p>
             <h2>Personal service, <em>not a platform</em></h2>
-            <p className="desc">Big proxy services are automated. We are real people in Tokyo.</p>
+            <p className="desc">Big proxy services are automated. We are real people in Tokyo — here's the difference.</p>
           </div>
-          <div className="why-grid-v2" style={{marginTop:"2rem"}}>
-            {[
-              {n:"01",stat:"< 24h",statL:"reply time",title:"Real person, not a bot",desc:"Every request handled personally — you speak directly with us.",svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>},
-              {n:"02",stat:"Ginza",statL:"Tokyo",title:"Based in Tokyo",desc:"We visit stores, attend events, and check items in person.",svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>},
-              {n:"03",stat:"24/7",statL:"available",title:"Direct communication",desc:"WhatsApp, Discord, email — real answers, no bots.",svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>},
-              {n:"04",stat:"日本語",statL:"native",title:"Fluent in Japanese",desc:"We negotiate directly with sellers — no translation delays.",svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 2H3v16h5l3 3 3-3h7V2z"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="13" y2="13"/></svg>},
-              {n:"05",stat:"100%",statL:"dedication",title:"We find what others can't",desc:"Store visits, live shopping, exclusive events.",svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>},
-              {n:"06",stat:"20+",statL:"countries",title:"Shipped worldwide",desc:"USA, Canada, Europe, Asia — we ship everywhere.",svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>},
-            ].map((item,i) => (
+          <div className="why-grid-v2">
+            {WHY_CARDS.map((item, i) => (
               <div key={i} className="why-card-v2">
                 <div className="why-card-v2-top">
                   <span className="why-card-v2-n">{item.n}</span>
-                  <div className="why-card-v2-stat"><strong>{item.stat}</strong><span>{item.statL}</span></div>
+                  <div className="why-card-v2-stat">
+                    <strong>{item.stat}</strong>
+                    <span>{item.statL}</span>
+                  </div>
                 </div>
-                <div className="why-card-v2-icon">{item.svg}</div>
+                <div className="why-card-v2-icon">{item.icon}</div>
                 <strong className="why-card-v2-title">{item.title}</strong>
                 <p className="why-card-v2-desc">{item.desc}</p>
               </div>
             ))}
           </div>
-          <div className="order-ticker" style={{marginTop:"2rem"}}>
+
+          {/* Ticker */}
+          <div className="order-ticker">
             <div className="ticker-label"><span className="ticker-dot"/>Recent orders</div>
             <div className="ticker-track">
               <div className="ticker-inner">
-                {["🎴 Pokémon cards → 🇺🇸","👟 Nike Japan → 🇫🇷","🎮 Nintendo exclusive → 🇨🇦","👕 Supreme drop → 🇩🇪","🗿 Anime figure → 🇬🇷","📚 Vintage manga → 🇬🇧","🎴 One Piece TCG → 🇮🇩","👟 Asics Japan → 🇰🇷","🎴 Pokémon cards → 🇺🇸","👟 Nike Japan → 🇫🇷","🎮 Nintendo exclusive → 🇨🇦","👕 Supreme drop → 🇩🇪","🗿 Anime figure → 🇬🇷","📚 Vintage manga → 🇬🇧","🎴 One Piece TCG → 🇮🇩","👟 Asics Japan → 🇰🇷"].map((t,i) => <span key={i} className="ticker-item">{t}</span>)}
+                {TICKER_ITEMS.concat(TICKER_ITEMS).map((item, i) => (
+                  <span key={i} className="ticker-item">{item}</span>
+                ))}
               </div>
             </div>
-          </div>      </section>
+          </div>
+        </div>
+      </section>
 
       {/* BLOG GUIDES */}
       <section className="section reveal" style={{background:"var(--beige)"}}>
@@ -1255,7 +1261,7 @@ export default function Home() {
             <p className="footer-col-title">Navigate</p>
             <a href="#services" className="footer-link">{t.whatWeBuy?.label}</a>
             <a href="#how-it-works" className="footer-link">How it works</a>
-            <a href="#calendar" className="footer-link">{t.calendar?.label}</a>
+            <a href="/news" className="footer-link">Announcements</a>
             <a href="#reviews" className="footer-link">Reviews</a>
             <a href="#pricing" className="footer-link">{t.nav.pricing}</a>
             <a href="/faq" className="footer-link">FAQ</a>
