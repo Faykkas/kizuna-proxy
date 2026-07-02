@@ -22,11 +22,11 @@ function getLangCode(browserLang: string): string | null {
   const base = browserLang.split("-")[0].toUpperCase();
   if (base === "EN") return null; // no need to translate EN
   if (DEEPL_SUPPORTED.has(base)) return base;
-  // Fallback mappings
-  const fallbacks: Record<string, string> = {
-    "ZH": "ZH", "HE": null, "HI": null, "TH": null, "VI": null,
-  };
-  return fallbacks[base] ?? null;
+  // Languages not supported by DeepL — return null to skip translation
+  const unsupported = new Set(["HE","HI","TH","VI","FA","UR","BN","SW","MS"]);
+  if (unsupported.has(base)) return null;
+  if (DEEPL_SUPPORTED.has(base)) return base;
+  return null;
 }
 
 export async function POST(req: NextRequest) {
