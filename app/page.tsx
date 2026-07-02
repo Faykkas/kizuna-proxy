@@ -763,6 +763,7 @@ const TICKER_ITEMS = [
 export default function Home() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [guidesOpen, setGuidesOpen] = useState(false);
   const [lang, setLang] = useState("en");
   const [announce, setAnnounce] = useState(null);
   const [gallery, setGallery] = useState([]);
@@ -830,6 +831,35 @@ export default function Home() {
           </a>
           <ul className="nav-links">
             {navLinks.map(l => <li key={l.href}><a href={l.href}>{l.label}</a></li>)}
+            {/* Guides dropdown */}
+            <li className="nav-dropdown-wrap" onMouseEnter={() => setGuidesOpen(true)} onMouseLeave={() => setGuidesOpen(false)}>
+              <button className="nav-dropdown-btn">
+                {t.blog?.label || "Guides"}
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{marginLeft:".3rem",transition:"transform .2s",transform:guidesOpen?"rotate(180deg)":"rotate(0)"}}>
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </button>
+              {guidesOpen && (
+                <div className="nav-dropdown">
+                  {[
+                    { href:"/blog/how-to-buy-from-mercari-japan",    emoji:"🛍️", label:"Mercari Japan" },
+                    { href:"/blog/yahoo-auctions-japan-guide",        emoji:"🏷️", label:"Yahoo Auctions" },
+                    { href:"/blog/best-pokemon-cards-japan-2026",     emoji:"🎴", label:"Pokémon Cards 2026" },
+                    { href:"/blog/pokemon-center-tokyo-exclusives",   emoji:"⭐", label:"Pokémon Center Tokyo" },
+                    { href:"/blog/supreme-japan-drops-guide",         emoji:"👕", label:"Supreme Japan Drops" },
+                    { href:"/blog/nike-japan-exclusives-guide",       emoji:"👟", label:"Nike Japan Exclusives" },
+                    { href:"/blog/anime-figures-japan-guide",         emoji:"🗿", label:"Anime Figures Japan" },
+                    { href:"/blog/japanese-trading-cards-guide-2026", emoji:"🃏", label:"Japanese Trading Cards" },
+                    { href:"/blog/japan-shipping-guide-2026",         emoji:"📦", label:"Japan Shipping Guide" },
+                  ].map(item => (
+                    <a key={item.href} href={item.href} className="nav-dropdown-item">
+                      <span className="nav-dropdown-emoji">{item.emoji}</span>
+                      <span>{item.label}</span>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </li>
           </ul>
           <div className="nav-controls">
             <a href="#request-wrap" className="nav-cta">{t.nav.request}</a>
@@ -857,6 +887,24 @@ export default function Home() {
         {mobileOpen && (
           <div className="mobile-menu">
             {navLinks.map(l => <a key={l.href} href={l.href} onClick={() => setMobileOpen(false)}>{l.label}</a>)}
+            <div className="mobile-menu-section">
+              <span className="mobile-menu-section-title">{t.blog?.label || "Guides"}</span>
+              {[
+                { href:"/blog/how-to-buy-from-mercari-japan",    emoji:"🛍️", label:"Mercari Japan" },
+                { href:"/blog/yahoo-auctions-japan-guide",        emoji:"🏷️", label:"Yahoo Auctions" },
+                { href:"/blog/best-pokemon-cards-japan-2026",     emoji:"🎴", label:"Pokémon Cards" },
+                { href:"/blog/pokemon-center-tokyo-exclusives",   emoji:"⭐", label:"Pokémon Center" },
+                { href:"/blog/supreme-japan-drops-guide",         emoji:"👕", label:"Supreme Drops" },
+                { href:"/blog/nike-japan-exclusives-guide",       emoji:"👟", label:"Nike Japan" },
+                { href:"/blog/anime-figures-japan-guide",         emoji:"🗿", label:"Anime Figures" },
+                { href:"/blog/japanese-trading-cards-guide-2026", emoji:"🃏", label:"Trading Cards" },
+                { href:"/blog/japan-shipping-guide-2026",         emoji:"📦", label:"Shipping Guide" },
+              ].map(item => (
+                <a key={item.href} href={item.href} className="mobile-menu-guide" onClick={() => setMobileOpen(false)}>
+                  {item.emoji} {item.label}
+                </a>
+              ))}
+            </div>
             <a href="#request-wrap" className="nav-cta" style={{textAlign:"center"}} onClick={() => setMobileOpen(false)}>{t.nav.request}</a>
           </div>
         )}
@@ -1182,37 +1230,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* BLOG GUIDES */}
-      <section className="section reveal" style={{background:"var(--beige)"}}>
-        <div className="wrap">
-          <div className="sec-head">
-            <p className="sec-label">{t.blog?.label || "Guides & Resources"}</p>
-            <h2>{t.blog?.title || "Learn how to"} <em>{t.blog?.titleEm || "buy from Japan"}</em></h2>
-            <p className="desc">{t.blog?.desc || "Practical guides to help you find and buy any item from Japan."}</p>
-          </div>
-          <div className="blog-grid">
-            {[
-              { href:"/blog/how-to-buy-from-mercari-japan", label:"Mercari Japan", title:"How to Buy from Mercari Japan", emoji:"🛍️", desc:"Complete guide to Japan's largest secondhand marketplace." },
-              { href:"/blog/yahoo-auctions-japan-guide", label:"Yahoo Auctions", title:"Yahoo Auctions Japan Guide", emoji:"🏷️", desc:"How to bid and win on Yahoo Auctions Japan." },
-              { href:"/blog/best-pokemon-cards-japan-2026", label:"Pokémon", title:"Best Pokémon Cards from Japan 2026", emoji:"🎴", desc:"Exclusive sets, promo cards and booster boxes from Japan." },
-              { href:"/blog/pokemon-center-tokyo-exclusives", label:"Pokémon Center", title:"Pokémon Center Tokyo Exclusives", emoji:"⭐", desc:"Items only available at Pokémon Center Tokyo." },
-              { href:"/blog/supreme-japan-drops-guide", label:"Supreme", title:"Supreme Japan Drops Guide", emoji:"👕", desc:"How to get Supreme Japan exclusive drops worldwide." },
-              { href:"/blog/nike-japan-exclusives-guide", label:"Nike Japan", title:"Nike Japan Exclusives Guide", emoji:"👟", desc:"Exclusive colourways and collabs only sold in Japan." },
-              { href:"/blog/anime-figures-japan-guide", label:"Anime", title:"Anime Figures from Japan Guide", emoji:"🗿", desc:"Scale figures, nendoroids and prize figures from Tokyo." },
-              { href:"/blog/japanese-trading-cards-guide-2026", label:"Trading Cards", title:"Japanese Trading Cards 2026", emoji:"🃏", desc:"Pokémon, One Piece, Dragon Ball — direct from Japan." },
-              { href:"/blog/japan-shipping-guide-2026", label:"Shipping", title:"Japan Shipping Guide 2026", emoji:"📦", desc:"EMS, FedEx, DHL — which method is right for you?" },
-            ].map((post, i) => (
-              <a key={i} href={post.href} className="blog-card">
-                <div className="blog-card-emoji">{post.emoji}</div>
-                <span className="blog-card-label">{post.label}</span>
-                <h3 className="blog-card-title">{post.title}</h3>
-                <p className="blog-card-desc">{post.desc}</p>
-                <span className="blog-card-cta">{t.blog?.cta || "Read guide →"}</span>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* GALLERY */}
       <section id="photos" className="section reveal">
