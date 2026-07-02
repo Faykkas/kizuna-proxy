@@ -879,18 +879,13 @@ export default function Home() {
           </div>
           <div className="hero-stats hero-stats-center">
             <div className="hero-stat">
-              <strong>11</strong>
-              <span>Reviews</span>
-            </div>
-            <div className="hero-stat-sep" />
-            <div className="hero-stat">
               <strong>5.0 ★</strong>
-              <span>Rating</span>
+              <span>{t.hero?.statRating || "Rating"}</span>
             </div>
             <div className="hero-stat-sep" />
             <div className="hero-stat">
               <strong>20+</strong>
-              <span>Countries</span>
+              <span>{t.hero?.statCountries || "Countries"}</span>
             </div>
           </div>
           <div className="hero-social-row hero-social-center">
@@ -1000,9 +995,9 @@ export default function Home() {
       <section id="pricing" className="section reveal">
         <div className="wrap">
           <div className="sec-head">
-            <p className="sec-label">Pricing</p>
-            <h2>Fully <em>personalised</em></h2>
-            <p className="desc">Every request is unique — our pricing adapts to your order. Contact us for a custom quote.</p>
+            <p className="sec-label">{t.pricing?.label || "Pricing"}</p>
+            <h2>{t.pricing?.title || "Fully"} <em>{t.pricing?.titleEm || "personalised"}</em></h2>
+            <p className="desc">{t.pricing?.desc || "Every request is unique — our pricing adapts to your order."}</p>
           </div>
 
           {/* 3 value cards */}
@@ -1011,42 +1006,42 @@ export default function Home() {
               <div className="pcg-icon">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="2"/></svg>
               </div>
-              <h3>No hidden fees</h3>
-              <p>Every cost is communicated clearly before any payment. What we quote is what you pay.</p>
+              <h3>{t.pricing?.card1Title || "No hidden fees"}</h3>
+              <p>{t.pricing?.card1Desc || "Every cost is communicated clearly before any payment."}</p>
             </div>
             <div className="pcg-card">
               <div className="pcg-icon">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
               </div>
-              <h3>Adapted to your order</h3>
-              <p>One item or a large haul — we study each request individually and offer the fairest rate.</p>
+              <h3>{t.pricing?.card2Title || "Adapted to your order"}</h3>
+              <p>{t.pricing?.card2Desc || "One item or a large haul — we study each request individually."}</p>
             </div>
             <div className="pcg-card">
               <div className="pcg-icon">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               </div>
-              <h3>Get a quote in 24h</h3>
-              <p>Send us your request and we reply with a detailed, honest quote — no commitment required.</p>
+              <h3>{t.pricing?.card3Title || "Get a quote in 24h"}</h3>
+              <p>{t.pricing?.card3Desc || "Send us your request and we reply with a detailed, honest quote."}</p>
             </div>
           </div>
 
           {/* Weekly shipping notice */}
           <div className="shipping-notice">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-            <span><strong>Weekly shipping</strong> — packages are consolidated and shipped once a week from Tokyo. Order early in the week for the fastest dispatch.</span>
+            <span><strong>{t.pricing?.weeklyShipping || "Weekly shipping"}</strong> — {t.pricing?.weeklyShippingDesc || "Packages are consolidated and shipped once a week from Tokyo."}</span>
           </div>
 
           {/* CTA */}
           <div className="pcg-cta">
             <div className="pcg-cta-left">
-              <strong>Ready to place a request?</strong>
-              <p>Describe your item and we'll get back to you with a personalised quote as soon as possible.</p>
+              <strong>{t.pricing?.ctaTitle || "Ready to place a request?"}</strong>
+              <p>{t.pricing?.ctaDesc || "Describe your item and we'll get back to you with a personalised quote."}</p>
             </div>
             <a href="mailto:kizunaproxy@gmail.com" className="btn btn-gold">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
               Contact us
             </a>
-            <a href="#request-wrap" className="btn btn-outline">Use the form</a>
+<a href="#request-wrap" className="btn btn-outline">{t.pricing?.useForm || "Use the form"}</a>
           </div>
             <div className="p-event-body">
               <strong>Tokyo Events & Exclusive Releases</strong>
@@ -1126,9 +1121,9 @@ export default function Home() {
 
           {/* Why Kizuna — merged */}
           <div className="why-merged-head">
-            <p className="sec-label">Why Kizuna</p>
-            <h2>Personal service, <em>not a platform</em></h2>
-            <p className="desc">Big proxy services are automated. We are real people in Tokyo — here's the difference.</p>
+            <p className="sec-label">{t.whyKizuna?.label || "Why Kizuna"}</p>
+            <h2>{t.whyKizuna?.title || "Personal service,"} <em>{t.whyKizuna?.titleEm || "not a platform"}</em></h2>
+            <p className="desc">{t.whyKizuna?.desc || "Big proxy services are automated. We are real people in Tokyo."}</p>
           </div>
           <div className="why-grid-v2">
             {WHY_CARDS_DATA.map((item, i) => (
@@ -1149,7 +1144,7 @@ export default function Home() {
 
           {/* Ticker */}
           <div className="order-ticker">
-            <div className="ticker-label"><span className="ticker-dot"/>Recent orders</div>
+            <div className="ticker-label"><span className="ticker-dot"/>{t.whyKizuna?.ticker || "Recent orders"}</div>
             <div className="ticker-track">
               <div className="ticker-inner">
                 {TICKER_ITEMS.concat(TICKER_ITEMS).map((item, i) => (
@@ -1165,9 +1160,9 @@ export default function Home() {
       <section className="section reveal" style={{background:"var(--beige)"}}>
         <div className="wrap">
           <div className="sec-head">
-            <p className="sec-label">Guides & Resources</p>
-            <h2>Learn how to <em>buy from Japan</em></h2>
-            <p className="desc">Practical guides to help you find and buy any item from Japan.</p>
+            <p className="sec-label">{t.blog?.label || "Guides & Resources"}</p>
+            <h2>{t.blog?.title || "Learn how to"} <em>{t.blog?.titleEm || "buy from Japan"}</em></h2>
+            <p className="desc">{t.blog?.desc || "Practical guides to help you find and buy any item from Japan."}</p>
           </div>
           <div className="blog-grid">
             {[
@@ -1186,7 +1181,7 @@ export default function Home() {
                 <span className="blog-card-label">{post.label}</span>
                 <h3 className="blog-card-title">{post.title}</h3>
                 <p className="blog-card-desc">{post.desc}</p>
-                <span className="blog-card-cta">Read guide →</span>
+                <span className="blog-card-cta">{t.blog?.cta || "Read guide →"}</span>
               </a>
             ))}
           </div>
@@ -1253,7 +1248,7 @@ export default function Home() {
               <img src="/logo.png" alt="Kizuna Proxy" style={{height:"32px",width:"auto",objectFit:"contain"}} />
               <div className="footer-logo"><span className="g">Kizuna</span> Proxy</div>
             </div>
-            <p className="footer-tagline">Tokyo-based proxy service.<br />Your trusted link to Japan.</p>
+<p className="footer-tagline">{t.footerNav?.tagline || "Tokyo-based proxy service. Your trusted link to Japan."}</p>
             <div className="footer-social">
               <a className="footer-social-link" href="https://www.instagram.com/kizuna_proxy/" target="_blank" rel="noopener noreferrer"><IconInstagram size={13} /></a>
               <a className="footer-social-link" href="https://www.tiktok.com/@kizunaproxy" target="_blank" rel="noopener noreferrer"><IconTiktok size={13} /></a>
@@ -1262,12 +1257,12 @@ export default function Home() {
           <div>
             <p className="footer-col-title">Navigate</p>
             <a href="#services" className="footer-link">{t.whatWeBuy?.label}</a>
-            <a href="#how-it-works" className="footer-link">How it works</a>
+<a href="#how-it-works" className="footer-link">{t.footerNav?.howItWorks || "How it works"}</a>
             <a href="/news" className="footer-link">Announcements</a>
-            <a href="#reviews" className="footer-link">Reviews</a>
+<a href="#reviews" className="footer-link">{t.footerNav?.reviews || "Reviews"}</a>
             <a href="#pricing" className="footer-link">{t.nav.pricing}</a>
             <a href="/faq" className="footer-link">FAQ</a>
-            <a href="/events" className="footer-link">Tokyo Events 🎌</a>
+<a href="/events" className="footer-link">{t.footerNav?.events || "Tokyo Events 🎌"}</a>
           </div>
           <div>
             <p className="footer-col-title">Guides</p>
