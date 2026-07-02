@@ -765,7 +765,6 @@ export default function Home() {
   const navLinks = [
     { href: "#calendar", label: t.calendar?.label || "Availability" },
     { href: "#pricing",  label: t.nav.pricing },
-    { href: "/events",   label: "Events 🎌" },
   ];
 
   const wbuyImgs = ["/buy-mercari.png","/buy-yahoo.png","/buy-sneakers.jpg","/buy-pokemon.jpg","/buy-nintendo.png","/buy-akihabara.jpg"];
@@ -931,6 +930,56 @@ export default function Home() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TOKYO EVENTS HIGHLIGHT */}
+      <section className="section-sm reveal tokyo-events-section">
+        <div className="wrap">
+          <div className="tokyo-events-banner">
+            <div className="tokyo-events-left">
+              <span className="tokyo-events-badge">🎌 Tokyo Exclusive</span>
+              <h2 className="tokyo-events-title">We attend <em>any event</em> in Tokyo</h2>
+              <p className="tokyo-events-desc">Pop-ups, limited drops, store openings, Pokémon Center exclusives, Supreme drops, Nintendo events — if it happens in Tokyo, we can be there for you.</p>
+              <div className="tokyo-events-tags">
+                {["Pokémon Center 🔴","Supreme Japan 🖤","Nintendo Store 🔴","Atmos Tokyo 👟","Akihabara 🎮","Wonder Festival 🗿","Comiket 📚","Any pop-up ✨"].map(t => (
+                  <span key={t} className="tokyo-tag">{t}</span>
+                ))}
+              </div>
+              <a href="/events" className="btn btn-gold" style={{marginTop:"1.5rem",display:"inline-flex",alignItems:"center",gap:".5rem"}}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                See upcoming events
+              </a>
+            </div>
+            <div className="tokyo-events-right">
+              <div className="tokyo-events-stats">
+                <div className="tokyo-stat">
+                  <strong>Any</strong>
+                  <span>Tokyo store or event</span>
+                </div>
+                <div className="tokyo-stat-sep"/>
+                <div className="tokyo-stat">
+                  <strong>Live</strong>
+                  <span>Video call shopping</span>
+                </div>
+                <div className="tokyo-stat-sep"/>
+                <div className="tokyo-stat">
+                  <strong>Photos</strong>
+                  <span>Before shipping</span>
+                </div>
+              </div>
+              <div className="tokyo-events-card">
+                <div className="tec-icon">📸</div>
+                <strong>Live shopping available</strong>
+                <p>We can walk through any Tokyo store on a live video call so you can pick exactly what you want — as if you were there yourself.</p>
+              </div>
+              <div className="tokyo-events-card">
+                <div className="tec-icon">⚡</div>
+                <strong>Same-day for online drops</strong>
+                <p>For online releases (Supreme, Pokémon, Nike) we checkout the moment the drop goes live at JST.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1179,18 +1228,28 @@ export default function Home() {
               Recent orders
             </div>
             <div className="ticker-track">
-              {[
-                "🎴 Pokémon cards — Akihabara → 🇺🇸 USA",
-                "👟 Nike Japan collab → 🇫🇷 France",
-                "🎮 Nintendo Switch exclusive → 🇨🇦 Canada",
-                "👕 Supreme Japan drop → 🇩🇪 Germany",
-                "🗿 Anime figure — Good Smile → 🇬🇷 Greece",
-                "📚 Vintage manga set — Mercari → 🇬🇧 UK",
-                "🎴 One Piece TCG box → 🇮🇩 Indonesia",
-                "👟 Asics Japan collab → 🇰🇷 Korea",
-              ].map((item, i) => (
-                <span key={i} className="ticker-item">{item}</span>
-              ))}
+              <div className="ticker-inner">
+                {[
+                  "🎴 Pokémon cards — Akihabara → 🇺🇸 USA",
+                  "👟 Nike Japan collab → 🇫🇷 France",
+                  "🎮 Nintendo Switch exclusive → 🇨🇦 Canada",
+                  "👕 Supreme Japan drop → 🇩🇪 Germany",
+                  "🗿 Anime figure — Good Smile → 🇬🇷 Greece",
+                  "📚 Vintage manga — Mercari → 🇬🇧 UK",
+                  "🎴 One Piece TCG box → 🇮🇩 Indonesia",
+                  "👟 Asics Japan collab → 🇰🇷 Korea",
+                  "🎴 Pokémon cards — Akihabara → 🇺🇸 USA",
+                  "👟 Nike Japan collab → 🇫🇷 France",
+                  "🎮 Nintendo Switch exclusive → 🇨🇦 Canada",
+                  "👕 Supreme Japan drop → 🇩🇪 Germany",
+                  "🗿 Anime figure — Good Smile → 🇬🇷 Greece",
+                  "📚 Vintage manga — Mercari → 🇬🇧 UK",
+                  "🎴 One Piece TCG box → 🇮🇩 Indonesia",
+                  "👟 Asics Japan collab → 🇰🇷 Korea",
+                ].map((item, i) => (
+                  <span key={i} className="ticker-item">{item}</span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
