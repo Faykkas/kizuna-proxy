@@ -969,7 +969,6 @@ export default function Home() {
                   <div className="rcn-stars">{"★".repeat(r.stars)}</div>
                   <div className="rcn-country">{r.country}</div>
                 </div>
-                <h3 className="rcn-title">{r.title}</h3>
                 <p className="rcn-text">&ldquo;{r.text}&rdquo;</p>
                 <div className="rcn-footer">
                   <div className="rcn-avatar">{r.name.replace("u/","").charAt(0).toUpperCase()}</div>
@@ -1039,15 +1038,10 @@ export default function Home() {
             </div>
             <a href="mailto:kizunaproxy@gmail.com" className="btn btn-gold">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              Contact us
+              {t.pricing?.contactUs || "Contact us"}
             </a>
 <a href="#request-wrap" className="btn btn-outline">{t.pricing?.useForm || "Use the form"}</a>
           </div>
-            <div className="p-event-body">
-              <strong>Tokyo Events & Exclusive Releases</strong>
-              <p>Pokémon Center, Nintendo Store, Supreme drops, pop-ups — we attend in person for you. <span className="p-event-dm">Pricing varies by event — contact us privately.</span></p>
-            </div>
-            <a href="/events" className="p-event-btn">See Events →</a>
           {/* SHIPPING */}
           <div className="shipping-section">
             <div className="shipping-title">
