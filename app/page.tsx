@@ -394,7 +394,7 @@ function ChatButton() {
 }
 
 // ─── EVENTS FLOAT ────────────────────────────────────────────────────────────
-function EventsFloat() {
+function EventsFloat({ t }: { t: any }) {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   useEffect(() => {
@@ -404,6 +404,7 @@ function EventsFloat() {
     return () => { clearTimeout(timer); window.removeEventListener("scroll", onScroll); };
   }, [dismissed]);
   if (dismissed) return null;
+  const ef = t.eventsFloat || {};
   return (
     <div className={`events-float${visible ? " visible" : ""}`}>
       <button className="events-float-close" onClick={() => { setVisible(false); setTimeout(() => setDismissed(true), 400); }}>
@@ -411,10 +412,10 @@ function EventsFloat() {
       </button>
       <div className="events-float-icon">🎌</div>
       <div className="events-float-body">
-        <strong>Tokyo Events</strong>
-        <p>Pokémon Center, Nintendo, Supreme drops & more — we attend in person.</p>
-        <p style={{color:"var(--red)",fontSize:".6rem",fontWeight:500,marginTop:"-.3rem"}}>⚡ High demand — book early to avoid delays.</p>
-        <a href="/events" className="events-float-btn">Learn more <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <strong>{ef.title || "Tokyo Events"}</strong>
+        <p>{ef.desc || "Pokémon Center, Nintendo, Supreme drops & more — we attend in person."}</p>
+        <p style={{color:"var(--red)",fontSize:".6rem",fontWeight:500,marginTop:"-.3rem"}}>{ef.urgency || "⚡ High demand — book early to avoid delays."}</p>
+        <a href="/events" className="events-float-btn">{ef.cta || "Learn more"} <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg></a>
       </div>
     </div>
   );
@@ -939,7 +940,7 @@ export default function Home() {
             <p className="sec-label">{t.news?.label || "Latest news"}</p>
             <h2>{t.news?.title || "Updates &"} <em>{t.news?.titleEm || "announcements"}</em></h2>
           </div>
-          <NewsSection />
+          <NewsSection lang={lang} />
         </div>
       </section>
 
@@ -1305,7 +1306,7 @@ export default function Home() {
             <p className="footer-col-title">Contact</p>
             <a href="#request-wrap" className="footer-link">{t.nav.request}</a>
             <a href="mailto:kizunaproxy@gmail.com" className="footer-link">kizunaproxy@gmail.com</a>
-            <a href="https://wa.me/819044595569" target="_blank" rel="noopener noreferrer" className="footer-link">WhatsApp</a>
+            <a href="https://wa.me/33788432501" target="_blank" rel="noopener noreferrer" className="footer-link">WhatsApp</a>
             <a href="https://discord.com/users/Faykas" target="_blank" rel="noopener noreferrer" className="footer-link">Discord</a>
             <a href="https://fr.trustpilot.com/review/kizunaproxy.com" target="_blank" rel="noopener noreferrer" className="footer-link">Trustpilot</a>
           </div>
@@ -1316,7 +1317,7 @@ export default function Home() {
         </div>
       </footer>
 
-      <EventsFloat />
+      <EventsFloat t={t} />
       <BackToTop />
       {/* Floating CTA */}
       <button
