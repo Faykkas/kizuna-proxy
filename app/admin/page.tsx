@@ -926,15 +926,30 @@ function StatsTab({ supabase, al }) {
   const [currency, setCurrency] = useState("JPY");
 
   useEffect(() => {
-    supabase.from("orders").select("*").then(({ data }) => {
-      setOrders(data || []);
+    supabase.from("orders").select("*").then(({ data, error }) => {
+      if (!error) setOrders(data || []);
       setLoading(false);
-    });
+    }).catch(() => setLoading(false));
   }, []);
 
   if (loading) return <p style={{color:"var(--warm)",padding:"2rem",textAlign:"center"}}>Loading…</p>;
 
-  const [rate, setRate] = useState(185); // JPY to EUR
+  const [rate, setRate] = useState(185);
+  const [rateFetching, setRateFetching] = useState(false);
+
+  async function fetchLiveRate() {
+    setRateFetching(true);
+    try {
+      const res = await fetch("https://api.frankfurter.app/latest?from=EUR&to=JPY");
+      const data = await res.json();
+      if (data?.rates?.JPY) {
+        setRate(Math.round(data.rates.JPY));
+      }
+    } catch { /* keep current rate */ }
+    setRateFetching(false);
+  }
+
+  useEffect(() => { fetchLiveRate(); }, []);
 
   // ── Monthly revenue ──────────────────────────────────────────────
   const monthlyMap = {};
@@ -1009,8 +1024,10 @@ function StatsTab({ supabase, al }) {
           <input type="number" value={rate} onChange={e=>setRate(+e.target.value||185)}
             style={{ ...inp, width:"80px", padding:".3rem .6rem", fontSize:".78rem" }} />
           <label style={{ fontSize:".65rem", color:"var(--mist)" }}>¥</label>
-          <a href="https://www.google.com/search?q=EUR+JPY" target="_blank" rel="noopener noreferrer"
-            style={{ fontSize:".6rem", color:"var(--red)", textDecoration:"none" }}>live rate ↗</a>
+          <button onClick={fetchLiveRate} disabled={rateFetching}
+            style={{ fontSize:".6rem", color:"var(--red)", background:"none", border:"none", cursor:"pointer", padding:0 }}>
+            {rateFetching ? "⏳" : "🔄 refresh"}
+          </button>
         </div>
         <div style={{ display:"flex", gap:".4rem" }}>
           {["JPY","EUR"].map(c => (
@@ -1198,7 +1215,7 @@ function EventsTab({ supabase, al }) {
 
   async function load() {
     const { data } = await supabase
-      .from("events")
+      .from("admin_events")
       .select("*")
       .order("date", { ascending: true });
     setEvents(data || []);
@@ -1209,9 +1226,9 @@ function EventsTab({ supabase, al }) {
     setSaving(true);
     const payload = { ...form, updated_at: new Date().toISOString() };
     if (editing) {
-      await supabase.from("events").update(payload).eq("id", editing);
+      await supabase.from("admin_events").update(payload).eq("id", editing);
     } else {
-      await supabase.from("events").insert(payload);
+      await supabase.from("admin_events").insert(payload);
     }
     setSaving(false);
     setForm(emptyEvent);
@@ -1223,7 +1240,7 @@ function EventsTab({ supabase, al }) {
 
   async function del(id) {
     if (!confirm("Delete this event?")) return;
-    await supabase.from("events").delete().eq("id", id);
+    await supabase.from("admin_events").delete().eq("id", id);
     load();
   }
 
