@@ -44,7 +44,7 @@ const ADMIN_LANGS = {
     orderAdded: "✓ Order added.", orderUpdated: "✓ Order updated.",
     totalOrders: "Total orders", totalFees: "Total fees (JPY)", activeOrders: "Active orders",
     actionRequired: "Action required", revenueSummary: "Revenue summary",
-    totalFeesLabel: "Total fees (JPY)", estEur: "Est. EUR (÷145)", ordersDelivered: "Orders delivered",
+    totalFeesLabel: "Total fees (JPY)", estEur: "Est. EUR (÷185)", ordersDelivered: "Orders delivered",
     // Stats
     monthlyRevenue: "Monthly revenue", feesOnly: "Service fees only",
     topCountries: "Top countries", orderStatus: "Order status",
@@ -86,7 +86,7 @@ const ADMIN_LANGS = {
     orderAdded: "✓ Commande ajoutée.", orderUpdated: "✓ Commande mise à jour.",
     totalOrders: "Total commandes", totalFees: "Total honoraires (JPY)", activeOrders: "Commandes actives",
     actionRequired: "Action requise", revenueSummary: "Résumé des revenus",
-    totalFeesLabel: "Total honoraires (JPY)", estEur: "Est. EUR (÷145)", ordersDelivered: "Commandes livrées",
+    totalFeesLabel: "Total honoraires (JPY)", estEur: "Est. EUR (÷185)", ordersDelivered: "Commandes livrées",
     monthlyRevenue: "Revenus mensuels", feesOnly: "Honoraires uniquement",
     topCountries: "Top pays", orderStatus: "Statut des commandes",
     monthlyBreakdown: "Détail mensuel", totalEarned: "Total gagné",
@@ -127,7 +127,7 @@ const ADMIN_LANGS = {
     orderAdded: "✓ 注文を追加しました。", orderUpdated: "✓ 注文を更新しました。",
     totalOrders: "総注文数", totalFees: "総手数料 (JPY)", activeOrders: "進行中の注文",
     actionRequired: "要対応", revenueSummary: "収益サマリー",
-    totalFeesLabel: "総手数料 (JPY)", estEur: "EUR換算 (÷145)", ordersDelivered: "配送完了",
+    totalFeesLabel: "総手数料 (JPY)", estEur: "EUR換算 (÷185)", ordersDelivered: "配送完了",
     monthlyRevenue: "月別収益", feesOnly: "手数料のみ",
     topCountries: "上位国", orderStatus: "注文ステータス",
     monthlyBreakdown: "月別詳細", totalEarned: "総収益",
@@ -298,6 +298,7 @@ export default function AdminPage() {
     { id:"gallery",  label:al.tabs.gallery },
     { id:"orders",   label:al.tabs.orders },
     { id:"stats",    label:al.tabs.stats },
+    { id:"events",   label:al.tabs.events || "🎌 Events" },
   ];
 
   return (
@@ -343,6 +344,7 @@ export default function AdminPage() {
         {tab==="gallery"  && <GalleryTab al={al} />}
         {tab==="orders"   && <OrdersTab supabase={supabase} al={al} />}
         {tab==="stats"    && <StatsTab supabase={supabase} al={al} />}
+        {tab==="events"   && <EventsTab supabase={supabase} al={al} />}
       </div>
     </div>
   );
@@ -932,7 +934,7 @@ function StatsTab({ supabase, al }) {
 
   if (loading) return <p style={{color:"var(--warm)",padding:"2rem",textAlign:"center"}}>Loading…</p>;
 
-  const RATE = 145; // JPY to EUR
+  const [rate, setRate] = useState(185); // JPY to EUR
 
   // ── Monthly revenue ──────────────────────────────────────────────
   const monthlyMap = {};
@@ -950,7 +952,7 @@ function StatsTab({ supabase, al }) {
       label: new Date(key + "-01").toLocaleDateString("fr-FR", { month: "short", year: "2-digit" }),
       fee: val.fee,
       count: val.count,
-      eur: Math.round(val.fee / RATE),
+      eur: Math.round(val.fee / rate),
     }));
 
   const maxFee = Math.max(...months.map(m => m.fee), 1);
@@ -994,23 +996,33 @@ function StatsTab({ supabase, al }) {
   });
 
   const fmt = (jpy) => currency === "EUR"
-    ? `${Math.round(jpy / RATE).toLocaleString("fr-FR")}€`
+    ? `${Math.round(jpy / rate).toLocaleString("fr-FR")}€`
     : `¥${jpy.toLocaleString()}`;
 
   return (
     <div style={{ display:"flex", flexDirection:"column", gap:"1.5rem" }}>
 
-      {/* Currency toggle */}
-      <div style={{ display:"flex", justifyContent:"flex-end", gap:".5rem" }}>
-        {["JPY","EUR"].map(c => (
-          <button key={c} onClick={() => setCurrency(c)} style={{
-            padding:".35rem .9rem", borderRadius:"6px", border:"1px solid",
-            borderColor: currency===c ? "var(--red)" : "var(--border)",
-            background: currency===c ? "var(--red)" : "var(--surface)",
-            color: currency===c ? "#fff" : "var(--warm)",
-            fontSize:".68rem", cursor:"pointer", fontFamily:"'Inter',sans-serif",
-          }}>{c}</button>
-        ))}
+      {/* Currency toggle + rate */}
+      <div style={{ display:"flex", justifyContent:"flex-end", gap:"1rem", alignItems:"center" }}>
+        <div style={{ display:"flex", alignItems:"center", gap:".5rem" }}>
+          <label style={{ fontSize:".65rem", color:"var(--mist)" }}>1€ =</label>
+          <input type="number" value={rate} onChange={e=>setRate(+e.target.value||185)}
+            style={{ ...inp, width:"80px", padding:".3rem .6rem", fontSize:".78rem" }} />
+          <label style={{ fontSize:".65rem", color:"var(--mist)" }}>¥</label>
+          <a href="https://www.google.com/search?q=EUR+JPY" target="_blank" rel="noopener noreferrer"
+            style={{ fontSize:".6rem", color:"var(--red)", textDecoration:"none" }}>live rate ↗</a>
+        </div>
+        <div style={{ display:"flex", gap:".4rem" }}>
+          {["JPY","EUR"].map(c => (
+            <button key={c} onClick={() => setCurrency(c)} style={{
+              padding:".35rem .9rem", borderRadius:"6px", border:"1px solid",
+              borderColor: currency===c ? "var(--red)" : "var(--border)",
+              background: currency===c ? "var(--red)" : "var(--surface)",
+              color: currency===c ? "#fff" : "var(--warm)",
+              fontSize:".68rem", cursor:"pointer", fontFamily:"'Inter',sans-serif",
+            }}>{c}</button>
+          ))}
+        </div>
       </div>
 
       {/* KPI Cards */}
@@ -1140,12 +1152,225 @@ function StatsTab({ supabase, al }) {
               <td style={{ padding:".7rem .8rem", color:"var(--ink)", fontWeight:600 }}>TOTAL</td>
               <td style={{ padding:".7rem .8rem", color:"var(--ink)", fontWeight:600 }}>{orders.length}</td>
               <td style={{ padding:".7rem .8rem", color:"#4ade80", fontWeight:600 }}>¥{totalFee.toLocaleString()}</td>
-              <td style={{ padding:".7rem .8rem", color:"#4ade80", fontWeight:600 }}>{Math.round(totalFee/RATE).toLocaleString()}€</td>
+              <td style={{ padding:".7rem .8rem", color:"#4ade80", fontWeight:600 }}>{Math.round(totalFee/rate).toLocaleString()}€</td>
               <td style={{ padding:".7rem .8rem", color:"var(--warm)" }}>¥{avgFee.toLocaleString()}</td>
             </tr>
           </tbody>
         </table>
       </div>
+    </div>
+  );
+}
+
+// ─── EVENTS TAB ───────────────────────────────────────────────────────────────
+function EventsTab({ supabase, al }) {
+  const emptyEvent = {
+    title: "", date: "", time: "", location: "", description: "",
+    category: "pokemon", status: "upcoming", url: "", capacity: "",
+  };
+
+  const [events, setEvents]   = useState([]);
+  const [form,   setForm]     = useState(emptyEvent);
+  const [editing, setEditing] = useState(null);
+  const [saving,  setSaving]  = useState(false);
+  const [msg,     setMsg]     = useState("");
+
+  const CATEGORIES = [
+    { value:"pokemon",    label:"🎴 Pokémon Center",   color:"#e03040" },
+    { value:"nintendo",   label:"🎮 Nintendo",          color:"#e4000f" },
+    { value:"supreme",    label:"👕 Supreme / Streetwear", color:"#000" },
+    { value:"anime",      label:"🗿 Anime / Manga",     color:"#7c3aed" },
+    { value:"tcg",        label:"🃏 Trading Cards",     color:"#d97706" },
+    { value:"popup",      label:"🏮 Pop-up / Collab",   color:"#059669" },
+    { value:"market",     label:"🛍️ Market / Store",    color:"#2563eb" },
+    { value:"other",      label:"📌 Other",             color:"#6b7280" },
+  ];
+
+  const STATUSES = [
+    { value:"upcoming",   label:"🟢 Upcoming",   color:"#4ade80" },
+    { value:"confirmed",  label:"✅ Confirmed",  color:"#60a5fa" },
+    { value:"full",       label:"🔴 Full",        color:"#ef4444" },
+    { value:"cancelled",  label:"⚫ Cancelled",  color:"#6b7280" },
+    { value:"completed",  label:"✓ Completed",   color:"#374151" },
+  ];
+
+  useEffect(() => { load(); }, []);
+
+  async function load() {
+    const { data } = await supabase
+      .from("events")
+      .select("*")
+      .order("date", { ascending: true });
+    setEvents(data || []);
+  }
+
+  async function save() {
+    if (!form.title || !form.date) { setMsg("Title and date are required."); return; }
+    setSaving(true);
+    const payload = { ...form, updated_at: new Date().toISOString() };
+    if (editing) {
+      await supabase.from("events").update(payload).eq("id", editing);
+    } else {
+      await supabase.from("events").insert(payload);
+    }
+    setSaving(false);
+    setForm(emptyEvent);
+    setEditing(null);
+    setMsg(editing ? "✓ Event updated." : "✓ Event added.");
+    setTimeout(() => setMsg(""), 3000);
+    load();
+  }
+
+  async function del(id) {
+    if (!confirm("Delete this event?")) return;
+    await supabase.from("events").delete().eq("id", id);
+    load();
+  }
+
+  function startEdit(ev) {
+    setForm({ ...ev });
+    setEditing(ev.id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  const setF = (k, v) => setForm(p => ({ ...p, [k]: v }));
+
+  // Group events by month
+  const grouped = events.reduce((acc, ev) => {
+    const month = ev.date ? ev.date.slice(0, 7) : "unknown";
+    if (!acc[month]) acc[month] = [];
+    acc[month].push(ev);
+    return acc;
+  }, {});
+
+  const upcoming = events.filter(e => e.status !== "cancelled" && e.status !== "completed" && e.date >= new Date().toISOString().slice(0,10));
+
+  return (
+    <div>
+      {/* Stats */}
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"12px", marginBottom:"1.5rem" }}>
+        {[
+          { label:"Upcoming events",  value: upcoming.length,                          color:"#4ade80" },
+          { label:"Total events",     value: events.length,                            color:"var(--ink)" },
+          { label:"Next event",       value: upcoming[0]?.date ? new Date(upcoming[0].date).toLocaleDateString("fr-FR",{day:"numeric",month:"short"}) : "—", color:"var(--red)" },
+        ].map(s => (
+          <div key={s.label} style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"10px", padding:"1rem 1.2rem" }}>
+            <div style={{ fontSize:"1.4rem", fontWeight:600, color:s.color, fontFamily:"'Cormorant Garamond',serif" }}>{s.value}</div>
+            <div style={{ fontSize:".65rem", color:"var(--mist)", marginTop:".2rem" }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Form */}
+      <div style={card}>
+        <p style={cardHeader}>{editing ? "✏️ Edit event" : "➕ New event"}</p>
+        {msg && <p style={msg.startsWith("✓") ? msgOk : msgErr}>{msg}</p>}
+
+        <div style={row2}>
+          <div><label style={lbl}>Title *</label><input style={inp} value={form.title} onChange={e=>setF("title",e.target.value)} placeholder="Pokémon Center — Summer Release" /></div>
+          <div><label style={lbl}>Date *</label><input style={inp} type="date" value={form.date} onChange={e=>setF("date",e.target.value)} /></div>
+        </div>
+
+        <div style={row2}>
+          <div><label style={lbl}>Time</label><input style={inp} type="time" value={form.time||""} onChange={e=>setF("time",e.target.value)} /></div>
+          <div><label style={lbl}>Location</label><input style={inp} value={form.location||""} onChange={e=>setF("location",e.target.value)} placeholder="Pokémon Center Tokyo, Ikebukuro" /></div>
+        </div>
+
+        <div style={row2}>
+          <div>
+            <label style={lbl}>Category</label>
+            <select style={inp} value={form.category} onChange={e=>setF("category",e.target.value)}>
+              {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={lbl}>Status</label>
+            <select style={inp} value={form.status} onChange={e=>setF("status",e.target.value)}>
+              {STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <div style={{marginBottom:"1rem"}}>
+          <label style={lbl}>Description</label>
+          <textarea style={{...inp, minHeight:"80px", resize:"vertical"}} value={form.description||""} onChange={e=>setF("description",e.target.value)} placeholder="Details about the event, what we can get, queue times…" />
+        </div>
+
+        <div style={row2}>
+          <div><label style={lbl}>Event URL</label><input style={inp} value={form.url||""} onChange={e=>setF("url",e.target.value)} placeholder="https://…" /></div>
+          <div><label style={lbl}>Max capacity (optional)</label><input style={inp} type="number" value={form.capacity||""} onChange={e=>setF("capacity",e.target.value)} placeholder="e.g. 3 clients" /></div>
+        </div>
+
+        <div style={{display:"flex",gap:".75rem"}}>
+          <button onClick={save} disabled={saving} style={btnPrimary}>{saving?"Saving…":editing?"Update":"Add event"}</button>
+          {editing && <button onClick={()=>{setEditing(null);setForm(emptyEvent);}} style={btnGhost}>Cancel</button>}
+        </div>
+      </div>
+
+      {/* Events list grouped by month */}
+      {Object.keys(grouped).length === 0 ? (
+        <p style={{color:"var(--mist)",padding:"2rem",textAlign:"center"}}>No events yet. Add your first one above.</p>
+      ) : Object.entries(grouped).sort(([a],[b])=>a.localeCompare(b)).map(([month, evs]) => (
+        <div key={month} style={{marginBottom:"1.5rem"}}>
+          <div style={{display:"flex",alignItems:"center",gap:"1rem",marginBottom:".75rem"}}>
+            <span style={{fontSize:".6rem",letterSpacing:".16em",textTransform:"uppercase",color:"var(--red)",fontWeight:500}}>
+              {new Date(month+"-01").toLocaleDateString("fr-FR",{month:"long",year:"numeric"})}
+            </span>
+            <span style={{flex:1,height:"1px",background:"var(--border)"}}/>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:"8px"}}>
+            {evs.map(ev => {
+              const cat  = CATEGORIES.find(c=>c.value===ev.category) || CATEGORIES[7];
+              const stat = STATUSES.find(s=>s.value===ev.status)     || STATUSES[0];
+              const isPast = ev.date < new Date().toISOString().slice(0,10);
+              return (
+                <div key={ev.id} style={{
+                  background:"var(--surface)", border:"1px solid var(--border)",
+                  borderRadius:"10px", padding:"1rem 1.2rem",
+                  display:"flex", alignItems:"center", gap:"1rem",
+                  opacity: isPast ? 0.5 : 1,
+                }}>
+                  {/* Date block */}
+                  <div style={{textAlign:"center",minWidth:"44px",flexShrink:0}}>
+                    <div style={{fontSize:"1.4rem",fontFamily:"'Cormorant Garamond',serif",fontWeight:300,color:"var(--ink)",lineHeight:1}}>
+                      {ev.date ? new Date(ev.date+"T00:00:00").getDate() : "?"}
+                    </div>
+                    <div style={{fontSize:".55rem",letterSpacing:".1em",textTransform:"uppercase",color:"var(--mist)"}}>
+                      {ev.date ? new Date(ev.date+"T00:00:00").toLocaleDateString("fr-FR",{month:"short"}) : ""}
+                    </div>
+                  </div>
+                  {/* Divider */}
+                  <div style={{width:"1px",height:"40px",background:"var(--border)",flexShrink:0}}/>
+                  {/* Info */}
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{display:"flex",alignItems:"center",gap:".5rem",marginBottom:".2rem",flexWrap:"wrap"}}>
+                      <span style={{fontSize:".62rem",fontWeight:500,color:"#fff",background:cat.color,padding:".1rem .45rem",borderRadius:"4px"}}>{cat.label}</span>
+                      <span style={{fontSize:".62rem",color:stat.color}}>{stat.label}</span>
+                      {ev.time && <span style={{fontSize:".65rem",color:"var(--mist)"}}>🕐 {ev.time}</span>}
+                    </div>
+                    <strong style={{fontSize:".88rem",color:"var(--ink)",display:"block"}}>{ev.title}</strong>
+                    {ev.location && <span style={{fontSize:".72rem",color:"var(--mist)"}}>📍 {ev.location}</span>}
+                    {ev.description && <p style={{fontSize:".75rem",color:"var(--warm)",margin:".25rem 0 0",lineHeight:1.5,overflow:"hidden",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical"}}>{ev.description}</p>}
+                  </div>
+                  {/* Capacity */}
+                  {ev.capacity && (
+                    <div style={{textAlign:"center",flexShrink:0}}>
+                      <div style={{fontSize:".75rem",color:"var(--ink)",fontWeight:500}}>{ev.capacity}</div>
+                      <div style={{fontSize:".58rem",color:"var(--mist)"}}>spots</div>
+                    </div>
+                  )}
+                  {/* Actions */}
+                  <div style={{display:"flex",gap:".4rem",flexShrink:0}}>
+                    {ev.url && <a href={ev.url} target="_blank" rel="noopener noreferrer" style={{...btnSmall,textDecoration:"none",display:"inline-flex",alignItems:"center"}}>↗</a>}
+                    <button onClick={()=>startEdit(ev)} style={btnSmall}>Edit</button>
+                    <button onClick={()=>del(ev.id)} style={btnDanger}>Del</button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
