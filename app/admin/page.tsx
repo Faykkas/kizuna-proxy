@@ -851,8 +851,8 @@ function OrdersTab({ supabase, al }) {
       ) : filtered.length === 0 ? (
         <p style={{ color:"var(--warm)", padding:"2rem", textAlign:"center" }}>No orders found.</p>
       ) : (
-        <div style={{ overflowX:"auto" }}>
-          <table style={{ width:"100%", borderCollapse:"separate", borderSpacing:0, fontSize:".78rem" }}>
+        <div style={{ overflowX:"auto", width:"100%" }}>
+          <table style={{ width:"100%", borderCollapse:"separate", borderSpacing:0, fontSize:".78rem", minWidth:"900px" }}>
             <thead>
               <tr>
                 {["Client","Items","Fee (JPY)","Status","Date","Country","Tracking",""].map(h => (
@@ -1064,17 +1064,17 @@ function StatsTab({ supabase, al }) {
           <p style={cardHeader}>Monthly revenue</p>
           <span style={{ fontSize:".68rem", color:"var(--mist)" }}>Service fees only</span>
         </div>
-        <div style={{ display:"flex", alignItems:"flex-end", gap:"8px", height:"180px", overflowX:"auto", paddingBottom:".5rem" }}>
+        <div style={{ display:"flex", alignItems:"flex-end", gap:"8px", height:"220px", overflowX:"auto", paddingBottom:".5rem" }}>
           {months.map((m, i) => (
             <div key={i} style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:"6px", flex:"0 0 auto", minWidth:"42px" }}>
-              {/* Value on hover */}
-              <div style={{ fontSize:".6rem", color:"var(--warm)", textAlign:"center", minHeight:"16px" }}>
-                {fmt(m.fee)}
+              {/* Value */}
+              <div style={{ fontSize:".55rem", color:"var(--warm)", textAlign:"center", minHeight:"14px", whiteSpace:"nowrap", overflow:"visible" }}>
+                {currency==="EUR" ? `${Math.round(m.fee/rate)}€` : `¥${Math.round(m.fee/1000)}k`}
               </div>
               {/* Bar */}
               <div style={{
                 width:"32px", borderRadius:"4px 4px 0 0",
-                height:`${Math.round((m.fee / maxFee) * 140)}px`,
+                height:`${Math.round((m.fee / maxFee) * 170)}px`,
                 background: i === months.length - 1
                   ? "var(--red)"
                   : `linear-gradient(to top, rgba(224,48,64,.6), rgba(224,48,64,.3))`,
