@@ -4,6 +4,138 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "../lib/supabase";
 
+
+// ─── ADMIN TRANSLATIONS ───────────────────────────────────────────────────────
+const ADMIN_LANGS = {
+  en: {
+    signIn: "Sign in to manage your site",
+    email: "Email", password: "Password", signInBtn: "Sign in",
+    backToSite: "← Back to site", signOut: "Sign out",
+    tabs: { announce: "📢 Banner", news: "🗞 News", gallery: "🖼 Gallery", orders: "📦 Orders", stats: "📊 Stats" },
+    // Banner
+    bannerTitle: al.bannerTitle,
+    bannerVisible: "Banner visible on site", bannerHidden: "Banner hidden",
+    bannerMsg: "Message", bannerMsgHint: al.bannerMsgHint,
+    bannerFrom: "From", bannerTo: "To", bannerSave: "Save", bannerSaving: "Saving…", bannerSaved: "✓ Banner updated.",
+    // News
+    newArticle: al.newArticle, editArticle: al.editArticle,
+    titleField: "Title *", contentField: "Content *", categoryField: "Category",
+    publish: "Publish", update: "Update", cancel: "Cancel", sending: "Saving…",
+    noArticles: al.noArticles,
+    published: "✓ Published.", updated: "✓ Updated.",
+    titleRequired: "Title and content are required.",
+    // Gallery
+    addPhoto: al.addPhoto, editPhoto: al.editPhoto,
+    photoTitle: "Title *", photoSubtitle: "Subtitle", photoUrl: "Image URL or upload",
+    uploadBtn: "📁 Upload image", uploading: "⏳ Uploading…",
+    addPhotoBtn: "Add photo", noPhotos: "No photos yet. Add your first one above.",
+    photoAdded: "✓ Added.", photoUpdated: "✓ Updated.",
+    titleImgRequired: "Title and image are required.",
+    // Orders
+    newOrder: al.newOrder, editOrder: al.editOrder,
+    clientName: al.clientName, country: "Country", platform: "Platform",
+    communication: "Communication", items: "Items *", itemPrice: "Item price (JPY)",
+    serviceFee: "Service fee (JPY)", status: "Status", purchaseDate: "Purchase date",
+    shippingMethod: "Shipping method", trackingNumber: "Tracking number",
+    paymentMethod: "Payment method", paymentReceived: "Payment received",
+    notes: "Notes", searchPlaceholder: "🔍 Search client, item, country, tracking…",
+    allStatuses: al.allStatuses, noOrders: al.noOrders,
+    addOrder: al.addOrder, clientRequired: "Client name is required.",
+    orderAdded: "✓ Order added.", orderUpdated: "✓ Order updated.",
+    totalOrders: "Total orders", totalFees: al.totalFeesLabel, activeOrders: "Active orders",
+    actionRequired: "Action required", revenueSummary: al.revenueSummary,
+    totalFeesLabel: "Total fees (JPY)", estEur: al.estEur, ordersDelivered: al.ordersDelivered,
+    // Stats
+    monthlyRevenue: al.monthlyRevenue, feesOnly: al.feesOnly,
+    topCountries: al.topCountries, orderStatus: al.orderStatus,
+    monthlyBreakdown: al.monthlyBreakdown, totalEarned: "Total earned",
+    avgPerOrder: "Avg per order", bestMonth: "Best month", delivered: "Delivered",
+    month: al.month, orders: al.orders, revenueJPY: al.revenueJPY, revenueEUR: al.revenueEUR, avgOrder: al.avgOrder,
+    total: al.total, sources: al.sources, serviceAvg: "service fee avg",
+  },
+  fr: {
+    signIn: "Connectez-vous pour gérer votre site",
+    email: "Email", password: "Mot de passe", signInBtn: "Se connecter",
+    backToSite: "← Retour au site", signOut: "Déconnexion",
+    tabs: { announce: "📢 Bannière", news: "🗞 Actualités", gallery: "🖼 Galerie", orders: "📦 Commandes", stats: "📊 Stats" },
+    bannerTitle: "Bannière d'annonce",
+    bannerVisible: "Bannière visible sur le site", bannerHidden: "Bannière masquée",
+    bannerMsg: "Message", bannerMsgHint: "Ce message apparaît en haut du site.",
+    bannerFrom: "Du", bannerTo: "Au", bannerSave: "Enregistrer", bannerSaving: "Enregistrement…", bannerSaved: "✓ Bannière mise à jour.",
+    newArticle: "➕ Nouvel article", editArticle: "✏️ Modifier l'article",
+    titleField: "Titre *", contentField: "Contenu *", categoryField: "Catégorie",
+    publish: "Publier", update: "Mettre à jour", cancel: "Annuler", sending: "Enregistrement…",
+    noArticles: "Aucun article pour l'instant.",
+    published: "✓ Publié.", updated: "✓ Mis à jour.",
+    titleRequired: "Le titre et le contenu sont requis.",
+    addPhoto: "➕ Ajouter une photo", editPhoto: "✏️ Modifier la photo",
+    photoTitle: "Titre *", photoSubtitle: "Sous-titre", photoUrl: "URL de l'image ou télécharger",
+    uploadBtn: "📁 Télécharger une image", uploading: "⏳ Téléchargement…",
+    addPhotoBtn: "Ajouter la photo", noPhotos: "Aucune photo. Ajoutez-en une ci-dessus.",
+    photoAdded: "✓ Ajoutée.", photoUpdated: "✓ Mise à jour.",
+    titleImgRequired: "Le titre et l'image sont requis.",
+    newOrder: "Nouvelle commande", editOrder: "✏️ Modifier la commande",
+    clientName: "Nom du client *", country: "Pays", platform: "Plateforme",
+    communication: "Contact", items: "Articles *", itemPrice: "Prix article (JPY)",
+    serviceFee: "Honoraires (JPY)", status: "Statut", purchaseDate: "Date d'achat",
+    shippingMethod: "Mode d'expédition", trackingNumber: "Numéro de suivi",
+    paymentMethod: "Méthode de paiement", paymentReceived: "Paiement reçu",
+    notes: "Notes", searchPlaceholder: "🔍 Recherche client, article, pays, suivi…",
+    allStatuses: "Tous les statuts", noOrders: "Aucune commande trouvée.",
+    addOrder: "Ajouter la commande", clientRequired: "Le nom du client est requis.",
+    orderAdded: "✓ Commande ajoutée.", orderUpdated: "✓ Commande mise à jour.",
+    totalOrders: "Total commandes", totalFees: "Total honoraires (JPY)", activeOrders: "Commandes actives",
+    actionRequired: "Action requise", revenueSummary: "Résumé des revenus",
+    totalFeesLabel: "Total honoraires (JPY)", estEur: "Est. EUR (÷145)", ordersDelivered: "Commandes livrées",
+    monthlyRevenue: "Revenus mensuels", feesOnly: "Honoraires uniquement",
+    topCountries: "Top pays", orderStatus: "Statut des commandes",
+    monthlyBreakdown: "Détail mensuel", totalEarned: "Total gagné",
+    avgPerOrder: "Moyenne par commande", bestMonth: "Meilleur mois", delivered: "Livrées",
+    month: "Mois", orders: "Commandes", revenueJPY: "Revenus (JPY)", revenueEUR: "Revenus (EUR)", avgOrder: "Moy/cmd",
+    total: "TOTAL", sources: "Sources", serviceAvg: "moy. honoraires",
+  },
+  ja: {
+    signIn: "サイト管理にログイン",
+    email: "メール", password: "パスワード", signInBtn: "ログイン",
+    backToSite: "← サイトに戻る", signOut: "ログアウト",
+    tabs: { announce: "📢 バナー", news: "🗞 ニュース", gallery: "🖼 ギャラリー", orders: "📦 注文", stats: "📊 統計" },
+    bannerTitle: "お知らせバナー",
+    bannerVisible: "バナーをサイトに表示中", bannerHidden: "バナーは非表示",
+    bannerMsg: "メッセージ", bannerMsgHint: "このメッセージはサイトの上部に表示されます。",
+    bannerFrom: "開始日", bannerTo: "終了日", bannerSave: "保存", bannerSaving: "保存中…", bannerSaved: "✓ バナーを更新しました。",
+    newArticle: "➕ 新しい記事", editArticle: "✏️ 記事を編集",
+    titleField: "タイトル *", contentField: "内容 *", categoryField: "カテゴリー",
+    publish: "公開", update: "更新", cancel: "キャンセル", sending: "保存中…",
+    noArticles: "記事がありません。",
+    published: "✓ 公開しました。", updated: "✓ 更新しました。",
+    titleRequired: "タイトルと内容は必須です。",
+    addPhoto: "➕ 写真を追加", editPhoto: "✏️ 写真を編集",
+    photoTitle: "タイトル *", photoSubtitle: "サブタイトル", photoUrl: "画像URLまたはアップロード",
+    uploadBtn: "📁 画像をアップロード", uploading: "⏳ アップロード中…",
+    addPhotoBtn: "写真を追加", noPhotos: "写真がありません。上から追加してください。",
+    photoAdded: "✓ 追加しました。", photoUpdated: "✓ 更新しました。",
+    titleImgRequired: "タイトルと画像は必須です。",
+    newOrder: "新しい注文", editOrder: "✏️ 注文を編集",
+    clientName: "クライアント名 *", country: "国", platform: "プラットフォーム",
+    communication: "連絡方法", items: "商品 *", itemPrice: "商品価格 (JPY)",
+    serviceFee: "手数料 (JPY)", status: "ステータス", purchaseDate: "購入日",
+    shippingMethod: "配送方法", trackingNumber: "追跡番号",
+    paymentMethod: "支払い方法", paymentReceived: "入金済み",
+    notes: "メモ", searchPlaceholder: "🔍 クライアント、商品、国、追跡番号で検索…",
+    allStatuses: "すべてのステータス", noOrders: "注文が見つかりません。",
+    addOrder: "注文を追加", clientRequired: "クライアント名は必須です。",
+    orderAdded: "✓ 注文を追加しました。", orderUpdated: "✓ 注文を更新しました。",
+    totalOrders: "総注文数", totalFees: "総手数料 (JPY)", activeOrders: "進行中の注文",
+    actionRequired: "要対応", revenueSummary: "収益サマリー",
+    totalFeesLabel: "総手数料 (JPY)", estEur: "EUR換算 (÷145)", ordersDelivered: "配送完了",
+    monthlyRevenue: "月別収益", feesOnly: "手数料のみ",
+    topCountries: "上位国", orderStatus: "注文ステータス",
+    monthlyBreakdown: "月別詳細", totalEarned: "総収益",
+    avgPerOrder: "注文平均", bestMonth: "最高月", delivered: "配送完了",
+    month: "月", orders: "注文", revenueJPY: "収益 (JPY)", revenueEUR: "収益 (EUR)", avgOrder: "平均/注文",
+    total: "合計", sources: "集客源", serviceAvg: "手数料平均",
+  },
+};
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 const NEWS_CATS = [
   { value: "shipping", label: "🚚 Shipping", color: "#4d148c" },
@@ -73,6 +205,7 @@ const sep    = { height: "1px", background: BORDER, margin: "1.5rem 0" };
 
 // ─── ADMIN PAGE ───────────────────────────────────────────────────────────────
 export default function AdminPage() {
+  const [adminLang, setAdminLang] = useState("en");
   const [session,  setSession]  = useState(null);
   const [email,    setEmail]    = useState("");
   const [pw,       setPw]       = useState("");
@@ -85,12 +218,19 @@ export default function AdminPage() {
   const lockRef = useRef(null);
 
   useEffect(() => {
+    const saved = localStorage.getItem("admin-lang");
+    if (saved && ADMIN_LANGS[saved]) setAdminLang(saved);
+  }, []);
+
+  useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session); setLoading(false);
     });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
     return () => subscription.unsubscribe();
   }, []);
+
+  const al = ADMIN_LANGS[adminLang] || ADMIN_LANGS.en;
 
   async function handleLogin() {
     if (locked) return;
@@ -124,18 +264,21 @@ export default function AdminPage() {
         <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.6rem", fontWeight:600, color:INK, marginBottom:".3rem" }}>
           <span style={{ color:RED }}>Kizuna</span> Admin
         </div>
-        <p style={{ fontSize:".8rem", color:MUTED, marginBottom:"2rem", fontFamily:"'Inter',sans-serif" }}>Sign in to manage your site</p>
+        <div style={{display:"flex",gap:".4rem",marginBottom:"1rem"}}>
+          {["en","fr","ja"].map(l => <button key={l} onClick={()=>{setAdminLang(l);localStorage.setItem("admin-lang",l);}} style={{padding:".25rem .6rem",borderRadius:"6px",border:"1px solid",borderColor:adminLang===l?RED:BORDER,background:adminLang===l?RED:"transparent",color:adminLang===l?"#fff":MUTED,fontSize:".65rem",cursor:"pointer"}}>{l.toUpperCase()}</button>)}
+        </div>
+        <p style={{ fontSize:".8rem", color:MUTED, marginBottom:"2rem", fontFamily:"'Inter',sans-serif" }}>{al.signIn}</p>
         {locked && (
           <div style={{ background:"rgba(224,48,64,.1)", border:`1px solid rgba(224,48,64,.2)`, padding:".75rem 1rem", marginBottom:"1rem", fontSize:".78rem", color:RED, borderRadius:"8px" }}>
             🔒 Locked. Try again in {lockTimer}s.
           </div>
         )}
-        <label style={lbl}>Email</label>
+        <label style={lbl}>{al.email}</label>
         <input type="email" value={email} onChange={e=>setEmail(e.target.value)}
           onKeyDown={e=>e.key==="Enter"&&handleLogin()}
           placeholder="kizunaproxy@gmail.com"
           style={{...inp, marginBottom:".75rem"}} autoFocus disabled={locked} />
-        <label style={lbl}>Password</label>
+        <label style={lbl}>{al.password}</label>
         <input type="password" value={pw} onChange={e=>setPw(e.target.value)}
           onKeyDown={e=>e.key==="Enter"&&handleLogin()}
           placeholder="••••••••"
@@ -143,18 +286,18 @@ export default function AdminPage() {
         {loginErr && !locked && <p style={msgErr}>{loginErr}</p>}
         <button onClick={handleLogin} disabled={locked}
           style={{...btnPrimary, width:"100%", marginTop:".75rem", opacity:locked?.5:1}}>
-          Sign in
+          {al.signInBtn}
         </button>
       </div>
     </div>
   );
 
   const TABS = [
-    { id:"announce", label:"📢 Banner" },
-    { id:"news",     label:"🗞 News" },
-    { id:"gallery",  label:"🖼 Gallery" },
-    { id:"orders",   label:"📦 Orders" },
-    { id:"stats",    label:"📊 Stats" },
+    { id:"announce", label:al.tabs.announce },
+    { id:"news",     label:al.tabs.news },
+    { id:"gallery",  label:al.tabs.gallery },
+    { id:"orders",   label:al.tabs.orders },
+    { id:"stats",    label:al.tabs.stats },
   ];
 
   return (
@@ -170,8 +313,11 @@ export default function AdminPage() {
             <p style={{ fontSize:".75rem", color:MUTED, fontFamily:"'Inter',sans-serif" }}>{session.user.email}</p>
           </div>
           <div style={{ display:"flex", gap:".75rem", alignItems:"center" }}>
-            <a href="/" style={{ fontSize:".65rem", letterSpacing:".1em", textTransform:"uppercase", color:MUTED, textDecoration:"none", fontFamily:"'Inter',sans-serif" }}>← Back to site</a>
-            <button onClick={()=>supabase.auth.signOut()} style={btnGhost}>Sign out</button>
+            <div style={{display:"flex",gap:".3rem"}}>
+              {["en","fr","ja"].map(l => <button key={l} onClick={()=>{setAdminLang(l);localStorage.setItem("admin-lang",l);}} style={{padding:".25rem .55rem",borderRadius:"6px",border:"1px solid",borderColor:adminLang===l?RED:BORDER,background:adminLang===l?RED:"transparent",color:adminLang===l?"#fff":MUTED,fontSize:".62rem",cursor:"pointer"}}>{l.toUpperCase()}</button>)}
+            </div>
+            <a href="/" style={{ fontSize:".65rem", letterSpacing:".1em", textTransform:"uppercase", color:MUTED, textDecoration:"none", fontFamily:"'Inter',sans-serif" }}>{al.backToSite}</a>
+            <button onClick={()=>supabase.auth.signOut()} style={btnGhost}>{al.signOut}</button>
           </div>
         </div>
 
@@ -192,18 +338,18 @@ export default function AdminPage() {
         </div>
 
         {/* Tab content */}
-        {tab==="announce" && <AnnounceTab />}
-        {tab==="news"     && <NewsTab />}
-        {tab==="gallery"  && <GalleryTab />}
-        {tab==="orders"   && <OrdersTab supabase={supabase} />}
-        {tab==="stats"    && <StatsTab supabase={supabase} />}
+        {tab==="announce" && <AnnounceTab al={al} />}
+        {tab==="news"     && <NewsTab al={al} />}
+        {tab==="gallery"  && <GalleryTab al={al} />}
+        {tab==="orders"   && <OrdersTab supabase={supabase} al={al} />}
+        {tab==="stats"    && <StatsTab supabase={supabase} al={al} />}
       </div>
     </div>
   );
 }
 
 // ─── ANNOUNCE TAB ─────────────────────────────────────────────────────────────
-function AnnounceTab() {
+function AnnounceTab({ al }) {
   const [data,   setData]   = useState(null);
   const [saving, setSaving] = useState(false);
   const [msg,    setMsg]    = useState("");
@@ -221,7 +367,7 @@ function AnnounceTab() {
       updated_at: new Date().toISOString()
     }).eq("id", data.id);
     setSaving(false);
-    setMsg("✓ Banner updated."); setTimeout(()=>setMsg(""),3000);
+    setMsg(al.bannerSaved); setTimeout(()=>setMsg(""),3000);
   }
 
   if (!data) return <p style={{color:MUTED,fontSize:".85rem",padding:"1rem"}}>Loading…</p>;
@@ -235,13 +381,13 @@ function AnnounceTab() {
         <label style={{ display:"flex", alignItems:"center", gap:".7rem", cursor:"pointer", fontSize:".85rem", color:INK, fontWeight:500, userSelect:"none", fontFamily:"'Inter',sans-serif" }}>
           <input type="checkbox" checked={data.active} onChange={e=>setData(d=>({...d,active:e.target.checked}))}
             style={{ width:"18px", height:"18px", accentColor:RED, cursor:"pointer" }} />
-          {data.active ? "🟢 Banner visible on site" : "⚫ Banner hidden"}
+          {data.active ? al.bannerVisible : al.bannerHidden}
         </label>
       </div>
 
       {/* Message */}
       <div style={{ marginBottom:"1rem" }}>
-        <label style={lbl}>Message</label>
+        <label style={lbl}>{al.bannerMsg}</label>
         <input style={inp} value={data.text_en||""} onChange={e=>setData(d=>({...d,text_en:e.target.value}))}
           placeholder="Orders paused from April 20 to June 1" />
         <p style={{ fontSize:".68rem", color:MUTED, marginTop:".4rem", fontFamily:"'Inter',sans-serif" }}>This message appears at the top of the site.</p>
@@ -250,11 +396,11 @@ function AnnounceTab() {
       {/* Dates */}
       <div style={row2}>
         <div>
-          <label style={lbl}>From</label>
+          <label style={lbl}>{al.bannerFrom}</label>
           <input style={inp} value={data.from_date||""} onChange={e=>setData(d=>({...d,from_date:e.target.value}))} placeholder="April 20" />
         </div>
         <div>
-          <label style={lbl}>To</label>
+          <label style={lbl}>{al.bannerTo}</label>
           <input style={inp} value={data.to_date||""} onChange={e=>setData(d=>({...d,to_date:e.target.value}))} placeholder="June 1" />
         </div>
       </div>
@@ -268,13 +414,13 @@ function AnnounceTab() {
       )}
 
       {msg && <p style={msgOk}>{msg}</p>}
-      <button onClick={save} disabled={saving} style={btnPrimary}>{saving?"Saving…":"Save"}</button>
+      <button onClick={save} disabled={saving} style={btnPrimary}>{saving?al.bannerSaving:al.bannerSave}</button>
     </div>
   );
 }
 
 // ─── NEWS TAB ─────────────────────────────────────────────────────────────────
-function NewsTab() {
+function NewsTab({ al }) {
   const [items,   setItems]   = useState([]);
   const [form,    setForm]    = useState(emptyNews);
   const [editing, setEditing] = useState(null);
@@ -287,12 +433,12 @@ function NewsTab() {
     setItems(data||[]);
   }
   async function save() {
-    if (!form.title||!form.content) { setMsg("Title and content are required."); return; }
+    if (!form.title||!form.content) { setMsg(al.titleRequired); return; }
     setSaving(true);
     if (editing) await supabase.from("news").update({...form,published_at:new Date().toISOString()}).eq("id",editing);
     else await supabase.from("news").insert({...form,published_at:new Date().toISOString()});
     setSaving(false); setForm(emptyNews); setEditing(null);
-    setMsg(editing?"✓ Updated.":"✓ Published."); setTimeout(()=>setMsg(""),3000); load();
+    setMsg(editing?al.updated:al.published); setTimeout(()=>setMsg(""),3000); load();
   }
   async function del(id) {
     if (!confirm("Delete this article?")) return;
@@ -328,8 +474,8 @@ function NewsTab() {
         </div>
         {msg&&<p style={msg.startsWith("✓")?msgOk:msgErr}>{msg}</p>}
         <div style={{display:"flex",gap:".75rem"}}>
-          <button onClick={save} disabled={saving} style={btnPrimary}>{saving?"Saving…":editing?"Update":"Publish"}</button>
-          {editing&&<button onClick={()=>{setEditing(null);setForm(emptyNews);}} style={btnGhost}>Cancel</button>}
+          <button onClick={save} disabled={saving} style={btnPrimary}>{saving?al.sending:editing?al.update:al.publish}</button>
+          {editing&&<button onClick={()=>{setEditing(null);setForm(emptyNews);}} style={btnGhost}>{al.cancel}</button>}
         </div>
       </div>
 
@@ -361,7 +507,7 @@ function NewsTab() {
 }
 
 // ─── GALLERY TAB ─────────────────────────────────────────────────────────────
-function GalleryTab() {
+function GalleryTab({ al }) {
   const [items,     setItems]     = useState([]);
   const [form,      setForm]      = useState(emptyGallery);
   const [editing,   setEditing]   = useState(null);
@@ -388,14 +534,14 @@ function GalleryTab() {
   }
 
   async function save() {
-    if (!form.title||!form.image_url) { setMsg("Title and image are required."); return; }
+    if (!form.title||!form.image_url) { setMsg(al.titleImgRequired); return; }
     setSaving(true);
     const nextOrder = editing ? Number(form.sort_order) : (items.length>0?Math.max(...items.map(i=>i.sort_order))+1:0);
     const p = { title:form.title, subtitle:form.subtitle, image_url:form.image_url, sort_order:nextOrder };
     if (editing) await supabase.from("gallery").update(p).eq("id",editing);
     else await supabase.from("gallery").insert(p);
     setSaving(false); setForm(emptyGallery); setEditing(null);
-    setMsg(editing?"✓ Updated.":"✓ Added."); setTimeout(()=>setMsg(""),3000); load();
+    setMsg(editing?al.photoUpdated:al.photoAdded); setTimeout(()=>setMsg(""),3000); load();
   }
 
   async function del(id, image_url) {
@@ -442,7 +588,7 @@ function GalleryTab() {
         )}
         {msg&&<p style={msg.startsWith("✓")?msgOk:msgErr}>{msg}</p>}
         <div style={{display:"flex",gap:".75rem"}}>
-          <button onClick={save} disabled={saving||uploading} style={btnPrimary}>{saving?"Saving…":editing?"Update":"Add photo"}</button>
+          <button onClick={save} disabled={saving||uploading} style={btnPrimary}>{saving?al.sending:editing?al.update:al.addPhotoBtn}</button>
           {editing&&<button onClick={()=>{setEditing(null);setForm(emptyGallery);}} style={btnGhost}>Cancel</button>}
         </div>
       </div>
@@ -481,7 +627,7 @@ function GalleryTab() {
 // Paste this inside admin-page.tsx as a new OrdersTab component
 // Add "📦 Orders" to the TABS array
 
-function OrdersTab({ supabase }) {
+function OrdersTab({ supabase, al }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -525,7 +671,7 @@ function OrdersTab({ supabase }) {
   }
 
   async function save() {
-    if (!form.client_name) { setMsg("Client name is required."); return; }
+    if (!form.client_name) { setMsg(al.clientRequired); return; }
     setSaving(true);
     const payload = { ...form, updated_at: new Date().toISOString() };
     if (editing) {
@@ -537,7 +683,7 @@ function OrdersTab({ supabase }) {
     setForm(emptyOrder);
     setEditing(null);
     setShowForm(false);
-    setMsg(editing ? "✓ Order updated." : "✓ Order added.");
+    setMsg(editing ? al.orderUpdated : al.orderAdded);
     setTimeout(() => setMsg(""), 3000);
     load();
   }
@@ -581,10 +727,10 @@ function OrdersTab({ supabase }) {
       {/* ── Stats ── */}
       <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"12px", marginBottom:"1.5rem" }}>
         {[
-          { label:"Total orders",      value: orders.length,           color:"var(--ink)" },
-          { label:"Total fees (JPY)",  value:`¥${totalFee.toLocaleString()}`, color:"#4ade80" },
-          { label:"Active orders",     value: active,                   color:"#60a5fa" },
-          { label:"Action required",   value: actionReq,                color: actionReq > 0 ? "#ef4444" : "var(--warm)" },
+          { label:al.totalOrders,      value: orders.length,           color:"var(--ink)" },
+          { label:al.totalFees,  value:`¥${totalFee.toLocaleString()}`, color:"#4ade80" },
+          { label:al.activeOrders,     value: active,                   color:"#60a5fa" },
+          { label:al.actionRequired,   value: actionReq,                color: actionReq > 0 ? "#ef4444" : "var(--warm)" },
         ].map(s => (
           <div key={s.label} style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"10px", padding:"1.1rem 1.2rem" }}>
             <div style={{ fontSize:"1.4rem", fontWeight:600, color:s.color, fontFamily:"'Cormorant Garamond',serif" }}>{s.value}</div>
@@ -674,7 +820,7 @@ function OrdersTab({ supabase }) {
           </div>
 
           <div style={{ display:"flex", gap:".75rem" }}>
-            <button onClick={save} disabled={saving} style={btnPrimary}>{saving ? "Saving…" : editing ? "Update" : "Add order"}</button>
+            <button onClick={save} disabled={saving} style={btnPrimary}>{saving ? al.sending : editing ? al.update : al.addOrder}</button>
             <button onClick={() => { setShowForm(false); setEditing(null); setForm(emptyOrder); }} style={btnGhost}>Cancel</button>
           </div>
         </div>
@@ -684,7 +830,7 @@ function OrdersTab({ supabase }) {
       <div style={{ display:"flex", gap:".75rem", flexWrap:"wrap", marginBottom:"1rem" }}>
         <input
           style={{ ...inp, flex:1, minWidth:"200px", padding:".6rem 1rem" }}
-          placeholder="🔍 Search client, item, country, tracking…"
+          placeholder={al.searchPlaceholder}
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
@@ -772,7 +918,7 @@ function OrdersTab({ supabase }) {
 
 
 // ─── STATS TAB ────────────────────────────────────────────────────────────────
-function StatsTab({ supabase }) {
+function StatsTab({ supabase, al }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currency, setCurrency] = useState("JPY");
@@ -870,9 +1016,9 @@ function StatsTab({ supabase }) {
       {/* KPI Cards */}
       <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"12px" }}>
         {[
-          { label:"Total earned",      value: fmt(totalFee),        sub: `${orders.length} orders`, color:"#4ade80" },
-          { label:"Avg per order",     value: fmt(avgFee),          sub: "service fee avg", color:"var(--ink)" },
-          { label:"Best month",        value: bestMonth?.label || "—", sub: bestMonth ? fmt(bestMonth.fee) : "—", color:"#f59e0b" },
+          { label:al.totalEarned,      value: fmt(totalFee),        sub: `${orders.length} orders`, color:"#4ade80" },
+          { label:al.avgPerOrder,     value: fmt(avgFee),          sub: al.serviceAvg, color:"var(--ink)" },
+          { label:al.bestMonth,        value: bestMonth?.label || "—", sub: bestMonth ? fmt(bestMonth.fee) : "—", color:"#f59e0b" },
           { label:"Delivered",         value: orders.filter(o=>o.status==="Delivered").length, sub: `of ${orders.length} total`, color:"#4ade80" },
         ].map(k => (
           <div key={k.label} style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"10px", padding:"1.1rem 1.2rem" }}>
