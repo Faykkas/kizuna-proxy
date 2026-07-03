@@ -640,7 +640,7 @@ function OrdersTab({ supabase, al }) {
   const [msg, setMsg] = useState("");
 
   const emptyOrder = {
-    client_name: "", platform: "Reddit", communication: "Discord",
+    client_name: "", client_email: "", platform: "Reddit", communication: "Discord",
     items: "", item_price_jpy: 0, service_fee_jpy: 0,
     payment_method: "PayPal / Goods & Services", payment_received: true,
     status: "Pending", purchase_date: new Date().toISOString().split('T')[0],
@@ -853,7 +853,7 @@ function OrdersTab({ supabase, al }) {
       ) : (
         <div style={{ border:"1px solid var(--border)", borderRadius:"12px", overflow:"hidden" }}>
           {/* Header */}
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1.5fr 85px 110px 75px 85px 130px 40px", gap:0, padding:".5rem 1rem", background:"var(--paper)", borderBottom:"1px solid var(--border)" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 110px 75px 85px 130px 40px", gap:0, padding:".5rem 1rem", background:"var(--paper)", borderBottom:"1px solid var(--border)" }}>
             {[al.clientName?.replace(" *","") || "Client","Items","Fee","Status","Date","Country","Tracking",""].map(h => (
               <div key={h} style={{ fontSize:".55rem", letterSpacing:".12em", textTransform:"uppercase", color:"var(--mist)", padding:"0 .4rem" }}>{h}</div>
             ))}
@@ -861,10 +861,13 @@ function OrdersTab({ supabase, al }) {
           {/* Rows */}
           {filtered.map((o, i) => (
             <div key={o.id}
-              style={{ display:"grid", gridTemplateColumns:"1fr 1.5fr 85px 110px 75px 85px 130px 40px", gap:0, padding:".65rem 1rem", background: i%2===0 ? "var(--surface)" : "var(--paper)", borderBottom:"1px solid var(--border)", alignItems:"center", cursor:"pointer" }}
+              style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 110px 75px 85px 130px 40px", gap:0, padding:".65rem 1rem", background: i%2===0 ? "var(--surface)" : "var(--paper)", borderBottom:"1px solid var(--border)", alignItems:"center", cursor:"pointer" }}
               onMouseEnter={e=>e.currentTarget.style.background="var(--surface2)"}
               onMouseLeave={e=>e.currentTarget.style.background=i%2===0?"var(--surface)":"var(--paper)"}>
-              <div style={{ padding:"0 .4rem", fontWeight:500, color:"var(--ink)", fontSize:".8rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{o.client_name}</div>
+              <div style={{ padding:"0 .4rem" }}>
+              <div style={{ fontWeight:500, color:"var(--ink)", fontSize:".8rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{o.client_name}</div>
+              {o.client_email && <a href={`mailto:${o.client_email}?subject=Thank you for your Kizuna Proxy order!&body=Hi ${o.client_name},%0A%0AYour order has been delivered! We hope everything arrived safely.%0A%0AWe would really appreciate if you could leave us a review on Trustpilot:%0Ahttps://fr.trustpilot.com/evaluate/kizunaproxy.com%0A%0AThank you so much!%0AKizuna Proxy Team`} style={{fontSize:".6rem",color:"var(--red)",textDecoration:"none"}} title="Send Trustpilot review email">✉ {o.client_email}</a>}
+            </div>
               <div style={{ padding:"0 .4rem", color:"var(--warm)", fontSize:".75rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }} title={o.items}>{o.items}</div>
               <div style={{ padding:"0 .4rem", color:"#4ade80", fontWeight:500, fontSize:".78rem" }}>¥{(o.service_fee_jpy||0).toLocaleString()}</div>
               <div style={{ padding:"0 .4rem" }}>
