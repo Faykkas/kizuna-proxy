@@ -880,7 +880,7 @@ function OrdersTab({ supabase, al }) {
                   const ship = (o.shipping_method||"").toLowerCase();
                   let url = `https://www.17track.net/en/track?nums=${tn}`;
                   if (tn.startsWith("EN") || tn.startsWith("LX") || tn.startsWith("CN") || ship.includes("ems") || ship.includes("epacket") || ship.includes("airmail")) {
-                    url = `https://trackings.post.japanpost.jp/services/srv/search/?requestNo1=${tn}&search.x=1&language=en`;
+                    url = `https://t.17track.net/en#nums=${tn}`;
                   } else if (ship.includes("fedex")) {
                     url = `https://www.fedex.com/fedextrack/?trknbr=${tn}`;
                   } else if (ship.includes("dhl")) {
