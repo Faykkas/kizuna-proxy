@@ -865,9 +865,16 @@ function OrdersTab({ supabase, al }) {
               onMouseEnter={e=>e.currentTarget.style.background="var(--surface2)"}
               onMouseLeave={e=>e.currentTarget.style.background=i%2===0?"var(--surface)":"var(--paper)"}>
               <div style={{ padding:"0 .4rem" }}>
-              <div style={{ fontWeight:500, color:"var(--ink)", fontSize:".8rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{o.client_name}</div>
-              {o.client_email && <a href={`mailto:${o.client_email}?subject=Thank you for your Kizuna Proxy order!&body=Hi ${o.client_name},%0A%0AYour order has been delivered! We hope everything arrived safely.%0A%0AWe would really appreciate if you could leave us a review on Trustpilot:%0Ahttps://fr.trustpilot.com/evaluate/kizunaproxy.com%0A%0AThank you so much!%0AKizuna Proxy Team`} style={{fontSize:".6rem",color:"var(--red)",textDecoration:"none"}} title="Send Trustpilot review email">✉ {o.client_email}</a>}
-            </div>
+                <div style={{ fontWeight:500, color:"var(--ink)", fontSize:".8rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{o.client_name}</div>
+                {o.client_email
+                  ? <a href={`mailto:${o.client_email}?subject=Thank you for your Kizuna Proxy order!&body=Hi ${o.client_name},%0A%0AYour order has been delivered! We hope everything arrived safely.%0A%0AWe would really appreciate if you could leave us a review on Trustpilot:%0Ahttps://fr.trustpilot.com/evaluate/kizunaproxy.com%0A%0AThank you so much!%0AKizuna Proxy Team`}
+                      style={{fontSize:".62rem",color:"var(--red)",textDecoration:"none",display:"block",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}
+                      title={`Email: ${o.client_email}`}>
+                      ✉ {o.client_email}
+                    </a>
+                  : <span style={{fontSize:".6rem",color:"var(--mist)"}}>no email</span>
+                }
+              </div>
               <div style={{ padding:"0 .4rem", color:"var(--warm)", fontSize:".75rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }} title={o.items}>{o.items}</div>
               <div style={{ padding:"0 .4rem", color:"#4ade80", fontWeight:500, fontSize:".78rem" }}>¥{(o.service_fee_jpy||0).toLocaleString()}</div>
               <div style={{ padding:"0 .4rem" }}>
