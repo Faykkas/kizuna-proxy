@@ -154,6 +154,7 @@ export default function AdminPage() {
     { id:"news",     label:"🗞 News" },
     { id:"gallery",  label:"🖼 Gallery" },
     { id:"orders",   label:"📦 Orders" },
+    { id:"stats",    label:"📊 Stats" },
   ];
 
   return (
@@ -195,6 +196,7 @@ export default function AdminPage() {
         {tab==="news"     && <NewsTab />}
         {tab==="gallery"  && <GalleryTab />}
         {tab==="orders"   && <OrdersTab supabase={supabase} />}
+        {tab==="stats"    && <StatsTab supabase={supabase} />}
       </div>
     </div>
   );
@@ -768,3 +770,236 @@ function OrdersTab({ supabase }) {
   );
 }
 
+
+// ─── STATS TAB ────────────────────────────────────────────────────────────────
+function StatsTab({ supabase }) {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currency, setCurrency] = useState("JPY");
+
+  useEffect(() => {
+    supabase.from("orders").select("*").then(({ data }) => {
+      setOrders(data || []);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) return <p style={{color:"var(--warm)",padding:"2rem",textAlign:"center"}}>Loading…</p>;
+
+  const RATE = 145; // JPY to EUR
+
+  // ── Monthly revenue ──────────────────────────────────────────────
+  const monthlyMap = {};
+  orders.forEach(o => {
+    if (!o.purchase_date || !o.service_fee_jpy) return;
+    const key = o.purchase_date.slice(0, 7); // YYYY-MM
+    if (!monthlyMap[key]) monthlyMap[key] = { fee: 0, count: 0 };
+    monthlyMap[key].fee   += o.service_fee_jpy;
+    monthlyMap[key].count += 1;
+  });
+
+  const months = Object.entries(monthlyMap)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, val]) => ({
+      label: new Date(key + "-01").toLocaleDateString("fr-FR", { month: "short", year: "2-digit" }),
+      fee: val.fee,
+      count: val.count,
+      eur: Math.round(val.fee / RATE),
+    }));
+
+  const maxFee = Math.max(...months.map(m => m.fee), 1);
+  const totalFee = orders.reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
+  const avgFee = orders.length ? Math.round(totalFee / orders.length) : 0;
+  const bestMonth = months.reduce((best, m) => m.fee > (best?.fee || 0) ? m : best, null);
+
+  // ── Country breakdown ─────────────────────────────────────────────
+  const countryMap = {};
+  orders.forEach(o => {
+    if (!o.delivery_country) return;
+    const c = o.delivery_country.trim();
+    if (!countryMap[c]) countryMap[c] = { count: 0, fee: 0 };
+    countryMap[c].count += 1;
+    countryMap[c].fee += o.service_fee_jpy || 0;
+  });
+  const countries = Object.entries(countryMap)
+    .sort(([,a],[,b]) => b.count - a.count)
+    .slice(0, 8);
+  const maxCountry = Math.max(...countries.map(([,v]) => v.count), 1);
+
+  // ── Platform breakdown ────────────────────────────────────────────
+  const platformMap = {};
+  orders.forEach(o => {
+    const p = o.platform?.trim() || "Unknown";
+    if (!platformMap[p]) platformMap[p] = 0;
+    platformMap[p] += 1;
+  });
+  const platforms = Object.entries(platformMap).sort(([,a],[,b]) => b - a);
+
+  // ── Status breakdown ──────────────────────────────────────────────
+  const STATUS_COLORS = {
+    "Delivered": "#4ade80", "Shipped": "#60a5fa",
+    "Purchased": "#f59e0b", "Action Required": "#ef4444",
+    "Pending": "#6b7280", "Cancelled": "#374151",
+  };
+  const statusMap = {};
+  orders.forEach(o => {
+    const s = o.status?.includes("Purchased") ? "Purchased" : (o.status || "Unknown");
+    statusMap[s] = (statusMap[s] || 0) + 1;
+  });
+
+  const fmt = (jpy) => currency === "EUR"
+    ? `${Math.round(jpy / RATE).toLocaleString("fr-FR")}€`
+    : `¥${jpy.toLocaleString()}`;
+
+  return (
+    <div style={{ display:"flex", flexDirection:"column", gap:"1.5rem" }}>
+
+      {/* Currency toggle */}
+      <div style={{ display:"flex", justifyContent:"flex-end", gap:".5rem" }}>
+        {["JPY","EUR"].map(c => (
+          <button key={c} onClick={() => setCurrency(c)} style={{
+            padding:".35rem .9rem", borderRadius:"6px", border:"1px solid",
+            borderColor: currency===c ? "var(--red)" : "var(--border)",
+            background: currency===c ? "var(--red)" : "var(--surface)",
+            color: currency===c ? "#fff" : "var(--warm)",
+            fontSize:".68rem", cursor:"pointer", fontFamily:"'Inter',sans-serif",
+          }}>{c}</button>
+        ))}
+      </div>
+
+      {/* KPI Cards */}
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"12px" }}>
+        {[
+          { label:"Total earned",      value: fmt(totalFee),        sub: `${orders.length} orders`, color:"#4ade80" },
+          { label:"Avg per order",     value: fmt(avgFee),          sub: "service fee avg", color:"var(--ink)" },
+          { label:"Best month",        value: bestMonth?.label || "—", sub: bestMonth ? fmt(bestMonth.fee) : "—", color:"#f59e0b" },
+          { label:"Delivered",         value: orders.filter(o=>o.status==="Delivered").length, sub: `of ${orders.length} total`, color:"#4ade80" },
+        ].map(k => (
+          <div key={k.label} style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"10px", padding:"1.1rem 1.2rem" }}>
+            <div style={{ fontSize:"1.5rem", fontWeight:600, color:k.color, fontFamily:"'Cormorant Garamond',serif", lineHeight:1.1 }}>{k.value}</div>
+            <div style={{ fontSize:".65rem", color:"var(--mist)", marginTop:".3rem" }}>{k.label}</div>
+            <div style={{ fontSize:".68rem", color:"var(--warm)", marginTop:".15rem" }}>{k.sub}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Monthly revenue chart */}
+      <div style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"12px", padding:"1.5rem" }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"1.5rem" }}>
+          <p style={cardHeader}>Monthly revenue</p>
+          <span style={{ fontSize:".68rem", color:"var(--mist)" }}>Service fees only</span>
+        </div>
+        <div style={{ display:"flex", alignItems:"flex-end", gap:"8px", height:"180px", overflowX:"auto", paddingBottom:".5rem" }}>
+          {months.map((m, i) => (
+            <div key={i} style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:"6px", flex:"0 0 auto", minWidth:"42px" }}>
+              {/* Value on hover */}
+              <div style={{ fontSize:".6rem", color:"var(--warm)", textAlign:"center", minHeight:"16px" }}>
+                {fmt(m.fee)}
+              </div>
+              {/* Bar */}
+              <div style={{
+                width:"32px", borderRadius:"4px 4px 0 0",
+                height:`${Math.round((m.fee / maxFee) * 140)}px`,
+                background: i === months.length - 1
+                  ? "var(--red)"
+                  : `linear-gradient(to top, rgba(224,48,64,.6), rgba(224,48,64,.3))`,
+                transition:"height .3s",
+                position:"relative",
+                minHeight:"4px",
+              }} />
+              {/* Label */}
+              <div style={{ fontSize:".58rem", color:"var(--mist)", whiteSpace:"nowrap" }}>{m.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Country + Platform side by side */}
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1rem" }}>
+
+        {/* Country breakdown */}
+        <div style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"12px", padding:"1.5rem" }}>
+          <p style={cardHeader}>Top countries</p>
+          <div style={{ display:"flex", flexDirection:"column", gap:".6rem" }}>
+            {countries.map(([country, val]) => (
+              <div key={country}>
+                <div style={{ display:"flex", justifyContent:"space-between", marginBottom:".25rem" }}>
+                  <span style={{ fontSize:".78rem", color:"var(--ink)" }}>{country}</span>
+                  <span style={{ fontSize:".72rem", color:"var(--warm)" }}>{val.count} orders</span>
+                </div>
+                <div style={{ height:"4px", background:"var(--border)", borderRadius:"2px", overflow:"hidden" }}>
+                  <div style={{ height:"100%", width:`${(val.count/maxCountry)*100}%`, background:"var(--red)", borderRadius:"2px", transition:"width .3s" }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Platform + Status */}
+        <div style={{ display:"flex", flexDirection:"column", gap:"1rem" }}>
+
+          {/* Platform */}
+          <div style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"12px", padding:"1.2rem" }}>
+            <p style={cardHeader}>Sources</p>
+            <div style={{ display:"flex", flexWrap:"wrap", gap:".5rem" }}>
+              {platforms.map(([p, count]) => (
+                <div key={p} style={{ background:"var(--paper)", border:"1px solid var(--border)", borderRadius:"20px", padding:".3rem .8rem", fontSize:".72rem", color:"var(--warm)" }}>
+                  {p} <strong style={{ color:"var(--ink)" }}>{count}</strong>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Status */}
+          <div style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"12px", padding:"1.2rem" }}>
+            <p style={cardHeader}>Order status</p>
+            <div style={{ display:"flex", flexDirection:"column", gap:".5rem" }}>
+              {Object.entries(statusMap).sort(([,a],[,b])=>b-a).map(([status, count]) => (
+                <div key={status} style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+                  <div style={{ display:"flex", alignItems:"center", gap:".5rem" }}>
+                    <div style={{ width:"8px", height:"8px", borderRadius:"50%", background: STATUS_COLORS[status] || "var(--mist)" }} />
+                    <span style={{ fontSize:".75rem", color:"var(--warm)" }}>{status}</span>
+                  </div>
+                  <span style={{ fontSize:".75rem", fontWeight:500, color:"var(--ink)" }}>{count}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Monthly table */}
+      <div style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"12px", padding:"1.5rem" }}>
+        <p style={cardHeader}>Monthly breakdown</p>
+        <table style={{ width:"100%", borderCollapse:"collapse", fontSize:".78rem" }}>
+          <thead>
+            <tr>
+              {["Month","Orders","Revenue (JPY)","Revenue (EUR)","Avg/order"].map(h => (
+                <th key={h} style={{ padding:".5rem .8rem", textAlign:"left", fontSize:".58rem", letterSpacing:".1em", textTransform:"uppercase", color:"var(--mist)", borderBottom:"1px solid var(--border)" }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {[...months].reverse().map((m, i) => (
+              <tr key={i} style={{ borderBottom:"1px solid var(--border)" }}>
+                <td style={{ padding:".6rem .8rem", color:"var(--ink)", fontWeight:500 }}>{m.label}</td>
+                <td style={{ padding:".6rem .8rem", color:"var(--warm)" }}>{m.count}</td>
+                <td style={{ padding:".6rem .8rem", color:"#4ade80" }}>¥{m.fee.toLocaleString()}</td>
+                <td style={{ padding:".6rem .8rem", color:"#4ade80" }}>{m.eur.toLocaleString()}€</td>
+                <td style={{ padding:".6rem .8rem", color:"var(--warm)" }}>¥{Math.round(m.fee/m.count).toLocaleString()}</td>
+              </tr>
+            ))}
+            {/* Total row */}
+            <tr style={{ background:"var(--paper)" }}>
+              <td style={{ padding:".7rem .8rem", color:"var(--ink)", fontWeight:600 }}>TOTAL</td>
+              <td style={{ padding:".7rem .8rem", color:"var(--ink)", fontWeight:600 }}>{orders.length}</td>
+              <td style={{ padding:".7rem .8rem", color:"#4ade80", fontWeight:600 }}>¥{totalFee.toLocaleString()}</td>
+              <td style={{ padding:".7rem .8rem", color:"#4ade80", fontWeight:600 }}>{Math.round(totalFee/RATE).toLocaleString()}€</td>
+              <td style={{ padding:".7rem .8rem", color:"var(--warm)" }}>¥{avgFee.toLocaleString()}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
