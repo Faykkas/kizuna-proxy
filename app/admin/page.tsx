@@ -153,6 +153,7 @@ export default function AdminPage() {
     { id:"announce", label:"📢 Banner" },
     { id:"news",     label:"🗞 News" },
     { id:"gallery",  label:"🖼 Gallery" },
+    { id:"orders",   label:"📦 Orders" },
   ];
 
   return (
@@ -193,6 +194,7 @@ export default function AdminPage() {
         {tab==="announce" && <AnnounceTab />}
         {tab==="news"     && <NewsTab />}
         {tab==="gallery"  && <GalleryTab />}
+        {tab==="orders"   && <OrdersTab supabase={supabase} />}
       </div>
     </div>
   );
@@ -472,3 +474,297 @@ function GalleryTab() {
     </>
   );
 }
+
+// @ts-nocheck
+// Paste this inside admin-page.tsx as a new OrdersTab component
+// Add "📦 Orders" to the TABS array
+
+function OrdersTab({ supabase }) {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [showForm, setShowForm] = useState(false);
+  const [editing, setEditing] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [msg, setMsg] = useState("");
+
+  const emptyOrder = {
+    client_name: "", platform: "Reddit", communication: "Discord",
+    items: "", item_price_jpy: 0, service_fee_jpy: 0,
+    payment_method: "PayPal / Goods & Services", payment_received: true,
+    status: "Pending", purchase_date: new Date().toISOString().split('T')[0],
+    shipping_method: "", tracking_number: "", delivery_country: "", notes: "",
+  };
+  const [form, setForm] = useState(emptyOrder);
+
+  const STATUSES = ["Pending","Purchased","Purchased — Awaiting Delivery","Purchased — Awaiting Event","Shipped","Delivered","Action Required","Cancelled"];
+  const STATUS_COLORS = {
+    "Delivered":           "#4ade80",
+    "Shipped":             "#60a5fa",
+    "Purchased":           "#f59e0b",
+    "Purchased — Awaiting Delivery": "#f59e0b",
+    "Purchased — Awaiting Event":    "#f59e0b",
+    "Action Required":     "#ef4444",
+    "Pending":             "#6b7280",
+    "Cancelled":           "#374151",
+  };
+
+  useEffect(() => { load(); }, []);
+
+  async function load() {
+    setLoading(true);
+    const { data } = await supabase
+      .from("orders")
+      .select("*")
+      .order("purchase_date", { ascending: false });
+    setOrders(data || []);
+    setLoading(false);
+  }
+
+  async function save() {
+    if (!form.client_name) { setMsg("Client name is required."); return; }
+    setSaving(true);
+    const payload = { ...form, updated_at: new Date().toISOString() };
+    if (editing) {
+      await supabase.from("orders").update(payload).eq("id", editing);
+    } else {
+      await supabase.from("orders").insert(payload);
+    }
+    setSaving(false);
+    setForm(emptyOrder);
+    setEditing(null);
+    setShowForm(false);
+    setMsg(editing ? "✓ Order updated." : "✓ Order added.");
+    setTimeout(() => setMsg(""), 3000);
+    load();
+  }
+
+  async function del(id) {
+    if (!confirm("Delete this order?")) return;
+    await supabase.from("orders").delete().eq("id", id);
+    load();
+  }
+
+  function startEdit(order) {
+    setForm({ ...order });
+    setEditing(order.id);
+    setShowForm(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // Filtered + searched orders
+  const filtered = orders.filter(o => {
+    const matchStatus = statusFilter === "all" || o.status === statusFilter;
+    const q = search.toLowerCase();
+    const matchSearch = !q || 
+      o.client_name?.toLowerCase().includes(q) ||
+      o.items?.toLowerCase().includes(q) ||
+      o.delivery_country?.toLowerCase().includes(q) ||
+      o.tracking_number?.toLowerCase().includes(q);
+    return matchStatus && matchSearch;
+  });
+
+  // Stats
+  const totalFee   = orders.reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
+  const delivered  = orders.filter(o => o.status === "Delivered").length;
+  const active     = orders.filter(o => !["Delivered","Cancelled"].includes(o.status)).length;
+  const actionReq  = orders.filter(o => o.status === "Action Required").length;
+
+  const f = form;
+  const setF = (k, v) => setForm(prev => ({ ...prev, [k]: v }));
+
+  return (
+    <div>
+      {/* ── Stats ── */}
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"12px", marginBottom:"1.5rem" }}>
+        {[
+          { label:"Total orders",      value: orders.length,           color:"var(--ink)" },
+          { label:"Total fees (JPY)",  value:`¥${totalFee.toLocaleString()}`, color:"#4ade80" },
+          { label:"Active orders",     value: active,                   color:"#60a5fa" },
+          { label:"Action required",   value: actionReq,                color: actionReq > 0 ? "#ef4444" : "var(--warm)" },
+        ].map(s => (
+          <div key={s.label} style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"10px", padding:"1.1rem 1.2rem" }}>
+            <div style={{ fontSize:"1.4rem", fontWeight:600, color:s.color, fontFamily:"'Cormorant Garamond',serif" }}>{s.value}</div>
+            <div style={{ fontSize:".65rem", color:"var(--mist)", letterSpacing:".08em", marginTop:".2rem" }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* ── New order button ── */}
+      {!showForm && (
+        <button onClick={() => { setForm(emptyOrder); setEditing(null); setShowForm(true); }}
+          style={{ ...btnPrimary, marginBottom:"1.5rem", display:"flex", alignItems:"center", gap:".5rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New order
+        </button>
+      )}
+
+      {/* ── Add / Edit form ── */}
+      {showForm && (
+        <div style={card}>
+          <p style={cardHeader}>{editing ? "✏️ Edit order" : "➕ New order"}</p>
+          {msg && <p style={msg.startsWith("✓") ? msgOk : msgErr}>{msg}</p>}
+
+          <div style={row2}>
+            <div><label style={lbl}>Client name *</label><input style={inp} value={f.client_name} onChange={e=>setF("client_name",e.target.value)} placeholder="e.g. Konstantinos" /></div>
+            <div><label style={lbl}>Country</label><input style={inp} value={f.delivery_country} onChange={e=>setF("delivery_country",e.target.value)} placeholder="Greece" /></div>
+          </div>
+
+          <div style={row2}>
+            <div>
+              <label style={lbl}>Platform</label>
+              <select style={inp} value={f.platform} onChange={e=>setF("platform",e.target.value)}>
+                {["Reddit","Kizuna website","Fiverr","Instagram","Other"].map(p => <option key={p}>{p}</option>)}
+              </select>
+            </div>
+            <div>
+              <label style={lbl}>Communication</label>
+              <select style={inp} value={f.communication} onChange={e=>setF("communication",e.target.value)}>
+                {["Discord","WhatsApp","Reddit DM","Email","Instagram","Line","Other"].map(c => <option key={c}>{c}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div style={{ marginBottom:"1rem" }}>
+            <label style={lbl}>Items *</label>
+            <textarea style={{ ...inp, minHeight:"80px", resize:"vertical" }} value={f.items} onChange={e=>setF("items",e.target.value)} placeholder="Describe the items or paste links" />
+          </div>
+
+          <div style={row2}>
+            <div><label style={lbl}>Item price (JPY)</label><input style={inp} type="number" value={f.item_price_jpy} onChange={e=>setF("item_price_jpy",+e.target.value)} /></div>
+            <div><label style={lbl}>Service fee (JPY)</label><input style={inp} type="number" value={f.service_fee_jpy} onChange={e=>setF("service_fee_jpy",+e.target.value)} /></div>
+          </div>
+
+          <div style={row2}>
+            <div>
+              <label style={lbl}>Status</label>
+              <select style={inp} value={f.status} onChange={e=>setF("status",e.target.value)}>
+                {STATUSES.map(s => <option key={s}>{s}</option>)}
+              </select>
+            </div>
+            <div><label style={lbl}>Purchase date</label><input style={inp} type="date" value={f.purchase_date || ""} onChange={e=>setF("purchase_date",e.target.value)} /></div>
+          </div>
+
+          <div style={row2}>
+            <div><label style={lbl}>Shipping method</label><input style={inp} value={f.shipping_method} onChange={e=>setF("shipping_method",e.target.value)} placeholder="EMS, FedEx, DHL…" /></div>
+            <div><label style={lbl}>Tracking number</label><input style={inp} value={f.tracking_number} onChange={e=>setF("tracking_number",e.target.value)} placeholder="EN123456789JP" /></div>
+          </div>
+
+          <div style={row2}>
+            <div>
+              <label style={lbl}>Payment method</label>
+              <select style={inp} value={f.payment_method} onChange={e=>setF("payment_method",e.target.value)}>
+                {["PayPal / Goods & Services","PayPal / Friends & Family","Fiverr Payment","Bank Transfer","Other"].map(p => <option key={p}>{p}</option>)}
+              </select>
+            </div>
+            <div style={{ display:"flex", flexDirection:"column", justifyContent:"flex-end" }}>
+              <label style={{ display:"flex", alignItems:"center", gap:".5rem", cursor:"pointer", marginBottom:".5rem" }}>
+                <input type="checkbox" checked={f.payment_received} onChange={e=>setF("payment_received",e.target.checked)} style={{ accentColor:"var(--red)", width:16, height:16 }} />
+                <span style={{ fontSize:".82rem", color:"var(--ink)" }}>Payment received</span>
+              </label>
+            </div>
+          </div>
+
+          <div style={{ marginBottom:"1rem" }}>
+            <label style={lbl}>Notes</label>
+            <textarea style={{ ...inp, minHeight:"60px", resize:"vertical" }} value={f.notes || ""} onChange={e=>setF("notes",e.target.value)} placeholder="Internal notes…" />
+          </div>
+
+          <div style={{ display:"flex", gap:".75rem" }}>
+            <button onClick={save} disabled={saving} style={btnPrimary}>{saving ? "Saving…" : editing ? "Update" : "Add order"}</button>
+            <button onClick={() => { setShowForm(false); setEditing(null); setForm(emptyOrder); }} style={btnGhost}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Filters ── */}
+      <div style={{ display:"flex", gap:".75rem", flexWrap:"wrap", marginBottom:"1rem" }}>
+        <input
+          style={{ ...inp, flex:1, minWidth:"200px", padding:".6rem 1rem" }}
+          placeholder="🔍 Search client, item, country, tracking…"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
+        <select style={{ ...inp, width:"auto", padding:".6rem 1rem" }} value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+          <option value="all">All statuses</option>
+          {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
+        </select>
+        <div style={{ padding:".6rem 1rem", background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"8px", fontSize:".75rem", color:"var(--warm)", display:"flex", alignItems:"center" }}>
+          {filtered.length} order{filtered.length !== 1 ? "s" : ""}
+        </div>
+      </div>
+
+      {/* ── Orders table ── */}
+      {loading ? (
+        <p style={{ color:"var(--warm)", padding:"2rem", textAlign:"center" }}>Loading…</p>
+      ) : filtered.length === 0 ? (
+        <p style={{ color:"var(--warm)", padding:"2rem", textAlign:"center" }}>No orders found.</p>
+      ) : (
+        <div style={{ overflowX:"auto" }}>
+          <table style={{ width:"100%", borderCollapse:"separate", borderSpacing:0, fontSize:".78rem" }}>
+            <thead>
+              <tr>
+                {["Client","Items","Fee (JPY)","Status","Date","Country","Tracking",""].map(h => (
+                  <th key={h} style={{ padding:".6rem .8rem", textAlign:"left", fontSize:".58rem", letterSpacing:".12em", textTransform:"uppercase", color:"var(--mist)", borderBottom:"1px solid var(--border)", background:"var(--paper)", whiteSpace:"nowrap" }}>
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((o, i) => (
+                <tr key={o.id} style={{ background: i % 2 === 0 ? "var(--surface)" : "var(--paper)" }}
+                  onMouseEnter={e => e.currentTarget.style.background = "var(--surface2)"}
+                  onMouseLeave={e => e.currentTarget.style.background = i % 2 === 0 ? "var(--surface)" : "var(--paper)"}>
+                  <td style={{ padding:".7rem .8rem", color:"var(--ink)", fontWeight:500, whiteSpace:"nowrap" }}>{o.client_name}</td>
+                  <td style={{ padding:".7rem .8rem", color:"var(--warm)", maxWidth:"200px", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }} title={o.items}>{o.items}</td>
+                  <td style={{ padding:".7rem .8rem", color:"#4ade80", fontWeight:500, whiteSpace:"nowrap" }}>¥{(o.service_fee_jpy||0).toLocaleString()}</td>
+                  <td style={{ padding:".7rem .8rem", whiteSpace:"nowrap" }}>
+                    <span style={{ display:"inline-block", padding:".15rem .55rem", borderRadius:"20px", fontSize:".62rem", fontWeight:500, background:`${STATUS_COLORS[o.status] || "#6b7280"}22`, color: STATUS_COLORS[o.status] || "var(--warm)" }}>
+                      {o.status}
+                    </span>
+                  </td>
+                  <td style={{ padding:".7rem .8rem", color:"var(--warm)", whiteSpace:"nowrap" }}>{o.purchase_date ? new Date(o.purchase_date).toLocaleDateString("fr-FR") : "—"}</td>
+                  <td style={{ padding:".7rem .8rem", color:"var(--warm)", whiteSpace:"nowrap" }}>{o.delivery_country || "—"}</td>
+                  <td style={{ padding:".7rem .8rem" }}>
+                    {o.tracking_number ? (
+                      <a href={`https://www.17track.net/en/track?nums=${o.tracking_number}`} target="_blank" rel="noopener noreferrer"
+                        style={{ color:"var(--red)", fontSize:".68rem", textDecoration:"none" }}>
+                        {o.tracking_number}
+                      </a>
+                    ) : <span style={{ color:"var(--mist)" }}>—</span>}
+                  </td>
+                  <td style={{ padding:".7rem .8rem", whiteSpace:"nowrap" }}>
+                    <button onClick={() => startEdit(o)} style={{ ...btnSmall, marginRight:"4px" }}>Edit</button>
+                    <button onClick={() => del(o.id)} style={btnDanger}>Del</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* ── Revenue summary ── */}
+      <div style={{ marginTop:"1.5rem", background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"10px", padding:"1.2rem 1.5rem" }}>
+        <p style={cardHeader}>Revenue summary</p>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"1rem" }}>
+          <div>
+            <div style={{ fontSize:".65rem", color:"var(--mist)", marginBottom:".3rem" }}>Total fees (JPY)</div>
+            <div style={{ fontSize:"1.4rem", fontFamily:"'Cormorant Garamond',serif", color:"#4ade80" }}>¥{totalFee.toLocaleString()}</div>
+          </div>
+          <div>
+            <div style={{ fontSize:".65rem", color:"var(--mist)", marginBottom:".3rem" }}>Est. EUR (÷145)</div>
+            <div style={{ fontSize:"1.4rem", fontFamily:"'Cormorant Garamond',serif", color:"#4ade80" }}>{(totalFee/145).toLocaleString("fr-FR",{minimumFractionDigits:0,maximumFractionDigits:0})}€</div>
+          </div>
+          <div>
+            <div style={{ fontSize:".65rem", color:"var(--mist)", marginBottom:".3rem" }}>Orders delivered</div>
+            <div style={{ fontSize:"1.4rem", fontFamily:"'Cormorant Garamond',serif", color:"var(--ink)" }}>{delivered} / {orders.length}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
