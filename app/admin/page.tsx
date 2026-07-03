@@ -851,48 +851,35 @@ function OrdersTab({ supabase, al }) {
       ) : filtered.length === 0 ? (
         <p style={{ color:"var(--warm)", padding:"2rem", textAlign:"center" }}>No orders found.</p>
       ) : (
-        <div style={{ overflowX:"auto", width:"100%" }}>
-          <table style={{ width:"100%", borderCollapse:"separate", borderSpacing:0, fontSize:".78rem", minWidth:"900px" }}>
-            <thead>
-              <tr>
-                {["Client","Items","Fee (JPY)","Status","Date","Country","Tracking",""].map(h => (
-                  <th key={h} style={{ padding:".6rem .8rem", textAlign:"left", fontSize:".58rem", letterSpacing:".12em", textTransform:"uppercase", color:"var(--mist)", borderBottom:"1px solid var(--border)", background:"var(--paper)", whiteSpace:"nowrap" }}>
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((o, i) => (
-                <tr key={o.id} style={{ background: i % 2 === 0 ? "var(--surface)" : "var(--paper)" }}
-                  onMouseEnter={e => e.currentTarget.style.background = "var(--surface2)"}
-                  onMouseLeave={e => e.currentTarget.style.background = i % 2 === 0 ? "var(--surface)" : "var(--paper)"}>
-                  <td style={{ padding:".7rem .8rem", color:"var(--ink)", fontWeight:500, whiteSpace:"nowrap" }}>{o.client_name}</td>
-                  <td style={{ padding:".7rem .8rem", color:"var(--warm)", maxWidth:"200px", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }} title={o.items}>{o.items}</td>
-                  <td style={{ padding:".7rem .8rem", color:"#4ade80", fontWeight:500, whiteSpace:"nowrap" }}>¥{(o.service_fee_jpy||0).toLocaleString()}</td>
-                  <td style={{ padding:".7rem .8rem", whiteSpace:"nowrap" }}>
-                    <span style={{ display:"inline-block", padding:".15rem .55rem", borderRadius:"20px", fontSize:".62rem", fontWeight:500, background:`${STATUS_COLORS[o.status] || "#6b7280"}22`, color: STATUS_COLORS[o.status] || "var(--warm)" }}>
-                      {o.status}
-                    </span>
-                  </td>
-                  <td style={{ padding:".7rem .8rem", color:"var(--warm)", whiteSpace:"nowrap" }}>{o.purchase_date ? new Date(o.purchase_date).toLocaleDateString("fr-FR") : "—"}</td>
-                  <td style={{ padding:".7rem .8rem", color:"var(--warm)", whiteSpace:"nowrap" }}>{o.delivery_country || "—"}</td>
-                  <td style={{ padding:".7rem .8rem" }}>
-                    {o.tracking_number ? (
-                      <a href={`https://www.17track.net/en/track?nums=${o.tracking_number}`} target="_blank" rel="noopener noreferrer"
-                        style={{ color:"var(--red)", fontSize:".68rem", textDecoration:"none" }}>
-                        {o.tracking_number}
-                      </a>
-                    ) : <span style={{ color:"var(--mist)" }}>—</span>}
-                  </td>
-                  <td style={{ padding:".7rem .8rem", whiteSpace:"nowrap" }}>
-                    <button onClick={() => startEdit(o)} style={{ ...btnSmall, marginRight:"4px" }}>Edit</button>
-                    <button onClick={() => del(o.id)} style={btnDanger}>Del</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div style={{ border:"1px solid var(--border)", borderRadius:"12px", overflow:"hidden" }}>
+          {/* Header */}
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 2fr 90px 120px 85px 100px 40px", gap:0, padding:".5rem 1rem", background:"var(--paper)", borderBottom:"1px solid var(--border)" }}>
+            {[al.clientName?.replace(" *","") || "Client","Items","Fee","Status","Date","Country",""].map(h => (
+              <div key={h} style={{ fontSize:".55rem", letterSpacing:".12em", textTransform:"uppercase", color:"var(--mist)", padding:"0 .4rem" }}>{h}</div>
+            ))}
+          </div>
+          {/* Rows */}
+          {filtered.map((o, i) => (
+            <div key={o.id}
+              style={{ display:"grid", gridTemplateColumns:"1fr 2fr 90px 120px 85px 100px 40px", gap:0, padding:".65rem 1rem", background: i%2===0 ? "var(--surface)" : "var(--paper)", borderBottom:"1px solid var(--border)", alignItems:"center", cursor:"pointer" }}
+              onMouseEnter={e=>e.currentTarget.style.background="var(--surface2)"}
+              onMouseLeave={e=>e.currentTarget.style.background=i%2===0?"var(--surface)":"var(--paper)"}>
+              <div style={{ padding:"0 .4rem", fontWeight:500, color:"var(--ink)", fontSize:".8rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{o.client_name}</div>
+              <div style={{ padding:"0 .4rem", color:"var(--warm)", fontSize:".75rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }} title={o.items}>{o.items}</div>
+              <div style={{ padding:"0 .4rem", color:"#4ade80", fontWeight:500, fontSize:".78rem" }}>¥{(o.service_fee_jpy||0).toLocaleString()}</div>
+              <div style={{ padding:"0 .4rem" }}>
+                <span style={{ display:"inline-block", padding:".12rem .45rem", borderRadius:"20px", fontSize:".58rem", fontWeight:500, background:`${STATUS_COLORS[o.status]||"#6b7280"}22`, color:STATUS_COLORS[o.status]||"var(--warm)", whiteSpace:"nowrap" }}>
+                  {o.status?.replace("Purchased — Awaiting Delivery","Awaiting").replace("Purchased — Awaiting Event","Awaiting Event").replace("Action Required","⚠ Action")}
+                </span>
+              </div>
+              <div style={{ padding:"0 .4rem", color:"var(--warm)", fontSize:".72rem" }}>{o.purchase_date ? new Date(o.purchase_date).toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit"}) : "—"}</div>
+              <div style={{ padding:"0 .4rem", color:"var(--warm)", fontSize:".72rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{o.delivery_country||"—"}</div>
+              <div style={{ padding:"0 .4rem", display:"flex", gap:"3px" }}>
+                <button onClick={()=>startEdit(o)} style={{...btnSmall, padding:".2rem .4rem", fontSize:".6rem"}}>✏️</button>
+                <button onClick={()=>del(o.id)} style={{...btnDanger, padding:".2rem .4rem", fontSize:".6rem"}}>🗑</button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
