@@ -924,32 +924,32 @@ function StatsTab({ supabase, al }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currency, setCurrency] = useState("JPY");
+  const [rate, setRate] = useState(185);
+  const [rateFetching, setRateFetching] = useState(false);
 
   useEffect(() => {
     supabase.from("orders").select("*").then(({ data, error }) => {
       if (!error) setOrders(data || []);
       setLoading(false);
     }).catch(() => setLoading(false));
+
+    // Fetch live EUR/JPY rate
+    fetch("https://api.frankfurter.app/latest?from=EUR&to=JPY")
+      .then(r => r.json())
+      .then(d => { if (d?.rates?.JPY) setRate(Math.round(d.rates.JPY)); })
+      .catch(() => {});
   }, []);
 
-  if (loading) return <p style={{color:"var(--warm)",padding:"2rem",textAlign:"center"}}>Loading…</p>;
-
-  const [rate, setRate] = useState(185);
-  const [rateFetching, setRateFetching] = useState(false);
-
-  async function fetchLiveRate() {
+  function fetchLiveRate() {
     setRateFetching(true);
-    try {
-      const res = await fetch("https://api.frankfurter.app/latest?from=EUR&to=JPY");
-      const data = await res.json();
-      if (data?.rates?.JPY) {
-        setRate(Math.round(data.rates.JPY));
-      }
-    } catch { /* keep current rate */ }
-    setRateFetching(false);
+    fetch("https://api.frankfurter.app/latest?from=EUR&to=JPY")
+      .then(r => r.json())
+      .then(d => { if (d?.rates?.JPY) setRate(Math.round(d.rates.JPY)); })
+      .catch(() => {})
+      .finally(() => setRateFetching(false));
   }
 
-  useEffect(() => { fetchLiveRate(); }, []);
+  if (loading) return <p style={{color:"var(--warm)",padding:"2rem",textAlign:"center"}}>Loading…</p>;
 
   // ── Monthly revenue ──────────────────────────────────────────────
   const monthlyMap = {};
