@@ -761,6 +761,11 @@ function OrdersTab({ supabase, al }) {
             <div><label style={lbl}>Country</label><input style={inp} value={f.delivery_country} onChange={e=>setF("delivery_country",e.target.value)} placeholder="Greece" /></div>
           </div>
 
+          <div style={{ marginBottom:"1rem" }}>
+            <label style={lbl}>Client email <span style={{color:"var(--mist)",textTransform:"none",letterSpacing:0}}>— PayPal / for Trustpilot invite</span></label>
+            <input style={inp} type="email" value={f.client_email||""} onChange={e=>setF("client_email",e.target.value)} placeholder="client@paypal.com" />
+          </div>
+
           <div style={row2}>
             <div>
               <label style={lbl}>Platform</label>
