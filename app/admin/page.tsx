@@ -853,15 +853,15 @@ function OrdersTab({ supabase, al }) {
       ) : (
         <div style={{ border:"1px solid var(--border)", borderRadius:"12px", overflow:"hidden" }}>
           {/* Header */}
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 2fr 90px 120px 85px 100px 40px", gap:0, padding:".5rem 1rem", background:"var(--paper)", borderBottom:"1px solid var(--border)" }}>
-            {[al.clientName?.replace(" *","") || "Client","Items","Fee","Status","Date","Country",""].map(h => (
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1.5fr 85px 110px 75px 85px 130px 40px", gap:0, padding:".5rem 1rem", background:"var(--paper)", borderBottom:"1px solid var(--border)" }}>
+            {[al.clientName?.replace(" *","") || "Client","Items","Fee","Status","Date","Country","Tracking",""].map(h => (
               <div key={h} style={{ fontSize:".55rem", letterSpacing:".12em", textTransform:"uppercase", color:"var(--mist)", padding:"0 .4rem" }}>{h}</div>
             ))}
           </div>
           {/* Rows */}
           {filtered.map((o, i) => (
             <div key={o.id}
-              style={{ display:"grid", gridTemplateColumns:"1fr 2fr 90px 120px 85px 100px 40px", gap:0, padding:".65rem 1rem", background: i%2===0 ? "var(--surface)" : "var(--paper)", borderBottom:"1px solid var(--border)", alignItems:"center", cursor:"pointer" }}
+              style={{ display:"grid", gridTemplateColumns:"1fr 1.5fr 85px 110px 75px 85px 130px 40px", gap:0, padding:".65rem 1rem", background: i%2===0 ? "var(--surface)" : "var(--paper)", borderBottom:"1px solid var(--border)", alignItems:"center", cursor:"pointer" }}
               onMouseEnter={e=>e.currentTarget.style.background="var(--surface2)"}
               onMouseLeave={e=>e.currentTarget.style.background=i%2===0?"var(--surface)":"var(--paper)"}>
               <div style={{ padding:"0 .4rem", fontWeight:500, color:"var(--ink)", fontSize:".8rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{o.client_name}</div>
@@ -874,6 +874,29 @@ function OrdersTab({ supabase, al }) {
               </div>
               <div style={{ padding:"0 .4rem", color:"var(--warm)", fontSize:".72rem" }}>{o.purchase_date ? new Date(o.purchase_date).toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit"}) : "—"}</div>
               <div style={{ padding:"0 .4rem", color:"var(--warm)", fontSize:".72rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{o.delivery_country||"—"}</div>
+              <div style={{ padding:"0 .4rem" }}>
+                {o.tracking_number ? (() => {
+                  const tn = o.tracking_number.trim();
+                  const ship = (o.shipping_method||"").toLowerCase();
+                  let url = `https://www.17track.net/en/track?nums=${tn}`;
+                  if (tn.startsWith("EN") || tn.startsWith("LX") || tn.startsWith("CN") || ship.includes("ems") || ship.includes("epacket") || ship.includes("airmail")) {
+                    url = `https://trackings.post.japanpost.jp/services/srv/search/?requestNo1=${tn}&search.x=1&language=en`;
+                  } else if (ship.includes("fedex")) {
+                    url = `https://www.fedex.com/fedextrack/?trknbr=${tn}`;
+                  } else if (ship.includes("dhl")) {
+                    url = `https://www.dhl.com/en/express/tracking.html?AWB=${tn}`;
+                  } else if (ship.includes("yamato")) {
+                    url = `https://jizen.kuronekoyamato.co.jp/jizen/servlet/crjz.b.CRJZ00?id=${tn}`;
+                  }
+                  return (
+                    <a href={url} target="_blank" rel="noopener noreferrer"
+                      style={{ color:"var(--red)", fontSize:".65rem", textDecoration:"none", fontFamily:"monospace", whiteSpace:"nowrap" }}
+                      title={`Track ${tn}`}>
+                      {tn.length > 14 ? tn.slice(0,13)+"…" : tn} ↗
+                    </a>
+                  );
+                })() : <span style={{ color:"var(--mist)", fontSize:".65rem" }}>—</span>}
+              </div>
               <div style={{ padding:"0 .4rem", display:"flex", gap:"3px" }}>
                 <button onClick={()=>startEdit(o)} style={{...btnSmall, padding:".2rem .4rem", fontSize:".6rem"}}>✏️</button>
                 <button onClick={()=>del(o.id)} style={{...btnDanger, padding:".2rem .4rem", fontSize:".6rem"}}>🗑</button>
