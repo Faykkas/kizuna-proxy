@@ -2,7 +2,7 @@
 "use client";
 
 import SiteNav from "../components/SiteNav";
-import { ManekiCorner } from "../components/pixel/Maneki";
+import Maneki from "../components/pixel/Maneki";
 import SiteFooter from "../components/SiteFooter";
 import AnnounceBar from "../components/AnnounceBar";
 import ServicesSection from "../components/sections/ServicesSection";
@@ -22,6 +22,10 @@ export default function ServicesClient() {
         <header className="page-head">
           <div className="page-head-kana" aria-hidden="true">商</div>
           <div className="page-head-inner">
+            <div className="px-head-mascot">
+              <Maneki prop="card" size={86} float />
+              <span className="px-head-bubble">We buy anything from Japan</span>
+            </div>
             <nav className="breadcrumb" aria-label="Breadcrumb">
               <a href="/">Home</a><span>/</span><span>Services</span>
             </nav>
@@ -30,7 +34,6 @@ export default function ServicesClient() {
           </div>
         </header>
         <ServicesSection t={t} />
-        <ManekiCorner prop="card" label="We buy anything from Japan" />
       </main>
       <SiteFooter t={t} />
       <BackToTop />

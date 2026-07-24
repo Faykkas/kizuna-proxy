@@ -2,7 +2,7 @@
 "use client";
 
 import SiteNav from "../components/SiteNav";
-import { ManekiCorner } from "../components/pixel/Maneki";
+import Maneki from "../components/pixel/Maneki";
 import SiteFooter from "../components/SiteFooter";
 import AnnounceBar from "../components/AnnounceBar";
 import ReviewsSection from "../components/sections/ReviewsSection";
@@ -22,6 +22,10 @@ export default function ReviewsClient() {
         <header className="page-head">
           <div className="page-head-kana" aria-hidden="true">信</div>
           <div className="page-head-inner">
+            <div className="px-head-mascot">
+              <Maneki prop="heart" size={86} float />
+              <span className="px-head-bubble">Thanks for the love</span>
+            </div>
             <nav className="breadcrumb" aria-label="Breadcrumb">
               <a href="/">Home</a><span>/</span><span>Reviews</span>
             </nav>
@@ -30,7 +34,6 @@ export default function ReviewsClient() {
           </div>
         </header>
         <ReviewsSection t={t} />
-        <ManekiCorner prop="heart" label="Thanks for the love" />
       </main>
       <SiteFooter t={t} />
       <BackToTop />

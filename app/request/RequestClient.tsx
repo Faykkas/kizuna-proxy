@@ -2,7 +2,7 @@
 "use client";
 
 import SiteNav from "../components/SiteNav";
-import { ManekiCorner } from "../components/pixel/Maneki";
+import Maneki from "../components/pixel/Maneki";
 import SiteFooter from "../components/SiteFooter";
 import AnnounceBar from "../components/AnnounceBar";
 import RequestSection from "../components/sections/RequestSection";
@@ -22,6 +22,10 @@ export default function RequestClient() {
         <header className="page-head">
           <div className="page-head-kana" aria-hidden="true">願</div>
           <div className="page-head-inner">
+            <div className="px-head-mascot">
+              <Maneki prop="mail" size={86} float />
+              <span className="px-head-bubble">Tell us what you want</span>
+            </div>
             <nav className="breadcrumb" aria-label="Breadcrumb">
               <a href="/">Home</a><span>/</span><span>Request</span>
             </nav>
@@ -30,7 +34,6 @@ export default function RequestClient() {
           </div>
         </header>
         <RequestSection t={t} />
-        <ManekiCorner prop="mail" label="Tell us what you want" />
       </main>
       <SiteFooter t={t} />
       <BackToTop />

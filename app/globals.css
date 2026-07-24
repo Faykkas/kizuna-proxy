@@ -1982,3 +1982,117 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   .hero-h1 { font-size: clamp(1.9rem, 4vw, 3rem); }
   .hero-desc { font-size: .85rem; }
 }
+/* ═══════════════════════════════════════════════════════════════════════════
+   KIZUNA PROXY — Correctifs v5.2
+   ─────────────────────────────────────────────────────────────────────── */
+
+/* ── 1. MASCOTTE EN TÊTE DE PAGE ──────────────────────────────────────────
+   Le chat accueille au lieu de conclure : il est vu immédiatement. */
+.px-head-mascot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .7rem;
+  margin-bottom: 1.4rem;
+}
+
+.px-head-bubble {
+  font-family: var(--font-pixel);
+  font-size: .45rem;
+  letter-spacing: .04em;
+  line-height: 1.8;
+  color: var(--warm);
+  background: var(--surface);
+  border: 2px solid var(--px-border);
+  border-radius: 8px;
+  padding: .5rem .8rem;
+  position: relative;
+}
+/* Pointe vers le haut, en direction du chat */
+.px-head-bubble::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  background: var(--surface);
+  border-left: 2px solid var(--px-border);
+  border-top: 2px solid var(--px-border);
+  transform: rotate(45deg);
+}
+
+/* L'ancienne position en bas de page n'est plus utilisée */
+.px-mascot-corner { display: none; }
+
+/* ── 2. TITRES DE PAGE EN PIXEL ───────────────────────────────────────────
+   Press Start 2P est large et n'a pas de vraies minuscules : à taille égale
+   il occupe environ le double d'une sans-serif. D'où une taille de base
+   réduite, un interlignage généreux et une limite de largeur — sans quoi
+   les titres longs deviendraient illisibles. */
+.page-head h1 {
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  font-size: clamp(.78rem, 1.9vw, 1.25rem);
+  line-height: 1.75;
+  letter-spacing: .01em;
+  max-width: 22ch;
+  margin: 0 auto 1.2rem;
+  text-transform: uppercase;
+}
+.page-head h1 em {
+  color: var(--red);
+  font-style: normal;
+  display: inline;
+}
+
+/* Le kana en filigrane remonte pour ne pas heurter le chat */
+.page-head { padding: 3.5rem 2rem 1.5rem; }
+
+/* Le paragraphe reste en Outfit : c'est du texte à lire, pas un titre */
+.page-head p {
+  font-family: var(--font-body);
+  font-size: .9rem;
+  line-height: 1.75;
+}
+
+/* ── 3. TITRES DE SECTION EN PIXEL ────────────────────────────────────────
+   Même traitement pour les h2 des sections, avec la même prudence. */
+.sec-head h2 {
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  font-size: clamp(.72rem, 1.5vw, 1rem);
+  line-height: 1.85;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  max-width: 26ch;
+}
+.sec-head h2 em {
+  color: var(--red);
+  font-style: normal;
+  display: inline;
+}
+.sec-head { margin-bottom: 2.5rem; }
+
+/* Le titre du hero reste en Outfit : c'est la première chose lue, elle doit
+   frapper vite. Le pixel y serait contre-productif. */
+.hero-h1 { font-family: var(--font-body); }
+
+/* Les sous-titres fusionnés « Why Kizuna » suivent la même règle */
+.why-merged-head h2 {
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  font-size: clamp(.72rem, 1.5vw, 1rem);
+  line-height: 1.85;
+  text-transform: uppercase;
+  max-width: 26ch;
+}
+.why-merged-head h2 em { color: var(--red); font-style: normal; }
+
+/* ── 4. RESPONSIVE ────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .page-head h1 { font-size: .72rem; line-height: 1.8; max-width: 18ch; }
+  .sec-head h2  { font-size: .68rem; line-height: 1.9; max-width: 20ch; }
+  .px-head-bubble { font-size: .4rem; }
+}
