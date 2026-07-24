@@ -13,7 +13,7 @@ import Maneki from "../components/pixel/Maneki";
 import { IconBox, IconTruck, IconCheck, IconHourglass } from "../components/pixel/PixelIcons";
 import { copy as t } from "../translations";
 import { useAuth } from "../lib/auth";
-import { useMyOrders, useAccountSummary, useNotifications } from "../lib/useOrders";
+import { useMyOrders, useAccountSummary, useNotifications, useMyRequests } from "../lib/useOrders";
 import {
   statusMeta, statusColor, progressPercent, nextStep,
   needsCustomerAction, formatJPY, normaliseStatus, orderTitle,
@@ -80,6 +80,7 @@ export default function AccountClient() {
   const { orders, loading } = useMyOrders();
   const summary = useAccountSummary(orders);
   const { items: notifs, unread, markAllRead } = useNotifications();
+  const { requests } = useMyRequests();
 
   // Not signed in → login. Admins → the admin panel, since the customer
   // dashboard would show them every order in the database, which is not
@@ -181,6 +182,35 @@ export default function AccountClient() {
           </section>
         )}
 
+        {/* ── Pending requests ──
+             A request that has not become an order yet still needs to be
+             visible, otherwise the customer thinks it was lost. */}
+        {requests.filter(r => r.status !== "converted" && r.status !== "declined").length > 0 && (
+          <section className="acc-section">
+            <h2 className="acc-section-title">AWAITING OUR REPLY</h2>
+            <div className="acc-req-list">
+              {requests
+                .filter(r => r.status !== "converted" && r.status !== "declined")
+                .map(r => (
+                  <div key={r.id} className="acc-req">
+                    <div className="acc-req-top">
+                      <span className="acc-req-date">
+                        Sent {new Date(r.created_at).toLocaleDateString("en-US", { day: "numeric", month: "short" })}
+                      </span>
+                      <span className="acc-req-status">
+                        {r.status === "new" ? "WAITING" : "REVIEWING"}
+                      </span>
+                    </div>
+                    <p className="acc-req-items">{r.items}</p>
+                    <p className="acc-req-hint">
+                      We reply within 24 hours with a quote.
+                    </p>
+                  </div>
+                ))}
+            </div>
+          </section>
+        )}
+
         {/* ── Active orders ── */}
         <section className="acc-section">
           <h2 className="acc-section-title">IN PROGRESS</h2>
@@ -189,7 +219,11 @@ export default function AccountClient() {
           ) : active.length === 0 ? (
             <div className="acc-empty">
               <Maneki prop="glass" size={72} />
-              <p>No orders in progress.</p>
+              <p>
+                {requests.some(r => r.status === "new" || r.status === "read")
+                  ? "Nothing confirmed yet — see your request above."
+                  : "No orders in progress."}
+              </p>
               <a href="/request" className="btn btn-gold">REQUEST AN ITEM</a>
             </div>
           ) : (

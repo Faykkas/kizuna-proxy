@@ -4,6 +4,7 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "../lib/supabase";
 import OrderManager from "../components/admin/OrderManager";
+import RequestsTab from "../components/admin/RequestsTab";
 import { ALL_STATUSES, statusColor, orderTitle } from "../lib/orderStatus";
 
 
@@ -222,10 +223,11 @@ export default function AdminPage() {
   const [pw,       setPw]       = useState("");
   const [loginErr, setLoginErr] = useState("");
   const [loading,  setLoading]  = useState(true);
-  const [tab,      setTab]      = useState("announce");
+  const [tab,      setTab]      = useState("requests");
   const [attempts, setAttempts] = useState(0);
   const [locked,   setLocked]   = useState(false);
   const [lockTimer,setLockTimer]= useState(0);
+  const [newRequests, setNewRequests] = useState(0);
   const lockRef = useRef(null);
 
   useEffect(() => {
@@ -240,6 +242,25 @@ export default function AdminPage() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
     return () => subscription.unsubscribe();
   }, []);
+
+  // Badge on the Requests tab. Live, so a request arriving while the admin
+  // is open shows up without a refresh.
+  useEffect(() => {
+    if (!session) return;
+    async function count() {
+      const { count: n } = await supabase
+        .from("requests")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "new");
+      setNewRequests(n || 0);
+    }
+    count();
+    const channel = supabase
+      .channel("admin-request-count")
+      .on("postgres_changes", { event: "*", schema: "public", table: "requests" }, count)
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [session]);
 
   const al = ADMIN_LANGS[adminLang] || ADMIN_LANGS.en;
 
@@ -304,6 +325,7 @@ export default function AdminPage() {
   );
 
   const TABS = [
+    { id:"requests", label:"📥 Requests", badge: newRequests },
     { id:"announce", label:al.tabs.announce },
     { id:"news",     label:al.tabs.news },
     { id:"gallery",  label:al.tabs.gallery },
@@ -347,11 +369,21 @@ export default function AdminPage() {
               transition:"all .15s",
             }}>
               {t.label}
+              {t.badge > 0 && (
+                <span style={{
+                  marginLeft: ".45rem", background: tab===t.id ? BG : ALERT,
+                  color: tab===t.id ? RED : BG, borderRadius: "8px",
+                  padding: ".15rem .35rem", fontSize: ".36rem", lineHeight: 1.6,
+                }}>
+                  {t.badge}
+                </span>
+              )}
             </button>
           ))}
         </div>
 
         {/* Tab content */}
+        {tab==="requests" && <RequestsTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
         {tab==="announce" && <AnnounceTab al={al} />}
         {tab==="news"     && <NewsTab al={al} />}
         {tab==="gallery"  && <GalleryTab al={al} />}

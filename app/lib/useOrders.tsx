@@ -44,6 +44,22 @@ export function useMyOrders() {
 
   useEffect(() => { load(); }, [load]);
 
+  // Live updates: when the admin creates or changes an order, the customer's
+  // dashboard reflects it without a refresh. Without this, someone sitting on
+  // the page would see nothing until they reloaded.
+  useEffect(() => {
+    if (!user) return;
+    const channel = supabase
+      .channel("my-orders")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "orders" },
+        () => load()
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [user, load]);
+
   return { orders, loading, error, reload: load };
 }
 
@@ -96,6 +112,24 @@ export function useOrderDetail(orderId) {
   }, [orderId]);
 
   useEffect(() => { load(); }, [load]);
+
+  // Live updates on this order: status changes, new photos, payment requests
+  useEffect(() => {
+    if (!orderId) return;
+    const channel = supabase
+      .channel(`order-${orderId}`)
+      .on("postgres_changes",
+          { event: "*", schema: "public", table: "orders", filter: `id=eq.${orderId}` },
+          () => load())
+      .on("postgres_changes",
+          { event: "*", schema: "public", table: "order_photos", filter: `order_id=eq.${orderId}` },
+          () => load())
+      .on("postgres_changes",
+          { event: "*", schema: "public", table: "order_events", filter: `order_id=eq.${orderId}` },
+          () => load())
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [orderId, load]);
 
   return { order, photos, events, payment, loading, reload: load };
 }
@@ -169,4 +203,37 @@ export function useAccountSummary(orders) {
     outstanding,
     needsAction,
   };
+}
+
+
+/** The customer's own requests, so they can see what they sent */
+export function useMyRequests() {
+  const { user } = useAuth();
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(async () => {
+    if (!user) { setRequests([]); setLoading(false); return; }
+    const { data } = await supabase
+      .from("requests")
+      .select("id, items, status, country, budget, created_at, order_id")
+      .order("created_at", { ascending: false });
+    setRequests(data || []);
+    setLoading(false);
+  }, [user]);
+
+  useEffect(() => { load(); }, [load]);
+
+  useEffect(() => {
+    if (!user) return;
+    const channel = supabase
+      .channel("my-requests")
+      .on("postgres_changes",
+          { event: "*", schema: "public", table: "requests" },
+          () => load())
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [user, load]);
+
+  return { requests, loading, reload: load };
 }
