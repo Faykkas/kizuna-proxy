@@ -1,10 +1,14 @@
 // app/lib/supabase.ts
 import { createClient } from "@supabase/supabase-js";
 
-export const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+// Supabase moved from anon/service_role keys to publishable/secret keys.
+// Both names are read so the app works either way — useful when the local
+// env and Vercel are not updated at the same moment.
+const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const key = (process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)!;
+
+export const supabase = createClient(url, key);
 
 export type CalendarEvent = {
   id: string;

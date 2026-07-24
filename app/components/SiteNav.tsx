@@ -4,6 +4,7 @@
 
 import { useState } from "react";
 import { copy as t } from "../translations";
+import { useAuth } from "../lib/auth";
 
 const BLOG_ITEMS = [
   { href:"/blog/how-to-buy-from-mercari-japan",    emoji:"🛍️", label:"Mercari Japan" },
@@ -18,6 +19,7 @@ const BLOG_ITEMS = [
 ];
 
 export default function SiteNav() {
+  const { user } = useAuth();
   const [guidesOpen, setGuidesOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileGuidesOpen, setMobileGuidesOpen] = useState(false);
@@ -71,6 +73,7 @@ export default function SiteNav() {
 
         {/* ── Desktop controls ── */}
         <div className="nav-controls">
+          <a href="/account" className="nav-account">{user ? "MY ORDERS" : "SIGN IN"}</a>
           <a href="/request" className="nav-cta">{t.nav.request}</a>
           {/* Burger */}
           <button className="mobile-menu-btn" onClick={() => setMobileOpen(v => !v)}
