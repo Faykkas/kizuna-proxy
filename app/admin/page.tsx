@@ -150,59 +150,68 @@ const emptyNews    = { title: "", content: "", category: "general" };
 const emptyGallery = { title: "", subtitle: "", image_url: "", sort_order: 0 };
 
 // ─── DESIGN TOKENS ───────────────────────────────────────────────────────────
-const BG      = "#0f0f11";
-const SURFACE = "#1c1c1f";
-const SURFACE2= "#242427";
-const BORDER  = "rgba(255,255,255,.08)";
-const RED     = "#e03040";
-const INK     = "#f4f4f5";
-const MUTED   = "rgba(244,244,245,.45)";
+// Phosphore palette — same tokens as the public site, so the admin no
+// longer looks like a different product.
+const BG      = "#150d28";   // deep night blue
+const SURFACE = "#251845";
+const SURFACE2= "#2d1d54";
+const BORDER  = "#4a3a75";
+const RED     = "#a8e04a";   // phosphor green — the accent
+const RED_D   = "#8fc23d";
+const VIOLET  = "#c77dff";
+const ALERT   = "#ff5060";
+const INK     = "#f0edf7";
+const MUTED   = "rgba(240,237,247,.42)";
+const PIXEL   = "'Press Start 2P', monospace";
+const BODY    = "'Outfit', system-ui, sans-serif";
 
 const lbl = {
-  fontSize: ".6rem", letterSpacing: ".14em", textTransform: "uppercase" as const,
-  color: MUTED, display: "block", marginBottom: ".4rem", fontFamily: "'Inter',sans-serif",
+  fontSize: ".42rem", letterSpacing: ".06em", textTransform: "uppercase" as const,
+  color: RED, display: "block", marginBottom: ".5rem", fontFamily: PIXEL,
+  lineHeight: 1.9,
 };
 const inp = {
-  width: "100%", padding: ".75rem 1rem",
-  border: `1px solid ${BORDER}`, borderRadius: "8px",
-  fontSize: ".88rem", fontFamily: "'Inter',sans-serif",
-  background: SURFACE2, color: INK, outline: "none",
+  width: "100%", padding: ".7rem .9rem",
+  border: `2px solid ${BORDER}`, borderRadius: "8px",
+  fontSize: ".88rem", fontFamily: BODY,
+  background: BG, color: INK, outline: "none",
   boxSizing: "border-box" as const, transition: "border-color .15s",
 };
 const btnPrimary = {
-  background: RED, color: "#fff", border: "none",
-  padding: ".65rem 1.4rem", borderRadius: "8px",
-  fontSize: ".68rem", letterSpacing: ".1em", textTransform: "uppercase" as const,
-  fontFamily: "'Inter',sans-serif", cursor: "pointer", fontWeight: 500,
+  background: RED, color: BG, border: "none",
+  padding: ".7rem 1.3rem", borderRadius: "8px",
+  fontSize: ".45rem", letterSpacing: ".04em", textTransform: "uppercase" as const,
+  fontFamily: PIXEL, cursor: "pointer", lineHeight: 1.8,
+  boxShadow: `0 3px 0 ${RED_D}`,
 };
 const btnGhost = {
   background: "transparent", color: MUTED,
-  border: `1px solid ${BORDER}`, padding: ".65rem 1.2rem", borderRadius: "8px",
-  fontSize: ".68rem", letterSpacing: ".1em", textTransform: "uppercase" as const,
-  fontFamily: "'Inter',sans-serif", cursor: "pointer",
+  border: `2px solid ${BORDER}`, padding: ".7rem 1.1rem", borderRadius: "8px",
+  fontSize: ".45rem", letterSpacing: ".04em", textTransform: "uppercase" as const,
+  fontFamily: PIXEL, cursor: "pointer", lineHeight: 1.8,
 };
 const btnSmall = {
-  border: `1px solid ${BORDER}`, padding: ".3rem .7rem", borderRadius: "6px",
-  fontSize: ".65rem", fontFamily: "'Inter',sans-serif", cursor: "pointer",
-  color: INK, background: SURFACE2,
+  border: `2px solid ${BORDER}`, padding: ".35rem .65rem", borderRadius: "6px",
+  fontSize: ".62rem", fontFamily: BODY, cursor: "pointer",
+  color: INK, background: BG,
 };
 const btnDanger = {
-  border: "none", padding: ".3rem .7rem", borderRadius: "6px",
-  fontSize: ".65rem", fontFamily: "'Inter',sans-serif", cursor: "pointer",
-  color: "#ff8080", background: "rgba(224,48,64,.12)",
+  border: `2px solid rgba(255,80,96,.3)`, padding: ".35rem .65rem", borderRadius: "6px",
+  fontSize: ".62rem", fontFamily: BODY, cursor: "pointer",
+  color: ALERT, background: "rgba(255,80,96,.1)",
 };
 const card = {
-  background: SURFACE, border: `1px solid ${BORDER}`,
-  borderRadius: "12px", padding: "1.75rem", marginBottom: "1.25rem",
+  background: SURFACE, border: `2px solid ${BORDER}`,
+  borderRadius: "12px", padding: "1.6rem", marginBottom: "1.25rem",
+  boxShadow: "0 4px 0 rgba(0,0,0,.3)",
 };
 const cardHeader = {
-  fontSize: ".62rem", letterSpacing: ".14em", textTransform: "uppercase" as const,
-  color: MUTED, fontWeight: 500, marginBottom: "1.5rem",
-  fontFamily: "'Inter',sans-serif",
+  fontSize: ".48rem", letterSpacing: ".06em", textTransform: "uppercase" as const,
+  color: RED, marginBottom: "1.4rem", fontFamily: PIXEL, lineHeight: 1.9,
 };
 const row2 = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" };
-const msgOk  = { fontSize: ".78rem", color: "#4ade80", marginBottom: ".75rem" };
-const msgErr = { fontSize: ".78rem", color: RED, marginBottom: ".75rem" };
+const msgOk  = { fontSize: ".45rem", color: RED, marginBottom: ".75rem", fontFamily: PIXEL, lineHeight: 1.9 };
+const msgErr = { fontSize: ".45rem", color: ALERT, marginBottom: ".75rem", fontFamily: PIXEL, lineHeight: 1.9 };
 const sep    = { height: "1px", background: BORDER, margin: "1.5rem 0" };
 
 // ─── ADMIN PAGE ───────────────────────────────────────────────────────────────
@@ -263,8 +272,8 @@ export default function AdminPage() {
   if (!session) return (
     <div style={{ minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center", background:BG }}>
       <div style={{ background:SURFACE, border:`1px solid ${BORDER}`, borderRadius:"16px", padding:"2.5rem", width:"100%", maxWidth:"380px" }}>
-        <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.6rem", fontWeight:600, color:INK, marginBottom:".3rem" }}>
-          <span style={{ color:RED }}>Kizuna</span> Admin
+        <div style={{ fontFamily:PIXEL, fontSize:".85rem", color:INK, marginBottom:".6rem", lineHeight:1.9 }}>
+          <span style={{ color:RED }}>KIZUNA</span> ADMIN
         </div>
         <div style={{display:"flex",gap:".4rem",marginBottom:"1rem"}}>
           {["en","fr","ja"].map(l => <button key={l} onClick={()=>{setAdminLang(l);localStorage.setItem("admin-lang",l);}} style={{padding:".25rem .6rem",borderRadius:"6px",border:"1px solid",borderColor:adminLang===l?RED:BORDER,background:adminLang===l?RED:"transparent",color:adminLang===l?"#fff":MUTED,fontSize:".65rem",cursor:"pointer"}}>{l.toUpperCase()}</button>)}
@@ -304,14 +313,14 @@ export default function AdminPage() {
   ];
 
   return (
-    <div style={{ minHeight:"100vh", background:BG, padding:"2rem 1.5rem" }}>
+    <div style={{ minHeight:"100vh", background:BG, padding:"2rem 1.5rem", fontFamily:BODY }}>
       <div style={{ maxWidth:"920px", margin:"0 auto" }}>
 
         {/* Header */}
         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"2.5rem", flexWrap:"wrap", gap:"1rem" }}>
           <div>
-            <h1 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", fontWeight:300, color:INK, marginBottom:".2rem" }}>
-              <span style={{ color:RED }}>Kizuna</span> Admin
+            <h1 style={{ fontFamily:PIXEL, fontSize:".95rem", color:INK, marginBottom:".5rem", lineHeight:1.9 }}>
+              <span style={{ color:RED }}>KIZUNA</span> ADMIN
             </h1>
             <p style={{ fontSize:".75rem", color:MUTED, fontFamily:"'Inter',sans-serif" }}>{session.user.email}</p>
           </div>
@@ -328,11 +337,13 @@ export default function AdminPage() {
         <div style={{ display:"flex", gap:"4px", marginBottom:"2rem" }}>
           {TABS.map(t => (
             <button key={t.id} onClick={()=>setTab(t.id)} style={{
-              padding:".6rem 1.3rem", borderRadius:"8px", border:"none", cursor:"pointer",
-              fontFamily:"'Inter',sans-serif", fontSize:".68rem", letterSpacing:".1em",
-              textTransform:"uppercase" as const, fontWeight:500,
+              padding:".75rem 1.1rem", borderRadius:"8px", cursor:"pointer",
+              fontFamily:PIXEL, fontSize:".45rem", letterSpacing:".04em",
+              textTransform:"uppercase" as const, lineHeight:1.8,
+              border: `2px solid ${tab===t.id ? RED : BORDER}`,
               background: tab===t.id ? RED : SURFACE,
-              color: tab===t.id ? "#fff" : MUTED,
+              color: tab===t.id ? BG : MUTED,
+              boxShadow: tab===t.id ? `0 3px 0 ${RED_D}` : "none",
               transition:"all .15s",
             }}>
               {t.label}
@@ -655,12 +666,12 @@ function OrdersTab({ supabase, al }) {
   // Shared with the customer dashboard so a status never means two things
   const STATUSES = ALL_STATUSES;
   const STATUS_COLORS = {
-    "Delivered":           "#4ade80",
-    "Shipped":             "#60a5fa",
+    "Delivered":           RED,
+    "Shipped":             VIOLET,
     "Purchased":           "#f59e0b",
     "Purchased — Awaiting Delivery": "#f59e0b",
     "Purchased — Awaiting Event":    "#f59e0b",
-    "Action Required":     "#ef4444",
+    "Action Required":     ALERT,
     "Pending":             "#6b7280",
     "Cancelled":           "#374151",
     // New dashboard statuses
@@ -669,7 +680,7 @@ function OrdersTab({ supabase, al }) {
     "Received in Japan":        "#a8e04a",
     "Photos Uploaded":          "#c77dff",
     "Packing":                  "#c77dff",
-    "Awaiting Shipping Payment":"#ef4444",
+    "Awaiting Shipping Payment":ALERT,
   };
 
   useEffect(() => { load(); }, []);
@@ -741,14 +752,14 @@ function OrdersTab({ supabase, al }) {
       {/* ── Stats ── */}
       <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"12px", marginBottom:"1.5rem" }}>
         {[
-          { label:al.totalOrders,      value: orders.length,           color:"var(--ink)" },
-          { label:al.totalFees,  value:`¥${totalFee.toLocaleString()}`, color:"#4ade80" },
-          { label:al.activeOrders,     value: active,                   color:"#60a5fa" },
-          { label:al.actionRequired,   value: actionReq,                color: actionReq > 0 ? "#ef4444" : "var(--warm)" },
+          { label:al.totalOrders,      value: orders.length,           color:INK },
+          { label:al.totalFees,  value:`¥${totalFee.toLocaleString()}`, color:RED },
+          { label:al.activeOrders,     value: active,                   color:VIOLET },
+          { label:al.actionRequired,   value: actionReq,                color: actionReq > 0 ? ALERT : MUTED },
         ].map(s => (
-          <div key={s.label} style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"10px", padding:"1.1rem 1.2rem" }}>
-            <div style={{ fontSize:"1.4rem", fontWeight:600, color:s.color, fontFamily:"'Cormorant Garamond',serif" }}>{s.value}</div>
-            <div style={{ fontSize:".65rem", color:"var(--mist)", letterSpacing:".08em", marginTop:".2rem" }}>{s.label}</div>
+          <div key={s.label} style={{ background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"12px", padding:"1.1rem 1.2rem", boxShadow:"0 4px 0 rgba(0,0,0,.3)" }}>
+            <div style={{ fontSize:".85rem", color:s.color, fontFamily:PIXEL, lineHeight:1.7 }}>{s.value}</div>
+            <div style={{ fontSize:".36rem", color:MUTED, letterSpacing:".08em", marginTop:".45rem", fontFamily:PIXEL, lineHeight:1.9 }}>{s.label}</div>
           </div>
         ))}
       </div>
@@ -774,7 +785,7 @@ function OrdersTab({ supabase, al }) {
           </div>
 
           <div style={{ marginBottom:"1rem" }}>
-            <label style={lbl}>Client email <span style={{color:"var(--mist)",textTransform:"none",letterSpacing:0}}>— PayPal / for Trustpilot invite</span></label>
+            <label style={lbl}>Client email <span style={{color:MUTED,textTransform:"none",letterSpacing:0}}>— PayPal / for Trustpilot invite</span></label>
             <input style={inp} type="email" value={f.client_email||""} onChange={e=>setF("client_email",e.target.value)} placeholder="client@paypal.com" />
           </div>
 
@@ -827,8 +838,8 @@ function OrdersTab({ supabase, al }) {
             </div>
             <div style={{ display:"flex", flexDirection:"column", justifyContent:"flex-end" }}>
               <label style={{ display:"flex", alignItems:"center", gap:".5rem", cursor:"pointer", marginBottom:".5rem" }}>
-                <input type="checkbox" checked={f.payment_received} onChange={e=>setF("payment_received",e.target.checked)} style={{ accentColor:"var(--red)", width:16, height:16 }} />
-                <span style={{ fontSize:".82rem", color:"var(--ink)" }}>Payment received</span>
+                <input type="checkbox" checked={f.payment_received} onChange={e=>setF("payment_received",e.target.checked)} style={{ accentColor:RED, width:16, height:16 }} />
+                <span style={{ fontSize:".82rem", color:INK }}>Payment received</span>
               </label>
             </div>
           </div>
@@ -857,50 +868,50 @@ function OrdersTab({ supabase, al }) {
           <option value="all">All statuses</option>
           {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
-        <div style={{ padding:".6rem 1rem", background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"8px", fontSize:".75rem", color:"var(--warm)", display:"flex", alignItems:"center" }}>
+        <div style={{ padding:".6rem 1rem", background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"8px", fontSize:".75rem", color:MUTED, display:"flex", alignItems:"center" }}>
           {filtered.length} order{filtered.length !== 1 ? "s" : ""}
         </div>
       </div>
 
       {/* ── Orders table ── */}
       {loading ? (
-        <p style={{ color:"var(--warm)", padding:"2rem", textAlign:"center" }}>Loading…</p>
+        <p style={{ color:MUTED, padding:"2rem", textAlign:"center" }}>Loading…</p>
       ) : filtered.length === 0 ? (
-        <p style={{ color:"var(--warm)", padding:"2rem", textAlign:"center" }}>No orders found.</p>
+        <p style={{ color:MUTED, padding:"2rem", textAlign:"center" }}>No orders found.</p>
       ) : (
-        <div style={{ border:"1px solid var(--border)", borderRadius:"12px", overflow:"hidden" }}>
+        <div style={{ border:`2px solid ${BORDER}`, borderRadius:"12px", overflow:"hidden" }}>
           {/* Header */}
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 110px 75px 85px 130px 66px", gap:0, padding:".5rem 1rem", background:"var(--paper)", borderBottom:"1px solid var(--border)" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 110px 75px 85px 130px 66px", gap:0, padding:".5rem 1rem", background:BG, borderBottom:`2px solid ${BORDER}` }}>
             {[al.clientName?.replace(" *","") || "Client","Items","Fee","Status","Date","Country","Tracking",""].map(h => (
-              <div key={h} style={{ fontSize:".55rem", letterSpacing:".12em", textTransform:"uppercase", color:"var(--mist)", padding:"0 .4rem" }}>{h}</div>
+              <div key={h} style={{ fontSize:".34rem", letterSpacing:".06em", textTransform:"uppercase", color:RED, padding:"0 .4rem", fontFamily:PIXEL, lineHeight:1.9 }}>{h}</div>
             ))}
           </div>
           {/* Rows */}
           {filtered.map((o, i) => (
             <div key={o.id}
-              style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 110px 75px 85px 130px 66px", gap:0, padding:".65rem 1rem", background: i%2===0 ? "var(--surface)" : "var(--paper)", borderBottom:"1px solid var(--border)", alignItems:"center", cursor:"pointer" }}
-              onMouseEnter={e=>e.currentTarget.style.background="var(--surface2)"}
-              onMouseLeave={e=>e.currentTarget.style.background=i%2===0?"var(--surface)":"var(--paper)"}>
+              style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 110px 75px 85px 130px 66px", gap:0, padding:".65rem 1rem", background: i%2===0 ? SURFACE : BG, borderBottom:`2px solid ${BORDER}`, alignItems:"center", cursor:"pointer" }}
+              onMouseEnter={e=>e.currentTarget.style.background=SURFACE2}
+              onMouseLeave={e=>e.currentTarget.style.background=i%2===0?SURFACE:BG}>
               <div style={{ padding:"0 .4rem" }}>
-                <div style={{ fontWeight:500, color:"var(--ink)", fontSize:".8rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{o.client_name}</div>
+                <div style={{ fontWeight:500, color:INK, fontSize:".8rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{o.client_name}</div>
                 {o.client_email
                   ? <a href={`mailto:${o.client_email}?subject=Thank you for your Kizuna Proxy order!&body=Hi ${o.client_name},%0A%0AYour order has been delivered! We hope everything arrived safely.%0A%0AWe would really appreciate if you could leave us a review on Trustpilot:%0Ahttps://fr.trustpilot.com/evaluate/kizunaproxy.com%0A%0AThank you so much!%0AKizuna Proxy Team`}
-                      style={{fontSize:".62rem",color:"var(--red)",textDecoration:"none",display:"block",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}
+                      style={{fontSize:".62rem",color:RED,textDecoration:"none",display:"block",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}
                       title={`Email: ${o.client_email}`}>
                       ✉ {o.client_email}
                     </a>
-                  : <span style={{fontSize:".6rem",color:"var(--mist)"}}>no email</span>
+                  : <span style={{fontSize:".6rem",color:MUTED}}>no email</span>
                 }
               </div>
-              <div style={{ padding:"0 .4rem", color:"var(--warm)", fontSize:".75rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }} title={o.items}>{o.items}</div>
-              <div style={{ padding:"0 .4rem", color:"#4ade80", fontWeight:500, fontSize:".78rem" }}>¥{(o.service_fee_jpy||0).toLocaleString()}</div>
+              <div style={{ padding:"0 .4rem", color:MUTED, fontSize:".75rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }} title={o.items}>{o.items}</div>
+              <div style={{ padding:"0 .4rem", color:RED, fontWeight:500, fontSize:".78rem" }}>¥{(o.service_fee_jpy||0).toLocaleString()}</div>
               <div style={{ padding:"0 .4rem" }}>
-                <span style={{ display:"inline-block", padding:".12rem .45rem", borderRadius:"20px", fontSize:".58rem", fontWeight:500, background:`${STATUS_COLORS[o.status]||"#6b7280"}22`, color:STATUS_COLORS[o.status]||"var(--warm)", whiteSpace:"nowrap" }}>
+                <span style={{ display:"inline-block", padding:".28rem .5rem", borderRadius:"5px", fontSize:".34rem", fontFamily:PIXEL, lineHeight:1.9, background:`${STATUS_COLORS[o.status]||"#6b7280"}22`, color:STATUS_COLORS[o.status]||MUTED, whiteSpace:"nowrap" }}>
                   {o.status?.replace("Purchased — Awaiting Delivery","Seller shipped").replace("Purchased — Awaiting Event","Awaiting Event").replace("Awaiting Shipping Payment","⚠ Payment due").replace("Action Required","⚠ Action")}
                 </span>
               </div>
-              <div style={{ padding:"0 .4rem", color:"var(--warm)", fontSize:".72rem" }}>{o.purchase_date ? new Date(o.purchase_date).toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit"}) : "—"}</div>
-              <div style={{ padding:"0 .4rem", color:"var(--warm)", fontSize:".72rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{o.delivery_country||"—"}</div>
+              <div style={{ padding:"0 .4rem", color:MUTED, fontSize:".72rem" }}>{o.purchase_date ? new Date(o.purchase_date).toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit"}) : "—"}</div>
+              <div style={{ padding:"0 .4rem", color:MUTED, fontSize:".72rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{o.delivery_country||"—"}</div>
               <div style={{ padding:"0 .4rem" }}>
                 {o.tracking_number ? (() => {
                   const tn = o.tracking_number.trim();
@@ -917,12 +928,12 @@ function OrdersTab({ supabase, al }) {
                   }
                   return (
                     <a href={url} target="_blank" rel="noopener noreferrer"
-                      style={{ color:"var(--red)", fontSize:".65rem", textDecoration:"none", fontFamily:"monospace", whiteSpace:"nowrap" }}
+                      style={{ color:RED, fontSize:".65rem", textDecoration:"none", fontFamily:"monospace", whiteSpace:"nowrap" }}
                       title={`Track ${tn}`}>
                       {tn.length > 14 ? tn.slice(0,13)+"…" : tn} ↗
                     </a>
                   );
-                })() : <span style={{ color:"var(--mist)", fontSize:".65rem" }}>—</span>}
+                })() : <span style={{ color:MUTED, fontSize:".65rem" }}>—</span>}
               </div>
               <div style={{ padding:"0 .4rem", display:"flex", gap:"3px" }}>
                 <button onClick={()=>setManaging(o)} style={{...btnSmall, padding:".2rem .4rem", fontSize:".6rem", borderColor:"#a8e04a", color:"#a8e04a"}} title="Manage (photos, payment, status)">⚙</button>
@@ -935,20 +946,20 @@ function OrdersTab({ supabase, al }) {
       )}
 
       {/* ── Revenue summary ── */}
-      <div style={{ marginTop:"1.5rem", background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"10px", padding:"1.2rem 1.5rem" }}>
+      <div style={{ marginTop:"1.5rem", background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"10px", padding:"1.2rem 1.5rem" }}>
         <p style={cardHeader}>Revenue summary</p>
         <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"1rem" }}>
           <div>
-            <div style={{ fontSize:".65rem", color:"var(--mist)", marginBottom:".3rem" }}>Total fees (JPY)</div>
-            <div style={{ fontSize:"1.4rem", fontFamily:"'Cormorant Garamond',serif", color:"#4ade80" }}>¥{totalFee.toLocaleString()}</div>
+            <div style={{ fontSize:".65rem", color:MUTED, marginBottom:".3rem" }}>Total fees (JPY)</div>
+            <div style={{ fontSize:".8rem", fontFamily:PIXEL, color:RED, lineHeight:1.7 }}>¥{totalFee.toLocaleString()}</div>
           </div>
           <div>
-            <div style={{ fontSize:".65rem", color:"var(--mist)", marginBottom:".3rem" }}>Est. EUR (÷145)</div>
-            <div style={{ fontSize:"1.4rem", fontFamily:"'Cormorant Garamond',serif", color:"#4ade80" }}>{(totalFee/145).toLocaleString("fr-FR",{minimumFractionDigits:0,maximumFractionDigits:0})}€</div>
+            <div style={{ fontSize:".65rem", color:MUTED, marginBottom:".3rem" }}>Est. EUR (÷145)</div>
+            <div style={{ fontSize:".8rem", fontFamily:PIXEL, color:RED, lineHeight:1.7 }}>{(totalFee/145).toLocaleString("fr-FR",{minimumFractionDigits:0,maximumFractionDigits:0})}€</div>
           </div>
           <div>
-            <div style={{ fontSize:".65rem", color:"var(--mist)", marginBottom:".3rem" }}>Orders delivered</div>
-            <div style={{ fontSize:"1.4rem", fontFamily:"'Cormorant Garamond',serif", color:"var(--ink)" }}>{delivered} / {orders.length}</div>
+            <div style={{ fontSize:".65rem", color:MUTED, marginBottom:".3rem" }}>Orders delivered</div>
+            <div style={{ fontSize:".8rem", fontFamily:PIXEL, color:INK, lineHeight:1.7 }}>{delivered} / {orders.length}</div>
           </div>
         </div>
       </div>
@@ -996,7 +1007,7 @@ function StatsTab({ supabase, al }) {
       .finally(() => setRateFetching(false));
   }
 
-  if (loading) return <p style={{color:"var(--warm)",padding:"2rem",textAlign:"center"}}>Loading…</p>;
+  if (loading) return <p style={{color:MUTED,padding:"2rem",textAlign:"center"}}>Loading…</p>;
 
   // ── Monthly revenue ──────────────────────────────────────────────
   const monthlyMap = {};
@@ -1047,8 +1058,8 @@ function StatsTab({ supabase, al }) {
 
   // ── Status breakdown ──────────────────────────────────────────────
   const STATUS_COLORS = {
-    "Delivered": "#4ade80", "Shipped": "#60a5fa",
-    "Purchased": "#f59e0b", "Action Required": "#ef4444",
+    "Delivered": RED, "Shipped": VIOLET,
+    "Purchased": "#f59e0b", "Action Required": ALERT,
     "Pending": "#6b7280", "Cancelled": "#374151",
   };
   const statusMap = {};
@@ -1067,12 +1078,12 @@ function StatsTab({ supabase, al }) {
       {/* Currency toggle + rate */}
       <div style={{ display:"flex", justifyContent:"flex-end", gap:"1rem", alignItems:"center" }}>
         <div style={{ display:"flex", alignItems:"center", gap:".5rem" }}>
-          <label style={{ fontSize:".65rem", color:"var(--mist)" }}>1€ =</label>
+          <label style={{ fontSize:".65rem", color:MUTED }}>1€ =</label>
           <input type="number" value={rate} onChange={e=>setRate(+e.target.value||185)}
             style={{ ...inp, width:"80px", padding:".3rem .6rem", fontSize:".78rem" }} />
-          <label style={{ fontSize:".65rem", color:"var(--mist)" }}>¥</label>
+          <label style={{ fontSize:".65rem", color:MUTED }}>¥</label>
           <button onClick={fetchLiveRate} disabled={rateFetching}
-            style={{ fontSize:".6rem", color:"var(--red)", background:"none", border:"none", cursor:"pointer", padding:0 }}>
+            style={{ fontSize:".6rem", color:RED, background:"none", border:"none", cursor:"pointer", padding:0 }}>
             {rateFetching ? "⏳" : "🔄 refresh"}
           </button>
         </div>
@@ -1080,9 +1091,9 @@ function StatsTab({ supabase, al }) {
           {["JPY","EUR"].map(c => (
             <button key={c} onClick={() => setCurrency(c)} style={{
               padding:".35rem .9rem", borderRadius:"6px", border:"1px solid",
-              borderColor: currency===c ? "var(--red)" : "var(--border)",
-              background: currency===c ? "var(--red)" : "var(--surface)",
-              color: currency===c ? "#fff" : "var(--warm)",
+              borderColor: currency===c ? RED : BORDER,
+              background: currency===c ? RED : SURFACE,
+              color: currency===c ? BG : MUTED,
               fontSize:".68rem", cursor:"pointer", fontFamily:"'Inter',sans-serif",
             }}>{c}</button>
           ))}
@@ -1092,30 +1103,30 @@ function StatsTab({ supabase, al }) {
       {/* KPI Cards */}
       <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"12px" }}>
         {[
-          { label:al.totalEarned,      value: fmt(totalFee),        sub: `${orders.length} orders`, color:"#4ade80" },
-          { label:al.avgPerOrder,     value: fmt(avgFee),          sub: al.serviceAvg, color:"var(--ink)" },
+          { label:al.totalEarned,      value: fmt(totalFee),        sub: `${orders.length} orders`, color:RED },
+          { label:al.avgPerOrder,     value: fmt(avgFee),          sub: al.serviceAvg, color:INK },
           { label:al.bestMonth,        value: bestMonth?.label || "—", sub: bestMonth ? fmt(bestMonth.fee) : "—", color:"#f59e0b" },
-          { label:"Delivered",         value: orders.filter(o=>o.status==="Delivered").length, sub: `of ${orders.length} total`, color:"#4ade80" },
+          { label:"Delivered",         value: orders.filter(o=>o.status==="Delivered").length, sub: `of ${orders.length} total`, color:RED },
         ].map(k => (
-          <div key={k.label} style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"10px", padding:"1.1rem 1.2rem" }}>
-            <div style={{ fontSize:"1.5rem", fontWeight:600, color:k.color, fontFamily:"'Cormorant Garamond',serif", lineHeight:1.1 }}>{k.value}</div>
-            <div style={{ fontSize:".65rem", color:"var(--mist)", marginTop:".3rem" }}>{k.label}</div>
-            <div style={{ fontSize:".68rem", color:"var(--warm)", marginTop:".15rem" }}>{k.sub}</div>
+          <div key={k.label} style={{ background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"12px", padding:"1.1rem 1.2rem", boxShadow:"0 4px 0 rgba(0,0,0,.3)" }}>
+            <div style={{ fontSize:".85rem", color:k.color, fontFamily:PIXEL, lineHeight:1.7 }}>{k.value}</div>
+            <div style={{ fontSize:".36rem", color:MUTED, marginTop:".45rem", fontFamily:PIXEL, lineHeight:1.9 }}>{k.label}</div>
+            <div style={{ fontSize:".68rem", color:MUTED, marginTop:".15rem" }}>{k.sub}</div>
           </div>
         ))}
       </div>
 
       {/* Monthly revenue chart */}
-      <div style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"12px", padding:"1.5rem" }}>
+      <div style={{ background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"12px", padding:"1.5rem" }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"1.5rem" }}>
           <p style={cardHeader}>Monthly revenue</p>
-          <span style={{ fontSize:".68rem", color:"var(--mist)" }}>Service fees only</span>
+          <span style={{ fontSize:".68rem", color:MUTED }}>Service fees only</span>
         </div>
         <div style={{ display:"flex", alignItems:"flex-end", gap:"8px", height:"220px", overflowX:"auto", paddingBottom:".5rem" }}>
           {months.map((m, i) => (
             <div key={i} style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:"6px", flex:"0 0 auto", minWidth:"42px" }}>
               {/* Value */}
-              <div style={{ fontSize:".55rem", color:"var(--warm)", textAlign:"center", minHeight:"14px", whiteSpace:"nowrap", overflow:"visible" }}>
+              <div style={{ fontSize:".55rem", color:MUTED, textAlign:"center", minHeight:"14px", whiteSpace:"nowrap", overflow:"visible" }}>
                 {currency==="EUR" ? `${Math.round(m.fee/rate)}€` : `¥${Math.round(m.fee/1000)}k`}
               </div>
               {/* Bar */}
@@ -1123,14 +1134,14 @@ function StatsTab({ supabase, al }) {
                 width:"32px", borderRadius:"4px 4px 0 0",
                 height:`${Math.round((m.fee / maxFee) * 170)}px`,
                 background: i === months.length - 1
-                  ? "var(--red)"
-                  : `linear-gradient(to top, rgba(224,48,64,.6), rgba(224,48,64,.3))`,
+                  ? RED
+                  : `linear-gradient(to top, rgba(168,224,74,.55), rgba(168,224,74,.22))`,
                 transition:"height .3s",
                 position:"relative",
                 minHeight:"4px",
               }} />
               {/* Label */}
-              <div style={{ fontSize:".58rem", color:"var(--mist)", whiteSpace:"nowrap" }}>{m.label}</div>
+              <div style={{ fontSize:".58rem", color:MUTED, whiteSpace:"nowrap" }}>{m.label}</div>
             </div>
           ))}
         </div>
@@ -1140,17 +1151,17 @@ function StatsTab({ supabase, al }) {
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1rem" }}>
 
         {/* Country breakdown */}
-        <div style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"12px", padding:"1.5rem" }}>
+        <div style={{ background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"12px", padding:"1.5rem" }}>
           <p style={cardHeader}>Top countries</p>
           <div style={{ display:"flex", flexDirection:"column", gap:".6rem" }}>
             {countries.map(([country, val]) => (
               <div key={country}>
                 <div style={{ display:"flex", justifyContent:"space-between", marginBottom:".25rem" }}>
-                  <span style={{ fontSize:".78rem", color:"var(--ink)" }}>{country}</span>
-                  <span style={{ fontSize:".72rem", color:"var(--warm)" }}>{val.count} orders</span>
+                  <span style={{ fontSize:".78rem", color:INK }}>{country}</span>
+                  <span style={{ fontSize:".72rem", color:MUTED }}>{val.count} orders</span>
                 </div>
-                <div style={{ height:"4px", background:"var(--border)", borderRadius:"2px", overflow:"hidden" }}>
-                  <div style={{ height:"100%", width:`${(val.count/maxCountry)*100}%`, background:"var(--red)", borderRadius:"2px", transition:"width .3s" }} />
+                <div style={{ height:"4px", background:BORDER, borderRadius:"2px", overflow:"hidden" }}>
+                  <div style={{ height:"100%", width:`${(val.count/maxCountry)*100}%`, background:RED, borderRadius:"2px", transition:"width .3s" }} />
                 </div>
               </div>
             ))}
@@ -1161,28 +1172,28 @@ function StatsTab({ supabase, al }) {
         <div style={{ display:"flex", flexDirection:"column", gap:"1rem" }}>
 
           {/* Platform */}
-          <div style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"12px", padding:"1.2rem" }}>
+          <div style={{ background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"12px", padding:"1.2rem" }}>
             <p style={cardHeader}>Sources</p>
             <div style={{ display:"flex", flexWrap:"wrap", gap:".5rem" }}>
               {platforms.map(([p, count]) => (
-                <div key={p} style={{ background:"var(--paper)", border:"1px solid var(--border)", borderRadius:"20px", padding:".3rem .8rem", fontSize:".72rem", color:"var(--warm)" }}>
-                  {p} <strong style={{ color:"var(--ink)" }}>{count}</strong>
+                <div key={p} style={{ background:BG, border:`2px solid ${BORDER}`, borderRadius:"20px", padding:".3rem .8rem", fontSize:".72rem", color:MUTED }}>
+                  {p} <strong style={{ color:INK }}>{count}</strong>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Status */}
-          <div style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"12px", padding:"1.2rem" }}>
+          <div style={{ background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"12px", padding:"1.2rem" }}>
             <p style={cardHeader}>Order status</p>
             <div style={{ display:"flex", flexDirection:"column", gap:".5rem" }}>
               {Object.entries(statusMap).sort(([,a],[,b])=>b-a).map(([status, count]) => (
                 <div key={status} style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
                   <div style={{ display:"flex", alignItems:"center", gap:".5rem" }}>
-                    <div style={{ width:"8px", height:"8px", borderRadius:"50%", background: STATUS_COLORS[status] || "var(--mist)" }} />
-                    <span style={{ fontSize:".75rem", color:"var(--warm)" }}>{status}</span>
+                    <div style={{ width:"8px", height:"8px", borderRadius:"50%", background: STATUS_COLORS[status] || MUTED }} />
+                    <span style={{ fontSize:".75rem", color:MUTED }}>{status}</span>
                   </div>
-                  <span style={{ fontSize:".75rem", fontWeight:500, color:"var(--ink)" }}>{count}</span>
+                  <span style={{ fontSize:".75rem", fontWeight:500, color:INK }}>{count}</span>
                 </div>
               ))}
             </div>
@@ -1191,33 +1202,33 @@ function StatsTab({ supabase, al }) {
       </div>
 
       {/* Monthly table */}
-      <div style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"12px", padding:"1.5rem" }}>
+      <div style={{ background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"12px", padding:"1.5rem" }}>
         <p style={cardHeader}>Monthly breakdown</p>
         <table style={{ width:"100%", borderCollapse:"collapse", fontSize:".78rem" }}>
           <thead>
             <tr>
               {["Month","Orders","Revenue (JPY)","Revenue (EUR)","Avg/order"].map(h => (
-                <th key={h} style={{ padding:".5rem .8rem", textAlign:"left", fontSize:".58rem", letterSpacing:".1em", textTransform:"uppercase", color:"var(--mist)", borderBottom:"1px solid var(--border)" }}>{h}</th>
+                <th key={h} style={{ padding:".5rem .8rem", textAlign:"left", fontSize:".58rem", letterSpacing:".1em", textTransform:"uppercase", color:MUTED, borderBottom:`2px solid ${BORDER}` }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {[...months].reverse().map((m, i) => (
-              <tr key={i} style={{ borderBottom:"1px solid var(--border)" }}>
-                <td style={{ padding:".6rem .8rem", color:"var(--ink)", fontWeight:500 }}>{m.label}</td>
-                <td style={{ padding:".6rem .8rem", color:"var(--warm)" }}>{m.count}</td>
-                <td style={{ padding:".6rem .8rem", color:"#4ade80" }}>¥{m.fee.toLocaleString()}</td>
-                <td style={{ padding:".6rem .8rem", color:"#4ade80" }}>{m.eur.toLocaleString()}€</td>
-                <td style={{ padding:".6rem .8rem", color:"var(--warm)" }}>¥{Math.round(m.fee/m.count).toLocaleString()}</td>
+              <tr key={i} style={{ borderBottom:`2px solid ${BORDER}` }}>
+                <td style={{ padding:".6rem .8rem", color:INK, fontWeight:500 }}>{m.label}</td>
+                <td style={{ padding:".6rem .8rem", color:MUTED }}>{m.count}</td>
+                <td style={{ padding:".6rem .8rem", color:RED }}>¥{m.fee.toLocaleString()}</td>
+                <td style={{ padding:".6rem .8rem", color:RED }}>{m.eur.toLocaleString()}€</td>
+                <td style={{ padding:".6rem .8rem", color:MUTED }}>¥{Math.round(m.fee/m.count).toLocaleString()}</td>
               </tr>
             ))}
             {/* Total row */}
-            <tr style={{ background:"var(--paper)" }}>
-              <td style={{ padding:".7rem .8rem", color:"var(--ink)", fontWeight:600 }}>TOTAL</td>
-              <td style={{ padding:".7rem .8rem", color:"var(--ink)", fontWeight:600 }}>{orders.length}</td>
-              <td style={{ padding:".7rem .8rem", color:"#4ade80", fontWeight:600 }}>¥{totalFee.toLocaleString()}</td>
-              <td style={{ padding:".7rem .8rem", color:"#4ade80", fontWeight:600 }}>{Math.round(totalFee/rate).toLocaleString()}€</td>
-              <td style={{ padding:".7rem .8rem", color:"var(--warm)" }}>¥{avgFee.toLocaleString()}</td>
+            <tr style={{ background:BG }}>
+              <td style={{ padding:".7rem .8rem", color:INK, fontWeight:600 }}>TOTAL</td>
+              <td style={{ padding:".7rem .8rem", color:INK, fontWeight:600 }}>{orders.length}</td>
+              <td style={{ padding:".7rem .8rem", color:RED, fontWeight:600 }}>¥{totalFee.toLocaleString()}</td>
+              <td style={{ padding:".7rem .8rem", color:RED, fontWeight:600 }}>{Math.round(totalFee/rate).toLocaleString()}€</td>
+              <td style={{ padding:".7rem .8rem", color:MUTED }}>¥{avgFee.toLocaleString()}</td>
             </tr>
           </tbody>
         </table>
@@ -1251,9 +1262,9 @@ function EventsTab({ supabase, al }) {
   ];
 
   const STATUSES = [
-    { value:"upcoming",   label:"🟢 Upcoming",   color:"#4ade80" },
-    { value:"confirmed",  label:"✅ Confirmed",  color:"#60a5fa" },
-    { value:"full",       label:"🔴 Full",        color:"#ef4444" },
+    { value:"upcoming",   label:"🟢 Upcoming",   color:RED },
+    { value:"confirmed",  label:"✅ Confirmed",  color:VIOLET },
+    { value:"full",       label:"🔴 Full",        color:ALERT },
     { value:"cancelled",  label:"⚫ Cancelled",  color:"#6b7280" },
     { value:"completed",  label:"✓ Completed",   color:"#374151" },
   ];
@@ -1314,13 +1325,13 @@ function EventsTab({ supabase, al }) {
       {/* Stats */}
       <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"12px", marginBottom:"1.5rem" }}>
         {[
-          { label:"Upcoming events",  value: upcoming.length,                          color:"#4ade80" },
-          { label:"Total events",     value: events.length,                            color:"var(--ink)" },
-          { label:"Next event",       value: upcoming[0]?.date ? new Date(upcoming[0].date).toLocaleDateString("fr-FR",{day:"numeric",month:"short"}) : "—", color:"var(--red)" },
+          { label:"Upcoming events",  value: upcoming.length,                          color:RED },
+          { label:"Total events",     value: events.length,                            color:INK },
+          { label:"Next event",       value: upcoming[0]?.date ? new Date(upcoming[0].date).toLocaleDateString("fr-FR",{day:"numeric",month:"short"}) : "—", color:RED },
         ].map(s => (
-          <div key={s.label} style={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"10px", padding:"1rem 1.2rem" }}>
-            <div style={{ fontSize:"1.4rem", fontWeight:600, color:s.color, fontFamily:"'Cormorant Garamond',serif" }}>{s.value}</div>
-            <div style={{ fontSize:".65rem", color:"var(--mist)", marginTop:".2rem" }}>{s.label}</div>
+          <div key={s.label} style={{ background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"12px", padding:"1rem 1.2rem", boxShadow:"0 4px 0 rgba(0,0,0,.3)" }}>
+            <div style={{ fontSize:".85rem", color:s.color, fontFamily:PIXEL, lineHeight:1.7 }}>{s.value}</div>
+            <div style={{ fontSize:".65rem", color:MUTED, marginTop:".2rem" }}>{s.label}</div>
           </div>
         ))}
       </div>
@@ -1373,14 +1384,14 @@ function EventsTab({ supabase, al }) {
 
       {/* Events list grouped by month */}
       {Object.keys(grouped).length === 0 ? (
-        <p style={{color:"var(--mist)",padding:"2rem",textAlign:"center"}}>No events yet. Add your first one above.</p>
+        <p style={{color:MUTED,padding:"2rem",textAlign:"center"}}>No events yet. Add your first one above.</p>
       ) : Object.entries(grouped).sort(([a],[b])=>a.localeCompare(b)).map(([month, evs]) => (
         <div key={month} style={{marginBottom:"1.5rem"}}>
           <div style={{display:"flex",alignItems:"center",gap:"1rem",marginBottom:".75rem"}}>
-            <span style={{fontSize:".6rem",letterSpacing:".16em",textTransform:"uppercase",color:"var(--red)",fontWeight:500}}>
+            <span style={{fontSize:".6rem",letterSpacing:".16em",textTransform:"uppercase",color:RED,fontWeight:500}}>
               {new Date(month+"-01").toLocaleDateString("fr-FR",{month:"long",year:"numeric"})}
             </span>
-            <span style={{flex:1,height:"1px",background:"var(--border)"}}/>
+            <span style={{flex:1,height:"1px",background:BORDER}}/>
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:"8px"}}>
             {evs.map(ev => {
@@ -1389,38 +1400,38 @@ function EventsTab({ supabase, al }) {
               const isPast = ev.date < new Date().toISOString().slice(0,10);
               return (
                 <div key={ev.id} style={{
-                  background:"var(--surface)", border:"1px solid var(--border)",
+                  background:SURFACE, border:`2px solid ${BORDER}`,
                   borderRadius:"10px", padding:"1rem 1.2rem",
                   display:"flex", alignItems:"center", gap:"1rem",
                   opacity: isPast ? 0.5 : 1,
                 }}>
                   {/* Date block */}
                   <div style={{textAlign:"center",minWidth:"44px",flexShrink:0}}>
-                    <div style={{fontSize:"1.4rem",fontFamily:"'Cormorant Garamond',serif",fontWeight:300,color:"var(--ink)",lineHeight:1}}>
+                    <div style={{fontSize:".8rem",fontFamily:PIXEL,color:INK,lineHeight:1.6}}>
                       {ev.date ? new Date(ev.date+"T00:00:00").getDate() : "?"}
                     </div>
-                    <div style={{fontSize:".55rem",letterSpacing:".1em",textTransform:"uppercase",color:"var(--mist)"}}>
+                    <div style={{fontSize:".55rem",letterSpacing:".1em",textTransform:"uppercase",color:MUTED}}>
                       {ev.date ? new Date(ev.date+"T00:00:00").toLocaleDateString("fr-FR",{month:"short"}) : ""}
                     </div>
                   </div>
                   {/* Divider */}
-                  <div style={{width:"1px",height:"40px",background:"var(--border)",flexShrink:0}}/>
+                  <div style={{width:"1px",height:"40px",background:BORDER,flexShrink:0}}/>
                   {/* Info */}
                   <div style={{flex:1,minWidth:0}}>
                     <div style={{display:"flex",alignItems:"center",gap:".5rem",marginBottom:".2rem",flexWrap:"wrap"}}>
                       <span style={{fontSize:".62rem",fontWeight:500,color:"#fff",background:cat.color,padding:".1rem .45rem",borderRadius:"4px"}}>{cat.label}</span>
                       <span style={{fontSize:".62rem",color:stat.color}}>{stat.label}</span>
-                      {ev.time && <span style={{fontSize:".65rem",color:"var(--mist)"}}>🕐 {ev.time}</span>}
+                      {ev.time && <span style={{fontSize:".65rem",color:MUTED}}>🕐 {ev.time}</span>}
                     </div>
-                    <strong style={{fontSize:".88rem",color:"var(--ink)",display:"block"}}>{ev.title}</strong>
-                    {ev.location && <span style={{fontSize:".72rem",color:"var(--mist)"}}>📍 {ev.location}</span>}
-                    {ev.description && <p style={{fontSize:".75rem",color:"var(--warm)",margin:".25rem 0 0",lineHeight:1.5,overflow:"hidden",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical"}}>{ev.description}</p>}
+                    <strong style={{fontSize:".88rem",color:INK,display:"block"}}>{ev.title}</strong>
+                    {ev.location && <span style={{fontSize:".72rem",color:MUTED}}>📍 {ev.location}</span>}
+                    {ev.description && <p style={{fontSize:".75rem",color:MUTED,margin:".25rem 0 0",lineHeight:1.5,overflow:"hidden",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical"}}>{ev.description}</p>}
                   </div>
                   {/* Capacity */}
                   {ev.capacity && (
                     <div style={{textAlign:"center",flexShrink:0}}>
-                      <div style={{fontSize:".75rem",color:"var(--ink)",fontWeight:500}}>{ev.capacity}</div>
-                      <div style={{fontSize:".58rem",color:"var(--mist)"}}>spots</div>
+                      <div style={{fontSize:".75rem",color:INK,fontWeight:500}}>{ev.capacity}</div>
+                      <div style={{fontSize:".58rem",color:MUTED}}>spots</div>
                     </div>
                   )}
                   {/* Actions */}
