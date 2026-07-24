@@ -2198,3 +2198,105 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 @media (prefers-reduced-motion: reduce) {
   .px-mascot-hero::after { animation: none; }
 }
+/* ═══════════════════════════════════════════════════════════════════════════
+   KIZUNA PROXY — Correctifs v5.3
+   ─────────────────────────────────────────────────────────────────────── */
+
+/* ── 1. EN-TÊTES DES PAGES FAQ ET EVENTS ──────────────────────────────────
+   Ces deux pages avaient leur propre mise en page héritée de l'ancien thème.
+   Elles adoptent maintenant la même structure que les autres. */
+.px-page-head-inline {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.px-page-title {
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  font-size: clamp(.78rem, 1.9vw, 1.25rem);
+  line-height: 1.75;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  max-width: 22ch;
+  margin: 0 auto 1.2rem;
+  color: var(--ink);
+}
+.px-page-title em { color: var(--red); font-style: normal; }
+
+.px-page-lead {
+  font-family: var(--font-body);
+  font-size: .9rem;
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--warm);
+  max-width: 520px;
+  margin: 0 auto;
+}
+.px-page-lead a { color: var(--red); text-decoration: none; }
+.px-page-lead a:hover { text-decoration: underline; }
+
+/* La page Events héritait de styles blog obsolètes */
+.blog-page .blog-eyebrow { display: none; }
+.px-page-head-inline .breadcrumb { justify-content: center; margin-bottom: 1.25rem; }
+
+/* ── 2. LE CHAT SUR LA PAGE D'ACCUEIL ─────────────────────────────────────
+   Il ne flotte plus dans le vide en bas à droite : il est posé sur un socle,
+   avec une bulle de bienvenue et une ombre au sol qui l'ancre visuellement. */
+.px-mascot-hero {
+  position: absolute;
+  right: 6%;
+  bottom: 12%;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .7rem;
+  pointer-events: none;
+  opacity: 1;
+}
+
+/* Bulle de bienvenue */
+.px-mascot-hero::before {
+  content: 'Welcome to Tokyo';
+  order: -1;
+  font-family: var(--font-pixel);
+  font-size: .42rem;
+  letter-spacing: .04em;
+  line-height: 1.9;
+  color: var(--warm);
+  background: var(--surface);
+  border: 2px solid var(--px-border);
+  border-radius: 8px;
+  padding: .5rem .75rem;
+  white-space: nowrap;
+  position: relative;
+}
+
+/* Ombre au sol : le chat est posé, pas suspendu */
+.px-mascot-hero::after {
+  content: '';
+  width: 46px;
+  height: 6px;
+  background: rgba(0,0,0,.42);
+  border-radius: 50%;
+  margin-top: -.3rem;
+  animation: px-shadow-pulse 2.4s steps(3, end) infinite;
+}
+@keyframes px-shadow-pulse {
+  0%, 100% { width: 46px; opacity: .42; }
+  50%      { width: 38px; opacity: .28; }
+}
+
+@media (max-width: 1100px), (max-height: 720px) {
+  .px-mascot-hero { display: none; }
+}
+
+/* ── 3. HERO SANS BADGE ───────────────────────────────────────────────────
+   Le badge « Tokyo-based proxy service » est retiré : l'information est déjà
+   dans le sous-titre et sous le logo. On récupère l'espace pour le titre. */
+.hero-badge-row { display: none; }
+.hero-h1 { margin-top: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .px-mascot-hero::after { animation: none; }
+}
