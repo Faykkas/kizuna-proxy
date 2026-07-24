@@ -1157,3 +1157,651 @@ a:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }
   .logo-sub { display: none; }
   .lang-selector::before { display: none; }
 }
+/* ═══════════════════════════════════════════════════════════════════════════
+   KIZUNA PROXY — Thème « Phosphore » v4.0
+   Rétro Game Boy sur bleu nuit. Pixel sur les accents, base lisible.
+
+   À coller À LA FIN de app/globals.css.
+   Ces règles surchargent le thème précédent sans le supprimer : si tu veux
+   revenir en arrière, il suffit de retirer ce bloc.
+   ─────────────────────────────────────────────────────────────────────── */
+
+
+/* ── 1. PALETTE ───────────────────────────────────────────────────────────
+   Le vert du vrai DMG-01 (#9bbc0f) est un olive terne, pensé pour un écran
+   LCD réfléchissant. Sur fond violet il faut le remonter en luminosité pour
+   qu'il vibre comme du phosphore — d'où #a8e04a. */
+:root {
+  /* Fonds */
+  --beige:       #150d28;   /* fond principal — bleu nuit profond */
+  --paper:       #1a1030;   /* fond secondaire */
+  --sand:        #251845;   /* cartes */
+  --surface:     #251845;
+  --surface2:    #2d1d54;
+  --ink-dark:    #150d28;
+
+  /* Accents */
+  --red:         #a8e04a;   /* vert phosphore — accent principal */
+  --red-d:       #8fc23d;
+  --red-l:       #c4f06a;
+  --gold:        #c77dff;   /* violet arcade — accent secondaire */
+  --gold-l:      #d9a3ff;
+  --gold-d:      #a855f7;
+  --alert:       #ff5060;   /* rouge — alertes et urgence uniquement */
+
+  /* Texte */
+  --ink:         #f0edf7;
+  --white:       #f0edf7;
+  --warm:        rgba(240,237,247,.58);
+  --mist:        rgba(240,237,247,.32);
+
+  /* Bordures */
+  --border:      rgba(199,125,255,.16);
+  --border-soft: rgba(199,125,255,.1);
+  --border-gold: rgba(168,224,74,.4);
+
+  /* Tokens des sprites pixel */
+  --px-bg:       #150d28;
+  --px-surface:  #251845;
+  --px-ink:      #f0edf7;
+  --px-muted:    #8b7fb0;
+  --px-border:   #4a3a75;
+  --px-accent:   #a8e04a;
+  --px-accent2:  #c77dff;
+  --px-red:      #ff5060;
+  --px-pink:     #ff8fa3;
+  --px-kraft:    #c9a227;
+  --px-kraft-l:  #e0b83a;
+
+  --radius-sm:   10px;
+  --font-pixel:  'Press Start 2P', 'Courier New', monospace;
+  --font-body:   'Outfit', system-ui, sans-serif;
+  --ease:        cubic-bezier(.22,.61,.36,1);
+  --ease-step:   steps(4, end);
+}
+
+/* ── 2. TYPOGRAPHIE ───────────────────────────────────────────────────────
+   Press Start 2P est la police pixel authentique, mais illisible en
+   paragraphe : elle reste sur les micro-labels, badges et compteurs.
+   Outfit prend le corps de texte — ronde, chaleureuse, très lisible. */
+body {
+  background: var(--beige);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 300;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-body);
+  font-weight: 500;
+  letter-spacing: -.01em;
+  line-height: 1.15;
+}
+
+em { color: var(--red); font-style: normal; font-weight: 600; }
+
+/* Le label de section devient un marqueur de sélection type menu de jeu */
+.sec-label {
+  font-family: var(--font-pixel);
+  font-size: .52rem;
+  letter-spacing: .1em;
+  color: var(--red);
+  text-transform: uppercase;
+  line-height: 1.8;
+}
+.sec-label::before {
+  content: '▸';
+  width: auto;
+  height: auto;
+  background: none;
+  margin-right: .1rem;
+  animation: px-blink 1.4s steps(2, end) infinite;
+}
+@keyframes px-blink { 0%,50% { opacity: 1; } 51%,100% { opacity: .25; } }
+
+.sec-head .desc { color: var(--warm); font-weight: 300; line-height: 1.7; }
+
+/* ── 3. BOUTONS — touches de borne d'arcade ───────────────────────────────
+   Le relief vient d'une ombre pleine décalée, pas d'un dégradé : le bouton
+   s'enfonce au clic, comme une vraie touche. */
+.btn, .nav-cta {
+  font-family: var(--font-pixel);
+  font-size: .55rem;
+  letter-spacing: .04em;
+  border-radius: 8px;
+  transition: transform .08s var(--ease-step), box-shadow .08s var(--ease-step), background .2s;
+}
+
+.btn-gold, .nav-cta {
+  background: var(--red);
+  color: var(--px-bg);
+  box-shadow: 0 4px 0 var(--red-d);
+  border: none;
+  padding: .85rem 1.6rem;
+}
+.btn-gold:hover, .nav-cta:hover {
+  background: var(--red-l);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--red-d);
+}
+.btn-gold:active, .nav-cta:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 var(--red-d);
+}
+
+.btn-outline {
+  background: var(--surface);
+  color: var(--ink);
+  border: 2px solid var(--px-border);
+  box-shadow: 0 4px 0 rgba(0,0,0,.3);
+  padding: .8rem 1.5rem;
+}
+.btn-outline:hover {
+  border-color: var(--red);
+  color: var(--red);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 rgba(0,0,0,.3);
+}
+.btn-outline:active { transform: translateY(4px); box-shadow: none; }
+
+/* ── 4. NAVIGATION ────────────────────────────────────────────────────── */
+nav {
+  background: rgba(21,13,40,.94);
+  border-bottom: 2px solid var(--border);
+  backdrop-filter: blur(16px);
+}
+
+.nav-links a, .nav-links .nav-dropdown-btn {
+  font-family: var(--font-pixel);
+  font-size: .5rem;
+  letter-spacing: .02em;
+  color: var(--warm);
+  line-height: 1;
+}
+.nav-links a:hover, .nav-links .nav-dropdown-btn:hover { color: var(--red); }
+
+/* Le curseur de sélection remplace le soulignement */
+.nav-links a::after, .nav-links .nav-dropdown-btn::after { display: none; }
+.nav-links a::before, .nav-links .nav-dropdown-btn::before {
+  content: '▸';
+  position: absolute;
+  left: -.7rem;
+  color: var(--red);
+  opacity: 0;
+  transform: translateX(-3px);
+  transition: opacity .12s var(--ease-step), transform .12s var(--ease-step);
+}
+.nav-links a:hover::before,
+.nav-dropdown-wrap:hover .nav-dropdown-btn::before { opacity: 1; transform: translateX(0); }
+
+.logo-name { font-family: var(--font-body); font-weight: 600; letter-spacing: 0; }
+.logo-name .g { color: var(--red); }
+.logo-sub {
+  font-family: var(--font-pixel);
+  font-size: .42rem;
+  letter-spacing: .06em;
+  color: var(--mist);
+  line-height: 1.6;
+}
+
+.lang-btn.icon-btn {
+  font-family: var(--font-pixel);
+  font-size: .48rem;
+  letter-spacing: 0;
+  color: var(--warm);
+}
+.lang-btn.icon-btn:hover { color: var(--red); }
+.lang-option { font-family: var(--font-pixel); font-size: .48rem; }
+.lang-option.active { color: var(--red); background: rgba(168,224,74,.12); }
+
+.nav-dropdown, .lang-dropdown {
+  background: var(--surface);
+  border: 2px solid var(--px-border);
+  border-radius: 10px;
+  box-shadow: 0 6px 0 rgba(0,0,0,.35);
+}
+
+/* ── 5. HERO ──────────────────────────────────────────────────────────── */
+.hero-center {
+  background: var(--beige);
+  background-image: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(168,224,74,.09) 0%, transparent 70%);
+  padding: 8rem 2rem 5rem;
+}
+.hero-center::before, .hero-center::after { display: none; }
+
+/* Le kana géant disparaît : le canvas pixel prend le relais */
+.hero-kana { display: none; }
+
+.hero-badge-row {
+  background: rgba(199,125,255,.14);
+  border: 2px solid rgba(199,125,255,.32);
+  border-radius: 20px;
+}
+.hero-badge-text {
+  font-family: var(--font-pixel);
+  font-size: .48rem;
+  letter-spacing: .04em;
+  color: var(--gold);
+}
+.hero-badge-dot { background: var(--gold); border-radius: 0; width: 5px; height: 5px; }
+
+.hero-h1 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+  letter-spacing: -.02em;
+}
+.hero-h1 em { color: var(--red); font-style: normal; display: block; }
+.hero-h1 em::after { display: none; }
+
+.hero-desc { color: var(--warm); font-weight: 300; line-height: 1.75; }
+
+.hero-rotating-item {
+  font-family: var(--font-pixel);
+  font-size: .5rem;
+  letter-spacing: .02em;
+  color: var(--warm);
+}
+.hero-rotating-item svg { fill: var(--red); }
+
+.social-label { font-family: var(--font-pixel); font-size: .45rem; color: var(--mist); }
+
+/* ── 6. CARTES DE COLLECTION ──────────────────────────────────────────────
+   C'est la signature du thème : les catégories deviennent des cartes à
+   collectionner, avec numéro et rareté. C'est le seul endroit où l'on pousse
+   loin — tout le reste reste sobre pour que ça respire. */
+.svc-card, .pcg-card, .why-card-v2, .review-card-new, .shipping-card {
+  background: var(--surface);
+  border: 2px solid var(--px-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 0 rgba(0,0,0,.3);
+  transition: transform .12s var(--ease-step), box-shadow .12s var(--ease-step), border-color .2s;
+  overflow: hidden;
+  position: relative;
+}
+.svc-card::before, .pcg-card::before, .why-card-v2::before, .review-card-new::before {
+  display: none;
+}
+.svc-card:hover, .pcg-card:hover, .why-card-v2:hover,
+.review-card-new:hover, .shipping-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--red);
+  box-shadow: 0 8px 0 rgba(0,0,0,.3), 0 0 24px rgba(168,224,74,.18);
+}
+
+/* Le numéro devient une référence de collection */
+.svc-num {
+  font-family: var(--font-pixel);
+  font-size: .5rem;
+  color: var(--px-border);
+  position: absolute;
+  top: .9rem;
+  right: 1rem;
+}
+.svc-card:hover .svc-num { color: var(--red); }
+
+.svc-title, .why-card-v2-title {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--ink);
+}
+.svc-desc, .why-card-v2-desc { color: var(--warm); font-weight: 300; line-height: 1.6; }
+.svc-arrow { color: var(--red); }
+
+/* Badge de rareté */
+.px-badge {
+  display: inline-block;
+  font-family: var(--font-pixel);
+  font-size: .42rem;
+  letter-spacing: .06em;
+  padding: .3rem .5rem;
+  border-radius: 4px;
+  margin-top: .6rem;
+}
+.px-badge-common { background: rgba(168,224,74,.16); color: var(--red); }
+.px-badge-rare   { background: rgba(199,125,255,.2); color: var(--gold); }
+.px-badge-legend { background: rgba(255,80,96,.18); color: var(--alert); }
+
+/* Conteneur d'icône pixel dans les cartes */
+.svc-icon {
+  font-size: inherit;
+  margin-bottom: .9rem;
+  display: block;
+  image-rendering: pixelated;
+}
+
+/* ── 7. STATISTIQUES — compteurs d'arcade ─────────────────────────────── */
+.why-card-v2-stat strong {
+  font-family: var(--font-pixel);
+  font-size: 1rem;
+  color: var(--red);
+  letter-spacing: 0;
+}
+.why-card-v2-stat span,
+.why-card-v2-n {
+  font-family: var(--font-pixel);
+  font-size: .42rem;
+  color: var(--mist);
+}
+
+/* ── 8. ÉTAPES — barre de progression de quête ────────────────────────── */
+.hiw-step {
+  background: var(--surface);
+  border: 2px solid var(--px-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 0 rgba(0,0,0,.3);
+  transition: transform .12s var(--ease-step), border-color .2s;
+}
+.hiw-step:hover { transform: translateY(-3px); border-color: var(--gold); }
+.hiw-step-num {
+  font-family: var(--font-pixel);
+  font-size: .8rem;
+  color: var(--gold);
+}
+.hiw-step-body strong { font-family: var(--font-body); font-weight: 500; }
+.hiw-step-body p { color: var(--warm); font-weight: 300; }
+
+/* ── 9. AVIS — bulles de visual novel ─────────────────────────────────────
+   La petite pointe sous la carte évoque les boîtes de dialogue des jeux
+   japonais : le témoignage devient une réplique de personnage. */
+.review-card-new { position: relative; }
+.review-card-new::after {
+  content: '';
+  position: absolute;
+  left: 2rem;
+  bottom: -9px;
+  width: 14px;
+  height: 8px;
+  background: var(--surface);
+  border-right: 2px solid var(--px-border);
+  border-bottom: 2px solid var(--px-border);
+  transform: rotate(45deg) skew(6deg,6deg);
+}
+.rcn-stars { color: var(--gold); letter-spacing: .1em; }
+.rcn-text { color: var(--ink); font-weight: 300; line-height: 1.7; }
+.rcn-name { font-family: var(--font-pixel); font-size: .48rem; color: var(--red); }
+.rcn-source, .rcn-country { font-family: var(--font-pixel); font-size: .42rem; color: var(--mist); }
+.rcn-avatar {
+  background: var(--red);
+  color: var(--px-bg);
+  border-radius: 6px;
+  font-family: var(--font-pixel);
+  font-size: .6rem;
+}
+
+.reviews-big-num {
+  font-family: var(--font-pixel);
+  font-size: 2rem;
+  color: var(--red);
+}
+.reviews-big-stars { color: var(--gold); }
+.reviews-big-label, .reviews-count { font-family: var(--font-pixel); font-size: .45rem; color: var(--mist); }
+
+/* ── 10. FORMULAIRE — champs de saisie d'arcade ───────────────────────── */
+.f-field label {
+  font-family: var(--font-pixel);
+  font-size: .45rem;
+  letter-spacing: .04em;
+  color: var(--warm);
+}
+.f-field input, .f-field textarea {
+  background: var(--px-bg);
+  border: 2px solid var(--px-border);
+  border-radius: 8px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  transition: border-color .15s var(--ease-step), box-shadow .15s var(--ease-step);
+}
+.f-field input:focus, .f-field textarea:focus {
+  outline: none;
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(168,224,74,.16);
+}
+.f-err { font-family: var(--font-pixel); font-size: .42rem; color: var(--alert); }
+.f-note { font-family: var(--font-pixel); font-size: .42rem; color: var(--mist); }
+.req-form {
+  background: var(--surface);
+  border: 2px solid var(--px-border);
+  border-radius: 14px;
+  box-shadow: 0 6px 0 rgba(0,0,0,.3);
+}
+
+/* ── 11. FAQ ──────────────────────────────────────────────────────────── */
+.faq-item {
+  background: var(--surface);
+  border: 2px solid var(--px-border);
+  border-radius: 10px;
+  transition: border-color .2s;
+}
+.faq-item:hover, .faq-item.open { border-color: var(--red); }
+.faq-q span { font-family: var(--font-body); font-weight: 400; }
+.faq-icon { color: var(--red); }
+.faq-a p { color: var(--warm); font-weight: 300; line-height: 1.7; }
+
+/* ── 12. EN-TÊTES DE PAGE ─────────────────────────────────────────────── */
+.page-head {
+  background-image: radial-gradient(ellipse 50% 60% at 50% 0%, rgba(168,224,74,.07) 0%, transparent 70%);
+  padding: 4.5rem 2rem 1.5rem;
+}
+.page-head-kana { display: none; }
+.page-head h1 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+}
+.page-head h1 em { color: var(--red); font-style: normal; }
+.page-head p { color: var(--warm); font-weight: 300; }
+
+.breadcrumb {
+  font-family: var(--font-pixel);
+  font-size: .45rem;
+  letter-spacing: .04em;
+  color: var(--mist);
+  background: none;
+  border: none;
+  padding: 0;
+}
+.breadcrumb a { color: var(--warm); }
+.breadcrumb a:hover { color: var(--red); }
+
+/* ── 13. BANDEAU D'ANNONCE ────────────────────────────────────────────── */
+.announce-bar {
+  background: var(--surface2);
+  border-bottom: 2px solid var(--border);
+}
+.announce-pill {
+  font-family: var(--font-pixel);
+  font-size: .42rem;
+  background: var(--gold);
+  color: var(--px-bg);
+  border-radius: 4px;
+}
+.announce-text { color: var(--warm); font-weight: 300; }
+
+/* ── 14. FOOTER ───────────────────────────────────────────────────────── */
+footer { background: var(--paper); border-top: 2px solid var(--border); }
+.footer-col-title {
+  font-family: var(--font-pixel);
+  font-size: .45rem;
+  letter-spacing: .06em;
+  color: var(--red);
+}
+.footer-link { color: var(--warm); font-weight: 300; }
+.footer-link:hover { color: var(--red); padding-left: 4px; }
+.footer-logo { font-family: var(--font-body); font-weight: 600; }
+.footer-logo .g { color: var(--red); }
+.footer-tagline { color: var(--mist); font-weight: 300; }
+.footer-bottom p { font-family: var(--font-pixel); font-size: .42rem; color: var(--mist); }
+
+/* ── 15. TICKER ───────────────────────────────────────────────────────── */
+.ticker-item { font-family: var(--font-pixel); font-size: .5rem; color: var(--warm); }
+.ticker-label { font-family: var(--font-pixel); font-size: .45rem; color: var(--red); }
+.ticker-dot { background: var(--red); border-radius: 0; width: 5px; height: 5px; }
+.order-ticker { background: var(--paper); border: 2px solid var(--px-border); border-radius: 10px; }
+
+/* ── 16. WIDGET DE RECHERCHE ──────────────────────────────────────────── */
+.sw-input {
+  background: var(--px-bg);
+  border: 2px solid var(--px-border);
+  border-radius: 8px;
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+.sw-input:focus { outline: none; border-color: var(--red); }
+.sw-btn {
+  background: var(--red);
+  color: var(--px-bg);
+  font-family: var(--font-pixel);
+  font-size: .5rem;
+  border-radius: 8px;
+  box-shadow: 0 3px 0 var(--red-d);
+}
+.sw-btn:active { transform: translateY(3px); box-shadow: none; }
+.sw-chip {
+  font-family: var(--font-pixel);
+  font-size: .45rem;
+  border: 2px solid var(--px-border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--warm);
+}
+.sw-chip.active { border-color: var(--red); color: var(--red); background: rgba(168,224,74,.1); }
+.sw-footer span, .sw-cta { font-family: var(--font-pixel); font-size: .42rem; }
+.sw-cta { color: var(--red); }
+
+/* ── 17. GALERIE ──────────────────────────────────────────────────────── */
+.filmstrip-main { border: 2px solid var(--px-border); border-radius: 12px; overflow: hidden; }
+.filmstrip-caption-inner strong { font-family: var(--font-body); font-weight: 500; }
+.filmstrip-caption-inner span { color: var(--warm); font-weight: 300; }
+.filmstrip-counter { font-family: var(--font-pixel); font-size: .45rem; color: var(--red); }
+.filmstrip-btn {
+  background: var(--surface);
+  border: 2px solid var(--px-border);
+  border-radius: 6px;
+  color: var(--ink);
+}
+.filmstrip-btn:hover { border-color: var(--red); color: var(--red); }
+.filmstrip-dot { background: var(--px-border); border-radius: 0; width: 8px; height: 8px; }
+.filmstrip-dot.active { background: var(--red); }
+
+/* ── 18. MASCOTTE ─────────────────────────────────────────────────────── */
+.px-float { animation: px-bob 2.4s steps(3, end) infinite; }
+@keyframes px-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+.px-mascot-hero {
+  position: absolute;
+  right: 6%;
+  bottom: 8%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: .95;
+}
+@media (max-width: 900px) { .px-mascot-hero { display: none; } }
+
+/* ── 19. DÉTAILS ──────────────────────────────────────────────────────── */
+::selection { background: rgba(168,224,74,.3); color: var(--ink); }
+
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track { background: var(--px-bg); }
+::-webkit-scrollbar-thumb {
+  background: var(--px-border);
+  border-radius: 0;
+  border: 3px solid var(--px-bg);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--red); }
+
+.back-to-top {
+  background: var(--surface);
+  border: 2px solid var(--px-border);
+  border-radius: 8px;
+  color: var(--red);
+  box-shadow: 0 4px 0 rgba(0,0,0,.3);
+}
+.back-to-top:hover { border-color: var(--red); }
+.back-to-top:active { transform: translateY(4px); box-shadow: none; }
+
+.events-float {
+  background: var(--surface);
+  border: 2px solid var(--gold);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 rgba(0,0,0,.35);
+}
+.events-float-body strong { font-family: var(--font-pixel); font-size: .5rem; color: var(--gold); }
+.events-float-body p { color: var(--warm); font-weight: 300; }
+.events-float-btn {
+  font-family: var(--font-pixel);
+  font-size: .45rem;
+  background: var(--gold);
+  color: var(--px-bg);
+  border-radius: 6px;
+}
+
+.chat-btn {
+  background: var(--red);
+  color: var(--px-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 0 var(--red-d);
+}
+.chat-btn-label { font-family: var(--font-pixel); font-size: .45rem; }
+.chat-btn:active { transform: translateY(4px); box-shadow: none; }
+
+.shipping-notice, .pcg-cta {
+  background: var(--surface);
+  border: 2px solid var(--px-border);
+  border-radius: 12px;
+}
+.pcg-cta-left strong { font-family: var(--font-body); font-weight: 500; }
+.pcg-cta-left p { color: var(--warm); font-weight: 300; }
+.carrier-badge { font-family: var(--font-pixel); font-size: .45rem; border-radius: 4px; }
+.carrier-name { font-family: var(--font-body); font-weight: 400; }
+.shipping-desc, .shipping-note { color: var(--warm); font-weight: 300; }
+.shipping-title span { font-family: var(--font-pixel); font-size: .5rem; color: var(--red); }
+
+.trustpilot-bar {
+  background: var(--surface);
+  border: 2px solid var(--px-border);
+  border-radius: 10px;
+}
+.trustpilot-bar:hover { border-color: var(--red); }
+.tp-name, .tp-cta { font-family: var(--font-pixel); font-size: .48rem; }
+.tp-cta { color: var(--red); }
+
+.reviews-reddit-badge {
+  background: var(--surface);
+  border: 2px solid var(--px-border);
+  border-radius: 8px;
+}
+.reviews-reddit-badge span { font-family: var(--font-pixel); font-size: .45rem; color: var(--warm); }
+
+/* ── 20. ACCESSIBILITÉ ────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 3px solid var(--red);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .px-float { animation: none; }
+  .sec-label::before { animation: none; opacity: 1; }
+}
+
+/* ── 21. RESPONSIVE ───────────────────────────────────────────────────── */
+@media (max-width: 1180px) {
+  .nav-links a, .nav-links .nav-dropdown-btn { font-size: .45rem; }
+  .logo-sub { display: none; }
+}
+@media (max-width: 768px) {
+  .hero-h1 { font-size: clamp(1.9rem, 8vw, 2.6rem); }
+  .btn, .nav-cta { font-size: .48rem; padding: .75rem 1.2rem; }
+  .sec-label { font-size: .45rem; }
+  .reviews-big-num { font-size: 1.5rem; }
+}

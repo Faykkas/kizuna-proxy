@@ -2,6 +2,7 @@
 "use client";
 
 import { IconInstagram, IconTiktok } from "../ui";
+import Maneki from "../pixel/Maneki";
 
 export default function HeroSection({ t }: { t: any }) {
   return (
@@ -64,6 +65,9 @@ export default function HeroSection({ t }: { t: any }) {
             <a className="hero-social-link" href="https://www.instagram.com/kizuna_proxy/" target="_blank" rel="noopener noreferrer"><IconInstagram /></a>
             <a className="hero-social-link" href="https://www.tiktok.com/@kizunaproxy" target="_blank" rel="noopener noreferrer"><IconTiktok /></a>
           </div>
+        </div>
+        <div className="px-mascot-hero">
+          <Maneki state="idle" size={130} float />
         </div>
       </section>
   );

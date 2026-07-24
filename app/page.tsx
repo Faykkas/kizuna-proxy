@@ -10,7 +10,7 @@ import SearchWidget from "./components/SearchWidget";
 import ServicesSection from "./components/sections/ServicesSection";
 import GallerySection from "./components/sections/GallerySection";
 import { BackToTop, EventsFloat, useScrollReveal } from "./components/ui";
-import useSakuraCanvas from "./components/useSakuraCanvas";
+import usePixelCanvas from "./components/pixel/usePixelCanvas";
 import { useLang, useAnnounce, useGallery } from "./components/useSiteState";
 import { REAL_REVIEWS } from "./components/data";
 
@@ -25,7 +25,7 @@ export default function Home() {
   const gallery = useGallery();
 
   useScrollReveal();
-  useSakuraCanvas();
+  usePixelCanvas();
 
   return (
     <>
