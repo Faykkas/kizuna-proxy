@@ -17,7 +17,17 @@ export default function ReviewsClient() {
     <>
       <AnnounceBar announce={announce} />
       <SiteNav />
-      <main style={{ paddingTop: "2rem" }}>
+      <main>
+        <header className="page-head">
+          <div className="page-head-kana" aria-hidden="true">信</div>
+          <div className="page-head-inner">
+            <nav className="breadcrumb" aria-label="Breadcrumb">
+              <a href="/">Home</a><span>/</span><span>Reviews</span>
+            </nav>
+            <h1>Trusted by <em>collectors worldwide</em></h1>
+            <p>Verified reviews from customers in the USA, Canada, France, Germany, Greece, Indonesia and beyond.</p>
+          </div>
+        </header>
         <ReviewsSection t={t} />
       </main>
       <SiteFooter t={t} />

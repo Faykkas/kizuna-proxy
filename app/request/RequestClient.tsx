@@ -17,7 +17,17 @@ export default function RequestClient() {
     <>
       <AnnounceBar announce={announce} />
       <SiteNav />
-      <main style={{ paddingTop: "2rem" }}>
+      <main>
+        <header className="page-head">
+          <div className="page-head-kana" aria-hidden="true">願</div>
+          <div className="page-head-inner">
+            <nav className="breadcrumb" aria-label="Breadcrumb">
+              <a href="/">Home</a><span>/</span><span>Request</span>
+            </nav>
+            <h1>Start your <em>request</em></h1>
+            <p>Tell us what you want from Japan. Free quote, no commitment, reply within 24 hours.</p>
+          </div>
+        </header>
         <RequestSection t={t} />
       </main>
       <SiteFooter t={t} />

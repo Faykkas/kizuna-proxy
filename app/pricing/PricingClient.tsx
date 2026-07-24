@@ -17,7 +17,17 @@ export default function PricingClient() {
     <>
       <AnnounceBar announce={announce} />
       <SiteNav />
-      <main style={{ paddingTop: "2rem" }}>
+      <main>
+        <header className="page-head">
+          <div className="page-head-kana" aria-hidden="true">価</div>
+          <div className="page-head-inner">
+            <nav className="breadcrumb" aria-label="Breadcrumb">
+              <a href="/">Home</a><span>/</span><span>Pricing</span>
+            </nav>
+            <h1>Fully <em>personalised</em></h1>
+            <p>Every request is unique. No hidden fees, and a detailed quote within 24 hours.</p>
+          </div>
+        </header>
         <PricingSection t={t} />
       </main>
       <SiteFooter t={t} />

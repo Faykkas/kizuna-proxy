@@ -725,3 +725,264 @@ iframe[src*="tawk"], #tawk-bubble-container, .tawk-min-container { display: none
   .hero-stats { gap: 1.5rem; }
   .trust-item span { display: none; }
 }
+/* ═══════════════════════════════════════════════════════════════════════════
+   KIZUNA PROXY — Raffinements v3.1
+   À coller À LA FIN de app/globals.css (après tout le reste, y compris
+   les media queries — l'ordre compte : ces règles corrigent les précédentes).
+   ─────────────────────────────────────────────────────────────────────── */
+
+/* ── 1. TOKENS COMPLÉMENTAIRES ────────────────────────────────────────────
+   Le système actuel utilise --gold comme simple alias de --red, donc l'or
+   n'existe pas vraiment. On introduit un vrai sumi (encre) et un washi
+   (papier japonais) pour donner de la profondeur sans changer l'identité. */
+:root {
+  --sakura:      #f4a7b9;                    /* Rose pétale — accent secondaire */
+  --sumi:        rgba(255,255,255,.03);      /* Voile d'encre */
+  --border-soft: rgba(255,255,255,.06);
+  --shadow-sm:   0 2px 8px rgba(0,0,0,.24);
+  --shadow-md:   0 12px 32px rgba(0,0,0,.36);
+  --shadow-red:  0 8px 28px rgba(224,48,64,.22);
+  --ease:        cubic-bezier(.22,.61,.36,1);
+}
+
+/* ── 2. NAV — cohérence du sélecteur de langue ─────────────────────────────
+   Problème : .lang-btn héritait de .icon-btn (largeur fixe 34px) tout en
+   ayant son propre padding, d'où le rendu écrasé et désaligné.
+   On lui rend une largeur automatique et on aligne sa hauteur sur le CTA. */
+.nav-controls { gap: .75rem; }
+
+.lang-btn.icon-btn {
+  width: auto;
+  min-width: 0;
+  height: 30px;
+  padding: 0 .7rem;
+  gap: .35rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-soft);
+  background: transparent;
+  color: var(--warm);
+  font-size: .62rem;
+  letter-spacing: .12em;
+  transition: color .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
+}
+.lang-btn.icon-btn:hover {
+  color: var(--ink);
+  border-color: rgba(224,48,64,.35);
+  background: rgba(224,48,64,.06);
+}
+.lang-btn.icon-btn svg { opacity: .6; transition: transform .2s var(--ease); }
+.lang-btn.icon-btn:hover svg { opacity: 1; }
+
+/* CTA de la nav — même hauteur que le sélecteur de langue */
+.nav-cta {
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 1.1rem;
+  box-shadow: var(--shadow-red);
+  transition: background .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.nav-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 32px rgba(224,48,64,.34);
+}
+
+/* Menu : 6 entrées désormais, on resserre pour éviter le débordement */
+.nav-links { gap: 1.5rem; }
+.nav-links a, .nav-dropdown-btn { position: relative; padding-bottom: 2px; }
+
+/* Soulignement animé — remplace le simple changement de couleur */
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -2px;
+  width: 100%; height: 1px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform .3s var(--ease);
+}
+.nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+/* Sur écrans intermédiaires, on allège avant de basculer en burger */
+@media (max-width: 1180px) {
+  .nav-links { gap: 1.1rem; }
+  .nav-links a, .nav-dropdown-btn { font-size: .6rem; letter-spacing: .1em; }
+  .logo-sub { display: none; }
+}
+
+/* ── 3. HERO — le kana 絆 était invisible ──────────────────────────────────
+   Il était réglé sur rgba(26,39,68,.04) : un bleu marine à 4% d'opacité,
+   invisible sur fond noir. On le passe en blanc très discret pour qu'il
+   redevienne le filigrane qu'il est censé être. */
+.hero-kana {
+  color: rgba(244,244,245,.028);
+  font-size: clamp(9rem, 22vw, 18rem);
+}
+
+/* Le titre respire davantage */
+.hero-h1 { letter-spacing: -.025em; }
+.hero-h1 em {
+  position: relative;
+  display: inline-block;
+}
+/* Trait d'encre sous le mot accentué — évoque le coup de pinceau */
+.hero-h1 em::after {
+  content: '';
+  position: absolute;
+  left: 4%; right: 4%; bottom: .08em;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--red) 18%, var(--red) 82%, transparent);
+  opacity: .34;
+}
+
+/* ── 4. CARTES — profondeur et réactivité ─────────────────────────────────
+   Les cartes étaient plates. On ajoute une élévation au survol et un
+   liseré rouge qui se révèle par la gauche, cohérent avec l'accent. */
+.svc-card, .pcg-card, .why-card-v2, .review-card-new, .shipping-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
+}
+.svc-card::before, .pcg-card::before, .why-card-v2::before, .review-card-new::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--red);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform .35s var(--ease);
+}
+.svc-card:hover, .pcg-card:hover, .why-card-v2:hover,
+.review-card-new:hover, .shipping-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-gold);
+  box-shadow: var(--shadow-md);
+}
+.svc-card:hover::before, .pcg-card:hover::before,
+.why-card-v2:hover::before, .review-card-new:hover::before {
+  transform: scaleY(1);
+  transform-origin: top;
+}
+
+/* ── 5. BOUTONS ───────────────────────────────────────────────────────── */
+.btn { transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease), transform .2s var(--ease), box-shadow .25s var(--ease); }
+.btn-gold { box-shadow: var(--shadow-red); }
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(224,48,64,.32); }
+.btn-outline:hover { border-color: rgba(224,48,64,.4); transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+
+/* ── 6. EN-TÊTES DE SECTION ───────────────────────────────────────────────
+   Le trait du .sec-label s'anime à l'apparition — petit détail qui donne
+   du rythme au scroll sans surcharger. */
+.sec-label::before {
+  width: 24px;
+  transition: width .5s var(--ease);
+}
+.reveal.revealed .sec-label::before { width: 40px; }
+
+/* ── 7. NOUVELLES PAGES — en-tête de page ─────────────────────────────────
+   Les pages /services, /pricing… commençaient à sec sur leur contenu.
+   Cette classe (optionnelle, voir plus bas) leur donne une amorce. */
+.page-head {
+  padding: 5rem 2rem 1rem;
+  text-align: center;
+  position: relative;
+  background-image: radial-gradient(ellipse 50% 60% at 50% 0%, rgba(224,48,64,.05) 0%, transparent 70%);
+}
+.page-head-kana {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(5rem, 12vw, 9rem);
+  color: rgba(244,244,245,.025);
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+.page-head-inner { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+.page-head h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  margin-bottom: 1rem;
+}
+.page-head h1 em { color: var(--red); font-style: italic; }
+.page-head p {
+  font-size: .92rem;
+  color: var(--warm);
+  font-weight: 300;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Fil d'Ariane — aide l'orientation maintenant que le site a des pages */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  font-size: .6rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--mist);
+  margin-bottom: 1.5rem;
+}
+.breadcrumb a { color: var(--warm); transition: color .2s var(--ease); }
+.breadcrumb a:hover { color: var(--red); }
+.breadcrumb span { opacity: .4; }
+
+/* ── 8. FORMULAIRE — meilleur retour visuel ───────────────────────────── */
+.f-field input, .f-field textarea {
+  transition: border-color .22s var(--ease), background .22s var(--ease), box-shadow .22s var(--ease);
+}
+.f-field input:focus, .f-field textarea:focus {
+  outline: none;
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(224,48,64,.1);
+}
+
+/* ── 9. ACCESSIBILITÉ ─────────────────────────────────────────────────────
+   Focus clavier visible (absent jusqu'ici) et respect de prefers-reduced-motion.
+   Ce sont des exigences d'accessibilité, pas de la décoration. */
+:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+a:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .svc-card:hover, .pcg-card:hover, .why-card-v2:hover,
+  .review-card-new:hover, .btn:hover, .nav-cta:hover { transform: none; }
+}
+
+/* ── 10. DÉTAILS ──────────────────────────────────────────────────────── */
+/* Sélection de texte aux couleurs de la marque */
+::selection { background: rgba(224,48,64,.28); color: var(--ink); }
+
+/* Barre de défilement discrète, cohérente avec le thème sombre */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--beige); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 5px; border: 2px solid var(--beige); }
+::-webkit-scrollbar-thumb:hover { background: rgba(224,48,64,.4); }
+
+/* Images de la galerie — léger zoom au survol */
+.filmstrip-main img { transition: transform .7s var(--ease); }
+.filmstrip-slide.active:hover img { transform: scale(1.03); }
+
+/* Liens du footer — décalage au survol, rappelle le soulignement de la nav */
+.footer-link { transition: color .2s var(--ease), padding-left .2s var(--ease); }
+.footer-link:hover { color: var(--red); padding-left: 4px; }

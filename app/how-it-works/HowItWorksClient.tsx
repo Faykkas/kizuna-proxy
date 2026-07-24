@@ -17,7 +17,17 @@ export default function HowItWorksClient() {
     <>
       <AnnounceBar announce={announce} />
       <SiteNav />
-      <main style={{ paddingTop: "2rem" }}>
+      <main>
+        <header className="page-head">
+          <div className="page-head-kana" aria-hidden="true">道</div>
+          <div className="page-head-inner">
+            <nav className="breadcrumb" aria-label="Breadcrumb">
+              <a href="/">Home</a><span>/</span><span>How it works</span>
+            </nav>
+            <h1>Simple as sending <em>a message</em></h1>
+            <p>From your first message to delivery at your door — three steps, real people in Tokyo.</p>
+          </div>
+        </header>
         <HowItWorksSection t={t} />
       </main>
       <SiteFooter t={t} />
