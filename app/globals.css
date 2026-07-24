@@ -986,3 +986,174 @@ a:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }
 /* Liens du footer — décalage au survol, rappelle le soulignement de la nav */
 .footer-link { transition: color .2s var(--ease), padding-left .2s var(--ease); }
 .footer-link:hover { color: var(--red); padding-left: 4px; }
+/* ═══════════════════════════════════════════════════════════════════════════
+   KIZUNA PROXY — Correctifs nav v3.2
+   À coller À LA FIN de app/globals.css (après les raffinements v3.1).
+   ─────────────────────────────────────────────────────────────────────── */
+
+/* ── 1. ALIGNEMENT DE « GUIDES » ──────────────────────────────────────────
+   Cause : .nav-dropdown-btn est un <button> avec line-height: 1, tandis que
+   les <a> voisins héritent du line-height du body (1.6). D'où le décalage
+   vertical d'environ 3px.
+   Correctif : on aligne les deux sur une hauteur de ligne identique et on
+   neutralise le comportement de baseline propre aux boutons. */
+.nav-links {
+  align-items: stretch;   /* chaque <li> occupe toute la hauteur */
+}
+
+.nav-links li {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a,
+.nav-links .nav-dropdown-btn {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;          /* même hauteur de ligne pour les deux */
+  height: 100%;
+  padding-bottom: 0;       /* annule le padding de la v3.1 */
+  vertical-align: middle;
+  font-family: 'Inter', sans-serif;
+  font-size: .65rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+/* Le wrapper du dropdown doit aussi s'étirer, sinon le bouton flotte */
+.nav-dropdown-wrap {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+/* Le soulignement animé doit partir du même endroit pour tous.
+   On le repositionne en bas du <li>, pas du texte. */
+.nav-links a::after {
+  bottom: -6px;
+}
+.nav-links .nav-dropdown-btn::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -6px;
+  width: 100%; height: 1px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform .3s var(--ease);
+}
+.nav-links .nav-dropdown-wrap:hover .nav-dropdown-btn::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Le chevron de « Guides » : aligné et discret */
+.nav-dropdown-btn svg {
+  margin-left: .3rem;
+  opacity: .5;
+  flex-shrink: 0;
+}
+.nav-dropdown-wrap:hover .nav-dropdown-btn svg { opacity: 1; }
+
+/* ── 2. SÉLECTEUR DE LANGUE — version sans bordure ────────────────────────
+   La bordure en faisait une boîte au milieu d'une nav en texte libre.
+   Il devient un élément de menu comme les autres, avec juste le chevron.
+
+   Pour revenir à une pastille, voir l'option B en bas de ce bloc. */
+.lang-btn.icon-btn {
+  width: auto;
+  min-width: 0;
+  height: auto;
+  padding: 0;
+  gap: .3rem;
+  border: none;
+  background: none;
+  border-radius: 0;
+  color: var(--warm);
+  font-family: 'Inter', sans-serif;
+  font-size: .65rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  transition: color .2s var(--ease);
+}
+.lang-btn.icon-btn:hover {
+  color: var(--ink);
+  background: none;
+  border: none;
+}
+.lang-btn.icon-btn span {
+  font-size: .65rem !important;
+  letter-spacing: .14em !important;
+}
+.lang-btn.icon-btn svg {
+  opacity: .5;
+  transition: opacity .2s var(--ease), transform .2s var(--ease);
+}
+.lang-btn.icon-btn:hover svg { opacity: 1; }
+
+/* Séparateur discret entre le CTA et le sélecteur de langue —
+   remplace la bordure du bouton pour marquer la limite de zone */
+.nav-controls { gap: 1.1rem; }
+.lang-selector::before {
+  content: '';
+  position: absolute;
+  left: -.55rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 12px;
+  background: var(--border);
+}
+
+/* Le menu déroulant des langues, assorti au reste */
+.lang-dropdown {
+  border-radius: 8px;
+  border-color: var(--border-soft);
+  box-shadow: var(--shadow-md);
+  padding: .25rem;
+  min-width: 88px;
+}
+.lang-option {
+  border-radius: 5px;
+  padding: .45rem .75rem;
+  font-size: .65rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.lang-option.active { color: var(--red); background: rgba(224,48,64,.08); }
+
+/* ── OPTION B — pastille pleine ────────────────────────────────────────────
+   Si tu préfères que le sélecteur reste un contrôle visible plutôt qu'un
+   simple lien, supprime le bloc « 2 » ci-dessus et décommente celui-ci.
+
+.lang-btn.icon-btn {
+  width: auto; min-width: 0; height: 28px;
+  padding: 0 .7rem; gap: .35rem;
+  border: none; border-radius: 14px;
+  background: rgba(255,255,255,.05);
+  color: var(--warm);
+  font-size: .62rem; letter-spacing: .12em; text-transform: uppercase;
+  line-height: 1; display: inline-flex; align-items: center;
+  transition: background .2s var(--ease), color .2s var(--ease);
+}
+.lang-btn.icon-btn:hover { background: rgba(255,255,255,.09); color: var(--ink); }
+.lang-btn.icon-btn svg { opacity: .5; }
+.lang-selector::before { display: none; }
+.nav-controls { gap: .75rem; }
+
+   ─────────────────────────────────────────────────────────────────────── */
+
+/* ── 3. AJUSTEMENT RESPONSIVE ─────────────────────────────────────────────
+   Avec 6 entrées + Guides + CTA + langue, on resserre plus tôt. */
+@media (max-width: 1280px) {
+  .nav-links { gap: 1.25rem; }
+}
+@media (max-width: 1180px) {
+  .nav-links { gap: 1rem; }
+  .nav-links a, .nav-links .nav-dropdown-btn { font-size: .6rem; letter-spacing: .1em; }
+  .logo-sub { display: none; }
+  .lang-selector::before { display: none; }
+}
