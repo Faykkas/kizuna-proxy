@@ -4375,3 +4375,239 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   margin-top: .75rem;
   text-decoration: none;
 }
+/* ═══════════════════════════════════════════════════════════════════════════
+   KIZUNA PROXY — v9 : formulaire simplifié + widget de contact
+   ─────────────────────────────────────────────────────────────────────── */
+
+/* ── 1. FORMULAIRE ────────────────────────────────────────────────────────
+   Trois champs obligatoires au lieu de cinq. Le reste est replié : présent
+   pour ceux qui veulent préciser, invisible pour les autres. */
+.req-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.f-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 560px) {
+  .f-row { grid-template-columns: 1fr; }
+}
+
+.req-more-toggle {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: var(--red);
+  font-family: var(--font-pixel);
+  font-size: .42rem;
+  letter-spacing: .04em;
+  cursor: pointer;
+  padding: .3rem 0;
+  line-height: 1.9;
+  transition: color .2s;
+}
+.req-more-toggle:hover { color: var(--red-l); }
+
+.req-more {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  padding: 1.15rem;
+  background: rgba(0,0,0,.16);
+  border: 2px dashed var(--px-border);
+  border-radius: 10px;
+}
+
+.req-submit {
+  width: 100%;
+  justify-content: center;
+  margin-top: .3rem;
+}
+
+.req-note {
+  font-size: .76rem;
+  color: var(--mist);
+  text-align: center;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+.req-error { text-align: center; }
+
+.req-success {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 340px;
+  gap: 1rem;
+}
+.req-success-title {
+  font-family: var(--font-pixel);
+  font-size: .8rem;
+  color: var(--red);
+  line-height: 1.9;
+}
+.req-success-desc {
+  font-size: .9rem;
+  color: var(--warm);
+  font-weight: 300;
+  line-height: 1.7;
+  max-width: 320px;
+}
+
+/* ── 2. WIDGET DE CONTACT ─────────────────────────────────────────────────
+   Un visiteur qui voit qu'un humain est joignable envoie plus volontiers sa
+   demande, même s'il ne clique jamais. C'est de la réassurance avant d'être
+   du support. */
+.cw-fab {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 120;
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 2px solid var(--red);
+  box-shadow: 0 5px 0 rgba(0,0,0,.35), 0 0 22px rgba(168,224,74,.18);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: transform .12s var(--ease-step), box-shadow .12s var(--ease-step);
+}
+.cw-fab:hover { transform: translateY(-2px); box-shadow: 0 7px 0 rgba(0,0,0,.35), 0 0 26px rgba(168,224,74,.26); }
+.cw-fab:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,.35); }
+.cw-fab.is-open { background: var(--red); border-color: var(--red); }
+.cw-fab-x { font-size: 1.7rem; color: var(--px-bg); line-height: 1; }
+
+.cw-panel {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 5.6rem;
+  z-index: 120;
+  width: 300px;
+  max-width: calc(100vw - 3rem);
+  background: var(--surface);
+  border: 2px solid var(--px-border);
+  border-radius: 14px;
+  box-shadow: 0 8px 0 rgba(0,0,0,.4);
+  overflow: hidden;
+  animation: cw-in .18s var(--ease-step);
+}
+@keyframes cw-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.cw-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: 1.1rem 1.2rem .9rem;
+  border-bottom: 2px solid var(--px-border);
+}
+.cw-head-text strong {
+  display: block;
+  font-family: var(--font-pixel);
+  font-size: .55rem;
+  color: var(--red);
+  line-height: 1.9;
+  margin-bottom: .4rem;
+}
+.cw-head-text p {
+  font-size: .78rem;
+  color: var(--warm);
+  font-weight: 300;
+  line-height: 1.55;
+}
+.cw-close {
+  background: none;
+  border: none;
+  color: var(--mist);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 .2rem;
+  flex-shrink: 0;
+}
+.cw-close:hover { color: var(--red); }
+
+.cw-list { display: flex; flex-direction: column; padding: .5rem; gap: .3rem; }
+
+.cw-item {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  padding: .7rem .8rem;
+  border-radius: 9px;
+  border: 2px solid transparent;
+  text-decoration: none;
+  transition: background .15s, border-color .15s;
+}
+.cw-item:hover {
+  background: rgba(168,224,74,.07);
+  border-color: rgba(168,224,74,.3);
+}
+
+.cw-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--px-bg);
+  border: 2px solid var(--px-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--red);
+  flex-shrink: 0;
+}
+.cw-item:hover .cw-icon { border-color: var(--red); }
+
+.cw-item-text { flex: 1; min-width: 0; }
+.cw-item-label {
+  display: block;
+  font-size: .85rem;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.cw-item-note {
+  display: block;
+  font-size: .72rem;
+  color: var(--mist);
+  font-weight: 300;
+  line-height: 1.4;
+  margin-top: .1rem;
+}
+.cw-arrow { color: var(--red); font-size: .85rem; flex-shrink: 0; opacity: 0; transition: opacity .15s; }
+.cw-item:hover .cw-arrow { opacity: 1; }
+
+.cw-foot {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  padding: .85rem 1.2rem 1rem;
+  border-top: 2px solid var(--px-border);
+  background: rgba(0,0,0,.14);
+}
+.cw-foot span {
+  font-size: .72rem;
+  color: var(--mist);
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+/* Ne pas empiler avec le bouton retour en haut */
+.back-to-top { bottom: 1.5rem; right: 5.6rem; }
+
+@media (max-width: 560px) {
+  .cw-fab { right: 1rem; bottom: 1rem; width: 52px; height: 52px; }
+  .cw-panel { right: 1rem; bottom: 4.8rem; }
+  .back-to-top { right: 4.8rem; bottom: 1rem; }
+}
