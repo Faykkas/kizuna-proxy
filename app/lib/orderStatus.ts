@@ -163,3 +163,51 @@ export function formatJPY(n) {
   if (n == null) return "—";
   return "¥" + Number(n).toLocaleString("en-US");
 }
+
+/**
+ * Order titles come from a free-text field the admin fills in, so they are
+ * often a raw URL pasted from Mercari or Yahoo. Showing that to a customer
+ * is unreadable — this turns it into something they can recognise.
+ */
+const SITE_NAMES = {
+  "mercari.com": "Mercari",
+  "jp.mercari.com": "Mercari",
+  "auctions.yahoo.co.jp": "Yahoo Auctions",
+  "page.auctions.yahoo.co.jp": "Yahoo Auctions",
+  "rakuten.co.jp": "Rakuten",
+  "amazon.co.jp": "Amazon JP",
+  "hmv.co.jp": "HMV",
+  "suruga-ya.jp": "Suruga-ya",
+  "bookoff.co.jp": "Book Off",
+  "pokemoncenter-online.com": "Pokémon Center",
+  "store-jp.nintendo.com": "Nintendo Store",
+  "mandarake.co.jp": "Mandarake",
+  "yodobashi.com": "Yodobashi",
+  "essential-japan.com": "Essential Japan",
+};
+
+export function orderTitle(items, fallback = "Your order") {
+  if (!items || !items.trim()) return fallback;
+
+  const text = items.trim();
+  const urls = text.match(/https?:\/\/[^\s]+/g);
+
+  // No URL at all — the admin wrote a real description
+  if (!urls) return text;
+
+  // Some description alongside the links: keep the description
+  const withoutUrls = text.replace(/https?:\/\/[^\s]+/g, "").trim();
+  if (withoutUrls.length > 3) return withoutUrls;
+
+  // Pure links — name the shop instead
+  const shops = [...new Set(urls.map(u => {
+    try {
+      const host = new URL(u).hostname.replace(/^www\./, "");
+      return SITE_NAMES[host] || host;
+    } catch { return null; }
+  }).filter(Boolean))];
+
+  if (shops.length === 0) return fallback;
+  if (urls.length === 1) return `${shops[0]} item`;
+  return `${urls.length} items from ${shops.join(", ")}`;
+}

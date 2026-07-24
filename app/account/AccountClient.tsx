@@ -16,7 +16,7 @@ import { useAuth } from "../lib/auth";
 import { useMyOrders, useAccountSummary, useNotifications } from "../lib/useOrders";
 import {
   statusMeta, statusColor, progressPercent, nextStep,
-  needsCustomerAction, formatJPY, normaliseStatus,
+  needsCustomerAction, formatJPY, normaliseStatus, orderTitle,
 } from "../lib/orderStatus";
 
 function StatusIcon({ name, size = 22 }) {
@@ -40,7 +40,7 @@ function OrderCard({ order }) {
         </span>
       </div>
 
-      <div className="acc-order-items">{order.items || "Your order"}</div>
+      <div className="acc-order-items">{orderTitle(order.items)}</div>
 
       <div className="acc-order-bar">
         <div className="acc-order-bar-fill" style={{ width: `${pct}%` }} />
@@ -75,9 +75,13 @@ export default function AccountClient() {
   const summary = useAccountSummary(orders);
   const { items: notifs, unread, markAllRead } = useNotifications();
 
-  // Not signed in → send to login
+  // Not signed in → login. Admins → the admin panel, since the customer
+  // dashboard would show them every order in the database, which is not
+  // what they need.
   useEffect(() => {
-    if (!authLoading && !user) router.replace("/account/login");
+    if (authLoading) return;
+    if (!user) { router.replace("/account/login"); return; }
+    if (user.user_metadata?.role === "admin") router.replace("/admin");
   }, [authLoading, user, router]);
 
   if (authLoading || !user) {

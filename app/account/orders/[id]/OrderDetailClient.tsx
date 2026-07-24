@@ -18,7 +18,7 @@ import { useOrderDetail } from "../../../lib/useOrders";
 import PayButton from "../../../components/account/PayButton";
 import {
   TIMELINE, SPECIAL_STATUSES, statusMeta, statusColor, stepIndex,
-  progressPercent, nextStep, needsCustomerAction, formatJPY, normaliseStatus,
+  progressPercent, nextStep, needsCustomerAction, formatJPY, normaliseStatus, orderTitle,
 } from "../../../lib/orderStatus";
 
 const ICONS = {
@@ -133,7 +133,7 @@ export default function OrderDetailClient({ orderId }) {
         <header className="ord-head">
           <div>
             <span className="ord-ref">{order.public_ref}</span>
-            <h1 className="ord-title">{order.items || "Your order"}</h1>
+            <h1 className="ord-title">{orderTitle(order.items)}</h1>
           </div>
           <span className="ord-badge" style={{ color: statusColor(order.status) }}>
             {meta.label}
