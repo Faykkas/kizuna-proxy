@@ -16,7 +16,7 @@ export const translations = {
       prop4: "Mercari & Yahoo Auctions",
       prop5: "Any store in Tokyo — we're there",
     },
-    nav: { request: "Request an item", pricing: "Pricing", faq: "FAQ", gallery: "Gallery" },
+    nav: { request: "Request an item", pricing: "Pricing", faq: "FAQ", gallery: "Gallery", events: "Events", services: "Services", howItWorks: "How it works", reviews: "Reviews" },
     whatWeBuy: {
       label: "Services",
       title: "We buy",
@@ -140,7 +140,7 @@ export const translations = {
       prop4: "Mercari & Yahoo Auctions",
       prop5: "N'importe quelle boutique à Tokyo",
     },
-    nav: { request: "Faire une demande", pricing: "Tarifs", faq: "FAQ", gallery: "Galerie" },
+    nav: { request: "Faire une demande", pricing: "Tarifs", faq: "FAQ", gallery: "Galerie", events: "Événements", services: "Services", howItWorks: "Comment ça marche", reviews: "Avis" },
     whatWeBuy: {
       label: "Services",
       title: "On achète",
@@ -264,7 +264,7 @@ export const translations = {
       prop4: "メルカリ & ヤフオク",
       prop5: "東京のどの店舗でも対応",
     },
-    nav: { request: "リクエスト", pricing: "料金", faq: "よくある質問", gallery: "ギャラリー" },
+    nav: { request: "リクエスト", pricing: "料金", faq: "よくある質問", gallery: "ギャラリー", events: "イベント", services: "サービス", howItWorks: "ご利用の流れ", reviews: "お客様の声" },
     whatWeBuy: {
       label: "サービス", title: "日本から", titleEm: "なんでも購入",
       desc: "大手マーケットプレイスから限定実店舗まで — 日本にあるものなら何でも手に入れます。",
@@ -378,7 +378,7 @@ export const translations = {
       prop4: "Mercari y Yahoo Auctions",
       prop5: "Cualquier tienda en Tokio",
     },
-    nav: { request: "Hacer una solicitud", pricing: "Precios", faq: "FAQ", gallery: "Galería" },
+    nav: { request: "Hacer una solicitud", pricing: "Precios", faq: "FAQ", gallery: "Galería", events: "Eventos", services: "Servicios", howItWorks: "Cómo funciona", reviews: "Opiniones" },
     whatWeBuy: {
       label: "Servicios", title: "Compramos", titleEm: "cualquier artículo de Japón",
       desc: "Desde los grandes marketplaces hasta tiendas físicas exclusivas — si existe en Japón, podemos conseguirlo.",
@@ -492,7 +492,7 @@ export const translations = {
       prop4: "Mercari e Yahoo Auctions",
       prop5: "Qualsiasi negozio a Tokyo",
     },
-    nav: { request: "Fai una richiesta", pricing: "Prezzi", faq: "FAQ", gallery: "Galleria" },
+    nav: { request: "Fai una richiesta", pricing: "Prezzi", faq: "FAQ", gallery: "Galleria", events: "Eventi", services: "Servizi", howItWorks: "Come funziona", reviews: "Recensioni" },
     whatWeBuy: {
       label: "Servizi", title: "Acquistiamo", titleEm: "qualsiasi articolo dal Giappone",
       desc: "Dai grandi marketplace ai negozi fisici esclusivi — se esiste in Giappone, possiamo procurartelo.",
@@ -606,7 +606,7 @@ export const translations = {
       prop4: "Mercari & Yahoo Auctions",
       prop5: "Jedes Geschäft in Tokio",
     },
-    nav: { request: "Anfrage stellen", pricing: "Preise", faq: "FAQ", gallery: "Galerie" },
+    nav: { request: "Anfrage stellen", pricing: "Preise", faq: "FAQ", gallery: "Galerie", events: "Events", services: "Leistungen", howItWorks: "So funktioniert es", reviews: "Bewertungen" },
     whatWeBuy: {
       label: "Services", title: "Wir kaufen", titleEm: "alles aus Japan",
       desc: "Von den größten Marktplätzen bis zu exklusiven Geschäften — wenn es in Japan existiert, können wir es besorgen.",
@@ -720,7 +720,7 @@ export const translations = {
       prop4: "Mercari & Yahoo Auctions",
       prop5: "도쿄 어떤 매장이든",
     },
-    nav: { request: "요청하기", pricing: "가격", faq: "FAQ", gallery: "갤러리" },
+    nav: { request: "요청하기", pricing: "가격", faq: "FAQ", gallery: "갤러리", events: "이벤트", services: "서비스", howItWorks: "이용 방법", reviews: "고객 후기" },
     whatWeBuy: {
       label: "서비스", title: "일본에서", titleEm: "무엇이든 구매",
       desc: "대형 마켓플레이스부터 독점 오프라인 매장까지 — 일본에 있는 것이라면 무엇이든 구할 수 있습니다.",
@@ -834,7 +834,7 @@ export const translations = {
       prop4: "Mercari和雅虎拍卖",
       prop5: "东京任何店铺",
     },
-    nav: { request: "提交需求", pricing: "价格", faq: "常见问题", gallery: "图库" },
+    nav: { request: "提交需求", pricing: "价格", faq: "常见问题", gallery: "图库", events: "活动", services: "服务", howItWorks: "服务流程", reviews: "客户评价" },
     whatWeBuy: {
       label: "服务", title: "我们代购", titleEm: "日本任何商品",
       desc: "从各大购物平台到独家实体店——日本有的，我们都能帮您买到。",

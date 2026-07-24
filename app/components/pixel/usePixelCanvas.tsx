@@ -52,11 +52,15 @@ export default function usePixelCanvas() {
       // Taille de pixel adaptée à la largeur : le mot occupe ~62% de l'écran
       const glyphW = 5, glyphH = 7, gap = 2;
       const totalCols = WORD.length * glyphW + (WORD.length - 1) * gap;
-      px = Math.max(3, Math.floor((W * 0.62) / totalCols));
+      // Contraint par la largeur ET la hauteur : le mot doit rester un
+      // filigrane discret derrière le titre, pas occuper tout l'écran.
+      const byWidth  = (W * 0.34) / totalCols;
+      const byHeight = (H * 0.14) / glyphH;
+      px = Math.max(2, Math.floor(Math.min(byWidth, byHeight)));
 
       const wordW = totalCols * px;
       const ox = (W - wordW) / 2;
-      const oy = H * 0.13;
+      const oy = H * 0.055;
 
       cells = [];
       WORD.forEach((ch, gi) => {
@@ -75,19 +79,21 @@ export default function usePixelCanvas() {
         });
       });
 
-      petals = Array.from({ length: 22 }, () => spawnPetal(true));
+      petals = Array.from({ length: 14 }, () => spawnPetal(true));
     }
 
     function spawnPetal(initial) {
+      const pp = 7;  // grille des pétales, indépendante de celle du mot
       return {
-        x: Math.floor(Math.random() * (W / px)) * px,
-        y: initial ? Math.floor(Math.random() * (H / px)) * px : -px * 2,
+        pp,
+        x: Math.floor(Math.random() * (W / pp)) * pp,
+        y: initial ? Math.floor(Math.random() * (H / pp)) * pp : -pp * 2,
         vy: 0.25 + Math.random() * 0.5,
         drift: Math.random() < 0.5 ? -1 : 1,
         acc: 0,
-        sz: Math.random() < 0.3 ? 2 : 1,
+        sz: 1,
         col: Math.random() < 0.5 ? PINK : Math.random() < 0.5 ? ACCENT2 : ACCENT,
-        alpha: 0.35 + Math.random() * 0.4,
+        alpha: 0.18 + Math.random() * 0.22,
       };
     }
 
@@ -98,16 +104,16 @@ export default function usePixelCanvas() {
       petals.forEach(p => {
         p.acc += p.vy;
         if (p.acc >= 1) {
-          p.y += px * Math.floor(p.acc);
+          p.y += p.pp * Math.floor(p.acc);
           p.acc = 0;
-          if (Math.random() < 0.35) p.x += px * p.drift;
+          if (Math.random() < 0.35) p.x += p.pp * p.drift;
           if (Math.random() < 0.04) p.drift *= -1;
         }
-        if (p.y > H + px) Object.assign(p, spawnPetal(false));
+        if (p.y > H + p.pp) Object.assign(p, spawnPetal(false));
 
         cx.globalAlpha = p.alpha;
         cx.fillStyle = p.col;
-        cx.fillRect(p.x, p.y, px * p.sz, px * p.sz);
+        cx.fillRect(p.x, p.y, p.pp, p.pp);
       });
       cx.globalAlpha = 1;
 
@@ -117,13 +123,13 @@ export default function usePixelCanvas() {
         if (c.order < reveal) c.on = Math.min(1, c.on + 0.14);
         if (c.on <= 0) return;
 
-        cx.globalAlpha = c.on * 0.9;
+        cx.globalAlpha = c.on * 0.17;
         cx.fillStyle = ACCENT;
         cx.fillRect(c.x, c.y, px, px);
 
         // Liseré plus clair en haut-gauche : donne du relief au sprite
         if (c.on > 0.9) {
-          cx.globalAlpha = 0.25;
+          cx.globalAlpha = 0.06;
           cx.fillStyle = "#d4f08a";
           cx.fillRect(c.x, c.y, px, Math.max(1, px * 0.22));
         }

@@ -1805,3 +1805,50 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   .sec-label { font-size: .45rem; }
   .reviews-big-num { font-size: 1.5rem; }
 }
+/* ═══════════════════════════════════════════════════════════════════════════
+   KIZUNA PROXY — Correctifs v4.1
+   ─────────────────────────────────────────────────────────────────────── */
+
+/* ── HERO : garantir la lisibilité du texte ───────────────────────────────
+   Le canvas passe derrière un voile dégradé : quoi qu'il s'y passe, le titre
+   reste lisible. C'est une ceinture de sécurité, pas une correction de
+   l'animation elle-même. */
+.hero-center { position: relative; }
+.hero-center > .hero-center-inner { position: relative; z-index: 2; }
+#hero-canvas { z-index: 0 !important; }
+
+.hero-center::after {
+  content: '';
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(ellipse 55% 45% at 50% 52%,
+              rgba(21,13,40,.92) 0%,
+              rgba(21,13,40,.72) 45%,
+              transparent 78%);
+}
+
+/* Le titre gagne un léger halo sombre — lisible même sur un pixel clair */
+.hero-h1 { text-shadow: 0 2px 18px rgba(21,13,40,.85); }
+.hero-desc { text-shadow: 0 1px 12px rgba(21,13,40,.9); }
+
+/* Le badge du haut ne doit pas être traversé par les pixels */
+.hero-badge-row {
+  background: rgba(45,29,84,.9);
+  backdrop-filter: blur(4px);
+}
+
+/* La bande de props défilantes : fond plein pour rester lisible */
+.hero-rotating-wrap {
+  background: rgba(21,13,40,.72);
+  backdrop-filter: blur(3px);
+  border-radius: 6px;
+  padding: .35rem 0;
+}
+
+/* ── LOGO PIXEL ───────────────────────────────────────────────────────── */
+.logo { gap: .65rem; }
+.logo svg { image-rendering: pixelated; }
+.footer-logo-wrap { gap: .6rem; align-items: center; }

@@ -2,6 +2,7 @@
 "use client";
 
 import { IconInstagram, IconTiktok } from "./ui";
+import PixelLogo from "./pixel/PixelLogo";
 
 export default function SiteFooter({ t }: { t: any }) {
   return (
@@ -9,7 +10,7 @@ export default function SiteFooter({ t }: { t: any }) {
         <div className="footer-grid">
           <div>
             <div className="footer-logo-wrap">
-              <img src="/logo.png" alt="Kizuna Proxy" style={{height:"32px",width:"auto",objectFit:"contain"}} />
+              <PixelLogo size={30} />
               <div className="footer-logo"><span className="g">Kizuna</span> Proxy</div>
             </div>
 <p className="footer-tagline">{t.footerNav?.tagline || "Tokyo-based proxy service. Your trusted link to Japan."}</p>

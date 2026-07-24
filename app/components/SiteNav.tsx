@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from "react";
 import { translations, detectLang, LANG_LABELS } from "../translations";
+import PixelLogo from "./pixel/PixelLogo";
 
 const BLOG_ITEMS = [
   { href:"/blog/how-to-buy-from-mercari-japan",    emoji:"🛍️", label:"Mercari Japan" },
@@ -47,7 +48,7 @@ export default function SiteNav() {
 
         {/* ── Logo ── */}
         <a href="/" className="logo">
-          <img src="/logo.png" alt="Kizuna Proxy" style={{height:"42px",width:"auto",objectFit:"contain"}} />
+          <PixelLogo size={40} />
           <div>
             <div className="logo-name"><span className="g">Kizuna</span> Proxy</div>
             <div className="logo-sub">Tokyo Proxy Service</div>
@@ -56,12 +57,12 @@ export default function SiteNav() {
 
         {/* ── Desktop links ── */}
         <ul className="nav-links">
-          <li><a href="/services">{t.whatWeBuy?.label || "Services"}</a></li>
+          <li><a href="/services">{t.nav?.services || "Services"}</a></li>
           <li><a href="/pricing">{t.nav.pricing}</a></li>
-          <li><a href="/how-it-works">{t.footerNav?.howItWorks || "How it works"}</a></li>
-          <li><a href="/reviews">{t.footerNav?.reviews || "Reviews"}</a></li>
+          <li><a href="/how-it-works">{t.nav?.howItWorks || "How it works"}</a></li>
+          <li><a href="/reviews">{t.nav?.reviews || "Reviews"}</a></li>
           <li><a href="/faq">{t.nav.faq || "FAQ"}</a></li>
-          <li><a href="/events">Events 🎌</a></li>
+          <li><a href="/events">{t.nav?.events || "Events"} 🎌</a></li>
 
           {/* Guides dropdown */}
           <li className="nav-dropdown-wrap"
@@ -129,12 +130,12 @@ export default function SiteNav() {
         <div className="mobile-menu">
 
           {/* Nav links */}
-          <a href="/services" onClick={() => setMobileOpen(false)}>{t.whatWeBuy?.label || "Services"}</a>
+          <a href="/services" onClick={() => setMobileOpen(false)}>{t.nav?.services || "Services"}</a>
           <a href="/pricing" onClick={() => setMobileOpen(false)}>{t.nav.pricing}</a>
-          <a href="/how-it-works" onClick={() => setMobileOpen(false)}>{t.footerNav?.howItWorks || "How it works"}</a>
-          <a href="/reviews" onClick={() => setMobileOpen(false)}>{t.footerNav?.reviews || "Reviews"}</a>
+          <a href="/how-it-works" onClick={() => setMobileOpen(false)}>{t.nav?.howItWorks || "How it works"}</a>
+          <a href="/reviews" onClick={() => setMobileOpen(false)}>{t.nav?.reviews || "Reviews"}</a>
           <a href="/faq" onClick={() => setMobileOpen(false)}>{t.nav.faq || "FAQ"}</a>
-          <a href="/events" onClick={() => setMobileOpen(false)}>Events 🎌</a>
+          <a href="/events" onClick={() => setMobileOpen(false)}>{t.nav?.events || "Events"} 🎌</a>
 
           {/* Guides accordion */}
           <div>
