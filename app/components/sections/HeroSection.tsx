@@ -11,12 +11,6 @@ export default function HeroSection({ t }: { t: any }) {
         <div className="hero-center-inner">
           <div className="hero-kana">絆</div>
 
-          {/* Rotating badge */}
-          <div className="hero-badge-row">
-            <span className="hero-badge-dot" />
-            <span className="hero-badge-text">{t.hero.eyebrow}</span>
-          </div>
-
           {/* Main headline */}
           <h1 className="hero-h1">
             {t.hero.title1}<br/>

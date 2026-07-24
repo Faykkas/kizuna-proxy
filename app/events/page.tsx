@@ -4,6 +4,7 @@
 import { useState, useEffect, useCallback } from "react";
 
 import SiteNav from "../components/SiteNav";
+import Maneki from "../components/pixel/Maneki";
 
 // ─── EVENTS CONTENT ───────────────────────────────────────────────────────────
 const EVENTS_CONTENT = {
@@ -55,9 +56,17 @@ export default function EventsPage() {
       <main className="blog-page">
         <div className="blog-wrap" style={{ maxWidth: "860px" }}>
 
-          <div className="blog-eyebrow">{c.eyebrow}</div>
-          <h1>{c.title}<br /><em>{c.titleEm}</em></h1>
-          <p className="blog-lead">{c.lead}</p>
+          <div className="px-page-head-inline">
+            <div className="px-head-mascot">
+              <Maneki prop="sign" size={86} float />
+              <span className="px-head-bubble">We queue so you don&apos;t</span>
+            </div>
+            <nav className="breadcrumb" aria-label="Breadcrumb">
+              <a href="/">Home</a><span>/</span><span>Events</span>
+            </nav>
+            <h1 className="px-page-title">{c.title} <em>{c.titleEm}</em></h1>
+            <p className="px-page-lead">{c.lead}</p>
+          </div>
 
           <hr className="blog-hr" />
 

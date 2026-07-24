@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { copy as t } from "../translations";
 import SiteNav from "../components/SiteNav";
+import Maneki from "../components/pixel/Maneki";
 
 const FAQS = [
   {
@@ -90,25 +91,23 @@ export default function FaqClient() {
     <main style={{ minHeight: "100vh", background: "var(--beige)", padding: "7rem 2rem 8rem" }}>
       <div style={{ maxWidth: "760px", margin: "0 auto" }}>
 
-        {/* Back */}
-        <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: ".4rem", fontSize: ".65rem", letterSpacing: ".1em", textTransform: "uppercase", color: "var(--mist)", textDecoration: "none", marginBottom: "3rem" }}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-          Back
-        </a>
-
-        {/* Header */}
-        <p style={{ fontSize: ".6rem", letterSpacing: ".2em", textTransform: "uppercase", color: "var(--red)", marginBottom: ".75rem", display: "flex", alignItems: "center", gap: ".5rem" }}>
-          <span style={{ display: "block", width: "20px", height: "1px", background: "var(--red)" }} />
-          {t.faq?.label || "FAQ"}
-        </p>
-        <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(2rem,4vw,2.8rem)", fontWeight: 300, color: "var(--ink)", marginBottom: ".75rem" }}>
-          {t.faq?.title || "Common"} <em style={{ color: "var(--red)", fontStyle: "italic" }}>{t.faq?.titleEm || "questions"}</em>
-        </h1>
-        <p style={{ fontSize: ".88rem", color: "var(--warm)", fontWeight: 300, lineHeight: 1.8, marginBottom: "3rem" }}>
-          Can't find your answer?{" "}
-          <a href="mailto:kizunaproxy@gmail.com" style={{ color: "var(--red)", textDecoration: "none" }}>Email us</a>{" "}
-          — we reply within 24 hours.
-        </p>
+        <div className="px-page-head-inline">
+          <div className="px-head-mascot">
+            <Maneki prop="glass" size={86} float />
+            <span className="px-head-bubble">Ask me anything</span>
+          </div>
+          <nav className="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Home</a><span>/</span><span>FAQ</span>
+          </nav>
+          <h1 className="px-page-title">
+            {t.faq?.title || "Common"} <em>{t.faq?.titleEm || "questions"}</em>
+          </h1>
+          <p className="px-page-lead">
+            Can&apos;t find your answer?{" "}
+            <a href="mailto:kizunaproxy@gmail.com">Email us</a>{" "}
+            — we reply within 24 hours.
+          </p>
+        </div>
 
         {/* FAQ sections */}
         {faqs.map((section, si) => (
