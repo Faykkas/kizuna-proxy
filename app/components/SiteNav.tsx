@@ -56,7 +56,10 @@ export default function SiteNav() {
 
         {/* ── Desktop links ── */}
         <ul className="nav-links">
-          <li><a href="/#pricing">{t.nav.pricing}</a></li>
+          <li><a href="/services">{t.whatWeBuy?.label || "Services"}</a></li>
+          <li><a href="/pricing">{t.nav.pricing}</a></li>
+          <li><a href="/how-it-works">{t.footerNav?.howItWorks || "How it works"}</a></li>
+          <li><a href="/reviews">{t.footerNav?.reviews || "Reviews"}</a></li>
           <li><a href="/faq">{t.nav.faq || "FAQ"}</a></li>
           <li><a href="/events">Events 🎌</a></li>
 
@@ -86,7 +89,7 @@ export default function SiteNav() {
 
         {/* ── Desktop controls ── */}
         <div className="nav-controls">
-          <a href="/#request-wrap" className="nav-cta">{t.nav.request}</a>
+          <a href="/request" className="nav-cta">{t.nav.request}</a>
 
           {/* Lang selector */}
           <div className="lang-selector">
@@ -126,7 +129,10 @@ export default function SiteNav() {
         <div className="mobile-menu">
 
           {/* Nav links */}
-          <a href="/#pricing" onClick={() => setMobileOpen(false)}>{t.nav.pricing}</a>
+          <a href="/services" onClick={() => setMobileOpen(false)}>{t.whatWeBuy?.label || "Services"}</a>
+          <a href="/pricing" onClick={() => setMobileOpen(false)}>{t.nav.pricing}</a>
+          <a href="/how-it-works" onClick={() => setMobileOpen(false)}>{t.footerNav?.howItWorks || "How it works"}</a>
+          <a href="/reviews" onClick={() => setMobileOpen(false)}>{t.footerNav?.reviews || "Reviews"}</a>
           <a href="/faq" onClick={() => setMobileOpen(false)}>{t.nav.faq || "FAQ"}</a>
           <a href="/events" onClick={() => setMobileOpen(false)}>Events 🎌</a>
 
@@ -196,7 +202,7 @@ export default function SiteNav() {
           </div>
 
           {/* CTA */}
-          <a href="/#request-wrap" className="nav-cta"
+          <a href="/request" className="nav-cta"
             style={{textAlign:"center",display:"block",marginTop:".5rem"}}
             onClick={() => setMobileOpen(false)}>
             {t.nav.request}
