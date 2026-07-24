@@ -3,6 +3,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "../lib/supabase";
+import OrderManager from "../components/admin/OrderManager";
+import { ALL_STATUSES, statusColor, orderTitle } from "../lib/orderStatus";
 
 
 // ─── ADMIN TRANSLATIONS ───────────────────────────────────────────────────────
@@ -638,6 +640,8 @@ function OrdersTab({ supabase, al }) {
   const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState("");
+  // Full-featured order panel: status, photos, payment request, internal notes
+  const [managing, setManaging] = useState(null);
 
   const emptyOrder = {
     client_name: "", client_email: "", platform: "Reddit", communication: "Discord",
@@ -648,7 +652,8 @@ function OrdersTab({ supabase, al }) {
   };
   const [form, setForm] = useState(emptyOrder);
 
-  const STATUSES = ["Pending","Purchased","Purchased — Awaiting Delivery","Purchased — Awaiting Event","Shipped","Delivered","Action Required","Cancelled"];
+  // Shared with the customer dashboard so a status never means two things
+  const STATUSES = ALL_STATUSES;
   const STATUS_COLORS = {
     "Delivered":           "#4ade80",
     "Shipped":             "#60a5fa",
@@ -658,6 +663,13 @@ function OrdersTab({ supabase, al }) {
     "Action Required":     "#ef4444",
     "Pending":             "#6b7280",
     "Cancelled":           "#374151",
+    // New dashboard statuses
+    "Purchasing":               "#f59e0b",
+    "Seller Shipped":           "#f59e0b",
+    "Received in Japan":        "#a8e04a",
+    "Photos Uploaded":          "#c77dff",
+    "Packing":                  "#c77dff",
+    "Awaiting Shipping Payment":"#ef4444",
   };
 
   useEffect(() => { load(); }, []);
@@ -858,7 +870,7 @@ function OrdersTab({ supabase, al }) {
       ) : (
         <div style={{ border:"1px solid var(--border)", borderRadius:"12px", overflow:"hidden" }}>
           {/* Header */}
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 110px 75px 85px 130px 40px", gap:0, padding:".5rem 1rem", background:"var(--paper)", borderBottom:"1px solid var(--border)" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 110px 75px 85px 130px 66px", gap:0, padding:".5rem 1rem", background:"var(--paper)", borderBottom:"1px solid var(--border)" }}>
             {[al.clientName?.replace(" *","") || "Client","Items","Fee","Status","Date","Country","Tracking",""].map(h => (
               <div key={h} style={{ fontSize:".55rem", letterSpacing:".12em", textTransform:"uppercase", color:"var(--mist)", padding:"0 .4rem" }}>{h}</div>
             ))}
@@ -866,7 +878,7 @@ function OrdersTab({ supabase, al }) {
           {/* Rows */}
           {filtered.map((o, i) => (
             <div key={o.id}
-              style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 110px 75px 85px 130px 40px", gap:0, padding:".65rem 1rem", background: i%2===0 ? "var(--surface)" : "var(--paper)", borderBottom:"1px solid var(--border)", alignItems:"center", cursor:"pointer" }}
+              style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 110px 75px 85px 130px 66px", gap:0, padding:".65rem 1rem", background: i%2===0 ? "var(--surface)" : "var(--paper)", borderBottom:"1px solid var(--border)", alignItems:"center", cursor:"pointer" }}
               onMouseEnter={e=>e.currentTarget.style.background="var(--surface2)"}
               onMouseLeave={e=>e.currentTarget.style.background=i%2===0?"var(--surface)":"var(--paper)"}>
               <div style={{ padding:"0 .4rem" }}>
@@ -884,7 +896,7 @@ function OrdersTab({ supabase, al }) {
               <div style={{ padding:"0 .4rem", color:"#4ade80", fontWeight:500, fontSize:".78rem" }}>¥{(o.service_fee_jpy||0).toLocaleString()}</div>
               <div style={{ padding:"0 .4rem" }}>
                 <span style={{ display:"inline-block", padding:".12rem .45rem", borderRadius:"20px", fontSize:".58rem", fontWeight:500, background:`${STATUS_COLORS[o.status]||"#6b7280"}22`, color:STATUS_COLORS[o.status]||"var(--warm)", whiteSpace:"nowrap" }}>
-                  {o.status?.replace("Purchased — Awaiting Delivery","Awaiting").replace("Purchased — Awaiting Event","Awaiting Event").replace("Action Required","⚠ Action")}
+                  {o.status?.replace("Purchased — Awaiting Delivery","Seller shipped").replace("Purchased — Awaiting Event","Awaiting Event").replace("Awaiting Shipping Payment","⚠ Payment due").replace("Action Required","⚠ Action")}
                 </span>
               </div>
               <div style={{ padding:"0 .4rem", color:"var(--warm)", fontSize:".72rem" }}>{o.purchase_date ? new Date(o.purchase_date).toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit"}) : "—"}</div>
@@ -913,6 +925,7 @@ function OrdersTab({ supabase, al }) {
                 })() : <span style={{ color:"var(--mist)", fontSize:".65rem" }}>—</span>}
               </div>
               <div style={{ padding:"0 .4rem", display:"flex", gap:"3px" }}>
+                <button onClick={()=>setManaging(o)} style={{...btnSmall, padding:".2rem .4rem", fontSize:".6rem", borderColor:"#a8e04a", color:"#a8e04a"}} title="Manage (photos, payment, status)">⚙</button>
                 <button onClick={()=>startEdit(o)} style={{...btnSmall, padding:".2rem .4rem", fontSize:".6rem"}}>✏️</button>
                 <button onClick={()=>del(o.id)} style={{...btnDanger, padding:".2rem .4rem", fontSize:".6rem"}}>🗑</button>
               </div>
@@ -939,6 +952,15 @@ function OrdersTab({ supabase, al }) {
           </div>
         </div>
       </div>
+
+      {/* Full order panel — opened with the ⚙ button on a row */}
+      {managing && (
+        <OrderManager
+          order={managing}
+          onClose={() => setManaging(null)}
+          onSaved={() => { load(); setManaging(null); }}
+        />
+      )}
     </div>
   );
 }
