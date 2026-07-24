@@ -27,8 +27,8 @@ function StatusIcon({ name, size = 22 }) {
 
 function OrderCard({ order }) {
   const meta = statusMeta(order.status);
-  const pct = progressPercent(order.status);
-  const next = nextStep(order.status);
+  const pct = progressPercent(order.status, order);
+  const next = nextStep(order.status, order);
   const action = needsCustomerAction(order.status);
 
   return (
@@ -56,6 +56,12 @@ function OrderCard({ order }) {
         )}
         <span className="acc-order-arrow">→</span>
       </div>
+
+      {normaliseStatus(order.status) === "Awaiting Event" && order.event_date && (
+        <div className="acc-order-event">
+          {order.event_name || "Event"} — {new Date(order.event_date).toLocaleDateString("en-US", { day: "numeric", month: "short" })}
+        </div>
+      )}
 
       {action && (
         <div className="acc-order-flag">

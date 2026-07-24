@@ -19,6 +19,7 @@ import PayButton from "../../../components/account/PayButton";
 import {
   TIMELINE, SPECIAL_STATUSES, statusMeta, statusColor, stepIndex,
   progressPercent, nextStep, needsCustomerAction, formatJPY, normaliseStatus, orderTitle,
+  timelineFor,
 } from "../../../lib/orderStatus";
 
 const ICONS = {
@@ -27,8 +28,9 @@ const ICONS = {
   coins: IconMarketplace, glass: IconMarketplace,
 };
 
-function Timeline({ status, events }) {
-  const current = stepIndex(status);
+function Timeline({ status, events, order }) {
+  const steps = timelineFor(order);
+  const current = stepIndex(status, order);
   const special = SPECIAL_STATUSES[normaliseStatus(status)];
 
   // When the order is in a special state (cancelled, action required) the
@@ -50,7 +52,7 @@ function Timeline({ status, events }) {
 
   return (
     <ol className="ord-timeline">
-      {TIMELINE.map((step, i) => {
+      {steps.map((step, i) => {
         const done = current >= 0 && i < current;
         const now = current === i;
         const Ico = ICONS[step.icon] || IconHourglass;
@@ -142,7 +144,7 @@ export default function OrderDetailClient({ orderId }) {
 
         {/* ── Progress ── */}
         <div className="ord-progress">
-          <div className="ord-progress-fill" style={{ width: `${progressPercent(order.status)}%` }} />
+          <div className="ord-progress-fill" style={{ width: `${progressPercent(order.status, order)}%` }} />
         </div>
 
         {/* ── Payment call to action, first because it blocks everything ── */}
@@ -164,6 +166,30 @@ export default function OrderDetailClient({ orderId }) {
           </section>
         )}
 
+        {normaliseStatus(order.status) === "Awaiting Event" && order.event_date && (
+          <section className="ord-event-banner">
+            <div>
+              <span className="ord-event-label">EVENT DATE</span>
+              <span className="ord-event-date">
+                {new Date(order.event_date).toLocaleDateString("en-US",
+                  { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+              </span>
+              {order.event_name && <span className="ord-event-name">{order.event_name}</span>}
+            </div>
+            <span className="ord-event-countdown">
+              {(() => {
+                const days = Math.ceil(
+                  (new Date(order.event_date) - new Date()) / 86400000
+                );
+                if (days > 1) return `IN ${days} DAYS`;
+                if (days === 1) return "TOMORROW";
+                if (days === 0) return "TODAY";
+                return "PASSED";
+              })()}
+            </span>
+          </section>
+        )}
+
         {action && order.status === "Action Required" && (
           <section className="ord-alert">
             <strong>We need something from you</strong>
@@ -177,7 +203,7 @@ export default function OrderDetailClient({ orderId }) {
           {/* ── Timeline ── */}
           <section className="ord-panel">
             <h2 className="ord-panel-title">PROGRESS</h2>
-            <Timeline status={order.status} events={events} />
+            <Timeline status={order.status} events={events} order={order} />
           </section>
 
           {/* ── Details ── */}

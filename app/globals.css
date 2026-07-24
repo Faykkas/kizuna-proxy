@@ -4149,3 +4149,69 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   .adm-grid-2, .adm-grid-3 { grid-template-columns: 1fr; }
   .adm-panel-head h2 { font-size: .92rem; }
 }
+/* ── ÉVÉNEMENT DANS L'ESPACE CLIENT ──────────────────────────────────────
+   Un client qui commande sur un événement veut savoir une seule chose :
+   quand. La date passe donc en tête de page, pas dans un panneau de détails. */
+.ord-event-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  background: rgba(199,125,255,.08);
+  border: 2px solid rgba(199,125,255,.35);
+  border-radius: 12px;
+  padding: 1.15rem 1.4rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+.ord-event-label {
+  display: block;
+  font-family: var(--font-pixel);
+  font-size: .4rem;
+  color: var(--gold);
+  letter-spacing: .06em;
+  margin-bottom: .5rem;
+  line-height: 1.9;
+}
+.ord-event-date {
+  display: block;
+  font-size: 1rem;
+  color: var(--ink);
+  font-weight: 500;
+  line-height: 1.4;
+}
+.ord-event-name {
+  display: block;
+  font-size: .82rem;
+  color: var(--warm);
+  font-weight: 300;
+  margin-top: .3rem;
+  line-height: 1.5;
+}
+.ord-event-countdown {
+  font-family: var(--font-pixel);
+  font-size: .5rem;
+  color: var(--gold);
+  border: 2px solid rgba(199,125,255,.4);
+  border-radius: 8px;
+  padding: .6rem .8rem;
+  line-height: 1.8;
+  flex-shrink: 0;
+}
+
+/* Rappel de l'événement sur la carte du dashboard */
+.acc-order-event {
+  margin-top: .8rem;
+  font-family: var(--font-pixel);
+  font-size: .38rem;
+  color: var(--gold);
+  background: rgba(199,125,255,.1);
+  border-radius: 6px;
+  padding: .5rem .65rem;
+  line-height: 1.8;
+}
+
+@media (max-width: 640px) {
+  .ord-event-banner { flex-direction: column; align-items: stretch; }
+  .ord-event-countdown { text-align: center; }
+}

@@ -881,7 +881,7 @@ function OrdersTab({ supabase, al }) {
       ) : (
         <div style={{ border:`2px solid ${BORDER}`, borderRadius:"12px", overflow:"hidden" }}>
           {/* Header */}
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 110px 75px 85px 130px 66px", gap:0, padding:".5rem 1rem", background:BG, borderBottom:`2px solid ${BORDER}` }}>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 120px 75px 85px 130px 56px", gap:0, padding:".5rem 1rem", background:BG, borderBottom:`2px solid ${BORDER}` }}>
             {[al.clientName?.replace(" *","") || "Client","Items","Fee","Status","Date","Country","Tracking",""].map(h => (
               <div key={h} style={{ fontSize:".34rem", letterSpacing:".06em", textTransform:"uppercase", color:RED, padding:"0 .4rem", fontFamily:PIXEL, lineHeight:1.9 }}>{h}</div>
             ))}
@@ -889,7 +889,7 @@ function OrdersTab({ supabase, al }) {
           {/* Rows */}
           {filtered.map((o, i) => (
             <div key={o.id}
-              style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 110px 75px 85px 130px 66px", gap:0, padding:".65rem 1rem", background: i%2===0 ? SURFACE : BG, borderBottom:`2px solid ${BORDER}`, alignItems:"center", cursor:"pointer" }}
+              style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 120px 75px 85px 130px 56px", gap:0, padding:".65rem 1rem", background: i%2===0 ? SURFACE : BG, borderBottom:`2px solid ${BORDER}`, alignItems:"center", cursor:"pointer" }}
               onMouseEnter={e=>e.currentTarget.style.background=SURFACE2}
               onMouseLeave={e=>e.currentTarget.style.background=i%2===0?SURFACE:BG}>
               <div style={{ padding:"0 .4rem" }}>
@@ -936,9 +936,8 @@ function OrdersTab({ supabase, al }) {
                 })() : <span style={{ color:MUTED, fontSize:".65rem" }}>—</span>}
               </div>
               <div style={{ padding:"0 .4rem", display:"flex", gap:"3px" }}>
-                <button onClick={()=>setManaging(o)} style={{...btnSmall, padding:".2rem .4rem", fontSize:".6rem", borderColor:"#a8e04a", color:"#a8e04a"}} title="Manage (photos, payment, status)">⚙</button>
-                <button onClick={()=>startEdit(o)} style={{...btnSmall, padding:".2rem .4rem", fontSize:".6rem"}}>✏️</button>
-                <button onClick={()=>del(o.id)} style={{...btnDanger, padding:".2rem .4rem", fontSize:".6rem"}}>🗑</button>
+                <button onClick={()=>setManaging(o)} style={{...btnSmall, padding:".3rem .55rem", fontSize:".7rem", borderColor:RED, color:RED}} title="Open order">⚙</button>
+                <button onClick={()=>del(o.id)} style={{...btnDanger, padding:".3rem .55rem", fontSize:".7rem"}} title="Delete">🗑</button>
               </div>
             </div>
           ))}

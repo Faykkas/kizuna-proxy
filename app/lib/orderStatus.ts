@@ -25,6 +25,13 @@ export const TIMELINE = [
     icon: "glass",
   },
   {
+    key: "Awaiting Event",
+    label: "Waiting for the event",
+    hint: "We'll be there on the day. See the date below.",
+    icon: "sign",
+    optional: true,      // only shown when the order has an event
+  },
+  {
     key: "Purchased",
     label: "Purchased",
     hint: "Your item is bought and on its way to us.",
@@ -83,11 +90,6 @@ export const SPECIAL_STATUSES = {
     hint: "We need something from you — check your email or contact us.",
     tone: "alert",
   },
-  "Purchased — Awaiting Event": {
-    label: "Waiting for event",
-    hint: "We'll attend the event on your behalf. See the date below.",
-    tone: "info",
-  },
   Cancelled: {
     label: "Cancelled",
     hint: "This order was cancelled.",
@@ -99,6 +101,7 @@ export const SPECIAL_STATUSES = {
 /** Legacy statuses from the old admin, mapped onto the new timeline */
 const LEGACY_MAP = {
   "Purchased — Awaiting Delivery": "Seller Shipped",
+  "Purchased — Awaiting Event": "Awaiting Event",
 };
 
 export function normaliseStatus(status) {
@@ -111,27 +114,40 @@ export const ALL_STATUSES = [
   ...Object.keys(SPECIAL_STATUSES),
 ];
 
+/**
+ * The steps to show for a given order. Optional steps (the event one) only
+ * appear when the order actually has an event, otherwise every customer
+ * would see a stage that does not concern them.
+ */
+export function timelineFor(order) {
+  const hasEvent = !!(order?.event_name || order?.event_date);
+  return TIMELINE.filter(s => !s.optional || hasEvent);
+}
+
 /** How far along the timeline is this order? Returns -1 for special statuses. */
-export function stepIndex(status) {
-  return TIMELINE.findIndex(s => s.key === normaliseStatus(status));
+export function stepIndex(status, order = null) {
+  const steps = order ? timelineFor(order) : TIMELINE;
+  return steps.findIndex(s => s.key === normaliseStatus(status));
 }
 
 /** Percentage for the progress bar */
-export function progressPercent(status) {
-  const i = stepIndex(status);
+export function progressPercent(status, order = null) {
+  const steps = order ? timelineFor(order) : TIMELINE;
+  const i = stepIndex(status, order);
   if (i < 0) return 0;
-  return Math.round((i / (TIMELINE.length - 1)) * 100);
+  return Math.round((i / (steps.length - 1)) * 100);
 }
 
 /** What happens next — answers "where is my order?" without a support message */
-export function nextStep(status) {
+export function nextStep(status, order = null) {
   const s = normaliseStatus(status);
   if (SPECIAL_STATUSES[s]) return SPECIAL_STATUSES[s].hint;
 
-  const i = stepIndex(s);
+  const steps = order ? timelineFor(order) : TIMELINE;
+  const i = stepIndex(s, order);
   if (i < 0) return null;
-  if (i >= TIMELINE.length - 1) return null;
-  return TIMELINE[i + 1].label;
+  if (i >= steps.length - 1) return null;
+  return steps[i + 1].label;
 }
 
 export function statusMeta(status) {
@@ -155,6 +171,7 @@ export function statusColor(status) {
   if (s === "Cancelled") return "var(--px-muted)";
   if (needsCustomerAction(s)) return "var(--px-red)";
   if (s === "Shipped") return "var(--px-accent2)";
+  if (s === "Awaiting Event") return "var(--px-accent2)";
   return "var(--px-muted)";
 }
 
