@@ -228,3 +228,48 @@ export function orderTitle(items, fallback = "Your order") {
   if (urls.length === 1) return `${shops[0]} item`;
   return `${urls.length} items from ${shops.join(", ")}`;
 }
+
+/**
+ * Build a tracking link from the number and the shipping method.
+ *
+ * Japan Post numbers follow a pattern: two letters, nine digits, then the
+ * country code — "EN123456789JP". Different prefixes mean different services
+ * (EMS, ePacket, registered airmail) but they all resolve on the same
+ * tracking page, so the prefix only needs to tell us it is Japan Post.
+ */
+export function trackingUrl(number, method = "") {
+  if (!number) return null;
+  const tn = number.trim().replace(/\s/g, "");
+  const m = (method || "").toLowerCase();
+
+  if (m.includes("fedex")) {
+    return { url: `https://www.fedex.com/fedextrack/?trknbr=${tn}`, carrier: "FedEx" };
+  }
+  if (m.includes("dhl")) {
+    return { url: `https://www.dhl.com/en/express/tracking.html?AWB=${tn}`, carrier: "DHL" };
+  }
+  if (m.includes("ups")) {
+    return { url: `https://www.ups.com/track?tracknum=${tn}`, carrier: "UPS" };
+  }
+  if (m.includes("yamato") || m.includes("kuroneko")) {
+    return {
+      url: `https://toi.kuronekoyamato.co.jp/cgi-bin/tneko?number01=${tn}`,
+      carrier: "Yamato",
+    };
+  }
+  if (m.includes("sagawa")) {
+    return { url: `https://k2k.sagawa-exp.co.jp/p/web/okurijosearch.do?okurijoNo=${tn}`, carrier: "Sagawa" };
+  }
+
+  // Japan Post: EMS, ePacket, airmail, small packet — all the same page
+  if (/^[A-Z]{2}\d{9}JP$/i.test(tn) || m.includes("ems") || m.includes("epacket") ||
+      m.includes("airmail") || m.includes("japan post") || m.includes("small packet")) {
+    return {
+      url: `https://trackings.post.japanpost.jp/services/srv/search/direct?reqCodeNo1=${tn}&searchKind=S002&locale=en`,
+      carrier: "Japan Post",
+    };
+  }
+
+  // Unknown carrier — 17track aggregates most of them
+  return { url: `https://t.17track.net/en#nums=${tn}`, carrier: "17TRACK" };
+}

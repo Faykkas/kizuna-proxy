@@ -4269,3 +4269,109 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   font-weight: 300;
   line-height: 1.5;
 }
+/* ═══════════════════════════════════════════════════════════════════════════
+   KIZUNA PROXY — Correctifs v8
+   ─────────────────────────────────────────────────────────────────────── */
+
+/* ── 1. MASCOTTE DU HERO SUR MOBILE ───────────────────────────────────────
+   Trois règles concurrentes s'étaient accumulées au fil des versions, avec
+   des seuils différents (900px, 1100px, 720px de hauteur). Résultat : sur
+   certaines tailles la mascotte restait visible et chevauchait le texte.
+   Cette règle unique tranche : masquée sous 1100px de large ou 780px de haut. */
+.px-mascot-hero { display: flex !important; }
+
+@media (max-width: 1100px), (max-height: 780px) {
+  .px-mascot-hero { display: none !important; }
+}
+
+/* Sur les écrans intermédiaires, la mascotte se réduit plutôt que de
+   déborder sur le bouton de défilement */
+@media (min-width: 1101px) and (max-width: 1400px) {
+  .px-mascot-hero { right: 3%; bottom: 16%; transform: scale(.82); transform-origin: bottom right; }
+}
+
+/* ── 2. GUIDES ET EVENTS — typographie du thème ───────────────────────────
+   Ces pages avaient gardé les tailles de l'ancien thème et n'utilisaient pas
+   la police pixel. Elles s'alignent sur les autres pages du site. */
+.blog-page h1 {
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  font-size: clamp(.78rem, 1.9vw, 1.2rem);
+  line-height: 1.8;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  max-width: 24ch;
+  margin: 0 auto 1.5rem;
+  color: var(--ink);
+}
+.blog-page h1 em { color: var(--red); font-style: normal; }
+
+.blog-page h2 {
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  font-size: clamp(.62rem, 1.3vw, .82rem);
+  line-height: 1.9;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 2.75rem 0 1rem;
+  max-width: 30ch;
+}
+.blog-page h2 em { color: var(--red); font-style: normal; }
+
+.blog-page h3 {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--ink);
+  margin: 1.75rem 0 .6rem;
+}
+
+/* Le corps de texte reste en Outfit : un guide se lit, il ne se scanne pas */
+.blog-page p,
+.blog-page li {
+  font-family: var(--font-body);
+  font-size: .92rem;
+  line-height: 1.85;
+  color: var(--warm);
+  font-weight: 300;
+}
+
+.blog-lead, .blog-page .blog-lead {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--warm);
+}
+
+.blog-page strong { color: var(--ink); font-weight: 500; }
+.blog-page a { color: var(--red); text-decoration: none; }
+.blog-page a:hover { text-decoration: underline; }
+
+.blog-hr {
+  border: none;
+  height: 2px;
+  background: var(--px-border);
+  margin: 2.5rem 0;
+}
+
+/* Encadrés et cartes des guides */
+.blog-page .ev-card,
+.blog-page .blog-box {
+  background: var(--surface);
+  border: 2px solid var(--px-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 0 rgba(0,0,0,.3);
+}
+
+.ev-icon { font-size: 1.5rem; margin-bottom: .6rem; }
+
+/* ── 3. BOUTON DE SUIVI ───────────────────────────────────────────────── */
+.ord-track-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: .75rem;
+  text-decoration: none;
+}

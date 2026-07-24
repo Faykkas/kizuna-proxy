@@ -246,7 +246,7 @@ export default function AdminPage() {
   // Badge on the Requests tab. Live, so a request arriving while the admin
   // is open shows up without a refresh.
   useEffect(() => {
-    if (!session) return;
+    if (!session || session.user?.user_metadata?.role !== "admin") return;
     async function count() {
       const { count: n } = await supabase
         .from("requests")
@@ -263,6 +263,11 @@ export default function AdminPage() {
   }, [session]);
 
   const al = ADMIN_LANGS[adminLang] || ADMIN_LANGS.en;
+
+  // Being signed in is not the same as being an admin. Without this check a
+  // customer could open /admin and see the whole interface — the RLS would
+  // stop them reading any data, but the screen itself should never appear.
+  const isAdmin = session?.user?.user_metadata?.role === "admin";
 
   async function handleLogin() {
     if (locked) return;
@@ -320,6 +325,28 @@ export default function AdminPage() {
           style={{...btnPrimary, width:"100%", marginTop:".75rem", opacity:locked?.5:1}}>
           {al.signInBtn}
         </button>
+      </div>
+    </div>
+  );
+
+  // Signed in, but not an admin
+  if (session && !isAdmin) return (
+    <div style={{ minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center", background:BG, padding:"2rem", fontFamily:BODY }}>
+      <div style={{ background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"14px", padding:"2.5rem 2rem", maxWidth:"400px", textAlign:"center", boxShadow:"0 6px 0 rgba(0,0,0,.3)" }}>
+        <div style={{ fontFamily:PIXEL, fontSize:".7rem", color:INK, marginBottom:"1rem", lineHeight:1.9 }}>
+          NOT YOUR AREA
+        </div>
+        <p style={{ fontSize:".88rem", color:MUTED, lineHeight:1.7, marginBottom:"1.75rem" }}>
+          This page is for the Kizuna team. Your orders are in your account.
+        </p>
+        <div style={{ display:"flex", gap:".6rem", justifyContent:"center", flexWrap:"wrap" }}>
+          <a href="/account" style={{ ...btnPrimary, textDecoration:"none", display:"inline-block" }}>
+            MY ORDERS
+          </a>
+          <a href="/" style={{ ...btnGhost, textDecoration:"none", display:"inline-block" }}>
+            HOME
+          </a>
+        </div>
       </div>
     </div>
   );

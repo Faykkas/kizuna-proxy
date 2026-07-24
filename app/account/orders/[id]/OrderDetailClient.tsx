@@ -19,7 +19,7 @@ import PayButton from "../../../components/account/PayButton";
 import {
   TIMELINE, SPECIAL_STATUSES, statusMeta, statusColor, stepIndex,
   progressPercent, nextStep, needsCustomerAction, formatJPY, normaliseStatus, orderTitle,
-  timelineFor,
+  timelineFor, trackingUrl,
 } from "../../../lib/orderStatus";
 
 const ICONS = {
@@ -254,8 +254,21 @@ export default function OrderDetailClient({ orderId }) {
                     COPY
                   </button>
                 </div>
+                {(() => {
+                  const t = trackingUrl(order.tracking_number, order.shipping_method);
+                  return t ? (
+                    <a
+                      href={t.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-gold ord-track-btn"
+                    >
+                      TRACK ON {t.carrier} →
+                    </a>
+                  ) : null;
+                })()}
                 <p className="ord-tracking-hint">
-                  Track it on the carrier&apos;s website with this number.
+                  Updates can take 24–48 hours to appear after dispatch.
                 </p>
               </section>
             )}
