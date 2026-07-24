@@ -2,6 +2,7 @@
 "use client";
 
 import SiteNav from "../components/SiteNav";
+import { ManekiCorner } from "../components/pixel/Maneki";
 import SiteFooter from "../components/SiteFooter";
 import AnnounceBar from "../components/AnnounceBar";
 import RequestSection from "../components/sections/RequestSection";
@@ -29,6 +30,7 @@ export default function RequestClient() {
           </div>
         </header>
         <RequestSection t={t} />
+        <ManekiCorner prop="mail" label="Tell us what you want" />
       </main>
       <SiteFooter t={t} />
       <BackToTop />

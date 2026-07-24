@@ -43,7 +43,7 @@ export default function SiteNav() {
           <li><a href="/how-it-works">{t.nav?.howItWorks || "How it works"}</a></li>
           <li><a href="/reviews">{t.nav?.reviews || "Reviews"}</a></li>
           <li><a href="/faq">{t.nav.faq || "FAQ"}</a></li>
-          <li><a href="/events">{t.nav?.events || "Events"} 🎌</a></li>
+          <li><a href="/events">{t.nav?.events || "Events"}</a></li>
 
           {/* Guides dropdown */}
           <li className="nav-dropdown-wrap"
@@ -92,7 +92,7 @@ export default function SiteNav() {
           <a href="/how-it-works" onClick={() => setMobileOpen(false)}>{t.nav?.howItWorks || "How it works"}</a>
           <a href="/reviews" onClick={() => setMobileOpen(false)}>{t.nav?.reviews || "Reviews"}</a>
           <a href="/faq" onClick={() => setMobileOpen(false)}>{t.nav.faq || "FAQ"}</a>
-          <a href="/events" onClick={() => setMobileOpen(false)}>{t.nav?.events || "Events"} 🎌</a>
+          <a href="/events" onClick={() => setMobileOpen(false)}>{t.nav?.events || "Events"}</a>
 
           {/* Guides accordion */}
           <div>

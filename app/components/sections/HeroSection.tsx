@@ -66,6 +66,14 @@ export default function HeroSection({ t }: { t: any }) {
             <a className="hero-social-link" href="https://www.tiktok.com/@kizunaproxy" target="_blank" rel="noopener noreferrer"><IconTiktok /></a>
           </div>
         </div>
+        <button
+          className="px-scroll-hint"
+          onClick={() => window.scrollBy({ top: window.innerHeight * 0.85, behavior: "smooth" })}
+          aria-label="Scroll down"
+        >
+          <span>SCROLL</span>
+          <span className="px-scroll-hint-arrow" aria-hidden="true" />
+        </button>
         <div className="px-mascot-hero">
           <Maneki state="idle" size={130} float />
         </div>

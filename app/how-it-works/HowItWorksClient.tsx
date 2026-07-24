@@ -2,6 +2,7 @@
 "use client";
 
 import SiteNav from "../components/SiteNav";
+import { ManekiCorner } from "../components/pixel/Maneki";
 import SiteFooter from "../components/SiteFooter";
 import AnnounceBar from "../components/AnnounceBar";
 import HowItWorksSection from "../components/sections/HowItWorksSection";
@@ -29,6 +30,7 @@ export default function HowItWorksClient() {
           </div>
         </header>
         <HowItWorksSection t={t} />
+        <ManekiCorner prop="sign" label="Three steps, that's it" />
       </main>
       <SiteFooter t={t} />
       <BackToTop />

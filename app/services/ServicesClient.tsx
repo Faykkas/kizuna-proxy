@@ -2,6 +2,7 @@
 "use client";
 
 import SiteNav from "../components/SiteNav";
+import { ManekiCorner } from "../components/pixel/Maneki";
 import SiteFooter from "../components/SiteFooter";
 import AnnounceBar from "../components/AnnounceBar";
 import ServicesSection from "../components/sections/ServicesSection";
@@ -29,6 +30,7 @@ export default function ServicesClient() {
           </div>
         </header>
         <ServicesSection t={t} />
+        <ManekiCorner prop="card" label="We buy anything from Japan" />
       </main>
       <SiteFooter t={t} />
       <BackToTop />

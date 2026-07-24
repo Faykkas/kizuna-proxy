@@ -54,13 +54,13 @@ export default function usePixelCanvas() {
       const totalCols = WORD.length * glyphW + (WORD.length - 1) * gap;
       // Contraint par la largeur ET la hauteur : le mot doit rester un
       // filigrane discret derrière le titre, pas occuper tout l'écran.
-      const byWidth  = (W * 0.34) / totalCols;
-      const byHeight = (H * 0.14) / glyphH;
+      const byWidth  = (W * 0.56) / totalCols;
+      const byHeight = (H * 0.22) / glyphH;
       px = Math.max(2, Math.floor(Math.min(byWidth, byHeight)));
 
       const wordW = totalCols * px;
       const ox = (W - wordW) / 2;
-      const oy = H * 0.055;
+      const oy = H * 0.07;
 
       cells = [];
       WORD.forEach((ch, gi) => {
@@ -123,7 +123,7 @@ export default function usePixelCanvas() {
         if (c.order < reveal) c.on = Math.min(1, c.on + 0.14);
         if (c.on <= 0) return;
 
-        cx.globalAlpha = c.on * 0.17;
+        cx.globalAlpha = c.on * 0.22;
         cx.fillStyle = ACCENT;
         cx.fillRect(c.x, c.y, px, px);
 

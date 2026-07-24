@@ -2,6 +2,7 @@
 "use client";
 
 import SiteNav from "../components/SiteNav";
+import { ManekiCorner } from "../components/pixel/Maneki";
 import SiteFooter from "../components/SiteFooter";
 import AnnounceBar from "../components/AnnounceBar";
 import ReviewsSection from "../components/sections/ReviewsSection";
@@ -29,6 +30,7 @@ export default function ReviewsClient() {
           </div>
         </header>
         <ReviewsSection t={t} />
+        <ManekiCorner prop="heart" label="Thanks for the love" />
       </main>
       <SiteFooter t={t} />
       <BackToTop />

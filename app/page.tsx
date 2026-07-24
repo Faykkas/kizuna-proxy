@@ -9,7 +9,7 @@ import HeroSection from "./components/sections/HeroSection";
 import SearchWidget from "./components/SearchWidget";
 import ServicesSection from "./components/sections/ServicesSection";
 import GallerySection from "./components/sections/GallerySection";
-import { BackToTop, EventsFloat, useScrollReveal } from "./components/ui";
+import { BackToTop, useScrollReveal } from "./components/ui";
 import usePixelCanvas from "./components/pixel/usePixelCanvas";
 import { useLang, useAnnounce, useGallery } from "./components/useSiteState";
 import { REAL_REVIEWS } from "./components/data";
@@ -121,7 +121,6 @@ export default function Home() {
       </section>
 
       <SiteFooter t={t} />
-      <EventsFloat t={t} />
       <BackToTop />
     </>
   );

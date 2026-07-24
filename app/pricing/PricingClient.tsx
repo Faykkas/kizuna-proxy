@@ -2,6 +2,7 @@
 "use client";
 
 import SiteNav from "../components/SiteNav";
+import { ManekiCorner } from "../components/pixel/Maneki";
 import SiteFooter from "../components/SiteFooter";
 import AnnounceBar from "../components/AnnounceBar";
 import PricingSection from "../components/sections/PricingSection";
@@ -29,6 +30,7 @@ export default function PricingClient() {
           </div>
         </header>
         <PricingSection t={t} />
+        <ManekiCorner prop="coins" label="Free quote in 24h" />
       </main>
       <SiteFooter t={t} />
       <BackToTop />
