@@ -4,7 +4,6 @@
 
 import { useState, useEffect } from "react";
 import { translations, detectLang, LANG_LABELS } from "../translations";
-import PixelLogo from "./pixel/PixelLogo";
 
 const BLOG_ITEMS = [
   { href:"/blog/how-to-buy-from-mercari-japan",    emoji:"🛍️", label:"Mercari Japan" },
@@ -48,7 +47,7 @@ export default function SiteNav() {
 
         {/* ── Logo ── */}
         <a href="/" className="logo">
-          <PixelLogo size={40} />
+          <img src="/logo.png" alt="Kizuna Proxy" style={{height:"42px",width:"42px",imageRendering:"pixelated"}} />
           <div>
             <div className="logo-name"><span className="g">Kizuna</span> Proxy</div>
             <div className="logo-sub">Tokyo Proxy Service</div>
