@@ -2,23 +2,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { translations, detectLang } from "../translations";
+import { copy } from "../translations";
 import { supabase } from "../lib/supabase";
 
 /**
- * Hook partagé : langue courante + traductions.
- * Utilisé par toutes les pages pour éviter de dupliquer la logique.
+ * Conservé pour compatibilité : le site est monolingue, `t` renvoie
+ * toujours les textes anglais.
  */
 export function useLang() {
-  const [lang, setLang] = useState("en");
-
-  useEffect(() => {
-    const saved = localStorage.getItem("kizuna-lang");
-    setLang(saved || detectLang());
-  }, []);
-
-  const t = (translations as any)[lang] || (translations as any).en;
-  return { lang, setLang, t };
+  return { lang: "en", setLang: () => {}, t: copy };
 }
 
 /** Bannière d'annonce depuis Supabase */

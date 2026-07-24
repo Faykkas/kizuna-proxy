@@ -2,8 +2,8 @@
 // app/components/SiteNav.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import { translations, detectLang, LANG_LABELS } from "../translations";
+import { useState } from "react";
+import { copy as t } from "../translations";
 
 const BLOG_ITEMS = [
   { href:"/blog/how-to-buy-from-mercari-japan",    emoji:"🛍️", label:"Mercari Japan" },
@@ -18,28 +18,10 @@ const BLOG_ITEMS = [
 ];
 
 export default function SiteNav() {
-  const [lang, setLang] = useState("en");
-  const [langOpen, setLangOpen] = useState(false);
   const [guidesOpen, setGuidesOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [mobileLangOpen, setMobileLangOpen] = useState(false);
   const [mobileGuidesOpen, setMobileGuidesOpen] = useState(false);
 
-  useEffect(() => {
-    const saved = localStorage.getItem("kizuna-lang");
-    setLang(saved || detectLang());
-  }, []);
-
-  function switchLang(l: string) {
-    setLang(l);
-    localStorage.setItem("kizuna-lang", l);
-    setLangOpen(false);
-    setMobileLangOpen(false);
-    setMobileOpen(false);
-    window.location.reload();
-  }
-
-  const t = (translations as any)[lang] || (translations as any).en;
 
   return (
     <nav>
@@ -90,30 +72,6 @@ export default function SiteNav() {
         {/* ── Desktop controls ── */}
         <div className="nav-controls">
           <a href="/request" className="nav-cta">{t.nav.request}</a>
-
-          {/* Lang selector */}
-          <div className="lang-selector">
-            <button className="icon-btn lang-btn" onClick={() => setLangOpen(v => !v)}>
-              <span style={{fontSize:".65rem",letterSpacing:".1em"}}>{(LANG_LABELS as any)[lang] || lang.toUpperCase()}</span>
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <polyline points="6 9 12 15 18 9"/>
-              </svg>
-            </button>
-            {langOpen && (
-              <>
-                <div style={{position:"fixed",inset:0,zIndex:199}} onClick={() => setLangOpen(false)} />
-                <div className="lang-dropdown">
-                  {Object.keys(LANG_LABELS).map(l => (
-                    <button key={l} className={`lang-option${l === lang ? " active" : ""}`}
-                      onClick={() => switchLang(l)}>
-                      {(LANG_LABELS as any)[l]}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-
           {/* Burger */}
           <button className="mobile-menu-btn" onClick={() => setMobileOpen(v => !v)}
             aria-label="Menu">
@@ -164,43 +122,6 @@ export default function SiteNav() {
               </div>
             )}
           </div>
-
-          {/* Language accordion */}
-          <div>
-            <button
-              onClick={() => setMobileLangOpen(v => !v)}
-              style={{
-                display:"flex",alignItems:"center",justifyContent:"space-between",
-                width:"100%",background:"none",border:"none",padding:".5rem 0",
-                fontSize:".75rem",letterSpacing:".14em",textTransform:"uppercase",
-                color:"var(--warm)",cursor:"pointer",fontFamily:"'Inter',sans-serif",
-                borderBottom:"1px solid var(--border)",
-              }}>
-              🌐 Language — {(LANG_LABELS as any)[lang]}
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                style={{transition:"transform .2s",transform:mobileLangOpen?"rotate(180deg)":"rotate(0)"}}>
-                <polyline points="6 9 12 15 18 9"/>
-              </svg>
-            </button>
-            {mobileLangOpen && (
-              <div style={{display:"flex",flexWrap:"wrap",gap:".4rem",padding:".75rem 0 .5rem"}}>
-                {Object.keys(LANG_LABELS).map(l => (
-                  <button key={l}
-                    onClick={() => switchLang(l)}
-                    style={{
-                      padding:".3rem .75rem",borderRadius:"20px",border:"1px solid",
-                      borderColor: l === lang ? "var(--red)" : "var(--border)",
-                      background: l === lang ? "var(--red)" : "var(--surface)",
-                      color: l === lang ? "#fff" : "var(--warm)",
-                      fontSize:".7rem",cursor:"pointer",fontFamily:"'Inter',sans-serif",
-                    }}>
-                    {(LANG_LABELS as any)[l]}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
           {/* CTA */}
           <a href="/request" className="nav-cta"
             style={{textAlign:"center",display:"block",marginTop:".5rem"}}

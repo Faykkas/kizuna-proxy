@@ -10,8 +10,6 @@ export const metadata: Metadata = {
     "japan personal shopper", "tokyo shopping service", "pokemon cards japan", "anime figures japan",
     "limited sneakers japan", "supreme japan proxy", "nintendo japan exclusive", "japanese collectibles",
     "proxy shopping japan", "buy mercari japan", "japan proxy worldwide",
-    "service proxy japon", "acheter au japon", "proxy mercari japon", "achat japon",
-    "日本 代行", "メルカリ 代行", "日本 買い物 代行", "日本 個人輸入",
     "kizuna proxy", "kizunaproxy"
   ],
   authors: [{ name: "Kizuna Proxy" }],
@@ -38,17 +36,16 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "https://kizunaproxy.com",
-    languages: {
-      "en": "https://kizunaproxy.com",
-      "fr": "https://kizunaproxy.com",
-      "ja": "https://kizunaproxy.com",
-      "es": "https://kizunaproxy.com",
-      "de": "https://kizunaproxy.com",
-      "it": "https://kizunaproxy.com",
-      "ko": "https://kizunaproxy.com",
-      "zh": "https://kizunaproxy.com",
-      "x-default": "https://kizunaproxy.com",
-    }
+  },
+  icons: {
+    icon: [
+      { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon-96.png", sizes: "96x96", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/favicon.ico",
   },
   verification: {
     google: "eou6qlkIJeT1H_3trXZM2gx3Nc_XJYGWw9i5l",
@@ -61,7 +58,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;700&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
         {/* LocalBusiness + Reviews */}
@@ -82,7 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           },
           "areaServed": "Worldwide",
           "serviceType": "Japan Proxy Shopping Service",
-          "knowsLanguage": ["fr", "ja", "en", "es", "de", "it", "ko", "zh"],
+          "knowsLanguage": ["en", "ja"],
           "aggregateRating": {
             "@type": "AggregateRating",
             "ratingValue": "5.0",
