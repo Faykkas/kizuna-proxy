@@ -44,14 +44,16 @@ export default function SiteNav() {
           <li><a href="/pricing">{t.nav.pricing}</a></li>
           <li><a href="/shipping">Shipping</a></li>
           <li><a href="/how-it-works">{t.nav?.howItWorks || "How it works"}</a></li>
+          <li><a href="/reviews">{t.nav?.reviews || "Reviews"}</a></li>
+          <li><a href="/events">{t.nav?.events || "Events"}</a></li>
           <li><a href="/faq">{t.nav.faq || "FAQ"}</a></li>
 
-          {/* More dropdown: reviews, events, guides */}
+          {/* Guides dropdown: blog articles only — everything else stays a direct link */}
           <li className="nav-dropdown-wrap"
             onMouseEnter={() => setGuidesOpen(true)}
             onMouseLeave={() => setGuidesOpen(false)}>
             <button className="nav-dropdown-btn">
-              More
+              {t.blog?.label || "Guides"}
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
                 style={{marginLeft:".3rem",transition:"transform .2s",transform:guidesOpen?"rotate(180deg)":"rotate(0)"}}>
                 <polyline points="6 9 12 15 18 9"/>
@@ -59,16 +61,6 @@ export default function SiteNav() {
             </button>
             {guidesOpen && (
               <div className="nav-dropdown">
-                <a href="/reviews" className="nav-dropdown-item nav-dropdown-item-wide">
-                  <span className="nav-dropdown-emoji">⭐</span>
-                  <span>{t.nav?.reviews || "Reviews"}</span>
-                </a>
-                <a href="/events" className="nav-dropdown-item nav-dropdown-item-wide">
-                  <span className="nav-dropdown-emoji">📅</span>
-                  <span>{t.nav?.events || "Events"}</span>
-                </a>
-                <div className="nav-dropdown-divider" />
-                <div className="nav-dropdown-label">{t.blog?.label || "Guides"}</div>
                 {BLOG_ITEMS.map(item => (
                   <a key={item.href} href={item.href} className="nav-dropdown-item">
                     <span className="nav-dropdown-emoji">{item.emoji}</span>

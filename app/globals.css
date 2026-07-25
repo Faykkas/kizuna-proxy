@@ -4213,31 +4213,24 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   KIZUNA PROXY — Nav v4.2 : ménage
-   Reviews et Events rejoignent le dropdown « More » aux côtés des Guides,
-   pour ramener la nav desktop à 5 liens + 1 menu au lieu de 7 + 1 : plus
-   d'air entre les items, plus rien qui frôle le CTA.
+   KIZUNA PROXY — Nav v4.3 : clarté
+   Reviews et Events reviennent en liens directs (« More » cachait des
+   pages importantes pour la conversion) — seuls les articles de blog
+   restent dans un menu « Guides », ce qui est un regroupement évident.
+   Les liens passent aussi de la police pixel 8px à la police normale du
+   site : la pixel reste sur le logo et les boutons, pas sur la nav —
+   c'est là que la lisibilité compte le plus pour un client qui scanne
+   vite la page.
    ─────────────────────────────────────────────────────────────────────── */
-.nav-links { gap: 1.75rem; }
-@media (max-width: 1280px) { .nav-links { gap: 1.4rem; } }
-@media (max-width: 1180px) { .nav-links { gap: 1.1rem; } }
+.nav-links a, .nav-links .nav-dropdown-btn {
+  font-family: var(--font-body);
+  font-size: .82rem;
+  font-weight: 500;
+  letter-spacing: .01em;
+  text-transform: none;
+  color: var(--warm);
+}
 
-.nav-dropdown-item-wide {
-  grid-column: 1 / -1;
-  padding: .55rem .7rem;
-}
-.nav-dropdown-divider {
-  grid-column: 1 / -1;
-  height: 1px;
-  background: var(--border);
-  margin: .35rem .2rem;
-}
-.nav-dropdown-label {
-  grid-column: 1 / -1;
-  font-family: var(--font-pixel);
-  font-size: .4rem;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--mist);
-  padding: 0 .7rem .3rem;
-}
+.nav-links { gap: 1.5rem; }
+@media (max-width: 1360px) { .nav-links { gap: 1.15rem; } }
+@media (max-width: 1250px) { .nav-links a, .nav-links .nav-dropdown-btn { font-size: .76rem; } .nav-links { gap: 1rem; } }
