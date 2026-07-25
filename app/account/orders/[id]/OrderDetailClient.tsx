@@ -85,7 +85,7 @@ function Timeline({ status, events, order }) {
 export default function OrderDetailClient({ orderId }) {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
-  const { order, photos, events, payment, loading, reload } = useOrderDetail(orderId);
+  const { order, photos, events, payment, shipment, shipmentOrders, loading, reload } = useOrderDetail(orderId);
   const [lightbox, setLightbox] = useState(null);
 
   useEffect(() => {
@@ -147,8 +147,29 @@ export default function OrderDetailClient({ orderId }) {
           <div className="ord-progress-fill" style={{ width: `${progressPercent(order.status, order)}%` }} />
         </div>
 
+        {/* ── Bundled into a package: shipping/tracking/payment all live there ── */}
+        {shipment && (
+          <section className="ord-pay">
+            <div>
+              <span className="ord-pay-label">
+                PACKAGE — {shipmentOrders.length} order{shipmentOrders.length !== 1 ? "s" : ""} bundled together
+              </span>
+              <span className="ord-pay-amount" style={{ fontSize: ".7rem" }}>
+                {shipment.shipping_paid
+                  ? "Shipping paid"
+                  : shipment.shipping_cost_jpy > 0
+                    ? `${formatJPY(shipment.shipping_cost_jpy)} shipping due`
+                    : "Shipping not yet quoted"}
+              </span>
+            </div>
+            <a href={`/account/shipments/${shipment.id}`} className="btn btn-gold">
+              VIEW PACKAGE →
+            </a>
+          </section>
+        )}
+
         {/* ── Payment call to action, first because it blocks everything ── */}
-        {action && order.status === "Awaiting Shipping Payment" && shipping > 0 && (
+        {!shipment && action && order.status === "Awaiting Shipping Payment" && shipping > 0 && (
           <section className="ord-pay">
             <div className="ord-pay-left">
               <span className="ord-pay-label">
@@ -216,7 +237,7 @@ export default function OrderDetailClient({ orderId }) {
                   <dt>Item &amp; fee</dt>
                   <dd>{formatJPY(itemTotal)}</dd>
                 </div>
-                {shipping > 0 && (
+                {!shipment && shipping > 0 && (
                   <div>
                     <dt>Shipping</dt>
                     <dd>
@@ -225,7 +246,7 @@ export default function OrderDetailClient({ orderId }) {
                     </dd>
                   </div>
                 )}
-                {order.shipping_method && (
+                {!shipment && order.shipping_method && (
                   <div><dt>Method</dt><dd>{order.shipping_method}</dd></div>
                 )}
                 {order.delivery_country && (
@@ -241,8 +262,8 @@ export default function OrderDetailClient({ orderId }) {
               </dl>
             </section>
 
-            {/* ── Tracking ── */}
-            {order.tracking_number && (
+            {/* ── Tracking (not shown when bundled — tracking lives on the package) ── */}
+            {!shipment && order.tracking_number && (
               <section className="ord-panel">
                 <h2 className="ord-panel-title">TRACKING</h2>
                 <div className="ord-tracking">

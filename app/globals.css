@@ -3341,6 +3341,81 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   .adm-grid-2, .adm-grid-3 { grid-template-columns: 1fr; }
   .adm-panel-head h2 { font-size: .92rem; }
 }
+
+/* ── Danger button variant ── */
+.adm-btn-danger { border-color: var(--px-red); color: var(--px-red); }
+.adm-btn-danger:hover { background: rgba(255,80,96,.1); }
+.adm-btn-danger-ghost {
+  font-family: var(--font-pixel);
+  font-size: .34rem;
+  letter-spacing: .04em;
+  color: var(--px-red);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: .3rem .5rem;
+  line-height: 1.8;
+  flex-shrink: 0;
+}
+.adm-btn-danger-ghost:hover { text-decoration: underline; }
+
+/* ── Shipment manager: orders bundled in a package ── */
+.adm-ship-orders { display: flex; flex-direction: column; gap: .5rem; }
+.adm-ship-order-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  background: var(--px-bg);
+  border: 2px solid var(--px-border);
+  border-radius: 8px;
+  padding: .6rem .8rem;
+}
+.adm-ship-order-ref {
+  display: block;
+  font-family: var(--font-pixel);
+  font-size: .38rem;
+  color: var(--red);
+  letter-spacing: .04em;
+  margin-bottom: .3rem;
+  line-height: 1.8;
+}
+.adm-ship-order-items {
+  display: block;
+  font-size: .78rem;
+  color: var(--warm);
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.adm-ship-order-right {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  flex-shrink: 0;
+  font-size: .78rem;
+  color: var(--ink);
+}
+
+/* ── Orders table: selection + package badge ── */
+.adm-row-check { width: auto !important; accent-color: var(--red); cursor: pointer; }
+.adm-ship-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  font-family: var(--font-pixel);
+  font-size: .32rem;
+  color: var(--gold);
+  background: rgba(199,125,255,.12);
+  border: 1px solid rgba(199,125,255,.35);
+  border-radius: 4px;
+  padding: .2rem .4rem;
+  cursor: pointer;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+.adm-ship-badge:hover { background: rgba(199,125,255,.22); }
 /* ── ÉVÉNEMENT DANS L'ESPACE CLIENT ──────────────────────────────────────
    Un client qui commande sur un événement veut savoir une seule chose :
    quand. La date passe donc en tête de page, pas dans un panneau de détails. */

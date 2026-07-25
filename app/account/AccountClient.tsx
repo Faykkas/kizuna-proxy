@@ -13,11 +13,73 @@ import Maneki from "../components/pixel/Maneki";
 import { IconBox, IconTruck, IconCheck, IconHourglass } from "../components/pixel/PixelIcons";
 import { copy as t } from "../translations";
 import { useAuth } from "../lib/auth";
-import { useMyOrders, useAccountSummary, useNotifications, useMyRequests } from "../lib/useOrders";
+import { useMyOrders, useMyShipments, useAccountSummary, useNotifications, useMyRequests } from "../lib/useOrders";
 import {
   statusMeta, statusColor, progressPercent, nextStep,
   needsCustomerAction, formatJPY, normaliseStatus, orderTitle,
 } from "../lib/orderStatus";
+
+const SHIPMENT_META = {
+  "Awaiting Shipping Payment": { label: "Shipping payment due", hint: "Pay below and we'll send your package out.", color: "var(--px-red)" },
+  "Shipped": { label: "Shipped", hint: "On its way to you. Track it below.", color: "var(--px-accent2)" },
+  "Delivered": { label: "Delivered", hint: "Enjoy! Thanks for trusting us.", color: "var(--px-accent)" },
+};
+
+/** Groups orders that share a shipment into one card; everything else stays standalone */
+function groupForDisplay(orders, shipments) {
+  const byShipment = new Map();
+  const standalone = [];
+
+  orders.forEach(o => {
+    if (o.shipment_id) {
+      if (!byShipment.has(o.shipment_id)) byShipment.set(o.shipment_id, []);
+      byShipment.get(o.shipment_id).push(o);
+    } else {
+      standalone.push(o);
+    }
+  });
+
+  const shipmentCards = [...byShipment.entries()]
+    .map(([shipId, ords]) => {
+      const shipment = shipments.find(s => s.id === shipId);
+      return shipment ? { type: "shipment", key: `s${shipId}`, shipment, orders: ords } : null;
+    })
+    .filter(Boolean);
+
+  const orderCards = standalone.map(o => ({ type: "order", key: `o${o.id}`, order: o }));
+
+  return [...shipmentCards, ...orderCards];
+}
+
+function ShipmentCard({ shipment, orders }) {
+  const meta = SHIPMENT_META[shipment.status] || SHIPMENT_META["Awaiting Shipping Payment"];
+  const action = shipment.status === "Awaiting Shipping Payment" && !shipment.shipping_paid && shipment.shipping_cost_jpy > 0;
+  const itemsLabel = orders.map(o => orderTitle(o.items)).join(" · ");
+
+  return (
+    <a href={`/account/shipments/${shipment.id}`} className={`acc-order-card${action ? " is-action" : ""}`}>
+      <div className="acc-order-top">
+        <span className="acc-order-ref">📦 PACKAGE · {orders.length} ORDERS</span>
+        <span className="acc-order-status" style={{ color: meta.color }}>
+          {meta.label}
+        </span>
+      </div>
+
+      <div className="acc-order-items">{itemsLabel}</div>
+
+      <div className="acc-order-bottom">
+        <span className="acc-order-next">{meta.hint}</span>
+        <span className="acc-order-arrow">→</span>
+      </div>
+
+      {action && (
+        <div className="acc-order-flag">
+          {formatJPY(shipment.shipping_cost_jpy)} shipping due
+        </div>
+      )}
+    </a>
+  );
+}
 
 function StatusIcon({ name, size = 22 }) {
   const map = { box: IconBox, truck: IconTruck, check: IconCheck, hourglass: IconHourglass };
@@ -78,7 +140,8 @@ export default function AccountClient() {
   const router = useRouter();
   const { user, profile, loading: authLoading, signOut } = useAuth();
   const { orders, loading } = useMyOrders();
-  const summary = useAccountSummary(orders);
+  const { shipments } = useMyShipments();
+  const summary = useAccountSummary(orders, shipments);
   const { items: notifs, unread, markAllRead } = useNotifications();
   const { requests } = useMyRequests();
 
@@ -103,8 +166,18 @@ export default function AccountClient() {
   }
 
   const firstName = (profile?.full_name || "").split(" ")[0];
-  const active = orders.filter(o => !["Delivered", "Cancelled"].includes(normaliseStatus(o.status)));
-  const past = orders.filter(o => ["Delivered", "Cancelled"].includes(normaliseStatus(o.status)));
+  const cards = groupForDisplay(orders, shipments);
+  const active = cards.filter(c =>
+    c.type === "shipment"
+      ? c.shipment.status !== "Delivered"
+      : !["Delivered", "Cancelled"].includes(normaliseStatus(c.order.status))
+  );
+  const past = cards.filter(c =>
+    c.type === "shipment"
+      ? c.shipment.status === "Delivered"
+      : ["Delivered", "Cancelled"].includes(normaliseStatus(c.order.status))
+  );
+  const attentionCount = summary.needsAction.length + summary.shipmentsNeedingPayment.length;
 
   return (
     <>
@@ -115,8 +188,8 @@ export default function AccountClient() {
         <header className="acc-head">
           <div className="acc-head-mascot">
             <Maneki
-              prop={summary.needsAction.length ? "coins" : "parcel"}
-              state={summary.needsAction.length ? "idle" : "success"}
+              prop={attentionCount ? "coins" : "parcel"}
+              state={attentionCount ? "idle" : "success"}
               size={80}
               float
             />
@@ -126,8 +199,8 @@ export default function AccountClient() {
               {firstName ? `HI ${firstName.toUpperCase()}` : "YOUR ORDERS"}
             </h1>
             <p className="acc-head-lead">
-              {summary.needsAction.length > 0
-                ? `${summary.needsAction.length} order${summary.needsAction.length > 1 ? "s need" : " needs"} your attention.`
+              {attentionCount > 0
+                ? `${attentionCount} order${attentionCount > 1 ? "s need" : " needs"} your attention.`
                 : summary.activeCount > 0
                   ? `${summary.activeCount} order${summary.activeCount > 1 ? "s" : ""} in progress. Everything on track.`
                   : "No active orders right now."}
@@ -228,7 +301,10 @@ export default function AccountClient() {
             </div>
           ) : (
             <div className="acc-order-grid">
-              {active.map(o => <OrderCard key={o.id} order={o} />)}
+              {active.map(c => c.type === "shipment"
+                ? <ShipmentCard key={c.key} shipment={c.shipment} orders={c.orders} />
+                : <OrderCard key={c.key} order={c.order} />
+              )}
             </div>
           )}
         </section>
@@ -238,7 +314,10 @@ export default function AccountClient() {
           <section className="acc-section">
             <h2 className="acc-section-title">HISTORY</h2>
             <div className="acc-order-grid">
-              {past.map(o => <OrderCard key={o.id} order={o} />)}
+              {past.map(c => c.type === "shipment"
+                ? <ShipmentCard key={c.key} shipment={c.shipment} orders={c.orders} />
+                : <OrderCard key={c.key} order={c.order} />
+              )}
             </div>
           </section>
         )}

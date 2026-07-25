@@ -4,6 +4,7 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "../lib/supabase";
 import OrderManager from "../components/admin/OrderManager";
+import ShipmentManager from "../components/admin/ShipmentManager";
 import RequestsTab from "../components/admin/RequestsTab";
 import { ALL_STATUSES, statusColor, orderTitle } from "../lib/orderStatus";
 
@@ -713,6 +714,15 @@ function OrdersTab({ supabase, al }) {
   // Full-featured order panel: status, photos, payment request, internal notes
   const [managing, setManaging] = useState(null);
 
+  // Packages: several orders bundled into one shipment (one tracking number,
+  // one shipping payment). `shipments` mirrors `orders` — loaded once, kept
+  // in sync by re-fetching after any change.
+  const [shipments, setShipments] = useState([]);
+  const [selected, setSelected] = useState(() => new Set());
+  // { mode: "new", orderIds } to bundle a fresh selection, or
+  // { mode: "edit", shipment } to open an existing package
+  const [shipmentPanel, setShipmentPanel] = useState(null);
+
   const emptyOrder = {
     client_name: "", client_email: "", platform: "Reddit", communication: "Discord",
     items: "", item_price_jpy: 0, service_fee_jpy: 0,
@@ -746,11 +756,12 @@ function OrdersTab({ supabase, al }) {
 
   async function load() {
     setLoading(true);
-    const { data } = await supabase
-      .from("orders")
-      .select("*")
-      .order("purchase_date", { ascending: false });
+    const [{ data }, { data: shipData }] = await Promise.all([
+      supabase.from("orders").select("*").order("purchase_date", { ascending: false }),
+      supabase.from("shipments").select("*").order("created_at", { ascending: false }),
+    ]);
     setOrders(data || []);
+    setShipments(shipData || []);
     setLoading(false);
   }
 
@@ -785,17 +796,36 @@ function OrdersTab({ supabase, al }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  function toggleSelect(id) {
+    setSelected(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  function shipmentFor(order) {
+    return order.shipment_id ? shipments.find(s => s.id === order.shipment_id) : null;
+  }
+
   // Filtered + searched orders
   const filtered = orders.filter(o => {
     const matchStatus = statusFilter === "all" || o.status === statusFilter;
     const q = search.toLowerCase();
-    const matchSearch = !q || 
+    const matchSearch = !q ||
       o.client_name?.toLowerCase().includes(q) ||
       o.items?.toLowerCase().includes(q) ||
       o.delivery_country?.toLowerCase().includes(q) ||
       o.tracking_number?.toLowerCase().includes(q);
     return matchStatus && matchSearch;
   });
+
+  // Revenue across whatever is currently filtered — search a name to see
+  // that one customer's total instead of the whole book.
+  const filteredTotal = filtered.reduce(
+    (s, o) => s + (o.item_price_jpy || 0) + (o.service_fee_jpy || 0),
+    0
+  );
 
   // Stats
   const totalFee   = orders.reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
@@ -927,10 +957,30 @@ function OrdersTab({ supabase, al }) {
           <option value="all">All statuses</option>
           {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
-        <div style={{ padding:".6rem 1rem", background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"8px", fontSize:".75rem", color:MUTED, display:"flex", alignItems:"center" }}>
-          {filtered.length} order{filtered.length !== 1 ? "s" : ""}
+        <div style={{ padding:".6rem 1rem", background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"8px", fontSize:".75rem", color:MUTED, display:"flex", alignItems:"center", gap:".5rem" }}>
+          <span>{filtered.length} order{filtered.length !== 1 ? "s" : ""}</span>
+          <span style={{ color:BORDER }}>·</span>
+          <span>total <strong style={{ color:RED }}>¥{filteredTotal.toLocaleString()}</strong></span>
         </div>
       </div>
+
+      {/* ── Selection bar: bundle several orders into one package ── */}
+      {selected.size > 0 && (
+        <div style={{ display:"flex", alignItems:"center", gap:".75rem", marginBottom:"1rem", padding:".7rem 1rem", background:`${VIOLET}18`, border:`2px solid ${VIOLET}`, borderRadius:"10px", flexWrap:"wrap" }}>
+          <span style={{ fontSize:".8rem", color:INK }}>{selected.size} order{selected.size !== 1 ? "s" : ""} selected</span>
+          <button
+            style={{ ...btnPrimary, padding:".5rem .9rem", fontSize:".7rem" }}
+            disabled={selected.size < 2}
+            title={selected.size < 2 ? "Select at least 2 orders to bundle" : ""}
+            onClick={() => setShipmentPanel({ mode:"new", orderIds:[...selected] })}
+          >
+            📦 Group into package
+          </button>
+          <button style={{ ...btnGhost, padding:".5rem .9rem", fontSize:".7rem" }} onClick={() => setSelected(new Set())}>
+            Clear selection
+          </button>
+        </div>
+      )}
 
       {/* ── Orders table ── */}
       {loading ? (
@@ -940,7 +990,8 @@ function OrdersTab({ supabase, al }) {
       ) : (
         <div style={{ border:`2px solid ${BORDER}`, borderRadius:"12px", overflow:"hidden" }}>
           {/* Header */}
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 120px 75px 85px 130px 56px", gap:0, padding:".5rem 1rem", background:BG, borderBottom:`2px solid ${BORDER}` }}>
+          <div style={{ display:"grid", gridTemplateColumns:"28px 1fr 1.2fr 85px 120px 75px 85px 130px 56px", gap:0, padding:".5rem 1rem", background:BG, borderBottom:`2px solid ${BORDER}` }}>
+            <div />
             {[al.clientName?.replace(" *","") || "Client","Items","Fee","Status","Date","Country","Tracking",""].map(h => (
               <div key={h} style={{ fontSize:".34rem", letterSpacing:".06em", textTransform:"uppercase", color:RED, padding:"0 .4rem", fontFamily:PIXEL, lineHeight:1.9 }}>{h}</div>
             ))}
@@ -948,9 +999,17 @@ function OrdersTab({ supabase, al }) {
           {/* Rows */}
           {filtered.map((o, i) => (
             <div key={o.id}
-              style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr 85px 120px 75px 85px 130px 56px", gap:0, padding:".65rem 1rem", background: i%2===0 ? SURFACE : BG, borderBottom:`2px solid ${BORDER}`, alignItems:"center", cursor:"pointer" }}
+              style={{ display:"grid", gridTemplateColumns:"28px 1fr 1.2fr 85px 120px 75px 85px 130px 56px", gap:0, padding:".65rem 1rem", background: i%2===0 ? SURFACE : BG, borderBottom:`2px solid ${BORDER}`, alignItems:"center", cursor:"pointer" }}
               onMouseEnter={e=>e.currentTarget.style.background=SURFACE2}
               onMouseLeave={e=>e.currentTarget.style.background=i%2===0?SURFACE:BG}>
+              <div style={{ padding:"0 .4rem" }} onClick={e => e.stopPropagation()}>
+                <input
+                  type="checkbox"
+                  className="adm-row-check"
+                  checked={selected.has(o.id)}
+                  onChange={() => toggleSelect(o.id)}
+                />
+              </div>
               <div style={{ padding:"0 .4rem" }}>
                 <div style={{ fontWeight:500, color:INK, fontSize:".8rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{o.client_name}</div>
                 {o.client_email
@@ -972,7 +1031,15 @@ function OrdersTab({ supabase, al }) {
               <div style={{ padding:"0 .4rem", color:MUTED, fontSize:".72rem" }}>{o.purchase_date ? new Date(o.purchase_date).toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit"}) : "—"}</div>
               <div style={{ padding:"0 .4rem", color:MUTED, fontSize:".72rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{o.delivery_country||"—"}</div>
               <div style={{ padding:"0 .4rem" }}>
-                {o.tracking_number ? (() => {
+                {shipmentFor(o) ? (
+                  <span
+                    className="adm-ship-badge"
+                    onClick={e => { e.stopPropagation(); setShipmentPanel({ mode:"edit", shipment: shipmentFor(o) }); }}
+                    title="Part of a package — click to manage"
+                  >
+                    📦 PKG #{o.shipment_id}
+                  </span>
+                ) : o.tracking_number ? (() => {
                   const tn = o.tracking_number.trim();
                   const ship = (o.shipping_method||"").toLowerCase();
                   let url = `https://www.17track.net/en/track?nums=${tn}`;
@@ -1028,6 +1095,20 @@ function OrdersTab({ supabase, al }) {
           order={managing}
           onClose={() => setManaging(null)}
           onSaved={() => { load(); setManaging(null); }}
+        />
+      )}
+
+      {/* Package panel — bundle a fresh selection, or edit an existing package */}
+      {shipmentPanel && (
+        <ShipmentManager
+          shipment={shipmentPanel.mode === "edit" ? shipmentPanel.shipment : null}
+          orderIds={shipmentPanel.mode === "new" ? shipmentPanel.orderIds : null}
+          onClose={() => setShipmentPanel(null)}
+          onSaved={() => {
+            load();
+            setSelected(new Set());
+            setShipmentPanel(null);
+          }}
         />
       )}
     </div>

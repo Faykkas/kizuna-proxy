@@ -33,7 +33,7 @@ export function useMyOrders() {
         "id, public_ref, items, status, purchase_date, created_at, " +
         "item_price_jpy, service_fee_jpy, shipping_cost_jpy, shipping_paid, " +
         "shipping_method, tracking_number, delivery_country, notes, " +
-        "event_name, event_date, event_status, event_result"
+        "event_name, event_date, event_status, event_result, shipment_id"
       )
       .order("created_at", { ascending: false });
 
@@ -63,26 +63,115 @@ export function useMyOrders() {
   return { orders, loading, error, reload: load };
 }
 
+/**
+ * Packages that bundle several of the customer's orders together — one
+ * tracking number, one shipping payment. RLS only returns shipments that
+ * hold at least one of this customer's orders.
+ */
+export function useMyShipments() {
+  const { user } = useAuth();
+  const [shipments, setShipments] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(async () => {
+    if (!user) { setShipments([]); setLoading(false); return; }
+    setLoading(true);
+    const { data } = await supabase
+      .from("shipments")
+      .select("id, tracking_number, shipping_method, shipping_cost_jpy, shipping_paid, status, notes, created_at")
+      .order("created_at", { ascending: false });
+    setShipments(data || []);
+    setLoading(false);
+  }, [user]);
+
+  useEffect(() => { load(); }, [load]);
+
+  useEffect(() => {
+    if (!user) return;
+    const channel = supabase
+      .channel("my-shipments")
+      .on("postgres_changes", { event: "*", schema: "public", table: "shipments" }, () => load())
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [user, load]);
+
+  return { shipments, loading, reload: load };
+}
+
+/** One package: its own record, the orders bundled into it, and its pending payment */
+export function useShipmentDetail(shipmentId) {
+  const [shipment, setShipment] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [payment, setPayment] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(async () => {
+    if (!shipmentId) return;
+    setLoading(true);
+
+    const [s, o, pay] = await Promise.all([
+      supabase.from("shipments").select("*").eq("id", shipmentId).single(),
+      supabase
+        .from("orders")
+        .select("id, public_ref, items, status, item_price_jpy, service_fee_jpy, delivery_country")
+        .eq("shipment_id", shipmentId)
+        .order("created_at", { ascending: true }),
+      supabase
+        .from("payments")
+        .select("*")
+        .eq("shipment_id", shipmentId)
+        .eq("status", "pending")
+        .maybeSingle(),
+    ]);
+
+    setShipment(s.data);
+    setOrders(o.data || []);
+    setPayment(pay.data);
+    setLoading(false);
+  }, [shipmentId]);
+
+  useEffect(() => { load(); }, [load]);
+
+  useEffect(() => {
+    if (!shipmentId) return;
+    const channel = supabase
+      .channel(`shipment-${shipmentId}`)
+      .on("postgres_changes",
+          { event: "*", schema: "public", table: "shipments", filter: `id=eq.${shipmentId}` },
+          () => load())
+      .on("postgres_changes",
+          { event: "*", schema: "public", table: "orders", filter: `shipment_id=eq.${shipmentId}` },
+          () => load())
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [shipmentId, load]);
+
+  return { shipment, orders, payment, loading, reload: load };
+}
+
 /** One order, with its photos, timeline and pending payment */
 export function useOrderDetail(orderId) {
   const [order, setOrder] = useState(null);
   const [photos, setPhotos] = useState([]);
   const [events, setEvents] = useState([]);
   const [payment, setPayment] = useState(null);
+  // Set only when this order ships as part of a bundled package
+  const [shipment, setShipment] = useState(null);
+  const [shipmentOrders, setShipmentOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
     if (!orderId) return;
     setLoading(true);
 
-    const [o, p, e, pay] = await Promise.all([
+    const [o, p, e] = await Promise.all([
       supabase
         .from("orders")
         .select(
           "id, public_ref, items, status, purchase_date, created_at, " +
           "item_price_jpy, service_fee_jpy, shipping_cost_jpy, shipping_paid, " +
           "shipping_method, tracking_number, delivery_country, notes, " +
-          "event_name, event_date, event_status, event_result"
+          "event_name, event_date, event_status, event_result, shipment_id"
         )
         .eq("id", orderId)
         .single(),
@@ -96,18 +185,42 @@ export function useOrderDetail(orderId) {
         .select("*")
         .eq("order_id", orderId)
         .order("created_at", { ascending: true }),
-      supabase
-        .from("payments")
-        .select("*")
-        .eq("order_id", orderId)
-        .eq("status", "pending")
-        .maybeSingle(),
     ]);
 
     setOrder(o.data);
     setPhotos(p.data || []);
     setEvents(e.data || []);
-    setPayment(pay.data);
+
+    if (o.data?.shipment_id) {
+      // Shipping lives on the package, not this individual order
+      const [ship, siblings, pay] = await Promise.all([
+        supabase.from("shipments").select("*").eq("id", o.data.shipment_id).single(),
+        supabase
+          .from("orders")
+          .select("id, public_ref, items")
+          .eq("shipment_id", o.data.shipment_id),
+        supabase
+          .from("payments")
+          .select("*")
+          .eq("shipment_id", o.data.shipment_id)
+          .eq("status", "pending")
+          .maybeSingle(),
+      ]);
+      setShipment(ship.data);
+      setShipmentOrders(siblings.data || []);
+      setPayment(pay.data);
+    } else {
+      setShipment(null);
+      setShipmentOrders([]);
+      const { data } = await supabase
+        .from("payments")
+        .select("*")
+        .eq("order_id", orderId)
+        .eq("status", "pending")
+        .maybeSingle();
+      setPayment(data);
+    }
+
     setLoading(false);
   }, [orderId]);
 
@@ -127,11 +240,14 @@ export function useOrderDetail(orderId) {
       .on("postgres_changes",
           { event: "*", schema: "public", table: "order_events", filter: `order_id=eq.${orderId}` },
           () => load())
+      .on("postgres_changes",
+          { event: "*", schema: "public", table: "shipments" },
+          () => load())
       .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, [orderId, load]);
 
-  return { order, photos, events, payment, loading, reload: load };
+  return { order, photos, events, payment, shipment, shipmentOrders, loading, reload: load };
 }
 
 /** Unread notifications, with a live subscription */
@@ -185,23 +301,38 @@ export function useNotifications() {
   return { items, unread, markAllRead, reload: load };
 }
 
-/** Totals across all orders — powers the dashboard summary */
-export function useAccountSummary(orders) {
+/**
+ * Totals across all orders — powers the dashboard summary. Shipping due is
+ * tracked on the order for standalone items, but on the shipment for
+ * anything bundled into a package — an order in a package never counts its
+ * own shipping_cost_jpy, or a shared shipping cost would be added once per
+ * item instead of once per package.
+ */
+export function useAccountSummary(orders, shipments = []) {
   const active = orders.filter(
     o => !["Delivered", "Cancelled"].includes(o.status)
   );
-  const outstanding = orders
-    .filter(o => !o.shipping_paid && (o.shipping_cost_jpy || 0) > 0)
+
+  const orderOutstanding = orders
+    .filter(o => !o.shipment_id && !o.shipping_paid && (o.shipping_cost_jpy || 0) > 0)
     .reduce((sum, o) => sum + (o.shipping_cost_jpy || 0), 0);
+
+  const shipmentsNeedingPayment = shipments.filter(
+    s => !s.shipping_paid && (s.shipping_cost_jpy || 0) > 0
+  );
+  const shipmentOutstanding = shipmentsNeedingPayment
+    .reduce((sum, s) => sum + (s.shipping_cost_jpy || 0), 0);
+
   const needsAction = orders.filter(
-    o => o.status === "Awaiting Shipping Payment" || o.status === "Action Required"
+    o => (!o.shipment_id && o.status === "Awaiting Shipping Payment") || o.status === "Action Required"
   );
 
   return {
     activeCount: active.length,
     totalCount: orders.length,
-    outstanding,
+    outstanding: orderOutstanding + shipmentOutstanding,
     needsAction,
+    shipmentsNeedingPayment,
   };
 }
 

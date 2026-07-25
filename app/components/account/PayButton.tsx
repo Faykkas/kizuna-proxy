@@ -34,7 +34,7 @@ function loadPayPalSdk(clientId) {
   });
 }
 
-export default function PayButton({ orderId, amountJpy, onPaid }) {
+export default function PayButton({ orderId, shipmentId, amountJpy, onPaid }) {
   const containerRef = useRef(null);
   const [state, setState] = useState("idle"); // idle | ready | paying | done | error
   const [message, setMessage] = useState("");
@@ -64,7 +64,7 @@ export default function PayButton({ orderId, amountJpy, onPaid }) {
                   "Content-Type": "application/json",
                   Authorization: `Bearer ${session?.access_token}`,
                 },
-                body: JSON.stringify({ action: "create", orderId }),
+                body: JSON.stringify({ action: "create", orderId, shipmentId }),
               });
               const data = await res.json();
               if (!res.ok) throw new Error(data.error || "Could not start payment");
@@ -83,6 +83,7 @@ export default function PayButton({ orderId, amountJpy, onPaid }) {
                 body: JSON.stringify({
                   action: "capture",
                   orderId,
+                  shipmentId,
                   paypalOrderId: data.orderID,
                 }),
               });
@@ -111,7 +112,7 @@ export default function PayButton({ orderId, amountJpy, onPaid }) {
       });
 
     return () => { cancelled = true; };
-  }, [clientId, orderId]);
+  }, [clientId, orderId, shipmentId]);
 
   // No key configured yet — show a clear fallback rather than a broken button
   if (!clientId) {
