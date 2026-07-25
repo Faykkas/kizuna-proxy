@@ -262,6 +262,17 @@ export default function OrderDetailClient({ orderId }) {
               </dl>
             </section>
 
+            {/* ── Paid, waiting to ship: tracking isn't up yet, say when it will be ── */}
+            {!shipment && order.shipping_paid && !order.tracking_number && (
+              <section className="ord-info">
+                <strong>YOUR PACKAGE SHIPS THIS SUNDAY</strong>
+                <p>
+                  We ship all paid packages on Sundays. Your tracking number
+                  will appear here Sunday evening, Japan time.
+                </p>
+              </section>
+            )}
+
             {/* ── Tracking (not shown when bundled — tracking lives on the package) ── */}
             {!shipment && order.tracking_number && (
               <section className="ord-panel">

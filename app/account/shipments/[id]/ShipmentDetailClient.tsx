@@ -158,6 +158,16 @@ export default function ShipmentDetailClient({ shipmentId }) {
               </dl>
             </section>
 
+            {shipment.shipping_paid && !shipment.tracking_number && (
+              <section className="ord-info">
+                <strong>YOUR PACKAGE SHIPS THIS SUNDAY</strong>
+                <p>
+                  We ship all paid packages on Sundays. Your tracking number
+                  will appear here Sunday evening, Japan time.
+                </p>
+              </section>
+            )}
+
             {shipment.tracking_number && (
               <section className="ord-panel">
                 <h2 className="ord-panel-title">TRACKING</h2>

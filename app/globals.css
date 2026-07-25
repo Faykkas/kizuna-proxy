@@ -2781,6 +2781,29 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   margin-bottom: 1rem;
 }
 
+/* Reassuring, not alarming — same shape as .ord-alert but in the brand accent */
+.ord-info {
+  background: rgba(168,224,74,.08);
+  border: 2px solid rgba(168,224,74,.3);
+  border-radius: 12px;
+  padding: 1.25rem 1.4rem;
+  margin-bottom: 2rem;
+}
+.ord-info strong {
+  display: block;
+  font-family: var(--font-pixel);
+  font-size: .5rem;
+  color: var(--red);
+  margin-bottom: .6rem;
+  line-height: 1.9;
+}
+.ord-info p {
+  font-size: .86rem;
+  color: var(--warm);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
 /* ── DETAIL GRID ──────────────────────────────────────────────────────── */
 .ord-grid {
   display: grid;
