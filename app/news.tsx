@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "./lib/supabase";
+import NewsContent from "./components/NewsContent";
 
 type NewsItem = {
   id: string;
@@ -77,7 +78,9 @@ export default function NewsSection({ lang = "en" }: { lang?: string }) {
                 <span className="news-date">{timeAgo(item.published_at, lang)}</span>
               </div>
               <h3 className="news-title">{title}</h3>
-              <p className="news-content">{content}</p>
+              <div className="news-content">
+                <NewsContent text={content} />
+              </div>
             </div>
           );
         })}

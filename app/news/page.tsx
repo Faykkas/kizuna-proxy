@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
+import NewsContent from "../components/NewsContent";
 
 type NewsItem = {
   id: string;
@@ -130,9 +131,10 @@ export default function NewsArchivePage() {
                   <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.05rem", fontWeight: 600, color: "var(--ink)", marginBottom: ".5rem", lineHeight: 1.3 }}>
                     {item.title}
                   </h3>
-                  <p style={{ fontSize: ".8rem", lineHeight: 1.8, color: "var(--warm)", fontWeight: 300, margin: 0 }}>
-                    {item.content}
-                  </p>
+                  <NewsContent
+                    text={item.content}
+                    style={{ fontSize: ".8rem", lineHeight: 1.8, color: "var(--warm)", fontWeight: 300, margin: "0 0 .9rem" }}
+                  />
                 </div>
               </div>
             ))}
