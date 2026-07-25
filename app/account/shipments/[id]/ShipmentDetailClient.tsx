@@ -14,7 +14,7 @@ import SiteNav from "../../../components/SiteNav";
 import SiteFooter from "../../../components/SiteFooter";
 import Maneki from "../../../components/pixel/Maneki";
 import { IconBox, IconTruck, IconCheck } from "../../../components/pixel/PixelIcons";
-import { copy as t } from "../../../translations";
+import { useLanguage } from "../../../lib/language";
 import { useAuth } from "../../../lib/auth";
 import { useShipmentDetail } from "../../../lib/useOrders";
 import PayButton from "../../../components/account/PayButton";
@@ -32,6 +32,7 @@ function stepIndex(status) {
 
 export default function ShipmentDetailClient({ shipmentId }) {
   const router = useRouter();
+  const { t } = useLanguage();
   const { user, loading: authLoading } = useAuth();
   const { shipment, orders, payment, loading, reload } = useShipmentDetail(shipmentId);
   const [copied, setCopied] = useState(false);

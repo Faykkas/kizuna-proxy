@@ -2,15 +2,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { copy } from "../translations";
 import { supabase } from "../lib/supabase";
+import { useLanguage } from "../lib/language";
 
-/**
- * Conservé pour compatibilité : le site est monolingue, `t` renvoie
- * toujours les textes anglais.
- */
+/** Thin re-export so existing call sites don't need to change their import. */
 export function useLang() {
-  return { lang: "en", setLang: () => {}, t: copy };
+  return useLanguage();
 }
 
 /** Bannière d'annonce depuis Supabase */

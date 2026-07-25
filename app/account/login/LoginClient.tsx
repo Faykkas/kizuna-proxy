@@ -11,11 +11,13 @@ import { useRouter } from "next/navigation";
 import SiteNav from "../../components/SiteNav";
 import SiteFooter from "../../components/SiteFooter";
 import Maneki from "../../components/pixel/Maneki";
-import { copy as t } from "../../translations";
+import { useLanguage } from "../../lib/language";
 import { useAuth } from "../../lib/auth";
 
 export default function LoginClient() {
   const router = useRouter();
+  const { t } = useLanguage();
+  const l = t.loginPage || {};
   const { signIn, signUp } = useAuth();
 
   const [mode, setMode] = useState("signin");   // signin | signup
@@ -31,11 +33,11 @@ export default function LoginClient() {
     setError("");
 
     if (!email || !password) {
-      setError("Email and password are required.");
+      setError(l.errEmailPassword || "Email and password are required.");
       return;
     }
     if (mode === "signup" && password.length < 8) {
-      setError("Password must be at least 8 characters.");
+      setError(l.errPasswordLength || "Password must be at least 8 characters.");
       return;
     }
 
@@ -48,7 +50,7 @@ export default function LoginClient() {
         // Supabase returns the same message for wrong password and unknown
         // account, which is correct — revealing which one it is would let
         // someone probe for registered email addresses.
-        setError("Wrong email or password.");
+        setError(l.errWrongCredentials || "Wrong email or password.");
         return;
       }
       router.push("/account");
@@ -72,13 +74,12 @@ export default function LoginClient() {
             <div className="acc-auth-mascot">
               <Maneki state="success" size={90} float />
             </div>
-            <h1 className="acc-auth-title">CHECK YOUR EMAIL</h1>
+            <h1 className="acc-auth-title">{l.checkEmailTitle || "CHECK YOUR EMAIL"}</h1>
             <p className="acc-auth-lead">
-              We sent a confirmation link to <strong>{email}</strong>.
-              Click it and you&apos;re in.
+              {l.checkEmailLeadPre || "We sent a confirmation link to "}<strong>{email}</strong>{l.checkEmailLeadPost || ". Click it and you're in."}
             </p>
             <p className="acc-auth-hint">
-              Nothing after a few minutes? Check your spam folder.
+              {l.checkEmailHint || "Nothing after a few minutes? Check your spam folder."}
             </p>
           </div>
         </main>
@@ -97,31 +98,31 @@ export default function LoginClient() {
           </div>
 
           <h1 className="acc-auth-title">
-            {mode === "signin" ? "WELCOME BACK" : "CREATE ACCOUNT"}
+            {mode === "signin" ? (l.welcomeBack || "WELCOME BACK") : (l.createAccount || "CREATE ACCOUNT")}
           </h1>
           <p className="acc-auth-lead">
             {mode === "signin"
-              ? "Track your orders, see photos, pay shipping."
-              : "Takes 30 seconds. Track every order in one place."}
+              ? (l.leadSignin || "Track your orders, see photos, pay shipping.")
+              : (l.leadSignup || "Takes 30 seconds. Track every order in one place.")}
           </p>
 
           <form onSubmit={submit} className="acc-auth-form">
             {mode === "signup" && (
               <div className="f-field">
-                <label htmlFor="name">Your name</label>
+                <label htmlFor="name">{l.yourName || "Your name"}</label>
                 <input
                   id="name"
                   type="text"
                   value={fullName}
                   onChange={e => setFullName(e.target.value)}
-                  placeholder="How should we call you?"
+                  placeholder={l.namePlaceholder || "How should we call you?"}
                   autoComplete="name"
                 />
               </div>
             )}
 
             <div className="f-field">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">{l.emailLabel || "Email"}</label>
               <input
                 id="email"
                 type="email"
@@ -134,13 +135,13 @@ export default function LoginClient() {
             </div>
 
             <div className="f-field">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">{l.passwordLabel || "Password"}</label>
               <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder={mode === "signup" ? "At least 8 characters" : "••••••••"}
+                placeholder={mode === "signup" ? (l.passwordPlaceholderSignup || "At least 8 characters") : "••••••••"}
                 autoComplete={mode === "signup" ? "new-password" : "current-password"}
                 required
               />
@@ -149,23 +150,23 @@ export default function LoginClient() {
             {error && <p className="acc-auth-error">{error}</p>}
 
             <button type="submit" className="btn btn-gold acc-auth-submit" disabled={busy}>
-              {busy ? "…" : mode === "signin" ? "SIGN IN" : "CREATE ACCOUNT"}
+              {busy ? "…" : mode === "signin" ? (l.signInBtn || "SIGN IN") : (l.createAccount || "CREATE ACCOUNT")}
             </button>
           </form>
 
           <div className="acc-auth-switch">
             {mode === "signin" ? (
               <>
-                No account yet?{" "}
+                {l.noAccountYet || "No account yet?"}{" "}
                 <button onClick={() => { setMode("signup"); setError(""); }}>
-                  Create one
+                  {l.createOneLink || "Create one"}
                 </button>
               </>
             ) : (
               <>
-                Already have an account?{" "}
+                {l.alreadyHaveAccount || "Already have an account?"}{" "}
                 <button onClick={() => { setMode("signin"); setError(""); }}>
-                  Sign in
+                  {l.signInLink || "Sign in"}
                 </button>
               </>
             )}
@@ -173,8 +174,7 @@ export default function LoginClient() {
 
           {mode === "signup" && (
             <p className="acc-auth-hint">
-              Ordered before? Use the same email and your past orders
-              will appear automatically.
+              {l.signupHint || "Ordered before? Use the same email and your past orders will appear automatically."}
             </p>
           )}
         </div>

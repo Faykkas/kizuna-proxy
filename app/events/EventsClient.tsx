@@ -2,7 +2,9 @@
 "use client";
 
 import SiteNav from "../components/SiteNav";
+import SiteFooter from "../components/SiteFooter";
 import Maneki from "../components/pixel/Maneki";
+import { useLang } from "../components/useSiteState";
 
 // ─── EVENTS CONTENT ───────────────────────────────────────────────────────────
 const EVENTS_CONTENT = {
@@ -44,6 +46,12 @@ const EVENTS_CONTENT = {
 // ─── EVENTS PAGE ──────────────────────────────────────────────────────────────
 export default function EventsClient() {
   const c = EVENTS_CONTENT;
+  const { t } = useLang();
+  const h = t.pageHeroes?.events || {};
+  const ep = t.eventsPage || {};
+  const cards = ep.cards || c.cards;
+  const steps = ep.steps || c.steps;
+  const faqs = ep.faqs || c.faqs;
 
   return (
     <>
@@ -57,20 +65,20 @@ export default function EventsClient() {
           <div className="px-page-head-inline">
             <div className="px-head-mascot">
               <Maneki prop="sign" size={86} float />
-              <span className="px-head-bubble">We queue so you don&apos;t</span>
+              <span className="px-head-bubble">{h.bubble || "We queue so you don't"}</span>
             </div>
             <nav className="breadcrumb" aria-label="Breadcrumb">
-              <a href="/">Home</a><span>/</span><span>Events</span>
+              <a href="/">{t.pageHeroes?.home || "Home"}</a><span>/</span><span>{t.nav?.events || "Events"}</span>
             </nav>
-            <h1 className="px-page-title">{c.title} <em>{c.titleEm}</em></h1>
-            <p className="px-page-lead">{c.lead}</p>
+            <h1 className="px-page-title">{h.title || c.title} <em>{h.titleEm || c.titleEm}</em></h1>
+            <p className="px-page-lead">{h.lead || c.lead}</p>
           </div>
 
           <hr className="blog-hr" />
 
-          <h2>{c.whatTitle}</h2>
+          <h2>{ep.whatTitle || c.whatTitle}</h2>
           <div className="ev-grid">
-            {c.cards.map((item, i) => (
+            {cards.map((item, i) => (
               <div key={i} className="ev-card">
                 <div className="ev-icon">{item.icon}</div>
                 <h3>{item.title}</h3>
@@ -81,9 +89,9 @@ export default function EventsClient() {
 
           <hr className="blog-hr" />
 
-          <h2>{c.howTitle}</h2>
+          <h2>{ep.howTitle || c.howTitle}</h2>
           <div className="ev-steps">
-            {c.steps.map(s => (
+            {steps.map(s => (
               <div key={s.n} className="ev-step">
                 <div className="ev-step-num">{s.n}</div>
                 <div><strong>{s.title}</strong><p>{s.body}</p></div>
@@ -98,21 +106,21 @@ export default function EventsClient() {
               <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
             </svg>
             <div>
-              <strong>{c.pricingTitle}</strong>
-              <p>{c.pricingText}</p>
+              <strong>{ep.pricingTitle || c.pricingTitle}</strong>
+              <p>{ep.pricingText || c.pricingText}</p>
             </div>
           </div>
 
           <div className="blog-cta" style={{ marginTop: "2rem" }}>
-            <p>{c.ctaText}</p>
-            <a href="/#request-wrap" className="btn btn-gold">{c.ctaBtn}</a>
+            <p>{ep.ctaText || c.ctaText}</p>
+            <a href="/#request-wrap" className="btn btn-gold">{ep.ctaBtn || c.ctaBtn}</a>
           </div>
 
           <hr className="blog-hr" />
 
-          <h2>{c.faqTitle}</h2>
+          <h2>{ep.faqTitle || c.faqTitle}</h2>
           <div className="ev-faq">
-            {c.faqs.map((item, i) => (
+            {faqs.map((item, i) => (
               <div key={i} className="ev-faq-item">
                 <strong>{item.q}</strong>
                 <p>{item.a}</p>
@@ -123,39 +131,7 @@ export default function EventsClient() {
         </div>
       </main>
 
-      {/* FOOTER */}
-      <footer>
-        <div className="footer-grid">
-          <div>
-            <div className="footer-logo-wrap">
-              <img src="/logo.png" alt="Kizuna Proxy" style={{height:"32px",width:"auto",objectFit:"contain"}} />
-              <div className="footer-logo"><span className="g">Kizuna</span> Proxy</div>
-            </div>
-            <p className="footer-tagline">Tokyo-based proxy service.<br />Your trusted link to Japan.</p>
-          </div>
-          <div>
-            <p className="footer-col-title">Navigate</p>
-            <a href="/" className="footer-link">Home</a>
-            <a href="/#request-wrap" className="footer-link">Request an item</a>
-            <a href="/#pricing" className="footer-link">Pricing</a>
-          </div>
-          <div>
-            <p className="footer-col-title">Events</p>
-            <a href="/events" className="footer-link">Tokyo Events</a>
-            <a href="/#calendar" className="footer-link">Availability</a>
-          </div>
-          <div>
-            <p className="footer-col-title">Contact</p>
-            <a href="mailto:kizunaproxy@gmail.com" className="footer-link">kizunaproxy@gmail.com</a>
-            <a href="https://wa.me/819044595568" target="_blank" rel="noopener noreferrer" className="footer-link">WhatsApp</a>
-            <a href="https://discord.com/users/Faykas" target="_blank" rel="noopener noreferrer" className="footer-link">Discord</a>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <p>© 2026 Kizuna Proxy</p>
-          <p><a href="/" className="footer-link" style={{display:"inline"}}>← Back to home</a></p>
-        </div>
-      </footer>
+      <SiteFooter t={t} />
     </>
   );
 }

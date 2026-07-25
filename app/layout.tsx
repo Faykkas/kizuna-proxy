@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "./lib/auth";
+import { LanguageProvider } from "./lib/language";
 import ContactWidget from "./components/ContactWidget";
 import "./globals.css";
 
@@ -140,8 +141,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <AuthProvider>
-          {children}
-          <ContactWidget />
+          <LanguageProvider>
+            {children}
+            <ContactWidget />
+          </LanguageProvider>
         </AuthProvider>
         <Analytics />
         <script

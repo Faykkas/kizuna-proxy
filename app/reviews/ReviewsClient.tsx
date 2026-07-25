@@ -11,6 +11,7 @@ import { useLang, useAnnounce } from "../components/useSiteState";
 
 export default function ReviewsClient() {
   const { t } = useLang();
+  const h = t.pageHeroes?.reviews || {};
   const announce = useAnnounce();
   useScrollReveal();
 
@@ -24,13 +25,13 @@ export default function ReviewsClient() {
           <div className="page-head-inner">
             <div className="px-head-mascot">
               <Maneki prop="heart" size={86} float />
-              <span className="px-head-bubble">Thanks for the love</span>
+              <span className="px-head-bubble">{h.bubble || "Thanks for the love"}</span>
             </div>
             <nav className="breadcrumb" aria-label="Breadcrumb">
-              <a href="/">Home</a><span>/</span><span>Reviews</span>
+              <a href="/">{t.pageHeroes?.home || "Home"}</a><span>/</span><span>{t.nav?.reviews || "Reviews"}</span>
             </nav>
-            <h1>Trusted by <em>collectors worldwide</em></h1>
-            <p>Verified reviews from customers in the USA, Canada, France, Germany, Greece, Indonesia and beyond.</p>
+            <h1>{h.title || "Trusted by "}<em>{h.titleEm || "collectors worldwide"}</em></h1>
+            <p>{h.desc || "Verified reviews from customers in the USA, Canada, France, Germany, Greece, Indonesia and beyond."}</p>
           </div>
         </header>
         <ReviewsSection t={t} />

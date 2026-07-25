@@ -1223,6 +1223,14 @@ a:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }
   --ease-step:   steps(4, end);
 }
 
+/* Press Start 2P has no CJK glyphs — mixing it with Japanese/Korean/Chinese
+   text would silently fall back to a mismatched system font per-character,
+   which looks broken. For those languages the whole site reads through the
+   body font instead, kept consistent rather than half-pixel half-fallback. */
+:root[lang="ja"], :root[lang="ko"], :root[lang="zh"] {
+  --font-pixel: var(--font-body);
+}
+
 /* ── 2. TYPOGRAPHIE ───────────────────────────────────────────────────────
    Press Start 2P est la police pixel authentique, mais illisible en
    paragraphe : elle reste sur les micro-labels, badges et compteurs.
@@ -4254,8 +4262,11 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   letter-spacing: .01em;
   text-transform: none;
   color: var(--warm);
+  white-space: nowrap;
 }
+.nav-links li { flex-shrink: 0; }
 
 .nav-links { gap: 1.5rem; }
 @media (max-width: 1360px) { .nav-links { gap: 1.15rem; } }
 @media (max-width: 1250px) { .nav-links a, .nav-links .nav-dropdown-btn { font-size: .76rem; } .nav-links { gap: 1rem; } }
+@media (max-width: 1150px) { .nav-links a, .nav-links .nav-dropdown-btn { font-size: .68rem; } .nav-links { gap: .7rem; } }

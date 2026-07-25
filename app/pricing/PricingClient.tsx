@@ -11,6 +11,7 @@ import { useLang, useAnnounce } from "../components/useSiteState";
 
 export default function PricingClient() {
   const { t } = useLang();
+  const h = t.pageHeroes?.pricing || {};
   const announce = useAnnounce();
   useScrollReveal();
 
@@ -24,13 +25,13 @@ export default function PricingClient() {
           <div className="page-head-inner">
             <div className="px-head-mascot">
               <Maneki prop="coins" size={86} float />
-              <span className="px-head-bubble">Free quote in 24h</span>
+              <span className="px-head-bubble">{h.bubble || "Free quote in 24h"}</span>
             </div>
             <nav className="breadcrumb" aria-label="Breadcrumb">
-              <a href="/">Home</a><span>/</span><span>Pricing</span>
+              <a href="/">{t.pageHeroes?.home || "Home"}</a><span>/</span><span>{t.nav?.pricing || "Pricing"}</span>
             </nav>
-            <h1>Fully <em>personalised</em></h1>
-            <p>Every request is unique. No hidden fees, and a detailed quote within 24 hours.</p>
+            <h1>{h.title || "Fully "}<em>{h.titleEm || "personalised"}</em></h1>
+            <p>{h.desc || "Every request is unique. No hidden fees, and a detailed quote within 24 hours."}</p>
           </div>
         </header>
         <PricingSection t={t} />

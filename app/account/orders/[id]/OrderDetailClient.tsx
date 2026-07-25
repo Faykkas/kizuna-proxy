@@ -12,7 +12,7 @@ import SiteFooter from "../../../components/SiteFooter";
 import Maneki from "../../../components/pixel/Maneki";
 import { IconBox, IconTruck, IconCheck, IconHourglass, IconCards, IconMarketplace }
   from "../../../components/pixel/PixelIcons";
-import { copy as t } from "../../../translations";
+import { useLanguage } from "../../../lib/language";
 import { useAuth } from "../../../lib/auth";
 import { useOrderDetail } from "../../../lib/useOrders";
 import PayButton from "../../../components/account/PayButton";
@@ -84,6 +84,7 @@ function Timeline({ status, events, order }) {
 
 export default function OrderDetailClient({ orderId }) {
   const router = useRouter();
+  const { t } = useLanguage();
   const { user, loading: authLoading } = useAuth();
   const { order, photos, events, payment, shipment, shipmentOrders, loading, reload } = useOrderDetail(orderId);
   const [lightbox, setLightbox] = useState(null);

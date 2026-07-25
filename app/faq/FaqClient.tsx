@@ -1,7 +1,7 @@
 // @ts-nocheck
 "use client";
 import { useState } from "react";
-import { copy as t } from "../translations";
+import { useLanguage } from "../lib/language";
 import SiteNav from "../components/SiteNav";
 import Maneki from "../components/pixel/Maneki";
 
@@ -83,7 +83,9 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 }
 
 export default function FaqClient() {
-  const faqs = FAQS;
+  const { t } = useLanguage();
+  const faqs = t.faqPage || FAQS;
+  const h = t.pageHeroes?.faq || {};
 
   return (
     <>
@@ -94,18 +96,18 @@ export default function FaqClient() {
         <div className="px-page-head-inline">
           <div className="px-head-mascot">
             <Maneki prop="glass" size={86} float />
-            <span className="px-head-bubble">Ask me anything</span>
+            <span className="px-head-bubble">{h.bubble || "Ask me anything"}</span>
           </div>
           <nav className="breadcrumb" aria-label="Breadcrumb">
-            <a href="/">Home</a><span>/</span><span>FAQ</span>
+            <a href="/">{t.pageHeroes?.home || "Home"}</a><span>/</span><span>{t.nav?.faq || "FAQ"}</span>
           </nav>
           <h1 className="px-page-title">
             {t.faq?.title || "Common"} <em>{t.faq?.titleEm || "questions"}</em>
           </h1>
           <p className="px-page-lead">
-            Can&apos;t find your answer?{" "}
-            <a href="mailto:kizunaproxy@gmail.com">Email us</a>{" "}
-            — we reply within 24 hours.
+            {t.faq?.contactPrefix || "Can't find your answer?"}{" "}
+            <a href="mailto:kizunaproxy@gmail.com">{t.faq?.contactEmail || "Email us"}</a>{" "}
+            {t.faq?.contactSuffix || "— we reply within 24 hours."}
           </p>
         </div>
 
@@ -134,10 +136,10 @@ export default function FaqClient() {
         }}>
           <div>
             <strong style={{ display: "block", fontSize: ".95rem", color: "var(--ink)", marginBottom: ".3rem" }}>
-              Still have a question?
+              {t.faq?.ctaTitle || "Still have a question?"}
             </strong>
             <p style={{ fontSize: ".82rem", color: "var(--mist)", margin: 0, fontWeight: 300 }}>
-              We reply within 24 hours — real answers, no bots.
+              {t.faq?.ctaDesc || "We reply within 24 hours — real answers, no bots."}
             </p>
           </div>
           <a href="mailto:kizunaproxy@gmail.com" style={{
@@ -145,7 +147,7 @@ export default function FaqClient() {
             fontSize: ".65rem", letterSpacing: ".1em", textTransform: "uppercase",
             fontFamily: "'Inter',sans-serif", fontWeight: 500, textDecoration: "none", borderRadius: "6px",
           }}>
-            Contact us →
+            {t.faq?.ctaBtn || "Contact us →"}
           </a>
         </div>
       </div>

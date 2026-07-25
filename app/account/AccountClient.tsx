@@ -11,7 +11,7 @@ import SiteNav from "../components/SiteNav";
 import SiteFooter from "../components/SiteFooter";
 import Maneki from "../components/pixel/Maneki";
 import { IconBox, IconTruck, IconCheck, IconHourglass } from "../components/pixel/PixelIcons";
-import { copy as t } from "../translations";
+import { useLanguage } from "../lib/language";
 import { useAuth } from "../lib/auth";
 import { useMyOrders, useMyShipments, useAccountSummary, useNotifications, useMyRequests } from "../lib/useOrders";
 import {
@@ -19,11 +19,15 @@ import {
   needsCustomerAction, formatJPY, normaliseStatus, orderTitle,
 } from "../lib/orderStatus";
 
-const SHIPMENT_META = {
-  "Awaiting Shipping Payment": { label: "Shipping payment due", hint: "Pay below and we'll send your package out.", color: "var(--px-red)" },
-  "Shipped": { label: "Shipped", hint: "On its way to you. Track it below.", color: "var(--px-accent2)" },
-  "Delivered": { label: "Delivered", hint: "Enjoy! Thanks for trusting us.", color: "var(--px-accent)" },
-};
+function shipmentMeta(status, t) {
+  const m = t.account || {};
+  const table = {
+    "Awaiting Shipping Payment": { label: m.shipDue || "Shipping payment due", hint: m.shipDueHint || "Pay below and we'll send your package out.", color: "var(--px-red)" },
+    "Shipped": { label: m.shipped || "Shipped", hint: m.shippedHint || "On its way to you. Track it below.", color: "var(--px-accent2)" },
+    "Delivered": { label: m.delivered || "Delivered", hint: m.deliveredHint || "Enjoy! Thanks for trusting us.", color: "var(--px-accent)" },
+  };
+  return table[status] || table["Awaiting Shipping Payment"];
+}
 
 /** Groups orders that share a shipment into one card; everything else stays standalone */
 function groupForDisplay(orders, shipments) {
@@ -52,14 +56,16 @@ function groupForDisplay(orders, shipments) {
 }
 
 function ShipmentCard({ shipment, orders }) {
-  const meta = SHIPMENT_META[shipment.status] || SHIPMENT_META["Awaiting Shipping Payment"];
+  const { t } = useLanguage();
+  const meta = shipmentMeta(shipment.status, t);
   const action = shipment.status === "Awaiting Shipping Payment" && !shipment.shipping_paid && shipment.shipping_cost_jpy > 0;
   const itemsLabel = orders.map(o => orderTitle(o.items)).join(" · ");
+  const a = t.account || {};
 
   return (
     <a href={`/account/shipments/${shipment.id}`} className={`acc-order-card${action ? " is-action" : ""}`}>
       <div className="acc-order-top">
-        <span className="acc-order-ref">📦 PACKAGE · {orders.length} ORDERS</span>
+        <span className="acc-order-ref">📦 {a.packageLabel || "PACKAGE"} · {orders.length} {a.ordersCount || "ORDERS"}</span>
         <span className="acc-order-status" style={{ color: meta.color }}>
           {meta.label}
         </span>
@@ -74,7 +80,7 @@ function ShipmentCard({ shipment, orders }) {
 
       {action && (
         <div className="acc-order-flag">
-          {formatJPY(shipment.shipping_cost_jpy)} shipping due
+          {formatJPY(shipment.shipping_cost_jpy)} {a.shippingDue || "shipping due"}
         </div>
       )}
     </a>
@@ -88,6 +94,8 @@ function StatusIcon({ name, size = 22 }) {
 }
 
 function OrderCard({ order }) {
+  const { t } = useLanguage();
+  const a = t.account || {};
   const meta = statusMeta(order.status);
   const pct = progressPercent(order.status, order);
   const next = nextStep(order.status, order);
@@ -111,7 +119,7 @@ function OrderCard({ order }) {
       <div className="acc-order-bottom">
         {next ? (
           <span className="acc-order-next">
-            <span className="acc-order-next-label">NEXT</span> {next}
+            <span className="acc-order-next-label">{a.nextLabel || "NEXT"}</span> {next}
           </span>
         ) : (
           <span className="acc-order-next">{meta.hint}</span>
@@ -128,8 +136,8 @@ function OrderCard({ order }) {
       {action && (
         <div className="acc-order-flag">
           {order.status === "Awaiting Shipping Payment"
-            ? `${formatJPY(order.shipping_cost_jpy)} shipping due`
-            : "Needs your attention"}
+            ? `${formatJPY(order.shipping_cost_jpy)} ${a.shippingDue || "shipping due"}`
+            : (a.needsAttention || "Needs your attention")}
         </div>
       )}
     </a>
@@ -138,6 +146,7 @@ function OrderCard({ order }) {
 
 export default function AccountClient() {
   const router = useRouter();
+  const { t } = useLanguage();
   const { user, profile, loading: authLoading, signOut } = useAuth();
   const { orders, loading } = useMyOrders();
   const { shipments } = useMyShipments();
@@ -178,6 +187,7 @@ export default function AccountClient() {
       : ["Delivered", "Cancelled"].includes(normaliseStatus(c.order.status))
   );
   const attentionCount = summary.needsAction.length + summary.shipmentsNeedingPayment.length;
+  const a = t.account || {};
 
   return (
     <>
@@ -196,18 +206,18 @@ export default function AccountClient() {
           </div>
           <div>
             <h1 className="acc-head-title">
-              {firstName ? `HI ${firstName.toUpperCase()}` : "YOUR ORDERS"}
+              {firstName ? `${a.hi || "HI"} ${firstName.toUpperCase()}` : (a.greeting || "YOUR ORDERS")}
             </h1>
             <p className="acc-head-lead">
               {attentionCount > 0
-                ? `${attentionCount} order${attentionCount > 1 ? "s need" : " needs"} your attention.`
+                ? (attentionCount > 1 ? (a.attentionMany || "{n} orders need your attention.") : (a.attentionOne || "1 order needs your attention.")).replace("{n}", attentionCount)
                 : summary.activeCount > 0
-                  ? `${summary.activeCount} order${summary.activeCount > 1 ? "s" : ""} in progress. Everything on track.`
-                  : "No active orders right now."}
+                  ? (summary.activeCount > 1 ? (a.activeMany || "{n} orders in progress. Everything on track.") : (a.activeOne || "1 order in progress. Everything on track.")).replace("{n}", summary.activeCount)
+                  : (a.noActive || "No active orders right now.")}
             </p>
           </div>
           <button className="acc-signout" onClick={() => { signOut(); router.push("/"); }}>
-            SIGN OUT
+            {a.signOut || "SIGN OUT"}
           </button>
         </header>
 
@@ -215,15 +225,15 @@ export default function AccountClient() {
         <section className="acc-stats">
           <div className="acc-stat">
             <span className="acc-stat-num">{summary.activeCount}</span>
-            <span className="acc-stat-label">ACTIVE</span>
+            <span className="acc-stat-label">{a.active || "ACTIVE"}</span>
           </div>
           <div className="acc-stat">
             <span className="acc-stat-num">{summary.totalCount}</span>
-            <span className="acc-stat-label">TOTAL</span>
+            <span className="acc-stat-label">{a.total || "TOTAL"}</span>
           </div>
           <div className={`acc-stat${summary.outstanding > 0 ? " is-due" : ""}`}>
             <span className="acc-stat-num">{formatJPY(summary.outstanding)}</span>
-            <span className="acc-stat-label">DUE</span>
+            <span className="acc-stat-label">{a.due || "DUE"}</span>
           </div>
         </section>
 
@@ -231,10 +241,10 @@ export default function AccountClient() {
         {notifs.length > 0 && (
           <section className="acc-section">
             <div className="acc-section-head">
-              <h2 className="acc-section-title">UPDATES</h2>
+              <h2 className="acc-section-title">{a.updates || "UPDATES"}</h2>
               {unread > 0 && (
                 <button className="acc-mark-read" onClick={markAllRead}>
-                  MARK ALL READ
+                  {a.markAllRead || "MARK ALL READ"}
                 </button>
               )}
             </div>
@@ -260,7 +270,7 @@ export default function AccountClient() {
              visible, otherwise the customer thinks it was lost. */}
         {requests.filter(r => r.status !== "converted" && r.status !== "declined").length > 0 && (
           <section className="acc-section">
-            <h2 className="acc-section-title">AWAITING OUR REPLY</h2>
+            <h2 className="acc-section-title">{a.awaitingReply || "AWAITING OUR REPLY"}</h2>
             <div className="acc-req-list">
               {requests
                 .filter(r => r.status !== "converted" && r.status !== "declined")
@@ -268,15 +278,15 @@ export default function AccountClient() {
                   <div key={r.id} className="acc-req">
                     <div className="acc-req-top">
                       <span className="acc-req-date">
-                        Sent {new Date(r.created_at).toLocaleDateString("en-US", { day: "numeric", month: "short" })}
+                        {new Date(r.created_at).toLocaleDateString("en-US", { day: "numeric", month: "short" })}
                       </span>
                       <span className="acc-req-status">
-                        {r.status === "new" ? "WAITING" : "REVIEWING"}
+                        {r.status === "new" ? (a.waiting || "WAITING") : (a.reviewing || "REVIEWING")}
                       </span>
                     </div>
                     <p className="acc-req-items">{r.items}</p>
                     <p className="acc-req-hint">
-                      We reply within 24 hours with a quote.
+                      {a.replyHint || "We reply within 24 hours with a quote."}
                     </p>
                   </div>
                 ))}
@@ -286,18 +296,18 @@ export default function AccountClient() {
 
         {/* ── Active orders ── */}
         <section className="acc-section">
-          <h2 className="acc-section-title">IN PROGRESS</h2>
+          <h2 className="acc-section-title">{a.inProgress || "IN PROGRESS"}</h2>
           {loading ? (
-            <p className="acc-loading">Loading your orders…</p>
+            <p className="acc-loading">{a.loadingOrders || "Loading your orders…"}</p>
           ) : active.length === 0 ? (
             <div className="acc-empty">
               <Maneki prop="glass" size={72} />
               <p>
                 {requests.some(r => r.status === "new" || r.status === "read")
-                  ? "Nothing confirmed yet — see your request above."
-                  : "No orders in progress."}
+                  ? (a.nothingConfirmed || "Nothing confirmed yet — see your request above.")
+                  : (a.noOrders || "No orders in progress.")}
               </p>
-              <a href="/request" className="btn btn-gold">REQUEST AN ITEM</a>
+              <a href="/request" className="btn btn-gold">{a.requestItem || "REQUEST AN ITEM"}</a>
             </div>
           ) : (
             <div className="acc-order-grid">
@@ -312,7 +322,7 @@ export default function AccountClient() {
         {/* ── History ── */}
         {past.length > 0 && (
           <section className="acc-section">
-            <h2 className="acc-section-title">HISTORY</h2>
+            <h2 className="acc-section-title">{a.history || "HISTORY"}</h2>
             <div className="acc-order-grid">
               {past.map(c => c.type === "shipment"
                 ? <ShipmentCard key={c.key} shipment={c.shipment} orders={c.orders} />

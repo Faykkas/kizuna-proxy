@@ -220,13 +220,18 @@ export const CUSTOMS = {
 
 const EU_CODES = ["FR","DE","IT","ES","NL","BE","SE","PL","GR","PT","AT","IE","DK","FI","CZ"];
 
+/** Returns which CUSTOMS bucket a country falls into ("US"|"EU"|"GB"|"CA"|"AU"|"DEFAULT") */
+export function customsKeyFor(code) {
+  if (code === "US") return "US";
+  if (code === "GB") return "GB";
+  if (code === "CA") return "CA";
+  if (code === "AU") return "AU";
+  if (EU_CODES.includes(code)) return "EU";
+  return "DEFAULT";
+}
+
 export function customsFor(code) {
-  if (code === "US") return CUSTOMS.US;
-  if (code === "GB") return CUSTOMS.GB;
-  if (code === "CA") return CUSTOMS.CA;
-  if (code === "AU") return CUSTOMS.AU;
-  if (EU_CODES.includes(code)) return CUSTOMS.EU;
-  return CUSTOMS.DEFAULT;
+  return CUSTOMS[customsKeyFor(code)];
 }
 
 /** Rough delivery windows, from Japan Post's published figures */
