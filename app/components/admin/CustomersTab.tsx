@@ -55,10 +55,14 @@ export default function CustomersTab({ tokens }) {
       if (o.customer_id) c.hasAccount = true;
     });
 
+    // "Spent" is what the customer paid in total (item + fee) — the item
+    // price just passes through what we paid to buy it, it isn't ours.
+    // "Fees" is the service fee alone: the actual revenue we earned.
     return [...map.values()].map(c => {
-      const totalRevenue = c.orders.reduce(
+      const totalSpent = c.orders.reduce(
         (s, o) => s + (o.item_price_jpy || 0) + (o.service_fee_jpy || 0), 0
       );
+      const totalFees = c.orders.reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
       const outstanding = c.orders
         .filter(o => !o.shipping_paid && (o.shipping_cost_jpy || 0) > 0)
         .reduce((s, o) => s + o.shipping_cost_jpy, 0);
@@ -66,12 +70,13 @@ export default function CustomersTab({ tokens }) {
       return {
         ...c,
         orderCount: c.orders.length,
-        totalRevenue,
+        totalSpent,
+        totalFees,
         outstanding,
         firstOrder: dates[0] || null,
         lastOrder: dates[dates.length - 1] || null,
       };
-    }).sort((a, b) => b.totalRevenue - a.totalRevenue);
+    }).sort((a, b) => b.totalFees - a.totalFees);
   }, [orders]);
 
   const filtered = useMemo(() => {
@@ -83,7 +88,7 @@ export default function CustomersTab({ tokens }) {
   }, [customers, search]);
 
   const selected = customers.find(c => c.key === selectedKey);
-  const totalAcrossAll = customers.reduce((s, c) => s + c.totalRevenue, 0);
+  const totalFeesAcrossAll = customers.reduce((s, c) => s + c.totalFees, 0);
   const repeatCount = customers.filter(c => c.orderCount > 1).length;
 
   const th = { fontSize: ".34rem", letterSpacing: ".06em", textTransform: "uppercase", color: RED, padding: "0 .4rem", fontFamily: PIXEL, lineHeight: 1.9 };
@@ -94,7 +99,7 @@ export default function CustomersTab({ tokens }) {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "12px", marginBottom: "1.5rem" }}>
         {[
           { label: "CUSTOMERS", value: customers.length, color: INK },
-          { label: "TOTAL REVENUE (JPY)", value: `¥${totalAcrossAll.toLocaleString()}`, color: RED },
+          { label: "TOTAL FEES EARNED (JPY)", value: `¥${totalFeesAcrossAll.toLocaleString()}`, color: RED },
           { label: "REPEAT CUSTOMERS", value: repeatCount, color: VIOLET },
         ].map(s => (
           <div key={s.label} style={{ background: SURFACE, border: `2px solid ${BORDER}`, borderRadius: "12px", padding: "1.1rem 1.2rem", boxShadow: "0 4px 0 rgba(0,0,0,.3)" }}>
@@ -124,15 +129,15 @@ export default function CustomersTab({ tokens }) {
         <p style={{ color: MUTED, padding: "2rem", textAlign: "center" }}>No customers found.</p>
       ) : (
         <div style={{ border: `2px solid ${BORDER}`, borderRadius: "12px", overflow: "hidden" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1.4fr 90px 130px 100px 100px", gap: 0, padding: ".5rem 1rem", background: BG, borderBottom: `2px solid ${BORDER}` }}>
-            {["Client", "Orders", "Total spent", "Last order", ""].map(h => (
+          <div style={{ display: "grid", gridTemplateColumns: "1.2fr 65px 100px 100px 90px 100px", gap: 0, padding: ".5rem 1rem", background: BG, borderBottom: `2px solid ${BORDER}` }}>
+            {["Client", "Orders", "Spent", "Our fees", "Last order", ""].map(h => (
               <div key={h} style={th}>{h}</div>
             ))}
           </div>
           {filtered.map((c, i) => (
             <div key={c.key}
               onClick={() => setSelectedKey(c.key)}
-              style={{ display: "grid", gridTemplateColumns: "1.4fr 90px 130px 100px 100px", gap: 0, padding: ".65rem 1rem", background: i % 2 === 0 ? SURFACE : BG, borderBottom: `2px solid ${BORDER}`, alignItems: "center", cursor: "pointer" }}
+              style={{ display: "grid", gridTemplateColumns: "1.2fr 65px 100px 100px 90px 100px", gap: 0, padding: ".65rem 1rem", background: i % 2 === 0 ? SURFACE : BG, borderBottom: `2px solid ${BORDER}`, alignItems: "center", cursor: "pointer" }}
               onMouseEnter={e => e.currentTarget.style.background = SURFACE2}
               onMouseLeave={e => e.currentTarget.style.background = i % 2 === 0 ? SURFACE : BG}>
               <div style={{ padding: "0 .4rem", overflow: "hidden" }}>
@@ -143,7 +148,8 @@ export default function CustomersTab({ tokens }) {
                 <div style={{ fontSize: ".62rem", color: MUTED, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.email || "no email"}</div>
               </div>
               <div style={{ padding: "0 .4rem", color: INK, fontSize: ".78rem" }}>{c.orderCount}</div>
-              <div style={{ padding: "0 .4rem", color: RED, fontWeight: 500, fontSize: ".78rem" }}>¥{c.totalRevenue.toLocaleString()}</div>
+              <div style={{ padding: "0 .4rem", color: MUTED, fontSize: ".78rem" }}>¥{c.totalSpent.toLocaleString()}</div>
+              <div style={{ padding: "0 .4rem", color: RED, fontWeight: 500, fontSize: ".78rem" }}>¥{c.totalFees.toLocaleString()}</div>
               <div style={{ padding: "0 .4rem", color: MUTED, fontSize: ".72rem" }}>
                 {c.lastOrder ? new Date(c.lastOrder).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit" }) : "—"}
               </div>
@@ -191,11 +197,20 @@ export default function CustomersTab({ tokens }) {
 
               <section className="adm-block">
                 <label className="adm-label">TOTALS</label>
-                <div className="adm-grid-3">
+                <p className="adm-hint" style={{ marginTop: 0 }}>
+                  “Spent” is what they paid us in total — “our fees” is what we actually earned, the rest just covers what we bought on their behalf.
+                </p>
+                <div className="adm-grid-2" style={{ marginBottom: ".6rem" }}>
                   <div>
                     <span className="adm-sublabel">Total spent</span>
-                    <div style={{ fontSize: ".95rem", color: RED, fontFamily: PIXEL, lineHeight: 1.7 }}>{formatJPY(selected.totalRevenue)}</div>
+                    <div style={{ fontSize: ".95rem", color: INK, fontFamily: PIXEL, lineHeight: 1.7 }}>{formatJPY(selected.totalSpent)}</div>
                   </div>
+                  <div>
+                    <span className="adm-sublabel">Our fees</span>
+                    <div style={{ fontSize: ".95rem", color: RED, fontFamily: PIXEL, lineHeight: 1.7 }}>{formatJPY(selected.totalFees)}</div>
+                  </div>
+                </div>
+                <div className="adm-grid-2">
                   <div>
                     <span className="adm-sublabel">Shipping due</span>
                     <div style={{ fontSize: ".95rem", color: selected.outstanding > 0 ? ALERT : INK, fontFamily: PIXEL, lineHeight: 1.7 }}>{formatJPY(selected.outstanding)}</div>

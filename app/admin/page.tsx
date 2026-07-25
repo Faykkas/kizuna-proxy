@@ -824,11 +824,10 @@ function OrdersTab({ supabase, al }) {
   });
 
   // Revenue across whatever is currently filtered — search a name to see
-  // that one customer's total instead of the whole book.
-  const filteredTotal = filtered.reduce(
-    (s, o) => s + (o.item_price_jpy || 0) + (o.service_fee_jpy || 0),
-    0
-  );
+  // that one customer's total instead of the whole book. Revenue is the
+  // service fee only: item_price_jpy just passes through what we paid to
+  // buy the item, it isn't money we earn.
+  const filteredTotal = filtered.reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
 
   // Stats
   const totalFee   = orders.reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
@@ -963,7 +962,7 @@ function OrdersTab({ supabase, al }) {
         <div style={{ padding:".6rem 1rem", background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"8px", fontSize:".75rem", color:MUTED, display:"flex", alignItems:"center", gap:".5rem" }}>
           <span>{filtered.length} order{filtered.length !== 1 ? "s" : ""}</span>
           <span style={{ color:BORDER }}>·</span>
-          <span>total <strong style={{ color:RED }}>¥{filteredTotal.toLocaleString()}</strong></span>
+          <span>fees <strong style={{ color:RED }}>¥{filteredTotal.toLocaleString()}</strong></span>
         </div>
       </div>
 
