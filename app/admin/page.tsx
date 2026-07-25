@@ -6,6 +6,7 @@ import { supabase } from "../lib/supabase";
 import OrderManager from "../components/admin/OrderManager";
 import ShipmentManager from "../components/admin/ShipmentManager";
 import RequestsTab from "../components/admin/RequestsTab";
+import CustomersTab from "../components/admin/CustomersTab";
 import { ALL_STATUSES, statusColor, orderTitle } from "../lib/orderStatus";
 
 
@@ -358,6 +359,7 @@ export default function AdminPage() {
     { id:"news",     label:al.tabs.news },
     { id:"gallery",  label:al.tabs.gallery },
     { id:"orders",   label:al.tabs.orders },
+    { id:"customers",label:"👤 Customers" },
     { id:"stats",    label:al.tabs.stats },
     { id:"events",   label:al.tabs.events || "🎌 Events" },
   ];
@@ -416,6 +418,7 @@ export default function AdminPage() {
         {tab==="news"     && <NewsTab al={al} />}
         {tab==="gallery"  && <GalleryTab al={al} />}
         {tab==="orders"   && <OrdersTab supabase={supabase} al={al} />}
+        {tab==="customers"&& <CustomersTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
         {tab==="stats"    && <StatsTab supabase={supabase} al={al} />}
         {tab==="events"   && <EventsTab supabase={supabase} al={al} />}
       </div>
