@@ -48,7 +48,11 @@ async function paypalToken() {
     body: "grant_type=client_credentials",
   });
 
-  if (!res.ok) throw new Error("PayPal auth failed");
+  if (!res.ok) {
+    const body = await res.text();
+    console.error("PayPal auth failed:", res.status, body);
+    throw new Error("PayPal auth failed");
+  }
   const data = await res.json();
   return data.access_token;
 }
@@ -131,6 +135,7 @@ export async function POST(request) {
 
       const data = await res.json();
       if (!res.ok) {
+        console.error("PayPal create order failed:", res.status, JSON.stringify(data));
         return Response.json({ error: "PayPal rejected the order" }, { status: 502 });
       }
 
@@ -172,6 +177,7 @@ export async function POST(request) {
       const data = await res.json();
 
       if (data.status !== "COMPLETED") {
+        console.error("PayPal capture not completed:", res.status, JSON.stringify(data));
         await admin
           .from("payments")
           .update({ status: "failed" })

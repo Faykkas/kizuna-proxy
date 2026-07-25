@@ -96,9 +96,10 @@ export default function PayButton({ orderId, amountJpy, onPaid }) {
               onPaid?.();
             },
 
-            onError: () => {
+            onError: (err) => {
+              console.error("PayPal Buttons error:", err);
               setState("error");
-              setMessage("Something went wrong with PayPal. Please try again.");
+              setMessage(err?.message || "Something went wrong with PayPal. Please try again.");
             },
           })
           .render(containerRef.current)
