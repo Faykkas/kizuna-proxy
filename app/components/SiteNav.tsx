@@ -42,17 +42,16 @@ export default function SiteNav() {
         <ul className="nav-links">
           <li><a href="/services">{t.nav?.services || "Services"}</a></li>
           <li><a href="/pricing">{t.nav.pricing}</a></li>
+          <li><a href="/shipping">Shipping</a></li>
           <li><a href="/how-it-works">{t.nav?.howItWorks || "How it works"}</a></li>
-          <li><a href="/reviews">{t.nav?.reviews || "Reviews"}</a></li>
           <li><a href="/faq">{t.nav.faq || "FAQ"}</a></li>
-          <li><a href="/events">{t.nav?.events || "Events"}</a></li>
 
-          {/* Guides dropdown */}
+          {/* More dropdown: reviews, events, guides */}
           <li className="nav-dropdown-wrap"
             onMouseEnter={() => setGuidesOpen(true)}
             onMouseLeave={() => setGuidesOpen(false)}>
             <button className="nav-dropdown-btn">
-              {t.blog?.label || "Guides"}
+              More
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
                 style={{marginLeft:".3rem",transition:"transform .2s",transform:guidesOpen?"rotate(180deg)":"rotate(0)"}}>
                 <polyline points="6 9 12 15 18 9"/>
@@ -60,6 +59,16 @@ export default function SiteNav() {
             </button>
             {guidesOpen && (
               <div className="nav-dropdown">
+                <a href="/reviews" className="nav-dropdown-item nav-dropdown-item-wide">
+                  <span className="nav-dropdown-emoji">⭐</span>
+                  <span>{t.nav?.reviews || "Reviews"}</span>
+                </a>
+                <a href="/events" className="nav-dropdown-item nav-dropdown-item-wide">
+                  <span className="nav-dropdown-emoji">📅</span>
+                  <span>{t.nav?.events || "Events"}</span>
+                </a>
+                <div className="nav-dropdown-divider" />
+                <div className="nav-dropdown-label">{t.blog?.label || "Guides"}</div>
                 {BLOG_ITEMS.map(item => (
                   <a key={item.href} href={item.href} className="nav-dropdown-item">
                     <span className="nav-dropdown-emoji">{item.emoji}</span>
@@ -92,6 +101,7 @@ export default function SiteNav() {
           {/* Nav links */}
           <a href="/services" onClick={() => setMobileOpen(false)}>{t.nav?.services || "Services"}</a>
           <a href="/pricing" onClick={() => setMobileOpen(false)}>{t.nav.pricing}</a>
+          <a href="/shipping" onClick={() => setMobileOpen(false)}>Shipping</a>
           <a href="/how-it-works" onClick={() => setMobileOpen(false)}>{t.nav?.howItWorks || "How it works"}</a>
           <a href="/reviews" onClick={() => setMobileOpen(false)}>{t.nav?.reviews || "Reviews"}</a>
           <a href="/faq" onClick={() => setMobileOpen(false)}>{t.nav.faq || "FAQ"}</a>
