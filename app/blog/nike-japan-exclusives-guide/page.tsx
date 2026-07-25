@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "How to Buy Nike Japan Exclusives — Kizuna Proxy Guide 2026",
   description: "Nike Japan releases exclusive sneakers, collabs and limited editions unavailable outside Japan. Buy Nike Japan exclusives with Kizuna Proxy — shipped worldwide.",
   openGraph: {
+    images: ["https://kizunaproxy.com/og-image.png"],
     title: "How to Buy Nike Japan Exclusives — Complete Guide 2026",
     description: "Nike Japan exclusives shipped worldwide via Tokyo proxy service.",
     url: "https://kizunaproxy.com/blog/nike-japan-exclusives-guide",

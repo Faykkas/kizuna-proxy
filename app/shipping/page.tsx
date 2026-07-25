@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://kizunaproxy.com/shipping" },
   openGraph: {
+    images: ["https://kizunaproxy.com/og-image.png"],
     title: "What shipping from Japan really costs — Kizuna Proxy",
     description:
       "EMS rates by weight and country, and the import taxes nobody explains until the parcel is at your door.",

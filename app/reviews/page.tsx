@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   description: "Read verified Reddit and Trustpilot reviews of Kizuna Proxy from customers in the USA, Canada, France, Germany, Greece, Indonesia and more. 5.0 average rating.",
   alternates: { canonical: "https://kizunaproxy.com/reviews" },
   openGraph: {
+    images: ["https://kizunaproxy.com/og-image.png"],
     title: "Customer Reviews — Kizuna Proxy",
     description: "Read verified Reddit and Trustpilot reviews of Kizuna Proxy from customers in the USA, Canada, France, Germany, Greece, Indonesia and more. 5.0 average rating.",
     url: "https://kizunaproxy.com/reviews",

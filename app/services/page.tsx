@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   description: "We buy anything from Japan on your behalf: Mercari, Yahoo Auctions, Rakuten, Amazon JP, Pokémon Center, Nintendo Store, Supreme drops, anime figures and Tokyo store visits. Shipped worldwide.",
   alternates: { canonical: "https://kizunaproxy.com/services" },
   openGraph: {
+    images: ["https://kizunaproxy.com/og-image.png"],
     title: "What We Buy from Japan — Kizuna Proxy",
     description: "We buy anything from Japan on your behalf: Mercari, Yahoo Auctions, Rakuten, Amazon JP, Pokémon Center, Nintendo Store, Supreme drops, anime figures and Tokyo store visits. Shipped worldwide.",
     url: "https://kizunaproxy.com/services",
