@@ -20,19 +20,20 @@ import { useShipmentDetail } from "../../../lib/useOrders";
 import PayButton from "../../../components/account/PayButton";
 import { formatJPY, orderTitle, trackingUrl } from "../../../lib/orderStatus";
 
-const STEPS = [
-  { key: "Awaiting Shipping Payment", label: "Shipping payment due", icon: IconBox },
-  { key: "Shipped", label: "Shipped", icon: IconTruck },
-  { key: "Delivered", label: "Delivered", icon: IconCheck },
-];
-
-function stepIndex(status) {
+function stepIndex(status, STEPS) {
   return STEPS.findIndex(s => s.key === status);
 }
 
 export default function ShipmentDetailClient({ shipmentId }) {
   const router = useRouter();
   const { t } = useLanguage();
+  const od = t.orderDetail || {};
+  const sm = t.orderStatusMap || {};
+  const STEPS = [
+    { key: "Awaiting Shipping Payment", label: sm["Awaiting Shipping Payment"]?.label || "Shipping payment due", icon: IconBox },
+    { key: "Shipped", label: sm["Shipped"]?.label || "Shipped", icon: IconTruck },
+    { key: "Delivered", label: sm["Delivered"]?.label || "Delivered", icon: IconCheck },
+  ];
   const { user, loading: authLoading } = useAuth();
   const { shipment, orders, payment, loading, reload } = useShipmentDetail(shipmentId);
   const [copied, setCopied] = useState(false);
@@ -45,7 +46,7 @@ export default function ShipmentDetailClient({ shipmentId }) {
     return (
       <>
         <SiteNav />
-        <main className="acc-wrap"><p className="acc-loading">Loading…</p></main>
+        <main className="acc-wrap"><p className="acc-loading">{od.loading || "Loading…"}</p></main>
       </>
     );
   }
@@ -57,8 +58,8 @@ export default function ShipmentDetailClient({ shipmentId }) {
         <main className="acc-wrap">
           <div className="acc-empty">
             <Maneki prop="glass" size={80} />
-            <p>Package not found.</p>
-            <a href="/account" className="btn btn-outline">BACK TO ORDERS</a>
+            <p>{od.packageNotFound || "Package not found."}</p>
+            <a href="/account" className="btn btn-outline">{od.backToOrders || "BACK TO ORDERS"}</a>
           </div>
         </main>
         <SiteFooter t={t} />
@@ -66,10 +67,11 @@ export default function ShipmentDetailClient({ shipmentId }) {
     );
   }
 
-  const current = stepIndex(shipment.status);
+  const current = stepIndex(shipment.status, STEPS);
   const itemsTotal = orders.reduce((s, o) => s + (o.item_price_jpy || 0) + (o.service_fee_jpy || 0), 0);
   const track = shipment.tracking_number ? trackingUrl(shipment.tracking_number, shipment.shipping_method) : null;
   const needsPayment = shipment.status === "Awaiting Shipping Payment" && !shipment.shipping_paid && shipment.shipping_cost_jpy > 0;
+  const statusLabel = sm[shipment.status]?.label || shipment.status;
 
   return (
     <>
@@ -77,16 +79,20 @@ export default function ShipmentDetailClient({ shipmentId }) {
       <main className="acc-wrap">
 
         <nav className="breadcrumb ord-crumb">
-          <a href="/account">My orders</a><span>/</span><span>Package #{shipment.id}</span>
+          <a href="/account">{od.myOrders || "My orders"}</a><span>/</span><span>{(od.packageRef || "PACKAGE #{id}").replace("{id}", shipment.id)}</span>
         </nav>
 
         {/* ── Header ── */}
         <header className="ord-head">
           <div>
-            <span className="ord-ref">PACKAGE #{shipment.id}</span>
-            <h1 className="ord-title">{orders.length} order{orders.length !== 1 ? "s" : ""} bundled together</h1>
+            <span className="ord-ref">{(od.packageRef || "PACKAGE #{id}").replace("{id}", shipment.id)}</span>
+            <h1 className="ord-title">
+              {orders.length > 1
+                ? (od.ordersBundledMany || "{n} orders bundled together").replace("{n}", orders.length)
+                : (od.ordersBundledOne || "1 order bundled together")}
+            </h1>
           </div>
-          <span className="ord-badge">{shipment.status}</span>
+          <span className="ord-badge">{statusLabel}</span>
         </header>
 
         {/* ── Progress ── */}
@@ -99,7 +105,7 @@ export default function ShipmentDetailClient({ shipmentId }) {
           <section className="ord-pay">
             <div>
               <span className="ord-pay-label">
-                SHIPPING — {shipment.shipping_method || "international"}
+                {od.shippingLabel || "SHIPPING"} — {shipment.shipping_method || (od.international || "international")}
               </span>
               <span className="ord-pay-amount">{formatJPY(shipment.shipping_cost_jpy)}</span>
             </div>
@@ -116,7 +122,7 @@ export default function ShipmentDetailClient({ shipmentId }) {
 
           {/* ── Steps ── */}
           <section className="ord-panel">
-            <h2 className="ord-panel-title">PROGRESS</h2>
+            <h2 className="ord-panel-title">{od.progress || "PROGRESS"}</h2>
             <ol className="ord-timeline">
               {STEPS.map((step, i) => {
                 const done = current >= 0 && i < current;
@@ -140,38 +146,37 @@ export default function ShipmentDetailClient({ shipmentId }) {
           <div className="ord-side">
 
             <section className="ord-panel">
-              <h2 className="ord-panel-title">DETAILS</h2>
+              <h2 className="ord-panel-title">{od.details || "DETAILS"}</h2>
               <dl className="ord-facts">
                 <div>
-                  <dt>Items &amp; fees</dt>
+                  <dt>{od.itemsAndFees || "Items & fees"}</dt>
                   <dd>{formatJPY(itemsTotal)}</dd>
                 </div>
                 <div>
-                  <dt>Shipping</dt>
+                  <dt>{od.shippingDt || "Shipping"}</dt>
                   <dd>
-                    {shipment.shipping_cost_jpy > 0 ? formatJPY(shipment.shipping_cost_jpy) : "Not yet quoted"}
-                    {shipment.shipping_paid && <span className="ord-paid">PAID</span>}
+                    {shipment.shipping_cost_jpy > 0 ? formatJPY(shipment.shipping_cost_jpy) : (od.notYetQuoted || "Not yet quoted")}
+                    {shipment.shipping_paid && <span className="ord-paid">{od.paidBadge || "PAID"}</span>}
                   </dd>
                 </div>
                 {shipment.shipping_method && (
-                  <div><dt>Method</dt><dd>{shipment.shipping_method}</dd></div>
+                  <div><dt>{od.method || "Method"}</dt><dd>{shipment.shipping_method}</dd></div>
                 )}
               </dl>
             </section>
 
             {shipment.shipping_paid && !shipment.tracking_number && (
               <section className="ord-info">
-                <strong>YOUR PACKAGE SHIPS THIS SUNDAY</strong>
+                <strong>{od.sundayShipTitle || "YOUR PACKAGE SHIPS THIS SUNDAY"}</strong>
                 <p>
-                  We ship all paid packages on Sundays. Your tracking number
-                  will appear here Sunday evening, Japan time.
+                  {od.sundayShipBody || "We ship all paid packages on Sundays. Your tracking number will appear here Sunday evening, Japan time."}
                 </p>
               </section>
             )}
 
             {shipment.tracking_number && (
               <section className="ord-panel">
-                <h2 className="ord-panel-title">TRACKING</h2>
+                <h2 className="ord-panel-title">{od.trackingTitle || "TRACKING"}</h2>
                 <div className="ord-tracking">
                   <code>{shipment.tracking_number}</code>
                   <button
@@ -182,16 +187,16 @@ export default function ShipmentDetailClient({ shipmentId }) {
                     }}
                     className="ord-copy"
                   >
-                    {copied ? "COPIED" : "COPY"}
+                    {copied ? (od.copied || "COPIED") : (od.copy || "COPY")}
                   </button>
                 </div>
                 {track && (
                   <a href={track.url} target="_blank" rel="noopener noreferrer" className="btn btn-gold ord-track-btn">
-                    TRACK ON {track.carrier} →
+                    {(od.trackOn || "TRACK ON {carrier} →").replace("{carrier}", track.carrier)}
                   </a>
                 )}
                 <p className="ord-tracking-hint">
-                  Updates can take 24–48 hours to appear after dispatch.
+                  {od.trackingHint || "Updates can take 24–48 hours to appear after dispatch."}
                 </p>
               </section>
             )}
@@ -201,7 +206,7 @@ export default function ShipmentDetailClient({ shipmentId }) {
 
         {/* ── Orders in this package ── */}
         <section className="ord-panel" style={{ marginTop: "1.25rem" }}>
-          <h2 className="ord-panel-title">WHAT&apos;S INSIDE ({orders.length})</h2>
+          <h2 className="ord-panel-title">{(od.whatsInside || "WHAT'S INSIDE ({n})").replace("{n}", orders.length)}</h2>
           <div className="acc-order-grid">
             {orders.map(o => (
               <a key={o.id} href={`/account/orders/${o.id}`} className="acc-order-card">
@@ -220,7 +225,7 @@ export default function ShipmentDetailClient({ shipmentId }) {
 
         {shipment.notes && (
           <section className="ord-panel" style={{ marginTop: "1.25rem" }}>
-            <h2 className="ord-panel-title">A NOTE FROM US</h2>
+            <h2 className="ord-panel-title">{od.noteFromUs || "A NOTE FROM US"}</h2>
             <p className="ord-note">{shipment.notes}</p>
           </section>
         )}

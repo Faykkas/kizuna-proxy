@@ -96,9 +96,9 @@ function StatusIcon({ name, size = 22 }) {
 function OrderCard({ order }) {
   const { t } = useLanguage();
   const a = t.account || {};
-  const meta = statusMeta(order.status);
+  const meta = statusMeta(order.status, t);
   const pct = progressPercent(order.status, order);
-  const next = nextStep(order.status, order);
+  const next = nextStep(order.status, order, t);
   const action = needsCustomerAction(order.status);
 
   return (
@@ -168,7 +168,7 @@ export default function AccountClient() {
       <>
         <SiteNav />
         <main className="acc-wrap">
-          <p className="acc-loading">Loading…</p>
+          <p className="acc-loading">{t.orderDetail?.loading || "Loading…"}</p>
         </main>
       </>
     );

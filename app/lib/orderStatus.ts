@@ -138,24 +138,32 @@ export function progressPercent(status, order = null) {
   return Math.round((i / (steps.length - 1)) * 100);
 }
 
+/** Looks up the translated {label, hint} for a status key, if the active language has one */
+export function translateStatus(key, t) {
+  return t?.orderStatusMap?.[key] || null;
+}
+
 /** What happens next — answers "where is my order?" without a support message */
-export function nextStep(status, order = null) {
+export function nextStep(status, order = null, t) {
   const s = normaliseStatus(status);
-  if (SPECIAL_STATUSES[s]) return SPECIAL_STATUSES[s].hint;
+  if (SPECIAL_STATUSES[s]) return translateStatus(s, t)?.hint || SPECIAL_STATUSES[s].hint;
 
   const steps = order ? timelineFor(order) : TIMELINE;
   const i = stepIndex(s, order);
   if (i < 0) return null;
   if (i >= steps.length - 1) return null;
-  return steps[i + 1].label;
+  const nxt = steps[i + 1];
+  return translateStatus(nxt.key, t)?.label || nxt.label;
 }
 
-export function statusMeta(status) {
+export function statusMeta(status, t) {
   const s = normaliseStatus(status);
-  return (
-    TIMELINE.find(t => t.key === s) ||
+  const base = (
+    TIMELINE.find(x => x.key === s) ||
     SPECIAL_STATUSES[s] || { label: s, hint: "", icon: "hourglass" }
   );
+  const tr = translateStatus(s, t);
+  return tr ? { ...base, label: tr.label, hint: tr.hint } : base;
 }
 
 /** Does this status require the customer to do something? */

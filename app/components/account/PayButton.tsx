@@ -9,6 +9,7 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { formatJPY } from "../../lib/orderStatus";
+import { useLanguage } from "../../lib/language";
 
 const SDK_ID = "paypal-sdk";
 
@@ -35,6 +36,8 @@ function loadPayPalSdk(clientId) {
 }
 
 export default function PayButton({ orderId, shipmentId, amountJpy, onPaid }) {
+  const { t } = useLanguage();
+  const od = t.orderDetail || {};
   const containerRef = useRef(null);
   const [state, setState] = useState("idle"); // idle | ready | paying | done | error
   const [message, setMessage] = useState("");
@@ -118,8 +121,8 @@ export default function PayButton({ orderId, shipmentId, amountJpy, onPaid }) {
   if (!clientId) {
     return (
       <div className="pay-fallback">
-        <p>Pay {formatJPY(amountJpy)} — contact us for a payment link.</p>
-        <a href="mailto:contact@kizunaproxy.com" className="btn btn-outline">EMAIL US</a>
+        <p>{(od.payFallback || "Pay {amount} — contact us for a payment link.").replace("{amount}", formatJPY(amountJpy))}</p>
+        <a href="mailto:contact@kizunaproxy.com" className="btn btn-outline">{od.emailUs || "EMAIL US"}</a>
       </div>
     );
   }
@@ -127,15 +130,15 @@ export default function PayButton({ orderId, shipmentId, amountJpy, onPaid }) {
   if (state === "done") {
     return (
       <div className="pay-done">
-        <strong>PAYMENT RECEIVED</strong>
-        <span>Thank you! We&apos;ll ship within 24 hours.</span>
+        <strong>{od.paymentReceived || "PAYMENT RECEIVED"}</strong>
+        <span>{od.thankYouShip || "Thank you! We'll ship within 24 hours."}</span>
       </div>
     );
   }
 
   return (
     <div className="pay-wrap">
-      {state === "paying" && <p className="pay-status">Confirming payment…</p>}
+      {state === "paying" && <p className="pay-status">{od.confirmingPayment || "Confirming payment…"}</p>}
       {state === "error" && <p className="pay-error">{message}</p>}
       <div ref={containerRef} className="pay-buttons" />
     </div>

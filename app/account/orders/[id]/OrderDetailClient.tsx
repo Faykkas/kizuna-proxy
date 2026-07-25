@@ -28,18 +28,20 @@ const ICONS = {
   coins: IconMarketplace, glass: IconMarketplace,
 };
 
-function Timeline({ status, events, order }) {
+function Timeline({ status, events, order, t }) {
   const steps = timelineFor(order);
   const current = stepIndex(status, order);
-  const special = SPECIAL_STATUSES[normaliseStatus(status)];
+  const normalised = normaliseStatus(status);
+  const special = SPECIAL_STATUSES[normalised];
+  const specialTr = special ? (t?.orderStatusMap?.[normalised] || special) : null;
 
   // When the order is in a special state (cancelled, action required) the
   // linear timeline would be misleading, so we show the state on its own.
   if (special && special.terminal) {
     return (
       <div className="ord-special">
-        <strong>{special.label}</strong>
-        <p>{special.hint}</p>
+        <strong>{specialTr.label}</strong>
+        <p>{specialTr.hint}</p>
       </div>
     );
   }
@@ -57,6 +59,7 @@ function Timeline({ status, events, order }) {
         const now = current === i;
         const Ico = ICONS[step.icon] || IconHourglass;
         const date = dates[step.key];
+        const stepTr = t?.orderStatusMap?.[step.key] || step;
 
         return (
           <li
@@ -67,8 +70,8 @@ function Timeline({ status, events, order }) {
               {done ? <IconCheck size={14} /> : now ? <Ico size={14} /> : null}
             </span>
             <div className="ord-step-body">
-              <span className="ord-step-label">{step.label}</span>
-              {now && <span className="ord-step-hint">{step.hint}</span>}
+              <span className="ord-step-label">{stepTr.label}</span>
+              {now && <span className="ord-step-hint">{stepTr.hint}</span>}
             </div>
             {date && (
               <span className="ord-step-date">
@@ -93,11 +96,13 @@ export default function OrderDetailClient({ orderId }) {
     if (!authLoading && !user) router.replace("/account/login");
   }, [authLoading, user, router]);
 
+  const od = t.orderDetail || {};
+
   if (authLoading || loading) {
     return (
       <>
         <SiteNav />
-        <main className="acc-wrap"><p className="acc-loading">Loading…</p></main>
+        <main className="acc-wrap"><p className="acc-loading">{od.loading || "Loading…"}</p></main>
       </>
     );
   }
@@ -109,8 +114,8 @@ export default function OrderDetailClient({ orderId }) {
         <main className="acc-wrap">
           <div className="acc-empty">
             <Maneki prop="glass" size={80} />
-            <p>Order not found.</p>
-            <a href="/account" className="btn btn-outline">BACK TO ORDERS</a>
+            <p>{od.orderNotFound || "Order not found."}</p>
+            <a href="/account" className="btn btn-outline">{od.backToOrders || "BACK TO ORDERS"}</a>
           </div>
         </main>
         <SiteFooter t={t} />
@@ -118,7 +123,7 @@ export default function OrderDetailClient({ orderId }) {
     );
   }
 
-  const meta = statusMeta(order.status);
+  const meta = statusMeta(order.status, t);
   const action = needsCustomerAction(order.status);
   const itemTotal = (order.item_price_jpy || 0) + (order.service_fee_jpy || 0);
   const shipping = order.shipping_cost_jpy || 0;
@@ -129,7 +134,7 @@ export default function OrderDetailClient({ orderId }) {
       <main className="acc-wrap">
 
         <nav className="breadcrumb ord-crumb">
-          <a href="/account">My orders</a><span>/</span><span>{order.public_ref}</span>
+          <a href="/account">{od.myOrders || "My orders"}</a><span>/</span><span>{order.public_ref}</span>
         </nav>
 
         {/* ── Header ── */}
@@ -153,18 +158,20 @@ export default function OrderDetailClient({ orderId }) {
           <section className="ord-pay">
             <div>
               <span className="ord-pay-label">
-                PACKAGE — {shipmentOrders.length} order{shipmentOrders.length !== 1 ? "s" : ""} bundled together
+                {od.packagePrefix || "PACKAGE"} — {shipmentOrders.length > 1
+                  ? (od.ordersBundledMany || "{n} orders bundled together").replace("{n}", shipmentOrders.length)
+                  : (od.ordersBundledOne || "1 order bundled together")}
               </span>
               <span className="ord-pay-amount" style={{ fontSize: ".7rem" }}>
                 {shipment.shipping_paid
-                  ? "Shipping paid"
+                  ? (od.shippingPaid || "Shipping paid")
                   : shipment.shipping_cost_jpy > 0
-                    ? `${formatJPY(shipment.shipping_cost_jpy)} shipping due`
-                    : "Shipping not yet quoted"}
+                    ? (od.shippingDue || "{n} shipping due").replace("{n}", formatJPY(shipment.shipping_cost_jpy))
+                    : (od.shippingNotQuoted || "Shipping not yet quoted")}
               </span>
             </div>
             <a href={`/account/shipments/${shipment.id}`} className="btn btn-gold">
-              VIEW PACKAGE →
+              {od.viewPackage || "VIEW PACKAGE →"}
             </a>
           </section>
         )}
@@ -174,8 +181,8 @@ export default function OrderDetailClient({ orderId }) {
           <section className="ord-pay">
             <div className="ord-pay-left">
               <span className="ord-pay-label">
-                SHIPPING — {order.shipping_method || "international"}
-                {order.delivery_country ? ` to ${order.delivery_country}` : ""}
+                {od.shippingLabel || "SHIPPING"} — {order.shipping_method || (od.international || "international")}
+                {order.delivery_country ? (od.toCountry || " to {country}").replace("{country}", order.delivery_country) : ""}
               </span>
               <span className="ord-pay-amount">{formatJPY(shipping)}</span>
             </div>
@@ -191,7 +198,7 @@ export default function OrderDetailClient({ orderId }) {
         {normaliseStatus(order.status) === "Awaiting Event" && order.event_date && (
           <section className="ord-event-banner">
             <div>
-              <span className="ord-event-label">EVENT DATE</span>
+              <span className="ord-event-label">{od.eventDateLabel || "EVENT DATE"}</span>
               <span className="ord-event-date">
                 {new Date(order.event_date).toLocaleDateString("en-US",
                   { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
@@ -203,10 +210,10 @@ export default function OrderDetailClient({ orderId }) {
                 const days = Math.ceil(
                   (new Date(order.event_date) - new Date()) / 86400000
                 );
-                if (days > 1) return `IN ${days} DAYS`;
-                if (days === 1) return "TOMORROW";
-                if (days === 0) return "TODAY";
-                return "PASSED";
+                if (days > 1) return (od.inDays || "IN {n} DAYS").replace("{n}", days);
+                if (days === 1) return od.tomorrow || "TOMORROW";
+                if (days === 0) return od.today || "TODAY";
+                return od.passed || "PASSED";
               })()}
             </span>
           </section>
@@ -214,9 +221,9 @@ export default function OrderDetailClient({ orderId }) {
 
         {action && order.status === "Action Required" && (
           <section className="ord-alert">
-            <strong>We need something from you</strong>
-            <p>{order.notes || "Please check your email or get in touch."}</p>
-            <a href="mailto:contact@kizunaproxy.com" className="btn btn-outline">CONTACT US</a>
+            <strong>{od.needSomething || "We need something from you"}</strong>
+            <p>{order.notes || (od.checkEmailOrContact || "Please check your email or get in touch.")}</p>
+            <a href="mailto:contact@kizunaproxy.com" className="btn btn-outline">{od.contactUs || "CONTACT US"}</a>
           </section>
         )}
 
@@ -224,38 +231,38 @@ export default function OrderDetailClient({ orderId }) {
 
           {/* ── Timeline ── */}
           <section className="ord-panel">
-            <h2 className="ord-panel-title">PROGRESS</h2>
-            <Timeline status={order.status} events={events} order={order} />
+            <h2 className="ord-panel-title">{od.progress || "PROGRESS"}</h2>
+            <Timeline status={order.status} events={events} order={order} t={t} />
           </section>
 
           {/* ── Details ── */}
           <div className="ord-side">
 
             <section className="ord-panel">
-              <h2 className="ord-panel-title">DETAILS</h2>
+              <h2 className="ord-panel-title">{od.details || "DETAILS"}</h2>
               <dl className="ord-facts">
                 <div>
-                  <dt>Item &amp; fee</dt>
+                  <dt>{od.itemAndFee || "Item & fee"}</dt>
                   <dd>{formatJPY(itemTotal)}</dd>
                 </div>
                 {!shipment && shipping > 0 && (
                   <div>
-                    <dt>Shipping</dt>
+                    <dt>{od.shippingDt || "Shipping"}</dt>
                     <dd>
                       {formatJPY(shipping)}
-                      {order.shipping_paid && <span className="ord-paid">PAID</span>}
+                      {order.shipping_paid && <span className="ord-paid">{od.paidBadge || "PAID"}</span>}
                     </dd>
                   </div>
                 )}
                 {!shipment && order.shipping_method && (
-                  <div><dt>Method</dt><dd>{order.shipping_method}</dd></div>
+                  <div><dt>{od.method || "Method"}</dt><dd>{order.shipping_method}</dd></div>
                 )}
                 {order.delivery_country && (
-                  <div><dt>Destination</dt><dd>{order.delivery_country}</dd></div>
+                  <div><dt>{od.destination || "Destination"}</dt><dd>{order.delivery_country}</dd></div>
                 )}
                 {order.purchase_date && (
                   <div>
-                    <dt>Ordered</dt>
+                    <dt>{od.ordered || "Ordered"}</dt>
                     <dd>{new Date(order.purchase_date).toLocaleDateString("en-US",
                       { year: "numeric", month: "short", day: "numeric" })}</dd>
                   </div>
@@ -266,10 +273,9 @@ export default function OrderDetailClient({ orderId }) {
             {/* ── Paid, waiting to ship: tracking isn't up yet, say when it will be ── */}
             {!shipment && order.shipping_paid && !order.tracking_number && (
               <section className="ord-info">
-                <strong>YOUR PACKAGE SHIPS THIS SUNDAY</strong>
+                <strong>{od.sundayShipTitle || "YOUR PACKAGE SHIPS THIS SUNDAY"}</strong>
                 <p>
-                  We ship all paid packages on Sundays. Your tracking number
-                  will appear here Sunday evening, Japan time.
+                  {od.sundayShipBody || "We ship all paid packages on Sundays. Your tracking number will appear here Sunday evening, Japan time."}
                 </p>
               </section>
             )}
@@ -277,31 +283,31 @@ export default function OrderDetailClient({ orderId }) {
             {/* ── Tracking (not shown when bundled — tracking lives on the package) ── */}
             {!shipment && order.tracking_number && (
               <section className="ord-panel">
-                <h2 className="ord-panel-title">TRACKING</h2>
+                <h2 className="ord-panel-title">{od.trackingTitle || "TRACKING"}</h2>
                 <div className="ord-tracking">
                   <code>{order.tracking_number}</code>
                   <button
                     onClick={() => navigator.clipboard?.writeText(order.tracking_number)}
                     className="ord-copy"
                   >
-                    COPY
+                    {od.copy || "COPY"}
                   </button>
                 </div>
                 {(() => {
-                  const t = trackingUrl(order.tracking_number, order.shipping_method);
-                  return t ? (
+                  const tr = trackingUrl(order.tracking_number, order.shipping_method);
+                  return tr ? (
                     <a
-                      href={t.url}
+                      href={tr.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-gold ord-track-btn"
                     >
-                      TRACK ON {t.carrier} →
+                      {(od.trackOn || "TRACK ON {carrier} →").replace("{carrier}", tr.carrier)}
                     </a>
                   ) : null;
                 })()}
                 <p className="ord-tracking-hint">
-                  Updates can take 24–48 hours to appear after dispatch.
+                  {od.trackingHint || "Updates can take 24–48 hours to appear after dispatch."}
                 </p>
               </section>
             )}
@@ -309,18 +315,18 @@ export default function OrderDetailClient({ orderId }) {
             {/* ── Event info ── */}
             {order.event_name && (
               <section className="ord-panel">
-                <h2 className="ord-panel-title">EVENT</h2>
+                <h2 className="ord-panel-title">{od.eventTitle || "EVENT"}</h2>
                 <dl className="ord-facts">
-                  <div><dt>Name</dt><dd>{order.event_name}</dd></div>
+                  <div><dt>{od.name || "Name"}</dt><dd>{order.event_name}</dd></div>
                   {order.event_date && (
                     <div>
-                      <dt>Date</dt>
+                      <dt>{od.date || "Date"}</dt>
                       <dd>{new Date(order.event_date).toLocaleDateString("en-US",
                         { year: "numeric", month: "short", day: "numeric" })}</dd>
                     </div>
                   )}
-                  {order.event_status && <div><dt>Status</dt><dd>{order.event_status}</dd></div>}
-                  {order.event_result && <div><dt>Result</dt><dd>{order.event_result}</dd></div>}
+                  {order.event_status && <div><dt>{od.statusDt || "Status"}</dt><dd>{order.event_status}</dd></div>}
+                  {order.event_result && <div><dt>{od.result || "Result"}</dt><dd>{order.event_result}</dd></div>}
                 </dl>
               </section>
             )}
@@ -331,9 +337,9 @@ export default function OrderDetailClient({ orderId }) {
         {/* ── Photos ── */}
         {photos.length > 0 && (
           <section className="ord-panel ord-photos-panel">
-            <h2 className="ord-panel-title">PHOTOS ({photos.length})</h2>
+            <h2 className="ord-panel-title">{(od.photosTitle || "PHOTOS ({n})").replace("{n}", photos.length)}</h2>
             <p className="ord-photos-hint">
-              Taken when your item reached our Tokyo office. Tap to enlarge.
+              {od.photosHint || "Taken when your item reached our Tokyo office. Tap to enlarge."}
             </p>
             <div className="ord-photos">
               {photos.map(p => (
@@ -348,7 +354,7 @@ export default function OrderDetailClient({ orderId }) {
         {/* ── Note from us ── */}
         {order.notes && !action && (
           <section className="ord-panel">
-            <h2 className="ord-panel-title">A NOTE FROM US</h2>
+            <h2 className="ord-panel-title">{od.noteFromUs || "A NOTE FROM US"}</h2>
             <p className="ord-note">{order.notes}</p>
           </section>
         )}
