@@ -7,6 +7,7 @@
 // ships, and how to reach them. The rest belongs in the conversation.
 
 import { useEffect, useState } from "react";
+import { track } from "@vercel/analytics";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../lib/auth";
 import Maneki from "./pixel/Maneki";
@@ -78,6 +79,7 @@ export default function RequestForm({ t }) {
     });
 
     if (!error) {
+      track("request_submitted", { country: form.country });
       setStatus("success");
       setForm(emptyForm);
       return;
@@ -91,7 +93,11 @@ export default function RequestForm({ t }) {
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({ ...form }),
       });
-      if (res.ok) { setStatus("success"); setForm(emptyForm); }
+      if (res.ok) {
+        track("request_submitted", { country: form.country, fallback: true });
+        setStatus("success");
+        setForm(emptyForm);
+      }
       else setStatus("error");
     } catch { setStatus("error"); }
   }
