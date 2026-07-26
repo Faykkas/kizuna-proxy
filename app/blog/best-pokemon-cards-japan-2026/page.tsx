@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 import PokemonCardsClient from "./PokemonCardsClient";
+import { blogLanguageAlternates } from "../hreflang";
 
 export const metadata: Metadata = {
   title: "Best Pokémon Cards to Buy from Japan in 2026 | Kizuna Proxy",
   description: "The most sought-after Japanese Pokémon card sets in 2026 — exclusive booster packs, vintage cards, and promo sets only available in Japan. Learn how to get them shipped worldwide.",
+  alternates: {
+    canonical: "/blog/best-pokemon-cards-japan-2026",
+    languages: blogLanguageAlternates("best-pokemon-cards-japan-2026"),
+  },
   openGraph: {
     images: ["https://kizunaproxy.com/og-image.png"],
     title: "Best Pokémon Cards to Buy from Japan in 2026",

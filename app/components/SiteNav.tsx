@@ -3,6 +3,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { useLanguage } from "../lib/language";
 import { LANG_LABELS } from "../translations";
 import { useAuth } from "../lib/auth";
@@ -49,7 +50,7 @@ export default function SiteNav() {
 
         {/* ── Logo ── */}
         <a href="/" className="logo">
-          <img src="/logo.png" alt="Kizuna Proxy" style={{height:"42px",width:"42px",imageRendering:"pixelated"}} />
+          <Image src="/logo.png" alt="Kizuna Proxy" width={42} height={42} priority style={{imageRendering:"pixelated"}} />
           <div>
             <div className="logo-name"><span className="g">Kizuna</span> Proxy</div>
             <div className="logo-sub">Tokyo Proxy Service</div>

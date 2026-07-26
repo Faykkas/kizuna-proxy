@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { SUPPORTED_LANGS } from "./translations";
 
 const BASE = "https://kizunaproxy.com";
 
@@ -13,6 +14,8 @@ const BLOG_SLUGS = [
   "japanese-trading-cards-guide-2026",
   "japan-shipping-guide-2026",
 ];
+
+const NON_EN_LOCALES = SUPPORTED_LANGS.filter((l) => l !== "en");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -36,5 +39,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "monthly" as const,
   }));
 
-  return [...main, ...blog].map(entry => ({ ...entry, lastModified: now }));
+  const blogLocales = NON_EN_LOCALES.flatMap(locale =>
+    BLOG_SLUGS.map(slug => ({
+      url: `${BASE}/blog/${locale}/${slug}`,
+      priority: 0.5,
+      changeFrequency: "monthly" as const,
+    }))
+  );
+
+  return [...main, ...blog, ...blogLocales].map(entry => ({ ...entry, lastModified: now }));
 }

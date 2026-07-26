@@ -1,10 +1,15 @@
 // @ts-nocheck
 import type { Metadata } from "next";
 import ShippingGuideClient from "./ShippingGuideClient";
+import { blogLanguageAlternates } from "../hreflang";
 
 export const metadata: Metadata = {
   title: "Japan International Shipping Guide 2026 — EMS, FedEx, DHL | Kizuna Proxy",
   description: "Complete guide to shipping from Japan in 2026. EMS, FedEx, DHL, Yamato compared. USA $100 gift limit explained. How to choose the best shipping method for your order.",
+  alternates: {
+    canonical: "/blog/japan-shipping-guide-2026",
+    languages: blogLanguageAlternates("japan-shipping-guide-2026"),
+  },
   openGraph: {
     images: ["https://kizunaproxy.com/og-image.png"],
     title: "Japan Shipping Guide 2026 — EMS vs FedEx vs DHL",

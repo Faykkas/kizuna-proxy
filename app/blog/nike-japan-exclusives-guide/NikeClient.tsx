@@ -4,10 +4,10 @@
 import { useLanguage } from "../../lib/language";
 import { guideTranslations } from "../../guideTranslations";
 
-export default function NikeClient() {
+export default function NikeClient({ locale } = {}) {
   const { lang } = useLanguage();
   const data = guideTranslations.nike;
-  const g = data[lang] || data.en;
+  const g = data[locale || lang] || data.en;
 
   return (
     <main className="blog-page">

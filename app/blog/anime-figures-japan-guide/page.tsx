@@ -1,10 +1,15 @@
 // @ts-nocheck
 import type { Metadata } from "next";
 import AnimeFiguresClient from "./AnimeFiguresClient";
+import { blogLanguageAlternates } from "../hreflang";
 
 export const metadata: Metadata = {
   title: "How to Buy Anime Figures from Japan — Kizuna Proxy Guide 2026",
   description: "Buy anime figures directly from Japan — Demon Slayer, One Piece, Dragon Ball, Jujutsu Kaisen. Exclusive Japanese releases shipped worldwide via Kizuna Proxy.",
+  alternates: {
+    canonical: "/blog/anime-figures-japan-guide",
+    languages: blogLanguageAlternates("anime-figures-japan-guide"),
+  },
   openGraph: {
     images: ["https://kizunaproxy.com/og-image.png"],
     title: "How to Buy Anime Figures from Japan — Complete Guide 2026",

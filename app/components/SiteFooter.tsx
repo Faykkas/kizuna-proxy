@@ -1,6 +1,7 @@
 // @ts-nocheck
 "use client";
 
+import Image from "next/image";
 import { IconInstagram, IconTiktok } from "./ui";
 
 export default function SiteFooter({ t }: { t: any }) {
@@ -9,7 +10,7 @@ export default function SiteFooter({ t }: { t: any }) {
         <div className="footer-grid">
           <div>
             <div className="footer-logo-wrap">
-              <img src="/logo.png" alt="Kizuna Proxy" style={{height:"34px",width:"34px",imageRendering:"pixelated"}} />
+              <Image src="/logo.png" alt="Kizuna Proxy" width={34} height={34} style={{imageRendering:"pixelated"}} />
               <div className="footer-logo"><span className="g">Kizuna</span> Proxy</div>
             </div>
 <p className="footer-tagline">{t.footerNav?.tagline || "Tokyo-based proxy service. Your trusted link to Japan."}</p>

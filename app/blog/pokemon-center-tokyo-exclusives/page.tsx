@@ -1,10 +1,15 @@
 // @ts-nocheck
 import type { Metadata } from "next";
 import PokemonCenterClient from "./PokemonCenterClient";
+import { blogLanguageAlternates } from "../hreflang";
 
 export const metadata: Metadata = {
   title: "Pokémon Center Tokyo — Exclusive Items Guide 2026 | Kizuna Proxy",
   description: "Pokémon Center Tokyo carries exclusive plush, cards, and merchandise unavailable outside Japan. Buy Pokémon Center Tokyo exclusives shipped worldwide via Kizuna Proxy.",
+  alternates: {
+    canonical: "/blog/pokemon-center-tokyo-exclusives",
+    languages: blogLanguageAlternates("pokemon-center-tokyo-exclusives"),
+  },
   openGraph: {
     images: ["https://kizunaproxy.com/og-image.png"],
     title: "Pokémon Center Tokyo Exclusives — Buy & Ship Worldwide 2026",

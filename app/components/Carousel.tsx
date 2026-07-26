@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import Image from "next/image";
 import { SLIDES } from "./data";
 
 // ─── FILMSTRIP CAROUSEL ───────────────────────────────────────────────────────
@@ -38,13 +39,20 @@ export default function Carousel({ slides = SLIDES }: { slides?: typeof SLIDES }
       onTouchEnd={e => { const dx = e.changedTouches[0].clientX - touchStartX.current; if (Math.abs(dx) > 40) move(dx < 0 ? 1 : -1); }}>
       <div className="filmstrip-stage">
         <div className="filmstrip-side" onClick={() => move(-1)}>
-          <img src={slides[prev].src} alt={slides[prev].alt} onError={e => { (e.target as HTMLImageElement).style.opacity="0"; }} />
+          <Image src={slides[prev].src} alt={slides[prev].alt} fill sizes="(max-width: 900px) 0px, 20vw" onError={e => { (e.target as HTMLImageElement).style.opacity="0"; }} />
           <div className="filmstrip-prev-overlay" />
         </div>
         <div className="filmstrip-main">
           {slides.map((s, i) => (
             <div key={i} className={`filmstrip-slide${i === current ? " active" : ""}`}>
-              <img src={s.src} alt={s.alt} onError={e => { (e.target as HTMLImageElement).style.opacity="0"; }} />
+              <Image
+                src={s.src}
+                alt={s.alt}
+                fill
+                sizes="(max-width: 900px) 100vw, 55vw"
+                priority={i === 0}
+                onError={e => { (e.target as HTMLImageElement).style.opacity="0"; }}
+              />
               <div className="filmstrip-caption">
                 <div className="filmstrip-caption-inner">
                   <strong>{s.title}</strong>
@@ -62,7 +70,7 @@ export default function Carousel({ slides = SLIDES }: { slides?: typeof SLIDES }
           </button>
         </div>
         <div className="filmstrip-side" onClick={() => move(1)}>
-          <img src={slides[next].src} alt={slides[next].alt} onError={e => { (e.target as HTMLImageElement).style.opacity="0"; }} />
+          <Image src={slides[next].src} alt={slides[next].alt} fill sizes="(max-width: 900px) 0px, 20vw" onError={e => { (e.target as HTMLImageElement).style.opacity="0"; }} />
           <div className="filmstrip-next-overlay" />
         </div>
       </div>
