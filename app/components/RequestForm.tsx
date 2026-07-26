@@ -80,6 +80,18 @@ export default function RequestForm({ t }) {
 
     if (!error) {
       track("request_submitted", { country: form.country });
+      fetch("/api/notify-request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          country: form.country,
+          items,
+          budget: form.budget,
+          contact: form.contact,
+        }),
+      }).catch(err => console.error("notify-request failed:", err));
       setStatus("success");
       setForm(emptyForm);
       return;
