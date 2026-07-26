@@ -14,6 +14,21 @@ import Maneki from "./pixel/Maneki";
 
 const FORMSPREE_ID = "https://formspree.io/f/mnjoypyk";
 
+// Splits a "...{email}...{phone}..." translation on its tokens and swaps
+// each one for the matching clickable link, so the sentence around them
+// stays translatable while the contact details stay real anchors.
+function renderContactAlt(template) {
+  return template.split(/(\{email\}|\{phone\})/g).map((part, i) => {
+    if (part === "{email}") {
+      return <a key={i} href="mailto:kizunaproxy@gmail.com">kizunaproxy@gmail.com</a>;
+    }
+    if (part === "{phone}") {
+      return <a key={i} href="https://wa.me/819044595568" target="_blank" rel="noopener noreferrer">+81 90 4459 5568</a>;
+    }
+    return part;
+  });
+}
+
 const emptyForm = {
   message: "",
   email: "",
@@ -26,6 +41,7 @@ const emptyForm = {
 };
 
 export default function RequestForm({ t }) {
+  const rt = t?.request || {};
   const { user, profile } = useAuth();
   const [form, setForm] = useState(emptyForm);
   const [errors, setErrors] = useState({});
@@ -121,6 +137,9 @@ export default function RequestForm({ t }) {
         <p className="req-success-title">GOT IT</p>
         <p className="req-success-desc">
           We&apos;ll reply within 24 hours with a quote. Check your inbox.
+        </p>
+        <p className="req-note">
+          {renderContactAlt(rt.contactAlt || "You can also reach us directly at {email} or by phone at {phone}.")}
         </p>
         {user ? (
           <a href="/account" className="btn btn-gold">SEE IT IN MY ACCOUNT</a>

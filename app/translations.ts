@@ -106,6 +106,7 @@ const en = {
     submit: "Send request", sending: "Sending…", errorMsg: "Something went wrong. Please try again.",
     successTitle: "Request sent!", successDesc: "We'll get back to you within 24 hours.", successBtn: "Send another request",
     footNote: "Your information is never shared with third parties.",
+    contactAlt: "You can also reach us directly at {email} or by phone at {phone}.",
   },
   faq: {
     label: "FAQ", title: "Common", titleEm: "questions", contactPrefix: "Can't find your answer?", contactEmail: "Email us", contactSuffix: "— we reply within 24 hours.", ctaTitle: "Still have a question?", ctaDesc: "We reply within 24 hours — real answers, no bots.", ctaBtn: "Contact us →",
@@ -413,6 +414,7 @@ const fr: Copy = {
     submit: "Envoyer la demande", sending: "Envoi…", errorMsg: "Une erreur est survenue. Merci de réessayer.",
     successTitle: "Demande envoyée !", successDesc: "Nous vous répondrons sous 24h.", successBtn: "Envoyer une autre demande",
     footNote: "Vos informations ne sont jamais partagées avec des tiers.",
+    contactAlt: "Vous pouvez aussi nous contacter directement par email à {email} ou par téléphone au {phone}.",
   },
   faq: {
     label: "FAQ", title: "Questions", titleEm: "fréquentes", contactPrefix: "Vous ne trouvez pas votre réponse ?", contactEmail: "Écrivez-nous", contactSuffix: "— nous répondons sous 24h.", ctaTitle: "Une autre question ?", ctaDesc: "Nous répondons sous 24h — de vraies réponses, pas de bots.", ctaBtn: "Nous contacter →",
@@ -718,6 +720,7 @@ const ja: Copy = {
     submit: "リクエストを送信", sending: "送信中…", errorMsg: "エラーが発生しました。もう一度お試しください。",
     successTitle: "リクエストを送信しました！", successDesc: "24時間以内にご連絡いたします。", successBtn: "別のリクエストを送る",
     footNote: "お客様の情報を第三者と共有することはありません。",
+    contactAlt: "{email} へのメール、または {phone} へのお電話でも直接ご連絡いただけます。",
   },
   faq: {
     label: "よくある質問", title: "よくある", titleEm: "ご質問", contactPrefix: "answerが見つかりませんか？", contactEmail: "メールでお問い合わせ", contactSuffix: "— 24時間以内に返信します。", ctaTitle: "他にもご質問がありますか？", ctaDesc: "24時間以内に返信 — ボットではなく本物の回答です。", ctaBtn: "お問い合わせ →",
@@ -1023,6 +1026,7 @@ const es: Copy = {
     submit: "Enviar solicitud", sending: "Enviando…", errorMsg: "Algo salió mal. Por favor, inténtalo de nuevo.",
     successTitle: "¡Solicitud enviada!", successDesc: "Te responderemos en 24 horas.", successBtn: "Enviar otra solicitud",
     footNote: "Tu información nunca se comparte con terceros.",
+    contactAlt: "También puedes contactarnos directamente por email a {email} o por teléfono al {phone}.",
   },
   faq: {
     label: "Preguntas frecuentes", title: "Preguntas", titleEm: "comunes", contactPrefix: "¿No encuentras tu respuesta?", contactEmail: "Escríbenos", contactSuffix: "— respondemos en 24 horas.", ctaTitle: "¿Aún tienes una pregunta?", ctaDesc: "Respondemos en 24 horas — respuestas reales, sin bots.", ctaBtn: "Contáctanos →",
@@ -1328,6 +1332,7 @@ const it: Copy = {
     submit: "Invia richiesta", sending: "Invio…", errorMsg: "Qualcosa è andato storto. Riprova.",
     successTitle: "Richiesta inviata!", successDesc: "Ti risponderemo entro 24 ore.", successBtn: "Invia un'altra richiesta",
     footNote: "Le tue informazioni non vengono mai condivise con terzi.",
+    contactAlt: "Puoi anche contattarci direttamente via email a {email} o per telefono al {phone}.",
   },
   faq: {
     label: "FAQ", title: "Domande", titleEm: "comuni", contactPrefix: "Non trovi la tua risposta?", contactEmail: "Scrivici", contactSuffix: "— rispondiamo entro 24 ore.", ctaTitle: "Hai ancora una domanda?", ctaDesc: "Rispondiamo entro 24 ore — risposte vere, niente bot.", ctaBtn: "Contattaci →",
@@ -1633,6 +1638,7 @@ const de: Copy = {
     submit: "Anfrage senden", sending: "Senden…", errorMsg: "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
     successTitle: "Anfrage gesendet!", successDesc: "Wir melden uns innerhalb von 24 Stunden.", successBtn: "Weitere Anfrage senden",
     footNote: "Deine Informationen werden niemals an Dritte weitergegeben.",
+    contactAlt: "Du kannst uns auch direkt per E-Mail an {email} oder telefonisch unter {phone} erreichen.",
   },
   faq: {
     label: "FAQ", title: "Häufige", titleEm: "Fragen", contactPrefix: "Deine Antwort nicht gefunden?", contactEmail: "Schreib uns", contactSuffix: "— wir antworten innerhalb von 24 Stunden.", ctaTitle: "Noch eine Frage?", ctaDesc: "Wir antworten innerhalb von 24 Stunden — echte Antworten, keine Bots.", ctaBtn: "Kontaktiere uns →",
@@ -1938,6 +1944,7 @@ const ko: Copy = {
     submit: "요청 보내기", sending: "전송 중…", errorMsg: "문제가 발생했습니다. 다시 시도해 주세요.",
     successTitle: "요청이 전송되었습니다!", successDesc: "24시간 이내에 답변드리겠습니다.", successBtn: "다른 요청 보내기",
     footNote: "고객님의 정보는 제3자와 절대 공유되지 않습니다.",
+    contactAlt: "{email} 이메일이나 {phone} 전화로도 직접 연락하실 수 있습니다.",
   },
   faq: {
     label: "자주 묻는 질문", title: "자주 묻는", titleEm: "질문", contactPrefix: "원하는 답변을 찾지 못하셨나요?", contactEmail: "이메일 문의", contactSuffix: "— 24시간 이내에 답변드립니다.", ctaTitle: "더 궁금한 점이 있으신가요?", ctaDesc: "24시간 이내 답변 — 봇이 아닌 진짜 답변입니다.", ctaBtn: "문의하기 →",
@@ -2243,6 +2250,7 @@ const zh: Copy = {
     submit: "发送求购请求", sending: "发送中…", errorMsg: "出了点问题，请重试。",
     successTitle: "请求已发送！", successDesc: "我们将在24小时内回复您。", successBtn: "发送另一个请求",
     footNote: "您的信息绝不会与第三方共享。",
+    contactAlt: "您也可以直接通过邮箱 {email} 或电话 {phone} 与我们联系。",
   },
   faq: {
     label: "常见问题", title: "常见", titleEm: "问题", contactPrefix: "没有找到您要的答案？", contactEmail: "发邮件给我们", contactSuffix: "— 我们将在24小时内回复。", ctaTitle: "还有其他问题？", ctaDesc: "24小时内回复 — 真人回答，非机器人。", ctaBtn: "联系我们 →",
@@ -2548,6 +2556,7 @@ const pt: Copy = {
     submit: "Enviar pedido", sending: "A enviar…", errorMsg: "Algo correu mal. Por favor tente novamente.",
     successTitle: "Pedido enviado!", successDesc: "Responderemos em 24 horas.", successBtn: "Enviar outro pedido",
     footNote: "As suas informações nunca são partilhadas com terceiros.",
+    contactAlt: "Também pode contactar-nos diretamente por email em {email} ou por telefone no {phone}.",
   },
   faq: {
     label: "Perguntas frequentes", title: "Perguntas", titleEm: "comuns", contactPrefix: "Não encontra a sua resposta?", contactEmail: "Envie-nos um email", contactSuffix: "— respondemos em 24 horas.", ctaTitle: "Ainda tem uma pergunta?", ctaDesc: "Respondemos em 24 horas — respostas reais, sem bots.", ctaBtn: "Contacte-nos →",
@@ -2853,6 +2862,7 @@ const id: Copy = {
     submit: "Kirim permintaan", sending: "Mengirim…", errorMsg: "Ada yang tidak beres. Silakan coba lagi.",
     successTitle: "Permintaan terkirim!", successDesc: "Kami akan membalas dalam 24 jam.", successBtn: "Kirim permintaan lain",
     footNote: "Informasi Anda tidak pernah dibagikan ke pihak ketiga.",
+    contactAlt: "Anda juga bisa menghubungi kami langsung lewat email di {email} atau telepon di {phone}.",
   },
   faq: {
     label: "FAQ", title: "Pertanyaan", titleEm: "umum", contactPrefix: "Tidak menemukan jawaban Anda?", contactEmail: "Email kami", contactSuffix: "— kami membalas dalam 24 jam.", ctaTitle: "Masih ada pertanyaan?", ctaDesc: "Kami membalas dalam 24 jam — jawaban sungguhan, bukan bot.", ctaBtn: "Hubungi kami →",
@@ -3158,6 +3168,7 @@ const vi: Copy = {
     submit: "Gửi yêu cầu", sending: "Đang gửi…", errorMsg: "Đã có lỗi xảy ra. Vui lòng thử lại.",
     successTitle: "Đã gửi yêu cầu!", successDesc: "Chúng tôi sẽ phản hồi trong 24 giờ.", successBtn: "Gửi yêu cầu khác",
     footNote: "Thông tin của bạn không bao giờ được chia sẻ với bên thứ ba.",
+    contactAlt: "Bạn cũng có thể liên hệ trực tiếp với chúng tôi qua email {email} hoặc điện thoại {phone}.",
   },
   faq: {
     label: "Câu hỏi thường gặp", title: "Câu hỏi", titleEm: "thường gặp", contactPrefix: "Không tìm thấy câu trả lời?", contactEmail: "Gửi email cho chúng tôi", contactSuffix: "— chúng tôi phản hồi trong 24 giờ.", ctaTitle: "Vẫn còn thắc mắc?", ctaDesc: "Chúng tôi phản hồi trong 24 giờ — câu trả lời thật, không phải bot.", ctaBtn: "Liên hệ chúng tôi →",
@@ -3463,6 +3474,7 @@ const nl: Copy = {
     submit: "Aanvraag versturen", sending: "Versturen…", errorMsg: "Er ging iets mis. Probeer het opnieuw.",
     successTitle: "Aanvraag verzonden!", successDesc: "We reageren binnen 24 uur.", successBtn: "Nog een aanvraag versturen",
     footNote: "Jouw gegevens worden nooit gedeeld met derden.",
+    contactAlt: "Je kunt ons ook rechtstreeks bereiken via e-mail op {email} of telefonisch op {phone}.",
   },
   faq: {
     label: "Veelgestelde vragen", title: "Veelgestelde", titleEm: "vragen", contactPrefix: "Geen antwoord gevonden?", contactEmail: "Mail ons", contactSuffix: "— we reageren binnen 24 uur.", ctaTitle: "Nog een vraag?", ctaDesc: "We reageren binnen 24 uur — echte antwoorden, geen bots.", ctaBtn: "Neem contact op →",
