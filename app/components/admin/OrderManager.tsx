@@ -234,6 +234,19 @@ export default function OrderManager({ order, onClose, onSaved }) {
             </p>
           </section>
 
+          {/* ── Purchase date ── */}
+          <section className="adm-block">
+            <label className="adm-label">PURCHASE DATE</label>
+            <input
+              type="date"
+              value={form.purchase_date || ""}
+              onChange={e => set("purchase_date", e.target.value || null)}
+            />
+            <p className="adm-hint">
+              Which month this order's revenue counts toward — separate from the event date below.
+            </p>
+          </section>
+
           {/* ── Customer link ── */}
           <section className="adm-block">
             <label className="adm-label">CUSTOMER</label>
