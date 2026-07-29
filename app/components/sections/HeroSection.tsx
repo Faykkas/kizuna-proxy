@@ -54,6 +54,17 @@ export default function HeroSection({ t }: { t: any }) {
             <a href="/pricing" className="btn btn-outline">{t.hero.ctaSecondary}</a>
           </div>
 
+          <a
+            href="https://fr.trustpilot.com/review/kizunaproxy.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero-trust-badge"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style={{color:"#00b67a",flexShrink:0}}><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+            <span className="hero-trust-stars">★★★★★</span>
+            <span>{t.hero.trustBadge || "Rated Excellent on Trustpilot"}</span>
+          </a>
+
           <div className="hero-social-row hero-social-center">
             <span className="social-label">{t.hero.followUs}</span>
             <a className="hero-social-link" href="https://www.instagram.com/kizuna_proxy/" target="_blank" rel="noopener noreferrer"><IconInstagram /></a>

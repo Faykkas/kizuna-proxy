@@ -19,6 +19,7 @@ const en = {
     prop3: "Nintendo Tokyo events",
     prop4: "Mercari & Yahoo Auctions",
     prop5: "Any store in Tokyo — we're there",
+    trustBadge: "Rated Excellent on Trustpilot",
   },
   nav: { request: "Request an item", pricing: "Pricing", faq: "FAQ", gallery: "Gallery", events: "Events", services: "Services", howItWorks: "How it works", reviews: "Reviews", signIn: "Sign in", myOrders: "My orders", shipping: "Shipping" },
   whatWeBuy: {
@@ -327,6 +328,7 @@ const fr: Copy = {
     prop3: "Événements Nintendo Tokyo",
     prop4: "Mercari & Yahoo Auctions",
     prop5: "N'importe quel magasin à Tokyo — on y est",
+    trustBadge: "Noté Excellent sur Trustpilot",
   },
   nav: { request: "Demander un article", pricing: "Tarifs", faq: "FAQ", gallery: "Galerie", events: "Événements", services: "Services", howItWorks: "Comment ça marche", reviews: "Avis", signIn: "Connexion", myOrders: "Mes commandes", shipping: "Livraison" },
   whatWeBuy: {
@@ -633,6 +635,7 @@ const ja: Copy = {
     prop3: "任天堂東京イベント",
     prop4: "メルカリ & ヤフオク",
     prop5: "東京中どこでも対応",
+    trustBadge: "Trustpilotで「Excellent」評価",
   },
   nav: { request: "商品をリクエスト", pricing: "料金", faq: "よくある質問", gallery: "ギャラリー", events: "イベント", services: "サービス", howItWorks: "ご利用の流れ", reviews: "レビュー", signIn: "ログイン", myOrders: "マイ注文", shipping: "配送" },
   whatWeBuy: {
@@ -939,6 +942,7 @@ const es: Copy = {
     prop3: "Eventos de Nintendo Tokio",
     prop4: "Mercari y Yahoo Auctions",
     prop5: "Cualquier tienda en Tokio — allí estamos",
+    trustBadge: "Calificación Excelente en Trustpilot",
   },
   nav: { request: "Solicitar un artículo", pricing: "Precios", faq: "Preguntas frecuentes", gallery: "Galería", events: "Eventos", services: "Servicios", howItWorks: "Cómo funciona", reviews: "Opiniones", signIn: "Iniciar sesión", myOrders: "Mis pedidos", shipping: "Envíos" },
   whatWeBuy: {
@@ -1245,6 +1249,7 @@ const it: Copy = {
     prop3: "Eventi Nintendo Tokyo",
     prop4: "Mercari & Yahoo Auctions",
     prop5: "Qualsiasi negozio a Tokyo — ci siamo",
+    trustBadge: "Valutazione Eccellente su Trustpilot",
   },
   nav: { request: "Richiedi un articolo", pricing: "Prezzi", faq: "FAQ", gallery: "Galleria", events: "Eventi", services: "Servizi", howItWorks: "Come funziona", reviews: "Recensioni", signIn: "Accedi", myOrders: "I miei ordini", shipping: "Spedizioni" },
   whatWeBuy: {
@@ -1551,6 +1556,7 @@ const de: Copy = {
     prop3: "Nintendo Tokio Events",
     prop4: "Mercari & Yahoo Auctions",
     prop5: "Jedes Geschäft in Tokio — wir sind vor Ort",
+    trustBadge: "Auf Trustpilot als „Exzellent“ bewertet",
   },
   nav: { request: "Artikel anfragen", pricing: "Preise", faq: "FAQ", gallery: "Galerie", events: "Events", services: "Leistungen", howItWorks: "So funktioniert's", reviews: "Bewertungen", signIn: "Anmelden", myOrders: "Meine Bestellungen", shipping: "Versand" },
   whatWeBuy: {
@@ -1857,6 +1863,7 @@ const ko: Copy = {
     prop3: "닌텐도 도쿄 이벤트",
     prop4: "메루카리 & 야후옥션",
     prop5: "도쿄 어디든 방문 가능",
+    trustBadge: "Trustpilot에서 '우수' 등급",
   },
   nav: { request: "상품 요청하기", pricing: "요금", faq: "자주 묻는 질문", gallery: "갤러리", events: "이벤트", services: "서비스", howItWorks: "이용 방법", reviews: "리뷰", signIn: "로그인", myOrders: "내 주문", shipping: "배송" },
   whatWeBuy: {
@@ -2163,6 +2170,7 @@ const zh: Copy = {
     prop3: "任天堂东京活动",
     prop4: "煤炉 & 雅虎拍卖",
     prop5: "东京任何商店 — 我们都能到达",
+    trustBadge: "Trustpilot「优秀」评级",
   },
   nav: { request: "提交求购", pricing: "价格", faq: "常见问题", gallery: "画廊", events: "活动", services: "服务", howItWorks: "运作方式", reviews: "评价", signIn: "登录", myOrders: "我的订单", shipping: "配送" },
   whatWeBuy: {
@@ -2469,6 +2477,7 @@ const pt: Copy = {
     prop3: "Eventos Nintendo Tóquio",
     prop4: "Mercari & Yahoo Auctions",
     prop5: "Qualquer loja em Tóquio — nós vamos até lá",
+    trustBadge: "Avaliação Excelente no Trustpilot",
   },
   nav: { request: "Solicitar um artigo", pricing: "Preços", faq: "Perguntas frequentes", gallery: "Galeria", events: "Eventos", services: "Serviços", howItWorks: "Como funciona", reviews: "Avaliações", signIn: "Entrar", myOrders: "Minhas encomendas", shipping: "Envio" },
   whatWeBuy: {
@@ -2775,6 +2784,7 @@ const id: Copy = {
     prop3: "Acara Nintendo Tokyo",
     prop4: "Mercari & Yahoo Auctions",
     prop5: "Toko mana pun di Tokyo — kami datangi",
+    trustBadge: "Dinilai Excellent di Trustpilot",
   },
   nav: { request: "Ajukan permintaan", pricing: "Harga", faq: "FAQ", gallery: "Galeri", events: "Acara", services: "Layanan", howItWorks: "Cara kerja", reviews: "Ulasan", signIn: "Masuk", myOrders: "Pesanan saya", shipping: "Pengiriman" },
   whatWeBuy: {
@@ -3081,6 +3091,7 @@ const vi: Copy = {
     prop3: "Sự kiện Nintendo Tokyo",
     prop4: "Mercari & Yahoo Auctions",
     prop5: "Bất kỳ cửa hàng nào ở Tokyo — chúng tôi đều có mặt",
+    trustBadge: "Được đánh giá Xuất sắc trên Trustpilot",
   },
   nav: { request: "Yêu cầu mua hàng", pricing: "Bảng giá", faq: "Câu hỏi thường gặp", gallery: "Thư viện ảnh", events: "Sự kiện", services: "Dịch vụ", howItWorks: "Cách hoạt động", reviews: "Đánh giá", signIn: "Đăng nhập", myOrders: "Đơn hàng của tôi", shipping: "Vận chuyển" },
   whatWeBuy: {
@@ -3387,6 +3398,7 @@ const nl: Copy = {
     prop3: "Nintendo Tokio-evenementen",
     prop4: "Mercari & Yahoo Auctions",
     prop5: "Elke winkel in Tokio — wij zijn er",
+    trustBadge: "Uitstekend beoordeeld op Trustpilot",
   },
   nav: { request: "Artikel aanvragen", pricing: "Prijzen", faq: "Veelgestelde vragen", gallery: "Galerij", events: "Evenementen", services: "Diensten", howItWorks: "Hoe het werkt", reviews: "Beoordelingen", signIn: "Inloggen", myOrders: "Mijn bestellingen", shipping: "Verzending" },
   whatWeBuy: {
