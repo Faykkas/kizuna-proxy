@@ -65,6 +65,7 @@ export default function SiteNav() {
           <li><a href="/how-it-works">{t.nav?.howItWorks || "How it works"}</a></li>
           <li><a href="/reviews">{t.nav?.reviews || "Reviews"}</a></li>
           <li><a href="/events">{t.nav?.events || "Events"}</a></li>
+          <li><a href="/box">Kizuna Box</a></li>
           <li><a href="/faq">{t.nav.faq || "FAQ"}</a></li>
 
           {/* Guides dropdown: blog articles only — everything else stays a direct link */}
@@ -140,6 +141,7 @@ export default function SiteNav() {
           <a href="/reviews" onClick={() => setMobileOpen(false)}>{t.nav?.reviews || "Reviews"}</a>
           <a href="/faq" onClick={() => setMobileOpen(false)}>{t.nav.faq || "FAQ"}</a>
           <a href="/events" onClick={() => setMobileOpen(false)}>{t.nav?.events || "Events"}</a>
+          <a href="/box" onClick={() => setMobileOpen(false)}>Kizuna Box</a>
 
           {/* Guides accordion */}
           <div>

@@ -31,6 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/faq`, priority: 0.8, changeFrequency: "monthly" as const },
     { url: `${BASE}/events`, priority: 0.9, changeFrequency: "weekly" as const },
     { url: `${BASE}/news`, priority: 0.7, changeFrequency: "weekly" as const },
+    { url: `${BASE}/box`, priority: 0.6, changeFrequency: "weekly" as const },
   ];
 
   const blog = BLOG_SLUGS.map(slug => ({

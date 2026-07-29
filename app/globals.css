@@ -2159,6 +2159,23 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 .blog-page .blog-eyebrow { display: none; }
 .px-page-head-inline .breadcrumb { justify-content: center; margin-bottom: 1.25rem; }
 
+/* ── Box waitlist form ── */
+.box-waitlist-cta { align-items: center; }
+.box-waitlist-form { display: flex; gap: .6rem; flex-wrap: wrap; }
+.box-waitlist-form input {
+  padding: .7rem 1rem;
+  border: 1px solid var(--border-gold);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: .82rem;
+  min-width: 220px;
+}
+.box-waitlist-error { color: var(--red); font-size: .75rem; margin: .5rem 0 0; width: 100%; }
+.box-waitlist-success { display: flex; flex-direction: column; gap: .2rem; }
+.box-waitlist-success strong { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--ink); }
+.box-waitlist-success span { font-size: .82rem; color: var(--warm); font-weight: 300; }
+
 /* ── 2. LE CHAT SUR LA PAGE D'ACCUEIL ─────────────────────────────────────
    Il ne flotte plus dans le vide en bas à droite : il est posé sur un socle,
    avec une bulle de bienvenue et une ombre au sol qui l'ancre visuellement. */
