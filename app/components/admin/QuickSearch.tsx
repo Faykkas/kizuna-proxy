@@ -99,16 +99,16 @@ export default function QuickSearch({ supabase, tokens, onJumpToOrder, onJumpToR
         placeholder="🔍 Search orders & requests…"
         style={{
           width: "100%", padding: ".55rem .8rem", boxSizing: "border-box",
-          background: SURFACE, border: `2px solid ${BORDER}`, borderRadius: "8px",
-          color: INK, fontSize: ".78rem", fontFamily: BODY, outline: "none",
+          background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "8px",
+          color: INK, fontSize: ".82rem", fontFamily: BODY, outline: "none",
         }}
       />
 
       {showDropdown && (
         <div style={{
           position: "absolute", top: "calc(100% + 6px)", left: 0, right: 0,
-          background: SURFACE, border: `2px solid ${BORDER}`, borderRadius: "10px",
-          boxShadow: "0 8px 0 rgba(0,0,0,.3)", zIndex: 50, overflow: "hidden", maxHeight: "360px", overflowY: "auto",
+          background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "10px",
+          boxShadow: "0 8px 24px rgba(0,0,0,.35)", zIndex: 50, overflow: "hidden", maxHeight: "360px", overflowY: "auto",
         }}>
           {loading ? (
             <p style={{ color: MUTED, fontSize: ".78rem", padding: "1rem", margin: 0 }}>Searching…</p>
@@ -118,7 +118,7 @@ export default function QuickSearch({ supabase, tokens, onJumpToOrder, onJumpToR
             <>
               {orders.length > 0 && (
                 <div>
-                  <div style={{ fontFamily: PIXEL, fontSize: ".36rem", color: RED, letterSpacing: ".08em", padding: ".6rem .9rem .3rem", lineHeight: 1.9 }}>
+                  <div style={{ fontFamily: BODY, fontSize: ".68rem", fontWeight: 600, letterSpacing: ".02em", color: MUTED, padding: ".6rem .9rem .3rem" }}>
                     ORDERS
                   </div>
                   {orders.map(o => (
@@ -137,7 +137,7 @@ export default function QuickSearch({ supabase, tokens, onJumpToOrder, onJumpToR
               )}
               {requests.length > 0 && (
                 <div>
-                  <div style={{ fontFamily: PIXEL, fontSize: ".36rem", color: RED, letterSpacing: ".08em", padding: ".6rem .9rem .3rem", lineHeight: 1.9 }}>
+                  <div style={{ fontFamily: BODY, fontSize: ".68rem", fontWeight: 600, letterSpacing: ".02em", color: MUTED, padding: ".6rem .9rem .3rem" }}>
                     REQUESTS
                   </div>
                   {requests.map(r => (

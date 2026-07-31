@@ -91,20 +91,20 @@ export default function CustomersTab({ tokens }) {
   const totalFeesAcrossAll = customers.reduce((s, c) => s + c.totalFees, 0);
   const repeatCount = customers.filter(c => c.orderCount > 1).length;
 
-  const th = { fontSize: ".34rem", letterSpacing: ".06em", textTransform: "uppercase", color: RED, padding: "0 .4rem", fontFamily: PIXEL, lineHeight: 1.9 };
+  const th = { fontSize: ".68rem", fontWeight: 600, letterSpacing: ".02em", textTransform: "uppercase", color: MUTED, padding: "0 .4rem", fontFamily: BODY };
 
   return (
     <div>
       {/* ── Stats ── */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "12px", marginBottom: "1.5rem" }}>
         {[
-          { label: "CUSTOMERS", value: customers.length, color: INK },
-          { label: "TOTAL FEES EARNED (JPY)", value: `¥${totalFeesAcrossAll.toLocaleString()}`, color: RED },
-          { label: "REPEAT CUSTOMERS", value: repeatCount, color: VIOLET },
+          { label: "Customers", value: customers.length, color: INK },
+          { label: "Total fees earned (JPY)", value: `¥${totalFeesAcrossAll.toLocaleString()}`, color: RED },
+          { label: "Repeat customers", value: repeatCount, color: VIOLET },
         ].map(s => (
-          <div key={s.label} style={{ background: SURFACE, border: `2px solid ${BORDER}`, borderRadius: "12px", padding: "1.1rem 1.2rem", boxShadow: "0 4px 0 rgba(0,0,0,.3)" }}>
-            <div style={{ fontSize: ".85rem", color: s.color, fontFamily: PIXEL, lineHeight: 1.7 }}>{s.value}</div>
-            <div style={{ fontSize: ".36rem", color: MUTED, letterSpacing: ".08em", marginTop: ".45rem", fontFamily: PIXEL, lineHeight: 1.9 }}>{s.label}</div>
+          <div key={s.label} style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "0 1px 3px rgba(0,0,0,.15)" }}>
+            <div style={{ fontSize: "1.3rem", fontWeight: 600, color: s.color, fontFamily: BODY, lineHeight: 1.3 }}>{s.value}</div>
+            <div style={{ fontSize: ".72rem", color: MUTED, fontWeight: 500, marginTop: ".35rem", fontFamily: BODY }}>{s.label}</div>
           </div>
         ))}
       </div>
@@ -112,12 +112,12 @@ export default function CustomersTab({ tokens }) {
       {/* ── Search ── */}
       <div style={{ display: "flex", gap: ".75rem", flexWrap: "wrap", marginBottom: "1rem" }}>
         <input
-          style={{ flex: 1, minWidth: "200px", padding: ".6rem 1rem", background: SURFACE, border: `2px solid ${BORDER}`, borderRadius: "8px", color: INK, fontSize: ".85rem", fontFamily: BODY }}
+          style={{ flex: 1, minWidth: "200px", padding: ".6rem 1rem", background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "8px", color: INK, fontSize: ".85rem", fontFamily: BODY }}
           placeholder="Search a customer by name or email…"
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
-        <div style={{ padding: ".6rem 1rem", background: SURFACE, border: `2px solid ${BORDER}`, borderRadius: "8px", fontSize: ".75rem", color: MUTED, display: "flex", alignItems: "center" }}>
+        <div style={{ padding: ".6rem 1rem", background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "8px", fontSize: ".75rem", color: MUTED, display: "flex", alignItems: "center" }}>
           {filtered.length} customer{filtered.length !== 1 ? "s" : ""}
         </div>
       </div>
@@ -128,8 +128,8 @@ export default function CustomersTab({ tokens }) {
       ) : filtered.length === 0 ? (
         <p style={{ color: MUTED, padding: "2rem", textAlign: "center" }}>No customers found.</p>
       ) : (
-        <div style={{ border: `2px solid ${BORDER}`, borderRadius: "12px", overflow: "hidden" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1.2fr 65px 100px 100px 90px 100px", gap: 0, padding: ".5rem 1rem", background: BG, borderBottom: `2px solid ${BORDER}` }}>
+        <div style={{ border: `1px solid ${BORDER}`, borderRadius: "10px", overflow: "hidden" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1.2fr 65px 100px 100px 90px 100px", gap: 0, padding: ".6rem 1rem", background: BG, borderBottom: `1px solid ${BORDER}` }}>
             {["Client", "Orders", "Spent", "Our fees", "Last order", ""].map(h => (
               <div key={h} style={th}>{h}</div>
             ))}
@@ -137,7 +137,7 @@ export default function CustomersTab({ tokens }) {
           {filtered.map((c, i) => (
             <div key={c.key}
               onClick={() => setSelectedKey(c.key)}
-              style={{ display: "grid", gridTemplateColumns: "1.2fr 65px 100px 100px 90px 100px", gap: 0, padding: ".65rem 1rem", background: i % 2 === 0 ? SURFACE : BG, borderBottom: `2px solid ${BORDER}`, alignItems: "center", cursor: "pointer" }}
+              style={{ display: "grid", gridTemplateColumns: "1.2fr 65px 100px 100px 90px 100px", gap: 0, padding: ".65rem 1rem", background: i % 2 === 0 ? SURFACE : BG, borderBottom: `1px solid ${BORDER}`, alignItems: "center", cursor: "pointer" }}
               onMouseEnter={e => e.currentTarget.style.background = SURFACE2}
               onMouseLeave={e => e.currentTarget.style.background = i % 2 === 0 ? SURFACE : BG}>
               <div style={{ padding: "0 .4rem", overflow: "hidden" }}>
@@ -155,8 +155,8 @@ export default function CustomersTab({ tokens }) {
               </div>
               <div style={{ padding: "0 .4rem" }}>
                 {c.outstanding > 0 && (
-                  <span style={{ fontSize: ".34rem", fontFamily: PIXEL, color: ALERT, background: `${ALERT}22`, padding: ".28rem .5rem", borderRadius: "5px", whiteSpace: "nowrap" }}>
-                    ⚠ ¥{c.outstanding.toLocaleString()} DUE
+                  <span style={{ fontSize: ".68rem", fontWeight: 600, fontFamily: BODY, color: ALERT, background: `${ALERT}22`, padding: ".3rem .55rem", borderRadius: "6px", whiteSpace: "nowrap" }}>
+                    ⚠ ¥{c.outstanding.toLocaleString()} due
                   </span>
                 )}
               </div>

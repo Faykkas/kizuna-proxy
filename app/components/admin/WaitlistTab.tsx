@@ -60,27 +60,27 @@ export default function WaitlistTab({ tokens }) {
 
       {/* ── Stats ── */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(1,1fr)", gap: "12px", marginBottom: "1.5rem", maxWidth: "220px" }}>
-        <div style={{ background: SURFACE, border: `2px solid ${BORDER}`, borderRadius: "12px", padding: "1.1rem 1.2rem", boxShadow: "0 4px 0 rgba(0,0,0,.3)" }}>
-          <div style={{ fontSize: ".85rem", color: RED, fontFamily: PIXEL, lineHeight: 1.7 }}>{entries.length}</div>
-          <div style={{ fontSize: ".36rem", color: MUTED, letterSpacing: ".08em", marginTop: ".45rem", fontFamily: PIXEL, lineHeight: 1.9 }}>SIGNUPS</div>
+        <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "0 1px 3px rgba(0,0,0,.15)" }}>
+          <div style={{ fontSize: "1.3rem", fontWeight: 600, color: RED, fontFamily: BODY, lineHeight: 1.3 }}>{entries.length}</div>
+          <div style={{ fontSize: ".72rem", color: MUTED, fontWeight: 500, marginTop: ".35rem", fontFamily: BODY }}>Signups</div>
         </div>
       </div>
 
       {/* ── Search ── */}
       <div style={{ display: "flex", gap: ".75rem", flexWrap: "wrap", marginBottom: "1rem" }}>
         <input
-          style={{ flex: 1, minWidth: "200px", padding: ".6rem 1rem", background: SURFACE, border: `2px solid ${BORDER}`, borderRadius: "8px", color: INK, fontSize: ".85rem", fontFamily: BODY }}
+          style={{ flex: 1, minWidth: "200px", padding: ".6rem 1rem", background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "8px", color: INK, fontSize: ".85rem", fontFamily: BODY }}
           placeholder="🔍 Search by email…"
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
         {filtered.length > 0 && (
           <button onClick={copyAll} style={{
-            background: "transparent", color: MUTED, border: `2px solid ${BORDER}`,
-            padding: ".6rem 1rem", borderRadius: "8px", fontFamily: PIXEL,
-            fontSize: ".42rem", cursor: "pointer", lineHeight: 1.8, whiteSpace: "nowrap",
+            background: "transparent", color: MUTED, border: `1px solid ${BORDER}`,
+            padding: ".6rem 1rem", borderRadius: "8px", fontFamily: BODY,
+            fontSize: ".82rem", fontWeight: 500, cursor: "pointer", whiteSpace: "nowrap",
           }}>
-            {copied ? "COPIED ✓" : "COPY EMAILS"}
+            {copied ? "Copied ✓" : "Copy emails"}
           </button>
         )}
       </div>
@@ -89,15 +89,15 @@ export default function WaitlistTab({ tokens }) {
         <p style={{ color: MUTED, padding: "2rem", textAlign: "center" }}>Loading…</p>
       ) : filtered.length === 0 ? (
         <div style={{
-          background: SURFACE, border: `2px dashed ${BORDER}`, borderRadius: "12px",
+          background: SURFACE, border: `1px dashed ${BORDER}`, borderRadius: "12px",
           padding: "3rem 1.5rem", textAlign: "center",
         }}>
-          <p style={{ fontFamily: PIXEL, fontSize: ".48rem", color: MUTED, lineHeight: 1.9 }}>
+          <p style={{ fontFamily: BODY, fontSize: ".85rem", color: MUTED }}>
             {entries.length === 0 ? "No signups yet." : "No match."}
           </p>
         </div>
       ) : (
-        <div style={{ border: `2px solid ${BORDER}`, borderRadius: "12px", overflow: "hidden" }}>
+        <div style={{ border: `1px solid ${BORDER}`, borderRadius: "10px", overflow: "hidden" }}>
           {filtered.map((e, i) => (
             <div key={e.id} style={{
               display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem",
@@ -108,7 +108,7 @@ export default function WaitlistTab({ tokens }) {
                 {e.email}
               </a>
               <div style={{ display: "flex", alignItems: "center", gap: ".9rem" }}>
-                <span style={{ fontFamily: PIXEL, fontSize: ".36rem", color: MUTED, lineHeight: 1.9, whiteSpace: "nowrap" }}>
+                <span style={{ fontFamily: BODY, fontSize: ".7rem", color: MUTED, whiteSpace: "nowrap" }}>
                   {new Date(e.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
                 </span>
                 <button onClick={() => del(e.id)} title="Remove" style={{

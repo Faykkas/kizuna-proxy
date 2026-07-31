@@ -122,17 +122,15 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
   );
 
   const chip = (active) => ({
-    padding: ".55rem .9rem",
+    padding: ".5rem .9rem",
     borderRadius: "8px",
-    border: `2px solid ${active ? RED : BORDER}`,
+    border: `1px solid ${active ? RED : BORDER}`,
     background: active ? RED : SURFACE,
     color: active ? BG : MUTED,
-    fontFamily: PIXEL,
-    fontSize: ".42rem",
-    letterSpacing: ".04em",
+    fontFamily: BODY,
+    fontSize: ".78rem",
+    fontWeight: active ? 600 : 500,
     cursor: "pointer",
-    lineHeight: 1.8,
-    textTransform: "uppercase",
   });
 
   const STATUS_STYLE = {
@@ -148,7 +146,7 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
       {/* Search */}
       <div style={{ marginBottom: "1rem" }}>
         <input
-          style={{ width: "100%", maxWidth: "360px", padding: ".6rem 1rem", background: SURFACE, border: `2px solid ${BORDER}`, borderRadius: "8px", color: INK, fontSize: ".85rem", fontFamily: BODY, boxSizing: "border-box" }}
+          style={{ width: "100%", maxWidth: "360px", padding: ".6rem 1rem", background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "8px", color: INK, fontSize: ".85rem", fontFamily: BODY, boxSizing: "border-box" }}
           placeholder="🔍 Search name, email, item…"
           value={search}
           onChange={e => setSearch(e.target.value)}
@@ -171,7 +169,7 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
       </div>
 
       {msg && (
-        <p style={{ fontFamily: PIXEL, fontSize: ".45rem", color: RED, marginBottom: "1rem", lineHeight: 1.9 }}>
+        <p style={{ fontFamily: BODY, fontSize: ".82rem", fontWeight: 500, color: RED, marginBottom: "1rem" }}>
           {msg}
         </p>
       )}
@@ -180,10 +178,10 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
         <p style={{ color: MUTED, padding: "2rem", textAlign: "center" }}>Loading…</p>
       ) : shown.length === 0 ? (
         <div style={{
-          background: SURFACE, border: `2px dashed ${BORDER}`, borderRadius: "12px",
+          background: SURFACE, border: `1px dashed ${BORDER}`, borderRadius: "12px",
           padding: "3rem 1.5rem", textAlign: "center",
         }}>
-          <p style={{ fontFamily: PIXEL, fontSize: ".48rem", color: MUTED, lineHeight: 1.9 }}>
+          <p style={{ fontFamily: BODY, fontSize: ".85rem", color: MUTED }}>
             {q ? "No match." : filter === "new" ? "No new requests." : "Nothing here."}
           </p>
         </div>
@@ -194,10 +192,10 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
             return (
               <div key={req.id} style={{
                 background: SURFACE,
-                border: `2px solid ${req.status === "new" ? RED : BORDER}`,
+                border: `1px solid ${req.status === "new" ? RED : BORDER}`,
                 borderRadius: "12px",
                 padding: "1.1rem 1.3rem",
-                boxShadow: "0 4px 0 rgba(0,0,0,.3)",
+                boxShadow: "0 1px 3px rgba(0,0,0,.15)",
               }}>
 
                 {/* Head */}
@@ -216,10 +214,10 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
                     )}
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: ".6rem" }}>
-                    <span style={{ fontFamily: PIXEL, fontSize: ".36rem", color: st.color, lineHeight: 1.9 }}>
+                    <span style={{ fontFamily: BODY, fontSize: ".72rem", fontWeight: 600, color: st.color }}>
                       {st.label}
                     </span>
-                    <span style={{ fontFamily: PIXEL, fontSize: ".34rem", color: MUTED, lineHeight: 1.9 }}>
+                    <span style={{ fontFamily: BODY, fontSize: ".7rem", color: MUTED }}>
                       {new Date(req.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
                     </span>
                   </div>
@@ -248,54 +246,54 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
                       disabled={busy === req.id}
                       style={{
                         background: RED, color: BG, border: "none",
-                        padding: ".65rem 1.1rem", borderRadius: "8px",
-                        fontFamily: PIXEL, fontSize: ".42rem", letterSpacing: ".04em",
-                        cursor: "pointer", lineHeight: 1.8, boxShadow: `0 3px 0 ${RED_D}`,
+                        padding: ".6rem 1.1rem", borderRadius: "8px",
+                        fontFamily: BODY, fontSize: ".82rem", fontWeight: 600,
+                        cursor: "pointer",
                         opacity: busy === req.id ? .5 : 1,
                       }}
                     >
-                      {busy === req.id ? "…" : "→ CREATE ORDER"}
+                      {busy === req.id ? "…" : "→ Create order"}
                     </button>
                   )}
 
                   {req.status === "converted" && req.order_id && (
                     <span style={{
-                      fontFamily: PIXEL, fontSize: ".4rem", color: VIOLET,
-                      border: `2px solid ${BORDER}`, borderRadius: "8px",
-                      padding: ".65rem .9rem", lineHeight: 1.8,
+                      fontFamily: BODY, fontSize: ".78rem", fontWeight: 600, color: VIOLET,
+                      border: `1px solid ${BORDER}`, borderRadius: "8px",
+                      padding: ".6rem .9rem",
                     }}>
-                      ORDER #{req.order_id}
+                      Order #{req.order_id}
                     </span>
                   )}
 
                   {req.status === "new" && (
                     <button onClick={() => setStatus(req, "read")} style={{
-                      background: "transparent", color: MUTED, border: `2px solid ${BORDER}`,
-                      padding: ".65rem 1rem", borderRadius: "8px", fontFamily: PIXEL,
-                      fontSize: ".42rem", cursor: "pointer", lineHeight: 1.8,
+                      background: "transparent", color: MUTED, border: `1px solid ${BORDER}`,
+                      padding: ".6rem 1rem", borderRadius: "8px", fontFamily: BODY,
+                      fontSize: ".82rem", fontWeight: 500, cursor: "pointer",
                     }}>
-                      MARK READ
+                      Mark read
                     </button>
                   )}
 
                   {req.status !== "declined" && req.status !== "converted" && (
                     <button onClick={() => setStatus(req, "declined")} style={{
-                      background: "transparent", color: MUTED, border: `2px solid ${BORDER}`,
-                      padding: ".65rem 1rem", borderRadius: "8px", fontFamily: PIXEL,
-                      fontSize: ".42rem", cursor: "pointer", lineHeight: 1.8,
+                      background: "transparent", color: MUTED, border: `1px solid ${BORDER}`,
+                      padding: ".6rem 1rem", borderRadius: "8px", fontFamily: BODY,
+                      fontSize: ".82rem", fontWeight: 500, cursor: "pointer",
                     }}>
-                      DECLINE
+                      Decline
                     </button>
                   )}
 
                   <button onClick={() => del(req.id)} style={{
                     background: "rgba(255,80,96,.1)", color: ALERT,
-                    border: `2px solid rgba(255,80,96,.3)`,
-                    padding: ".65rem .9rem", borderRadius: "8px", fontFamily: PIXEL,
-                    fontSize: ".42rem", cursor: "pointer", lineHeight: 1.8,
+                    border: `1px solid rgba(255,80,96,.3)`,
+                    padding: ".6rem .9rem", borderRadius: "8px", fontFamily: BODY,
+                    fontSize: ".82rem", fontWeight: 500, cursor: "pointer",
                     marginLeft: "auto",
                   }}>
-                    DELETE
+                    Delete
                   </button>
                 </div>
 
