@@ -7,6 +7,8 @@ import OrderManager from "../components/admin/OrderManager";
 import ShipmentManager from "../components/admin/ShipmentManager";
 import RequestsTab from "../components/admin/RequestsTab";
 import CustomersTab from "../components/admin/CustomersTab";
+import WaitlistTab from "../components/admin/WaitlistTab";
+import QuickSearch from "../components/admin/QuickSearch";
 import { ALL_STATUSES, statusColor, orderTitle } from "../lib/orderStatus";
 
 
@@ -230,6 +232,8 @@ export default function AdminPage() {
   const [locked,   setLocked]   = useState(false);
   const [lockTimer,setLockTimer]= useState(0);
   const [newRequests, setNewRequests] = useState(0);
+  const [jumpToOrderId, setJumpToOrderId] = useState(null);
+  const [jumpToRequestQuery, setJumpToRequestQuery] = useState(null);
   const lockRef = useRef(null);
 
   useEffect(() => {
@@ -362,6 +366,7 @@ export default function AdminPage() {
     { id:"customers",label:"👤 Customers" },
     { id:"stats",    label:al.tabs.stats },
     { id:"events",   label:al.tabs.events || "🎌 Events" },
+    { id:"waitlist", label:"🎁 Box Waitlist" },
   ];
 
   return (
@@ -376,7 +381,13 @@ export default function AdminPage() {
             </h1>
             <p style={{ fontSize:".75rem", color:MUTED, fontFamily:"'Inter',sans-serif" }}>{session.user.email}</p>
           </div>
-          <div style={{ display:"flex", gap:".75rem", alignItems:"center" }}>
+          <div style={{ display:"flex", gap:".75rem", alignItems:"center", flexWrap:"wrap" }}>
+            <QuickSearch
+              supabase={supabase}
+              tokens={{ SURFACE, BORDER, RED, INK, MUTED, PIXEL, BODY }}
+              onJumpToOrder={(id) => { setTab("orders"); setJumpToOrderId(id); }}
+              onJumpToRequest={(q) => { setTab("requests"); setJumpToRequestQuery(q); }}
+            />
             <div style={{display:"flex",gap:".3rem"}}>
               {["en","fr","ja"].map(l => <button key={l} onClick={()=>{setAdminLang(l);localStorage.setItem("admin-lang",l);}} style={{padding:".25rem .55rem",borderRadius:"6px",border:"1px solid",borderColor:adminLang===l?RED:BORDER,background:adminLang===l?RED:"transparent",color:adminLang===l?"#fff":MUTED,fontSize:".62rem",cursor:"pointer"}}>{l.toUpperCase()}</button>)}
             </div>
@@ -413,14 +424,15 @@ export default function AdminPage() {
         </div>
 
         {/* Tab content */}
-        {tab==="requests" && <RequestsTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
+        {tab==="requests" && <RequestsTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} jumpToQuery={jumpToRequestQuery} onJumped={() => setJumpToRequestQuery(null)} />}
         {tab==="announce" && <AnnounceTab al={al} />}
         {tab==="news"     && <NewsTab al={al} />}
         {tab==="gallery"  && <GalleryTab al={al} />}
-        {tab==="orders"   && <OrdersTab supabase={supabase} al={al} />}
+        {tab==="orders"   && <OrdersTab supabase={supabase} al={al} jumpToOrderId={jumpToOrderId} onJumped={() => setJumpToOrderId(null)} />}
         {tab==="customers"&& <CustomersTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
         {tab==="stats"    && <StatsTab supabase={supabase} al={al} />}
         {tab==="events"   && <EventsTab supabase={supabase} al={al} />}
+        {tab==="waitlist" && <WaitlistTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
       </div>
     </div>
   );
@@ -705,7 +717,7 @@ function GalleryTab({ al }) {
 // Paste this inside admin-page.tsx as a new OrdersTab component
 // Add "📦 Orders" to the TABS array
 
-function OrdersTab({ supabase, al }) {
+function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -716,6 +728,13 @@ function OrdersTab({ supabase, al }) {
   const [msg, setMsg] = useState("");
   // Full-featured order panel: status, photos, payment request, internal notes
   const [managing, setManaging] = useState(null);
+
+  // Opens an order's panel directly when arriving from the header quick-search
+  useEffect(() => {
+    if (!jumpToOrderId || orders.length === 0) return;
+    const found = orders.find(o => o.id === jumpToOrderId);
+    if (found) { setManaging(found); onJumped?.(); }
+  }, [jumpToOrderId, orders, onJumped]);
 
   // Packages: several orders bundled into one shipment (one tracking number,
   // one shipping payment). `shipments` mirrors `orders` — loaded once, kept
@@ -1251,7 +1270,7 @@ function StatsTab({ supabase, al }) {
         ].map(k => (
           <div key={k.label} style={{ background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"12px", padding:"1.1rem 1.2rem", boxShadow:"0 4px 0 rgba(0,0,0,.3)" }}>
             <div style={{ fontSize:".85rem", color:k.color, fontFamily:PIXEL, lineHeight:1.7 }}>{k.value}</div>
-            <div style={{ fontSize:".36rem", color:MUTED, marginTop:".45rem", fontFamily:PIXEL, lineHeight:1.9 }}>{k.label}</div>
+            <div style={{ fontSize:".36rem", color:MUTED, letterSpacing:".08em", marginTop:".45rem", fontFamily:PIXEL, lineHeight:1.9 }}>{k.label.toUpperCase()}</div>
             <div style={{ fontSize:".68rem", color:MUTED, marginTop:".15rem" }}>{k.sub}</div>
           </div>
         ))}
@@ -1470,9 +1489,9 @@ function EventsTab({ supabase, al }) {
           { label:"Total events",     value: events.length,                            color:INK },
           { label:"Next event",       value: upcoming[0]?.date ? new Date(upcoming[0].date).toLocaleDateString("fr-FR",{day:"numeric",month:"short"}) : "—", color:RED },
         ].map(s => (
-          <div key={s.label} style={{ background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"12px", padding:"1rem 1.2rem", boxShadow:"0 4px 0 rgba(0,0,0,.3)" }}>
+          <div key={s.label} style={{ background:SURFACE, border:`2px solid ${BORDER}`, borderRadius:"12px", padding:"1.1rem 1.2rem", boxShadow:"0 4px 0 rgba(0,0,0,.3)" }}>
             <div style={{ fontSize:".85rem", color:s.color, fontFamily:PIXEL, lineHeight:1.7 }}>{s.value}</div>
-            <div style={{ fontSize:".65rem", color:MUTED, marginTop:".2rem" }}>{s.label}</div>
+            <div style={{ fontSize:".36rem", color:MUTED, letterSpacing:".08em", marginTop:".45rem", fontFamily:PIXEL, lineHeight:1.9 }}>{s.label.toUpperCase()}</div>
           </div>
         ))}
       </div>

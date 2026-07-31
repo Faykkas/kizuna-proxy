@@ -9,14 +9,24 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "../../lib/supabase";
 
-export default function RequestsTab({ tokens }) {
+export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
   const { BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY } = tokens;
 
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("new");
+  const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(null);
   const [msg, setMsg] = useState("");
+
+  // Arriving from the header quick-search: show every status so the match
+  // is guaranteed visible, not hidden behind the default "new" filter.
+  useEffect(() => {
+    if (!jumpToQuery) return;
+    setSearch(jumpToQuery);
+    setFilter("all");
+    onJumped?.();
+  }, [jumpToQuery, onJumped]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -103,7 +113,13 @@ export default function RequestsTab({ tokens }) {
     declined: requests.filter(r => r.status === "declined").length,
   };
 
-  const shown = filter === "all" ? requests : requests.filter(r => r.status === filter);
+  const byStatus = filter === "all" ? requests : requests.filter(r => r.status === filter);
+  const q = search.trim().toLowerCase();
+  const shown = !q ? byStatus : byStatus.filter(r =>
+    r.name?.toLowerCase().includes(q) ||
+    r.email?.toLowerCase().includes(q) ||
+    r.items?.toLowerCase().includes(q)
+  );
 
   const chip = (active) => ({
     padding: ".55rem .9rem",
@@ -128,6 +144,16 @@ export default function RequestsTab({ tokens }) {
 
   return (
     <div style={{ fontFamily: BODY }}>
+
+      {/* Search */}
+      <div style={{ marginBottom: "1rem" }}>
+        <input
+          style={{ width: "100%", maxWidth: "360px", padding: ".6rem 1rem", background: SURFACE, border: `2px solid ${BORDER}`, borderRadius: "8px", color: INK, fontSize: ".85rem", fontFamily: BODY, boxSizing: "border-box" }}
+          placeholder="🔍 Search name, email, item…"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
+      </div>
 
       {/* Filters */}
       <div style={{ display: "flex", gap: ".5rem", marginBottom: "1.5rem", flexWrap: "wrap" }}>
@@ -158,7 +184,7 @@ export default function RequestsTab({ tokens }) {
           padding: "3rem 1.5rem", textAlign: "center",
         }}>
           <p style={{ fontFamily: PIXEL, fontSize: ".48rem", color: MUTED, lineHeight: 1.9 }}>
-            {filter === "new" ? "No new requests." : "Nothing here."}
+            {q ? "No match." : filter === "new" ? "No new requests." : "Nothing here."}
           </p>
         </div>
       ) : (
