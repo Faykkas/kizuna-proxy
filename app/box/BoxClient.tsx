@@ -1,14 +1,14 @@
 // @ts-nocheck
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SiteNav from "../components/SiteNav";
 import SiteFooter from "../components/SiteFooter";
 import Maneki from "../components/pixel/Maneki";
 import { useLanguage } from "../lib/language";
 import { supabase } from "../lib/supabase";
 
-function WaitlistForm({ b }) {
+function WaitlistForm({ b, onJoined }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
 
@@ -31,6 +31,7 @@ function WaitlistForm({ b }) {
       body: JSON.stringify({ email: email.trim() }),
     }).catch(err => console.error("notify-waitlist failed:", err));
 
+    onJoined?.();
     setStatus("success");
   }
 
@@ -65,6 +66,14 @@ function WaitlistForm({ b }) {
 export default function BoxClient() {
   const { t } = useLanguage();
   const b = t?.box || {};
+  const [count, setCount] = useState(null);
+
+  useEffect(() => {
+    fetch("/api/box-waitlist-count")
+      .then(res => res.json())
+      .then(data => setCount(data.count))
+      .catch(() => {});
+  }, []);
 
   const FEATURES = [
     { icon: "🥤", title: b.feature1Title || "Real Japanese drinks", desc: b.feature1Desc || "Sodas, teas and snacks you won't find outside Japan — picked fresh, not imported months ago." },
@@ -90,6 +99,11 @@ export default function BoxClient() {
             <p className="px-page-lead">
               {b.lead || "A box of Japan, delivered to your door — real Japanese drinks and snacks, plus a random gachapon surprise every time. We're still shaping the details, but you can be the first to know when it launches."}
             </p>
+            {count != null && (
+              <p className="box-interested-count">
+                {(b.interestedCount || "{n} people interested so far").replace("{n}", count)}
+              </p>
+            )}
           </div>
 
           <hr className="blog-hr" />
@@ -111,7 +125,7 @@ export default function BoxClient() {
                 {b.ctaDesc || "Leave your email — no spam, just one message when Kizuna Box is ready to order."}
               </p>
             </div>
-            <WaitlistForm b={b} />
+            <WaitlistForm b={b} onJoined={() => setCount(c => (c == null ? c : c + 1))} />
           </div>
 
         </div>

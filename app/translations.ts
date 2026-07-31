@@ -32,6 +32,7 @@ const en = {
     placeholder: "you@example.com", submit: "NOTIFY ME", sending: "JOINING…",
     successTitle: "You're on the list!", successDesc: "We'll email you the moment Kizuna Box is ready.",
     errorMsg: "Something went wrong. Try again, or email us at kizunaproxy@gmail.com.",
+    interestedCount: "{n} people interested so far",
   },
   whatWeBuy: {
     label: "Services",
@@ -352,6 +353,7 @@ const fr: Copy = {
     placeholder: "vous@exemple.com", submit: "ME PRÉVENIR", sending: "INSCRIPTION…",
     successTitle: "Vous êtes inscrit !", successDesc: "On vous écrit dès que Kizuna Box est prête.",
     errorMsg: "Une erreur est survenue. Réessayez, ou écrivez-nous à kizunaproxy@gmail.com.",
+    interestedCount: "{n} personnes intéressées pour l'instant",
   },
   whatWeBuy: {
     label: "Services",
@@ -670,6 +672,7 @@ const ja: Copy = {
     placeholder: "you@example.com", submit: "通知を受け取る", sending: "登録中…",
     successTitle: "登録が完了しました！", successDesc: "Kizuna Boxの準備が整い次第、メールでお知らせします。",
     errorMsg: "エラーが発生しました。もう一度お試しいただくか、kizunaproxy@gmail.com までご連絡ください。",
+    interestedCount: "現在 {n} 人が興味を持っています",
   },
   whatWeBuy: {
     label: "サービス",
@@ -988,6 +991,7 @@ const es: Copy = {
     placeholder: "tu@ejemplo.com", submit: "AVISARME", sending: "UNIÉNDOTE…",
     successTitle: "¡Ya estás en la lista!", successDesc: "Te escribiremos en cuanto Kizuna Box esté lista.",
     errorMsg: "Algo salió mal. Inténtalo de nuevo o escríbenos a kizunaproxy@gmail.com.",
+    interestedCount: "{n} personas interesadas hasta ahora",
   },
   whatWeBuy: {
     label: "Servicios",
@@ -1306,6 +1310,7 @@ const it: Copy = {
     placeholder: "tu@esempio.com", submit: "AVVISAMI", sending: "ISCRIZIONE…",
     successTitle: "Sei in lista!", successDesc: "Ti scriveremo non appena Kizuna Box sarà pronta.",
     errorMsg: "Qualcosa è andato storto. Riprova, oppure scrivici a kizunaproxy@gmail.com.",
+    interestedCount: "{n} persone interessate finora",
   },
   whatWeBuy: {
     label: "Servizi",
@@ -1624,6 +1629,7 @@ const de: Copy = {
     placeholder: "du@beispiel.com", submit: "BENACHRICHTIGE MICH", sending: "WIRD EINGETRAGEN…",
     successTitle: "Du stehst auf der Liste!", successDesc: "Wir schreiben dir, sobald Kizuna Box bereit ist.",
     errorMsg: "Etwas ist schiefgelaufen. Versuch es erneut oder schreib uns an kizunaproxy@gmail.com.",
+    interestedCount: "{n} Personen bisher interessiert",
   },
   whatWeBuy: {
     label: "Leistungen",
@@ -1942,6 +1948,7 @@ const ko: Copy = {
     placeholder: "you@example.com", submit: "알림 받기", sending: "등록 중…",
     successTitle: "명단에 등록되었습니다!", successDesc: "Kizuna Box가 준비되는 대로 이메일로 알려드리겠습니다.",
     errorMsg: "문제가 발생했습니다. 다시 시도하시거나 kizunaproxy@gmail.com으로 연락해 주세요.",
+    interestedCount: "지금까지 {n}명이 관심을 보였습니다",
   },
   whatWeBuy: {
     label: "서비스",
@@ -2260,6 +2267,7 @@ const zh: Copy = {
     placeholder: "you@example.com", submit: "通知我", sending: "提交中…",
     successTitle: "你已加入名单！", successDesc: "Kizuna Box 准备就绪后，我们会立即发邮件通知你。",
     errorMsg: "出了点问题，请重试，或发邮件至 kizunaproxy@gmail.com 联系我们。",
+    interestedCount: "目前已有 {n} 人感兴趣",
   },
   whatWeBuy: {
     label: "服务",
@@ -2578,6 +2586,7 @@ const pt: Copy = {
     placeholder: "voce@exemplo.com", submit: "AVISAR-ME", sending: "A REGISTAR…",
     successTitle: "Já está na lista!", successDesc: "Escrevemos assim que a Kizuna Box estiver pronta.",
     errorMsg: "Algo correu mal. Tente novamente ou escreva-nos para kizunaproxy@gmail.com.",
+    interestedCount: "{n} pessoas interessadas até agora",
   },
   whatWeBuy: {
     label: "Serviços",
@@ -2896,6 +2905,7 @@ const id: Copy = {
     placeholder: "kamu@contoh.com", submit: "BERI TAHU SAYA", sending: "MENDAFTARKAN…",
     successTitle: "Kamu sudah masuk daftar!", successDesc: "Kami akan mengirim email begitu Kizuna Box siap.",
     errorMsg: "Terjadi kesalahan. Coba lagi, atau hubungi kami di kizunaproxy@gmail.com.",
+    interestedCount: "{n} orang tertarik sejauh ini",
   },
   whatWeBuy: {
     label: "Layanan",
@@ -3214,6 +3224,7 @@ const vi: Copy = {
     placeholder: "ban@vidu.com", submit: "BÁO CHO TÔI", sending: "ĐANG ĐĂNG KÝ…",
     successTitle: "Bạn đã có trong danh sách!", successDesc: "Chúng tôi sẽ gửi email ngay khi Kizuna Box sẵn sàng.",
     errorMsg: "Đã có lỗi xảy ra. Vui lòng thử lại, hoặc liên hệ kizunaproxy@gmail.com.",
+    interestedCount: "Hiện có {n} người quan tâm",
   },
   whatWeBuy: {
     label: "Dịch vụ",
@@ -3532,6 +3543,7 @@ const nl: Copy = {
     placeholder: "jij@voorbeeld.com", submit: "HOU ME OP DE HOOGTE", sending: "BEZIG MET AANMELDEN…",
     successTitle: "Je staat op de lijst!", successDesc: "We mailen je zodra Kizuna Box klaar is.",
     errorMsg: "Er is iets misgegaan. Probeer het opnieuw, of mail ons op kizunaproxy@gmail.com.",
+    interestedCount: "{n} mensen tot nu toe geïnteresseerd",
   },
   whatWeBuy: {
     label: "Diensten",

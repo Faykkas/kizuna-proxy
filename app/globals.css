@@ -2175,6 +2175,14 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 .box-waitlist-success { display: flex; flex-direction: column; gap: .2rem; }
 .box-waitlist-success strong { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--ink); }
 .box-waitlist-success span { font-size: .82rem; color: var(--warm); font-weight: 300; }
+.box-interested-count {
+  display: inline-flex; align-items: center; gap: .4rem;
+  margin: 1rem auto 0; padding: .4rem .9rem;
+  border: 1px solid var(--border-gold); border-radius: 999px;
+  background: var(--surface);
+  font-size: .72rem; letter-spacing: .02em; color: var(--warm);
+  width: fit-content;
+}
 
 /* ── 2. LE CHAT SUR LA PAGE D'ACCUEIL ─────────────────────────────────────
    Il ne flotte plus dans le vide en bas à droite : il est posé sur un socle,
