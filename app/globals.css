@@ -3334,6 +3334,43 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 .adm-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .adm-table-scroll > div { min-width: 720px; }
 
+/* Orders: table on desktop, stacked cards on phone — a 9-column table has
+   no legible reflow, side-scrolling it is a poor substitute for a real
+   mobile layout. */
+.adm-orders-mobile { display: none; }
+@media (max-width: 768px) {
+  .adm-orders-desktop { display: none; }
+  .adm-orders-mobile { display: flex; flex-direction: column; gap: .6rem; }
+}
+
+.adm-order-card {
+  background: var(--surface);
+  border: 1px solid var(--px-border);
+  border-radius: 10px;
+  padding: .9rem 1rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+}
+.adm-order-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; }
+.adm-order-card-name { font-weight: 600; color: var(--ink); font-size: .9rem; }
+.adm-order-card-email { font-size: .72rem; color: var(--red); margin-top: .15rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.adm-order-card-status { font-size: .68rem; font-weight: 600; padding: .3rem .55rem; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
+.adm-order-card-items { font-size: .8rem; color: var(--warm); line-height: 1.5; }
+.adm-order-card-meta { display: flex; gap: .9rem; flex-wrap: wrap; font-size: .74rem; color: var(--mist); }
+.adm-order-card-track { font-size: .78rem; color: var(--red); text-decoration: none; font-family: monospace; width: fit-content; }
+.adm-order-card-actions {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: .55rem; margin-top: .1rem; border-top: 1px solid var(--px-border);
+}
+.adm-order-card-check { display: flex; align-items: center; gap: .4rem; font-size: .78rem; color: var(--mist); cursor: pointer; }
+.adm-order-card-delete {
+  background: rgba(255,80,96,.1); color: var(--alert);
+  border: 1px solid rgba(255,80,96,.3); border-radius: 6px;
+  padding: .4rem .7rem; font-size: .76rem; cursor: pointer;
+}
+
 /* ── Danger button variant ── */
 .adm-btn-danger { border-color: var(--px-red); color: var(--px-red); }
 .adm-btn-danger:hover { background: rgba(255,80,96,.1); }

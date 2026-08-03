@@ -832,6 +832,27 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
     return order.shipment_id ? shipments.find(s => s.id === order.shipment_id) : null;
   }
 
+  function trackingLinkFor(o) {
+    if (!o.tracking_number) return null;
+    const tn = o.tracking_number.trim();
+    const ship = (o.shipping_method || "").toLowerCase();
+    let url = `https://www.17track.net/en/track?nums=${tn}`;
+    if (tn.startsWith("EN") || tn.startsWith("LX") || tn.startsWith("CN") || ship.includes("ems") || ship.includes("epacket") || ship.includes("airmail")) {
+      url = `https://t.17track.net/en#nums=${tn}`;
+    } else if (ship.includes("fedex")) {
+      url = `https://www.fedex.com/fedextrack/?trknbr=${tn}`;
+    } else if (ship.includes("dhl")) {
+      url = `https://www.dhl.com/en/express/tracking.html?AWB=${tn}`;
+    } else if (ship.includes("yamato")) {
+      url = `https://jizen.kuronekoyamato.co.jp/jizen/servlet/crjz.b.CRJZ00?id=${tn}`;
+    }
+    return { url, tn };
+  }
+
+  function statusLabelFor(status) {
+    return status?.replace("Purchased — Awaiting Delivery", "Seller shipped").replace("Purchased — Awaiting Event", "Awaiting Event").replace("Awaiting Shipping Payment", "⚠ Payment due").replace("Action Required", "⚠ Action");
+  }
+
   // Filtered + searched orders
   const filtered = orders.filter(o => {
     const matchStatus = statusFilter === "all" || o.status === statusFilter;
@@ -1011,7 +1032,9 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
       ) : filtered.length === 0 ? (
         <p style={{ color:MUTED, padding:"2rem", textAlign:"center" }}>No orders found.</p>
       ) : (
-        <div className="adm-table-scroll">
+        <>
+        {/* Desktop: full table */}
+        <div className="adm-orders-desktop adm-table-scroll">
         <div style={{ border:`1px solid ${BORDER}`, borderRadius:"10px", overflow:"hidden" }}>
           {/* Header */}
           <div style={{ display:"grid", gridTemplateColumns:"28px 1fr 1.2fr 85px 120px 75px 85px 130px 56px", gap:0, padding:".6rem 1rem", background:BG, borderBottom:`1px solid ${BORDER}` }}>
@@ -1021,7 +1044,9 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
             ))}
           </div>
           {/* Rows */}
-          {filtered.map((o, i) => (
+          {filtered.map((o, i) => {
+            const track = trackingLinkFor(o);
+            return (
             <div key={o.id}
               style={{ display:"grid", gridTemplateColumns:"28px 1fr 1.2fr 85px 120px 75px 85px 130px 56px", gap:0, padding:".65rem 1rem", background: i%2===0 ? SURFACE : BG, borderBottom:`1px solid ${BORDER}`, alignItems:"center", cursor:"pointer" }}
               onMouseEnter={e=>e.currentTarget.style.background=SURFACE2}
@@ -1049,7 +1074,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
               <div style={{ padding:"0 .4rem", color:RED, fontWeight:500, fontSize:".78rem" }}>¥{(o.service_fee_jpy||0).toLocaleString()}</div>
               <div style={{ padding:"0 .4rem" }}>
                 <span style={{ display:"inline-block", padding:".3rem .55rem", borderRadius:"6px", fontSize:".68rem", fontWeight:600, fontFamily:BODY, lineHeight:1.3, background:`${STATUS_COLORS[o.status]||"#6b7280"}22`, color:STATUS_COLORS[o.status]||MUTED, whiteSpace:"nowrap" }}>
-                  {o.status?.replace("Purchased — Awaiting Delivery","Seller shipped").replace("Purchased — Awaiting Event","Awaiting Event").replace("Awaiting Shipping Payment","⚠ Payment due").replace("Action Required","⚠ Action")}
+                  {statusLabelFor(o.status)}
                 </span>
               </div>
               <div style={{ padding:"0 .4rem", color:MUTED, fontSize:".72rem" }}>{o.purchase_date ? new Date(o.purchase_date).toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit"}) : "—"}</div>
@@ -1063,36 +1088,78 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
                   >
                     📦 PKG #{o.shipment_id}
                   </span>
-                ) : o.tracking_number ? (() => {
-                  const tn = o.tracking_number.trim();
-                  const ship = (o.shipping_method||"").toLowerCase();
-                  let url = `https://www.17track.net/en/track?nums=${tn}`;
-                  if (tn.startsWith("EN") || tn.startsWith("LX") || tn.startsWith("CN") || ship.includes("ems") || ship.includes("epacket") || ship.includes("airmail")) {
-                    url = `https://t.17track.net/en#nums=${tn}`;
-                  } else if (ship.includes("fedex")) {
-                    url = `https://www.fedex.com/fedextrack/?trknbr=${tn}`;
-                  } else if (ship.includes("dhl")) {
-                    url = `https://www.dhl.com/en/express/tracking.html?AWB=${tn}`;
-                  } else if (ship.includes("yamato")) {
-                    url = `https://jizen.kuronekoyamato.co.jp/jizen/servlet/crjz.b.CRJZ00?id=${tn}`;
-                  }
-                  return (
-                    <a href={url} target="_blank" rel="noopener noreferrer"
-                      style={{ color:RED, fontSize:".65rem", textDecoration:"none", fontFamily:"monospace", whiteSpace:"nowrap" }}
-                      title={`Track ${tn}`}>
-                      {tn.length > 14 ? tn.slice(0,13)+"…" : tn} ↗
-                    </a>
-                  );
-                })() : <span style={{ color:MUTED, fontSize:".65rem" }}>—</span>}
+                ) : track ? (
+                  <a href={track.url} target="_blank" rel="noopener noreferrer"
+                    style={{ color:RED, fontSize:".65rem", textDecoration:"none", fontFamily:"monospace", whiteSpace:"nowrap" }}
+                    title={`Track ${track.tn}`}>
+                    {track.tn.length > 14 ? track.tn.slice(0,13)+"…" : track.tn} ↗
+                  </a>
+                ) : <span style={{ color:MUTED, fontSize:".65rem" }}>—</span>}
               </div>
               <div style={{ padding:"0 .4rem", display:"flex", gap:"3px" }}>
                 <button onClick={()=>setManaging(o)} style={{...btnSmall, padding:".3rem .55rem", fontSize:".7rem", borderColor:RED, color:RED}} title="Open order">⚙</button>
                 <button onClick={()=>del(o.id)} style={{...btnDanger, padding:".3rem .55rem", fontSize:".7rem"}} title="Delete">🗑</button>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
         </div>
+
+        {/* Mobile: stacked cards — a 9-column table has no good way to
+            reflow, so phones get a different layout entirely instead of a
+            squeezed or side-scrolling table. */}
+        <div className="adm-orders-mobile">
+          {filtered.map(o => {
+            const track = trackingLinkFor(o);
+            const shipment = shipmentFor(o);
+            return (
+              <div key={o.id} className="adm-order-card" onClick={() => setManaging(o)}>
+                <div className="adm-order-card-top">
+                  <div style={{ minWidth: 0 }}>
+                    <div className="adm-order-card-name">{o.client_name}</div>
+                    {o.client_email && <div className="adm-order-card-email">{o.client_email}</div>}
+                  </div>
+                  <span className="adm-order-card-status" style={{ background:`${STATUS_COLORS[o.status]||"#6b7280"}22`, color:STATUS_COLORS[o.status]||MUTED }}>
+                    {statusLabelFor(o.status)}
+                  </span>
+                </div>
+
+                {o.items && <div className="adm-order-card-items">{o.items}</div>}
+
+                <div className="adm-order-card-meta">
+                  <span>¥{(o.service_fee_jpy||0).toLocaleString()}</span>
+                  <span>{o.purchase_date ? new Date(o.purchase_date).toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit"}) : "—"}</span>
+                  <span>{o.delivery_country || "—"}</span>
+                </div>
+
+                {shipment ? (
+                  <span
+                    className="adm-ship-badge"
+                    onClick={e => { e.stopPropagation(); setShipmentPanel({ mode:"edit", shipment }); }}
+                  >
+                    📦 Package #{o.shipment_id}
+                  </span>
+                ) : track ? (
+                  <a href={track.url} target="_blank" rel="noopener noreferrer"
+                    onClick={e => e.stopPropagation()}
+                    className="adm-order-card-track">
+                    Track: {track.tn} ↗
+                  </a>
+                ) : null}
+
+                <div className="adm-order-card-actions" onClick={e => e.stopPropagation()}>
+                  <label className="adm-order-card-check">
+                    <input type="checkbox" checked={selected.has(o.id)} onChange={() => toggleSelect(o.id)} />
+                    Select
+                  </label>
+                  <button onClick={() => del(o.id)} className="adm-order-card-delete">Delete</button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        </>
       )}
 
       {/* ── Revenue summary ── */}
