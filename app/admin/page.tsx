@@ -218,7 +218,6 @@ const cardHeader = {
   fontSize: "1rem", fontWeight: 600,
   color: INK, marginBottom: "1.25rem", fontFamily: BODY,
 };
-const row2 = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" };
 const msgOk  = { fontSize: ".82rem", color: RED, marginBottom: ".75rem", fontFamily: BODY, fontWeight: 500 };
 const msgErr = { fontSize: ".82rem", color: ALERT, marginBottom: ".75rem", fontFamily: BODY, fontWeight: 500 };
 const sep    = { height: "1px", background: BORDER, margin: "1.5rem 0" };
@@ -374,7 +373,7 @@ export default function AdminPage() {
   ];
 
   return (
-    <div style={{ minHeight:"100vh", background:BG, padding:"2rem 1.5rem", fontFamily:BODY }}>
+    <div className="adm-shell" style={{ background:BG, fontFamily:BODY }}>
       <div style={{ maxWidth:"920px", margin:"0 auto" }}>
 
         {/* Header */}
@@ -487,7 +486,7 @@ function AnnounceTab({ al }) {
       </div>
 
       {/* Dates */}
-      <div style={row2}>
+      <div className="adm-row2">
         <div>
           <label style={lbl}>{al.bannerFrom}</label>
           <input style={inp} value={data.from_date||""} onChange={e=>setData(d=>({...d,from_date:e.target.value}))} placeholder="April 20" />
@@ -658,7 +657,7 @@ function GalleryTab({ al }) {
     <>
       <div style={card}>
         <p style={cardHeader}>{editing?"✏️ Edit photo":"➕ Add photo"}</p>
-        <div style={row2}>
+        <div className="adm-row2">
           <div><label style={lbl}>Title *</label><input style={inp} value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))} placeholder="Pokémon Center Tokyo" /></div>
           <div><label style={lbl}>Subtitle</label><input style={inp} value={form.subtitle} onChange={e=>setForm(f=>({...f,subtitle:e.target.value}))} placeholder="Rare cards · Japan" /></div>
         </div>
@@ -863,7 +862,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
   return (
     <div>
       {/* ── Stats ── */}
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"12px", marginBottom:"1.5rem" }}>
+      <div className="adm-stat-grid" style={{ "--cols":4 }}>
         {[
           { label:al.totalOrders,      value: orders.length,           color:INK },
           { label:al.totalFees,  value:`¥${totalFee.toLocaleString()}`, color:RED },
@@ -892,7 +891,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
           <p style={cardHeader}>{editing ? "✏️ Edit order" : "➕ New order"}</p>
           {msg && <p style={msg.startsWith("✓") ? msgOk : msgErr}>{msg}</p>}
 
-          <div style={row2}>
+          <div className="adm-row2">
             <div><label style={lbl}>Client name *</label><input style={inp} value={f.client_name} onChange={e=>setF("client_name",e.target.value)} placeholder="e.g. Konstantinos" /></div>
             <div><label style={lbl}>Country</label><input style={inp} value={f.delivery_country} onChange={e=>setF("delivery_country",e.target.value)} placeholder="Greece" /></div>
           </div>
@@ -902,7 +901,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
             <input style={inp} type="email" value={f.client_email||""} onChange={e=>setF("client_email",e.target.value)} placeholder="client@paypal.com" />
           </div>
 
-          <div style={row2}>
+          <div className="adm-row2">
             <div>
               <label style={lbl}>Platform</label>
               <select style={inp} value={f.platform} onChange={e=>setF("platform",e.target.value)}>
@@ -922,12 +921,12 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
             <textarea style={{ ...inp, minHeight:"80px", resize:"vertical" }} value={f.items} onChange={e=>setF("items",e.target.value)} placeholder="Describe the items or paste links" />
           </div>
 
-          <div style={row2}>
+          <div className="adm-row2">
             <div><label style={lbl}>Item price (JPY)</label><input style={inp} type="number" value={f.item_price_jpy} onChange={e=>setF("item_price_jpy",+e.target.value)} /></div>
             <div><label style={lbl}>Service fee (JPY)</label><input style={inp} type="number" value={f.service_fee_jpy} onChange={e=>setF("service_fee_jpy",+e.target.value)} /></div>
           </div>
 
-          <div style={row2}>
+          <div className="adm-row2">
             <div>
               <label style={lbl}>Status</label>
               <select style={inp} value={f.status} onChange={e=>setF("status",e.target.value)}>
@@ -937,12 +936,12 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
             <div><label style={lbl}>Purchase date</label><input style={inp} type="date" value={f.purchase_date || ""} onChange={e=>setF("purchase_date",e.target.value)} /></div>
           </div>
 
-          <div style={row2}>
+          <div className="adm-row2">
             <div><label style={lbl}>Shipping method</label><input style={inp} value={f.shipping_method} onChange={e=>setF("shipping_method",e.target.value)} placeholder="EMS, FedEx, DHL…" /></div>
             <div><label style={lbl}>Tracking number</label><input style={inp} value={f.tracking_number} onChange={e=>setF("tracking_number",e.target.value)} placeholder="EN123456789JP" /></div>
           </div>
 
-          <div style={row2}>
+          <div className="adm-row2">
             <div>
               <label style={lbl}>Payment method</label>
               <select style={inp} value={f.payment_method} onChange={e=>setF("payment_method",e.target.value)}>
@@ -1012,6 +1011,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
       ) : filtered.length === 0 ? (
         <p style={{ color:MUTED, padding:"2rem", textAlign:"center" }}>No orders found.</p>
       ) : (
+        <div className="adm-table-scroll">
         <div style={{ border:`1px solid ${BORDER}`, borderRadius:"10px", overflow:"hidden" }}>
           {/* Header */}
           <div style={{ display:"grid", gridTemplateColumns:"28px 1fr 1.2fr 85px 120px 75px 85px 130px 56px", gap:0, padding:".6rem 1rem", background:BG, borderBottom:`1px solid ${BORDER}` }}>
@@ -1092,23 +1092,24 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
             </div>
           ))}
         </div>
+        </div>
       )}
 
       {/* ── Revenue summary ── */}
       <div style={{ marginTop:"1.5rem", background:SURFACE, border:`1px solid ${BORDER}`, borderRadius:"10px", padding:"1.2rem 1.5rem" }}>
         <p style={cardHeader}>Revenue summary</p>
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"1rem" }}>
+        <div className="adm-stat-grid" style={{ "--cols":3, marginBottom:0 }}>
           <div>
-            <div style={{ fontSize:".65rem", color:MUTED, marginBottom:".3rem" }}>Total fees (JPY)</div>
-            <div style={{ fontSize:".8rem", fontFamily:PIXEL, color:RED, lineHeight:1.7 }}>¥{totalFee.toLocaleString()}</div>
+            <div style={{ fontSize:".72rem", color:MUTED, marginBottom:".3rem" }}>Total fees (JPY)</div>
+            <div style={{ fontSize:"1rem", fontWeight:600, fontFamily:BODY, color:RED }}>¥{totalFee.toLocaleString()}</div>
           </div>
           <div>
-            <div style={{ fontSize:".65rem", color:MUTED, marginBottom:".3rem" }}>Est. EUR (÷145)</div>
-            <div style={{ fontSize:".8rem", fontFamily:PIXEL, color:RED, lineHeight:1.7 }}>{(totalFee/145).toLocaleString("fr-FR",{minimumFractionDigits:0,maximumFractionDigits:0})}€</div>
+            <div style={{ fontSize:".72rem", color:MUTED, marginBottom:".3rem" }}>Est. EUR (÷145)</div>
+            <div style={{ fontSize:"1rem", fontWeight:600, fontFamily:BODY, color:RED }}>{(totalFee/145).toLocaleString("fr-FR",{minimumFractionDigits:0,maximumFractionDigits:0})}€</div>
           </div>
           <div>
-            <div style={{ fontSize:".65rem", color:MUTED, marginBottom:".3rem" }}>Orders delivered</div>
-            <div style={{ fontSize:".8rem", fontFamily:PIXEL, color:INK, lineHeight:1.7 }}>{delivered} / {orders.length}</div>
+            <div style={{ fontSize:".72rem", color:MUTED, marginBottom:".3rem" }}>Orders delivered</div>
+            <div style={{ fontSize:"1rem", fontWeight:600, fontFamily:BODY, color:INK }}>{delivered} / {orders.length}</div>
           </div>
         </div>
       </div>
@@ -1264,7 +1265,7 @@ function StatsTab({ supabase, al }) {
       </div>
 
       {/* KPI Cards */}
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"12px" }}>
+      <div className="adm-stat-grid" style={{ "--cols":4, marginBottom:0 }}>
         {[
           { label:al.totalEarned,      value: fmt(totalFee),        sub: `${orders.length} orders`, color:RED },
           { label:al.avgPerOrder,     value: fmt(avgFee),          sub: al.serviceAvg, color:INK },
@@ -1486,7 +1487,7 @@ function EventsTab({ supabase, al }) {
   return (
     <div>
       {/* Stats */}
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"12px", marginBottom:"1.5rem" }}>
+      <div className="adm-stat-grid" style={{ "--cols":3 }}>
         {[
           { label:"Upcoming events",  value: upcoming.length,                          color:RED },
           { label:"Total events",     value: events.length,                            color:INK },
@@ -1504,17 +1505,17 @@ function EventsTab({ supabase, al }) {
         <p style={cardHeader}>{editing ? "✏️ Edit event" : "➕ New event"}</p>
         {msg && <p style={msg.startsWith("✓") ? msgOk : msgErr}>{msg}</p>}
 
-        <div style={row2}>
+        <div className="adm-row2">
           <div><label style={lbl}>Title *</label><input style={inp} value={form.title} onChange={e=>setF("title",e.target.value)} placeholder="Pokémon Center — Summer Release" /></div>
           <div><label style={lbl}>Date *</label><input style={inp} type="date" value={form.date} onChange={e=>setF("date",e.target.value)} /></div>
         </div>
 
-        <div style={row2}>
+        <div className="adm-row2">
           <div><label style={lbl}>Time</label><input style={inp} type="time" value={form.time||""} onChange={e=>setF("time",e.target.value)} /></div>
           <div><label style={lbl}>Location</label><input style={inp} value={form.location||""} onChange={e=>setF("location",e.target.value)} placeholder="Pokémon Center Tokyo, Ikebukuro" /></div>
         </div>
 
-        <div style={row2}>
+        <div className="adm-row2">
           <div>
             <label style={lbl}>Category</label>
             <select style={inp} value={form.category} onChange={e=>setF("category",e.target.value)}>
@@ -1534,7 +1535,7 @@ function EventsTab({ supabase, al }) {
           <textarea style={{...inp, minHeight:"80px", resize:"vertical"}} value={form.description||""} onChange={e=>setF("description",e.target.value)} placeholder="Details about the event, what we can get, queue times…" />
         </div>
 
-        <div style={row2}>
+        <div className="adm-row2">
           <div><label style={lbl}>Event URL</label><input style={inp} value={form.url||""} onChange={e=>setF("url",e.target.value)} placeholder="https://…" /></div>
           <div><label style={lbl}>Max capacity (optional)</label><input style={inp} type="number" value={form.capacity||""} onChange={e=>setF("capacity",e.target.value)} placeholder="e.g. 3 clients" /></div>
         </div>

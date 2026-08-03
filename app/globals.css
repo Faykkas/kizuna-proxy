@@ -3306,6 +3306,34 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   .adm-panel-head h2 { font-size: .92rem; }
 }
 
+/* ── Admin: responsive layout primitives ──────────────────────────────────
+   The dashboard tabs (Orders, Customers, Stats…) are built with inline
+   styles, which can't respond to media queries on their own — these
+   shared classes give them one place to pick up mobile breakpoints. */
+.adm-shell { min-height: 100vh; padding: 2rem 1.5rem; }
+@media (max-width: 640px) {
+  .adm-shell { padding: 1.25rem .85rem; }
+}
+
+.adm-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+@media (max-width: 560px) {
+  .adm-row2 { grid-template-columns: 1fr; }
+}
+
+.adm-stat-grid { display: grid; grid-template-columns: repeat(var(--cols, 3), 1fr); gap: 12px; margin-bottom: 1.5rem; }
+@media (max-width: 640px) {
+  .adm-stat-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 400px) {
+  .adm-stat-grid { grid-template-columns: 1fr; }
+}
+
+/* Data-table grids (Orders, Customers) are too many columns to reflow on a
+   phone — scrolling sideways keeps every column usable instead of
+   crushing them into illegible slivers. */
+.adm-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.adm-table-scroll > div { min-width: 720px; }
+
 /* ── Danger button variant ── */
 .adm-btn-danger { border-color: var(--px-red); color: var(--px-red); }
 .adm-btn-danger:hover { background: rgba(255,80,96,.1); }

@@ -96,7 +96,7 @@ export default function CustomersTab({ tokens }) {
   return (
     <div>
       {/* ── Stats ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "12px", marginBottom: "1.5rem" }}>
+      <div className="adm-stat-grid" style={{ "--cols":3 }}>
         {[
           { label: "Customers", value: customers.length, color: INK },
           { label: "Total fees earned (JPY)", value: `¥${totalFeesAcrossAll.toLocaleString()}`, color: RED },
@@ -128,6 +128,7 @@ export default function CustomersTab({ tokens }) {
       ) : filtered.length === 0 ? (
         <p style={{ color: MUTED, padding: "2rem", textAlign: "center" }}>No customers found.</p>
       ) : (
+        <div className="adm-table-scroll">
         <div style={{ border: `1px solid ${BORDER}`, borderRadius: "10px", overflow: "hidden" }}>
           <div style={{ display: "grid", gridTemplateColumns: "1.2fr 65px 100px 100px 90px 100px", gap: 0, padding: ".6rem 1rem", background: BG, borderBottom: `1px solid ${BORDER}` }}>
             {["Client", "Orders", "Spent", "Our fees", "Last order", ""].map(h => (
@@ -162,6 +163,7 @@ export default function CustomersTab({ tokens }) {
               </div>
             </div>
           ))}
+        </div>
         </div>
       )}
 
