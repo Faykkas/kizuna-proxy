@@ -15,6 +15,7 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("new");
+  const [typeFilter, setTypeFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(null);
   const [msg, setMsg] = useState("");
@@ -114,12 +115,18 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
   };
 
   const byStatus = filter === "all" ? requests : requests.filter(r => r.status === filter);
+  const byType = typeFilter === "all" ? byStatus : byStatus.filter(r => r.purchase_type === typeFilter);
   const q = search.trim().toLowerCase();
-  const shown = !q ? byStatus : byStatus.filter(r =>
+  const shown = !q ? byType : byType.filter(r =>
     r.name?.toLowerCase().includes(q) ||
     r.email?.toLowerCase().includes(q) ||
     r.items?.toLowerCase().includes(q)
   );
+
+  const typeCounts = {
+    online: requests.filter(r => r.purchase_type === "online").length,
+    visit: requests.filter(r => r.purchase_type === "visit").length,
+  };
 
   const chip = (active) => ({
     padding: ".5rem .9rem",
@@ -163,6 +170,19 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
           ["all", `ALL (${requests.length})`],
         ].map(([key, label]) => (
           <button key={key} onClick={() => setFilter(key)} style={chip(filter === key)}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* Purchase type filter */}
+      <div style={{ display: "flex", gap: ".5rem", marginBottom: "1.5rem", flexWrap: "wrap" }}>
+        {[
+          ["all", `ALL TYPES (${requests.length})`],
+          ["online", `ONLINE (${typeCounts.online})`],
+          ["visit", `STORE VISIT (${typeCounts.visit})`],
+        ].map(([key, label]) => (
+          <button key={key} onClick={() => setTypeFilter(key)} style={chip(typeFilter === key)}>
             {label}
           </button>
         ))}
@@ -222,6 +242,32 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
                     </span>
                   </div>
                 </div>
+
+                {/* Meta chips: quantity, purchase type, deadline, partial fulfillment */}
+                {(req.quantity || req.purchase_type || req.deadline || req.partial_ok != null) && (
+                  <div style={{ display: "flex", gap: ".5rem", flexWrap: "wrap", marginBottom: ".8rem" }}>
+                    {req.quantity && (
+                      <span style={{ fontSize: ".72rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
+                        Qty: {req.quantity}
+                      </span>
+                    )}
+                    {req.purchase_type && (
+                      <span style={{ fontSize: ".72rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
+                        {req.purchase_type === "visit" ? "Store visit" : "Online"}
+                      </span>
+                    )}
+                    {req.deadline && (
+                      <span style={{ fontSize: ".72rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
+                        Deadline: {new Date(req.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                      </span>
+                    )}
+                    {req.partial_ok != null && (
+                      <span style={{ fontSize: ".72rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
+                        Partial: {req.partial_ok ? "OK" : "All or nothing"}
+                      </span>
+                    )}
+                  </div>
+                )}
 
                 {/* Body */}
                 <p style={{

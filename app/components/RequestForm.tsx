@@ -84,11 +84,6 @@ export default function RequestForm({ t }) {
     const items = [
       form.message,
       form.itemLink ? `\n\nLink: ${form.itemLink}` : "",
-      form.quantity ? `\nQuantity: ${form.quantity}` : "",
-      form.purchaseType ? `\nPurchase type: ${form.purchaseType === "visit" ? "Physical store visit" : "Online marketplace"}` : "",
-      form.deadline ? `\nDeadline / pop-up end date: ${form.deadline}` : "",
-      form.budget ? `\nBudget: ${form.budget}` : "",
-      `\nPartial fulfillment: ${form.partialOk ? "OK if not everything is available" : "All or nothing"}`,
     ].join("");
 
     const { error } = await supabase.from("requests").insert({
@@ -100,6 +95,10 @@ export default function RequestForm({ t }) {
       budget: form.budget || null,
       notes: form.contact ? `Prefers: ${form.contact}` : null,
       status: "new",
+      quantity: form.quantity || null,
+      purchase_type: form.purchaseType || null,
+      deadline: form.deadline || null,
+      partial_ok: form.partialOk,
     });
 
     if (!error) {
@@ -114,6 +113,10 @@ export default function RequestForm({ t }) {
           items,
           budget: form.budget,
           contact: form.contact,
+          quantity: form.quantity,
+          purchaseType: form.purchaseType,
+          deadline: form.deadline,
+          partialOk: form.partialOk,
         }),
       }).catch(err => console.error("notify-request failed:", err));
       setStatus("success");

@@ -24,7 +24,7 @@ export async function POST(request) {
       return Response.json({ ok: false }, { status: 503 });
     }
 
-    const { name, email, country, items, budget, contact } = await request.json();
+    const { name, email, country, items, budget, contact, quantity, purchaseType, deadline, partialOk } = await request.json();
 
     const resend = new Resend(key);
     const { error } = await resend.emails.send({
@@ -34,8 +34,12 @@ export async function POST(request) {
       text: [
         `De : ${name || "—"} <${email}>`,
         `Pays : ${country || "—"}`,
+        quantity ? `Quantité : ${quantity}` : null,
+        purchaseType ? `Type d'achat : ${purchaseType === "visit" ? "Visite en boutique" : "Achat en ligne"}` : null,
+        deadline ? `Date limite : ${deadline}` : null,
         budget ? `Budget : ${budget}` : null,
         contact ? `Contact préféré : ${contact}` : null,
+        `Envoi partiel accepté : ${partialOk ? "Oui" : "Non"}`,
         "",
         items || "",
       ].filter(Boolean).join("\n"),
