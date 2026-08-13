@@ -15,6 +15,12 @@ const BLOG_SLUGS = [
   "japan-shipping-guide-2026",
 ];
 
+const LANDING_SLUGS = [
+  "tokyo-in-store-personal-shopper",
+  "japan-pop-up-store-proxy",
+  "pokemon-one-piece-card-proxy-japan",
+];
+
 const NON_EN_LOCALES = SUPPORTED_LANGS.filter((l) => l !== "en");
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -51,5 +57,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
   );
 
-  return [...main, ...blog, ...blogLocales].map(entry => ({ ...entry, lastModified: now }));
+  const landingLocales = NON_EN_LOCALES.flatMap(locale =>
+    LANDING_SLUGS.map(slug => ({
+      url: `${BASE}/${locale}/${slug}`,
+      priority: 0.6,
+      changeFrequency: "monthly" as const,
+    }))
+  );
+
+  return [...main, ...blog, ...blogLocales, ...landingLocales].map(entry => ({ ...entry, lastModified: now }));
 }

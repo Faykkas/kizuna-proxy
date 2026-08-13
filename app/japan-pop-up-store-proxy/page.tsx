@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import PopUpProxyClient from "./PopUpProxyClient";
+import { landingLanguageAlternates } from "../landingHreflang";
 
 export const metadata: Metadata = {
   title: "Japan Pop-Up Store Proxy — Limited Drops & Collabs | Kizuna Proxy",
   description: "Missed a Tokyo pop-up or limited collab? Kizuna Proxy queues and buys in person for pop-up stores, exclusive events and collab drops across Tokyo. Upfront pricing, honest updates, no guarantees.",
-  alternates: { canonical: "https://kizunaproxy.com/japan-pop-up-store-proxy" },
+  alternates: {
+    canonical: "https://kizunaproxy.com/japan-pop-up-store-proxy",
+    languages: landingLanguageAlternates("japan-pop-up-store-proxy"),
+  },
   openGraph: {
     images: ["https://kizunaproxy.com/og-image.png"],
     title: "Japan Pop-Up Store Proxy — Kizuna Proxy",

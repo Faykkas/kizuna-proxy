@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import CardProxyClient from "./CardProxyClient";
+import { landingLanguageAlternates } from "../landingHreflang";
 
 export const metadata: Metadata = {
   title: "Pokémon & One Piece Card Proxy in Japan | Kizuna Proxy",
   description: "Buy Pokémon and One Piece TCG boosters, decks and sealed boxes from authorized Tokyo retailers. Kizuna Proxy respects per-customer purchase limits, ships worldwide, and never guarantees high-demand stock.",
-  alternates: { canonical: "https://kizunaproxy.com/pokemon-one-piece-card-proxy-japan" },
+  alternates: {
+    canonical: "https://kizunaproxy.com/pokemon-one-piece-card-proxy-japan",
+    languages: landingLanguageAlternates("pokemon-one-piece-card-proxy-japan"),
+  },
   openGraph: {
     images: ["https://kizunaproxy.com/og-image.png"],
     title: "Pokémon & One Piece Card Proxy in Japan — Kizuna Proxy",

@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import TokyoInStoreClient from "./TokyoInStoreClient";
+import { landingLanguageAlternates } from "../landingHreflang";
 
 export const metadata: Metadata = {
   title: "Tokyo In-Store Personal Shopper — Physical Store Visits | Kizuna Proxy",
   description: "Need someone to visit a store in Tokyo for you? Kizuna Proxy is a real, in-person personal shopper — Akihabara, Shibuya, Harajuku, Pokémon Center, Mandarake and more. Upfront pricing, live updates, worldwide shipping.",
-  alternates: { canonical: "https://kizunaproxy.com/tokyo-in-store-personal-shopper" },
+  alternates: {
+    canonical: "https://kizunaproxy.com/tokyo-in-store-personal-shopper",
+    languages: landingLanguageAlternates("tokyo-in-store-personal-shopper"),
+  },
   openGraph: {
     images: ["https://kizunaproxy.com/og-image.png"],
     title: "Tokyo In-Store Personal Shopper — Kizuna Proxy",
