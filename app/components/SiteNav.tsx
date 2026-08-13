@@ -18,6 +18,9 @@ const BLOG_ITEMS = [
   { href:"/blog/anime-figures-japan-guide",         emoji:"🗿", label:"Anime Figures" },
   { href:"/blog/japanese-trading-cards-guide-2026", emoji:"🃏", label:"Trading Cards" },
   { href:"/blog/japan-shipping-guide-2026",         emoji:"📦", label:"Shipping Guide" },
+  { href:"/tokyo-in-store-personal-shopper",        emoji:"🏬", label:"In-Store Shopper" },
+  { href:"/japan-pop-up-store-proxy",               emoji:"🎪", label:"Pop-Up Store Proxy" },
+  { href:"/pokemon-one-piece-card-proxy-japan",     emoji:"🎴", label:"Card Proxy" },
 ];
 
 export default function SiteNav() {

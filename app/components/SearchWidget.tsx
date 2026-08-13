@@ -6,7 +6,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 // ─── SEARCH WIDGET ───────────────────────────────────────────────────────────
 const PLATFORMS = [
   { id: "mercari",  label: "Mercari",        url: (q: string) => `https://jp.mercari.com/search?keyword=${encodeURIComponent(q)}&status=on_sale`,          color: "#ff0211", logo: "M" },
-  { id: "yahoo",    label: "Yahoo Auctions", url: (q: string) => `https://auctions.yahoo.co.jp/search/search?p=${encodeURIComponent(q)}&va=${encodeURIComponent(q)}`, color: "#720099", logo: "Y" },
+  { id: "rakuma",   label: "Rakuma",         url: (q: string) => `https://fril.jp/s?query=${encodeURIComponent(q)}`,          color: "#c2185b", logo: "R" },
   { id: "rakuten",  label: "Rakuten",        url: (q: string) => `https://search.rakuten.co.jp/search/mall/${encodeURIComponent(q)}/`,                      color: "#BF0000", logo: "R" },
   { id: "amazon",   label: "Amazon JP",      url: (q: string) => `https://www.amazon.co.jp/s?k=${encodeURIComponent(q)}`,                                  color: "#FF9900", logo: "A" },
   { id: "surugaya", label: "Suruga-ya",      url: (q: string) => `https://www.suruga-ya.jp/search?search_word=${encodeURIComponent(q)}`,                    color: "#e65c00", logo: "S" },

@@ -33,10 +33,10 @@ export const REAL_REVIEWS = [
 export const WHY_CARDS_DATA = [
   { n:"01", stat:"< 24h", statL:"reply time", title:"Real person, not a bot", desc:"Every request handled personally — you speak directly with us." },
   { n:"02", stat:"Ginza", statL:"Tokyo", title:"Based in Tokyo", desc:"We visit stores, attend events, and check items in person." },
-  { n:"03", stat:"24/7", statL:"available", title:"Direct communication", desc:"WhatsApp, Discord, email — real answers, no bots." },
+  { n:"03", stat:"Live", statL:"chat & calls", title:"Direct communication", desc:"WhatsApp, Discord, email — real answers, no bots." },
   { n:"04", stat:"日本語", statL:"native", title:"Fluent in Japanese", desc:"We negotiate directly with sellers — no translation delays." },
-  { n:"05", stat:"100%", statL:"dedication", title:"We find what others can't", desc:"Store visits, live shopping calls, exclusive events." },
-  { n:"06", stat:"20+", statL:"countries", title:"Shipped worldwide", desc:"USA, Canada, Europe, Asia — we ship everywhere." },
+  { n:"05", stat:"Hands-on", statL:"approach", title:"We find what others can't", desc:"Store visits, live shopping calls, exclusive events." },
+  { n:"06", stat:"Worldwide", statL:"shipping", title:"Shipped worldwide", desc:"USA, Canada, Europe, Asia — wherever you are." },
 ];
 
 function WhyIcon({ i }: { i: number }) {

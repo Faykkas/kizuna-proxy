@@ -1,23 +1,20 @@
 // @ts-nocheck
 "use client";
 
-import dynamic from "next/dynamic";
 import SiteNav from "./components/SiteNav";
 import SiteFooter from "./components/SiteFooter";
 import AnnounceBar from "./components/AnnounceBar";
 import HeroSection from "./components/sections/HeroSection";
 import SearchWidget from "./components/SearchWidget";
 import ServicesSection from "./components/sections/ServicesSection";
+import WhyKizunaHomeSection from "./components/sections/WhyKizunaHomeSection";
+import ServiceRulesSection from "./components/sections/ServiceRulesSection";
+import NewsPreviewSection from "./components/sections/NewsPreviewSection";
 import GallerySection from "./components/sections/GallerySection";
 import { BackToTop, useScrollReveal } from "./components/ui";
 import usePixelCanvas from "./components/pixel/usePixelCanvas";
 import { useLang, useAnnounce, useGallery } from "./components/useSiteState";
 import { REAL_REVIEWS } from "./components/data";
-
-const NewsSection = dynamic(() => import("./news"), {
-  ssr: false,
-  loading: () => <div style={{padding:"2rem",textAlign:"center",color:"var(--warm)"}}>Loading…</div>
-});
 
 export default function Home() {
   const { lang, t } = useLang();
@@ -42,15 +39,7 @@ export default function Home() {
       </section>
 
       {/* NEWS */}
-      <section id="news" className="section-sm reveal">
-        <div className="wrap">
-          <div className="sec-head" style={{marginBottom:"2rem"}}>
-            <p className="sec-label">{t.news?.label || "Latest news"}</p>
-            <h2>{t.news?.title || "Updates &"} <em>{t.news?.titleEm || "announcements"}</em></h2>
-          </div>
-          <NewsSection lang={lang} />
-        </div>
-      </section>
+      <NewsPreviewSection t={t} />
 
       {/* SERVICES — aperçu, détail sur /services */}
       <ServicesSection t={t} />
@@ -59,6 +48,12 @@ export default function Home() {
           {t.whatWeBuy?.seeAll || "See all services"} →
         </a>
       </div>
+
+      {/* WHY KIZUNA */}
+      <WhyKizunaHomeSection t={t} />
+
+      {/* SERVICE RULES */}
+      <ServiceRulesSection t={t} />
 
       {/* PREUVE SOCIALE — 3 avis, le reste sur /reviews */}
       <section className="section reveal">

@@ -40,6 +40,10 @@ export default function PokemonCardsClient({ locale } = {}) {
           <p>{g.ctaText}</p>
           <a href="/#request-wrap" className="btn btn-red">{g.ctaBtn}</a>
         </div>
+
+        <p style={{ fontSize: ".82rem", marginTop: "1.5rem" }}>
+          Looking for booster boxes or sealed product? See our <a href="/pokemon-one-piece-card-proxy-japan">Pokémon & One Piece card proxy</a> page for purchase limits and pricing.
+        </p>
       </div>
     </main>
   );

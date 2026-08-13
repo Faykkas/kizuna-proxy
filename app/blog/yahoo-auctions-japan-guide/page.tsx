@@ -3,16 +3,16 @@ import YahooClient from "./YahooClient";
 import { blogLanguageAlternates } from "../hreflang";
 
 export const metadata: Metadata = {
-  title: "Yahoo Auctions Japan Guide for International Buyers 2026 | Kizuna Proxy",
-  description: "Complete guide to buying from Yahoo Auctions Japan in 2026 — how bidding works, what you can find, fees explained, and how a proxy service handles everything for you.",
+  title: "Yahoo Auctions Japan — What We Actually Offer | Kizuna Proxy",
+  description: "Kizuna Proxy doesn't bid on Yahoo Auctions Japan. Here's why, and what to buy instead: fixed-price Mercari & Rakuma listings, physical store visits in Tokyo, and official retailers.",
   alternates: {
     canonical: "/blog/yahoo-auctions-japan-guide",
     languages: blogLanguageAlternates("yahoo-auctions-japan-guide"),
   },
   openGraph: {
     images: ["https://kizunaproxy.com/og-image.png"],
-    title: "Yahoo Auctions Japan Guide for International Buyers 2026",
-    description: "Everything you need to know about Yahoo Auctions Japan — bidding, fees, and how to buy without a Japanese account.",
+    title: "Yahoo Auctions Japan — What We Actually Offer",
+    description: "We don't bid on Yahoo Auctions or any auction platform. Here's what we buy instead: fixed-price Mercari & Rakuma listings and in-person Tokyo store visits.",
     url: "https://kizunaproxy.com/blog/yahoo-auctions-japan-guide",
   },
 };

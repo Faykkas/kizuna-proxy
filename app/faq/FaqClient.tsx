@@ -11,7 +11,7 @@ const FAQS = [
     items: [
       { q: "What is a Japan proxy service?", a: "A Japan proxy service buys items on your behalf from Japanese websites or physical stores in Tokyo. We act as your local representative — you send us what you want, we purchase it and ship it directly to you worldwide." },
       { q: "How do I place a request?", a: "Fill in the request form on our homepage or email us at kizunaproxy@gmail.com. Describe the item, share a link if you have one, and tell us where you want it shipped. We reply within 24 hours with a quote." },
-      { q: "How long does it take to get a reply?", a: "We reply to all requests within 24 hours. For most online orders (Mercari, Yahoo Auctions), we purchase the same day once payment is confirmed." },
+      { q: "How long does it take to get a reply?", a: "We reply to all requests within 24 hours. For most online orders (fixed-price listings on Mercari or Rakuma), we purchase the same day once payment is confirmed." },
     ]
   },
   {
@@ -27,7 +27,7 @@ const FAQS = [
     category: "Platforms & purchasing",
     items: [
       { q: "Can you buy from Mercari Japan?", a: "Yes — Mercari Japan is one of our most common requests. We handle all communication with sellers, payment, and shipping. Most Mercari orders are purchased the same day." },
-      { q: "Can you buy from Yahoo Auctions Japan?", a: "Yes — we bid on Yahoo Auctions Japan on your behalf. Tell us the item, your maximum bid, and whether you want a real-time or sniper bid. We monitor the auction and notify you of the result." },
+      { q: "Do you buy from Yahoo Auctions?", a: "Not currently — we don't place bids on Yahoo Auctions or any other auction platform. We do buy fixed-price listings on Mercari and Rakuma, and we can visit physical stores in Tokyo in person, which covers most requests." },
       { q: "Can you visit physical stores in Tokyo?", a: "Yes — this is one of our biggest advantages. We visit Pokémon Center, Nintendo Store, Akihabara stores, Supreme Japan, and any other physical location in Tokyo. We can even do a live video call so you can shop in real time." },
       { q: "Can you attend exclusive events and drops?", a: "Yes — we queue at Supreme Japan drops, attend Pokémon Center event releases, and visit any Tokyo event or pop-up on your behalf. Contact us in advance with the event details." },
     ]

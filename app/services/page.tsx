@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import ServicesClient from "./ServicesClient";
 
 export const metadata: Metadata = {
-  title: "What We Buy from Japan — Mercari, Yahoo Auctions, Tokyo Stores | Kizuna Proxy",
-  description: "We buy anything from Japan on your behalf: Mercari, Yahoo Auctions, Rakuten, Amazon JP, Pokémon Center, Nintendo Store, Supreme drops, anime figures and Tokyo store visits. Shipped worldwide.",
+  title: "Personal Shopper in Tokyo — Stores, Pop-Ups & Japanese Online Shopping | Kizuna Proxy",
+  description: "Your personal shopper in Tokyo: physical store visits, pop-up releases, fixed-price Mercari & Rakuma listings, and Japanese online stores. Real people, transparent quotes, shipped worldwide.",
   alternates: { canonical: "https://kizunaproxy.com/services" },
   openGraph: {
     images: ["https://kizunaproxy.com/og-image.png"],
-    title: "What We Buy from Japan — Kizuna Proxy",
-    description: "We buy anything from Japan on your behalf: Mercari, Yahoo Auctions, Rakuten, Amazon JP, Pokémon Center, Nintendo Store, Supreme drops, anime figures and Tokyo store visits. Shipped worldwide.",
+    title: "Personal Shopper in Tokyo — Kizuna Proxy",
+    description: "Physical store visits, pop-up releases, fixed-price Mercari & Rakuma listings, and Japanese online stores. Shipped worldwide.",
     url: "https://kizunaproxy.com/services",
   },
 };

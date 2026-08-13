@@ -40,6 +40,9 @@ export default function SiteFooter({ t }: { t: any }) {
             <a href="/blog/anime-figures-japan-guide" className="footer-link">Anime Figures Japan</a>
             <a href="/blog/japanese-trading-cards-guide-2026" className="footer-link">Trading Cards Japan</a>
             <a href="/blog/japan-shipping-guide-2026" className="footer-link">Shipping Guide 2026</a>
+            <a href="/tokyo-in-store-personal-shopper" className="footer-link">Tokyo In-Store Shopper</a>
+            <a href="/japan-pop-up-store-proxy" className="footer-link">Pop-Up Store Proxy</a>
+            <a href="/pokemon-one-piece-card-proxy-japan" className="footer-link">Pokémon & One Piece Cards</a>
           </div>
           <div>
             <p className="footer-col-title">Contact</p>

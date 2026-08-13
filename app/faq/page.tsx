@@ -3,7 +3,7 @@ import FaqClient from "./FaqClient";
 
 export const metadata: Metadata = {
   title: "FAQ — Kizuna Proxy | Your Questions Answered",
-  description: "Everything you need to know about Kizuna Proxy — pricing, shipping, Mercari Japan, Yahoo Auctions, Tokyo store visits, and more.",
+  description: "Everything you need to know about Kizuna Proxy — pricing, shipping, Mercari Japan, Rakuma, Tokyo store visits, and more.",
   openGraph: {
     images: ["https://kizunaproxy.com/og-image.png"],
     title: "FAQ — Kizuna Proxy",

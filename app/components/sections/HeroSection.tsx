@@ -24,8 +24,8 @@ export default function HeroSection({ t }: { t: any }) {
                 t.hero.prop1 || "Pokémon Center drops",
                 t.hero.prop2 || "Supreme Japan exclusives",
                 t.hero.prop3 || "Nintendo Tokyo events",
-                t.hero.prop4 || "Mercari & Yahoo Auctions",
-                t.hero.prop5 || "Any store in Tokyo",
+                t.hero.prop4 || "Mercari & Rakuma",
+                t.hero.prop5 || "Physical stores in Tokyo",
               ].map((prop, i) => (
                 <span key={i} className="hero-rotating-item">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--red)" stroke="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
@@ -36,8 +36,8 @@ export default function HeroSection({ t }: { t: any }) {
                 t.hero.prop1 || "Pokémon Center drops",
                 t.hero.prop2 || "Supreme Japan exclusives",
                 t.hero.prop3 || "Nintendo Tokyo events",
-                t.hero.prop4 || "Mercari & Yahoo Auctions",
-                t.hero.prop5 || "Any store in Tokyo",
+                t.hero.prop4 || "Mercari & Rakuma",
+                t.hero.prop5 || "Physical stores in Tokyo",
               ].map((prop, i) => (
                 <span key={`b${i}`} className="hero-rotating-item">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--red)" stroke="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>

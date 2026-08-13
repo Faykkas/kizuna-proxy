@@ -38,6 +38,10 @@ const emptyForm = {
   contact: "",
   itemLink: "",
   budget: "",
+  quantity: "",
+  purchaseType: "",
+  deadline: "",
+  partialOk: false,
 };
 
 export default function RequestForm({ t }) {
@@ -80,7 +84,11 @@ export default function RequestForm({ t }) {
     const items = [
       form.message,
       form.itemLink ? `\n\nLink: ${form.itemLink}` : "",
+      form.quantity ? `\nQuantity: ${form.quantity}` : "",
+      form.purchaseType ? `\nPurchase type: ${form.purchaseType === "visit" ? "Physical store visit" : "Online marketplace"}` : "",
+      form.deadline ? `\nDeadline / pop-up end date: ${form.deadline}` : "",
       form.budget ? `\nBudget: ${form.budget}` : "",
+      `\nPartial fulfillment: ${form.partialOk ? "OK if not everything is available" : "All or nothing"}`,
     ].join("");
 
     const { error } = await supabase.from("requests").insert({
@@ -244,6 +252,50 @@ export default function RequestForm({ t }) {
             />
           </div>
 
+          <div className="f-row">
+            <div className="f-field">
+              <label htmlFor="req-quantity">Quantity</label>
+              <input
+                id="req-quantity"
+                type="text"
+                placeholder="1"
+                value={form.quantity}
+                onChange={e => update("quantity", e.target.value)}
+              />
+            </div>
+            <div className="f-field">
+              <label htmlFor="req-type">Online purchase or store visit?</label>
+              <select
+                id="req-type"
+                value={form.purchaseType}
+                onChange={e => update("purchaseType", e.target.value)}
+              >
+                <option value="">Not sure yet</option>
+                <option value="online">Online marketplace</option>
+                <option value="visit">Physical store visit</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="f-field">
+            <label htmlFor="req-deadline">Deadline or pop-up end date</label>
+            <input
+              id="req-deadline"
+              type="date"
+              value={form.deadline}
+              onChange={e => update("deadline", e.target.value)}
+            />
+          </div>
+
+          <label className="f-checkbox">
+            <input
+              type="checkbox"
+              checked={form.partialOk}
+              onChange={e => update("partialOk", e.target.checked)}
+            />
+            I&apos;m okay receiving only some of the items if not everything is available
+          </label>
+
           <div className="f-field">
             <label htmlFor="req-contact">Prefer another way to talk?</label>
             <input
@@ -256,6 +308,10 @@ export default function RequestForm({ t }) {
           </div>
         </div>
       )}
+
+      <p className="req-note">
+        Orders are shipped only to the delivery address shown in the completed PayPal Goods &amp; Services transaction.
+      </p>
 
       {status === "error" && (
         <p className="f-err req-error">

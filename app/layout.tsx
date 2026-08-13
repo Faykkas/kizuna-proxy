@@ -6,10 +6,10 @@ import ContactWidget from "./components/ContactWidget";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Kizuna Proxy — Buy Any Item from Japan | Personal Shopper Tokyo",
-  description: "Tokyo-based Japan proxy & personal shopping service. We buy any item from Japan for you — Mercari, Yahoo Auctions, Pokémon Center, Nintendo Store, Supreme drops, anime figures, rare collectibles. Worldwide shipping. Fast replies. Trusted by customers in 20+ countries.",
+  title: "Kizuna Proxy — Personal Shopper in Tokyo | Japan Proxy Service",
+  description: "Your personal shopper in Tokyo: physical store visits, pop-ups, limited releases and Japanese online shopping. Fixed-price Mercari & Rakuma listings, Pokémon Center, Nintendo Store, Supreme drops, anime figures. Worldwide shipping, fast replies.",
   keywords: [
-    "japan proxy service", "buy from japan", "mercari japan proxy", "yahoo auctions japan proxy",
+    "japan proxy service", "buy from japan", "mercari japan proxy", "rakuma japan proxy",
     "japan personal shopper", "tokyo shopping service", "pokemon cards japan", "anime figures japan",
     "limited sneakers japan", "supreme japan proxy", "nintendo japan exclusive", "japanese collectibles",
     "proxy shopping japan", "buy mercari japan", "japan proxy worldwide",
@@ -24,13 +24,13 @@ export const metadata: Metadata = {
     url: "https://kizunaproxy.com",
     siteName: "Kizuna Proxy",
     title: "Kizuna Proxy — Your Trusted Link to Japan",
-    description: "Buy any item from Japan, shipped worldwide. Mercari, Yahoo Auctions, Tokyo stores, Pokémon cards, Supreme drops, limited sneakers, rare collectibles. Personal, fast, transparent.",
-    images: [{ url: "https://kizunaproxy.com/og-image.png", width: 1200, height: 630, alt: "Kizuna Proxy — Buy from Japan, shipped worldwide" }],
+    description: "Your personal shopper in Tokyo — physical store visits, pop-ups, limited releases, fixed-price Mercari & Rakuma listings, and Japanese online shopping. Shipped worldwide. Personal, fast, transparent.",
+    images: [{ url: "https://kizunaproxy.com/og-image.png", width: 1200, height: 630, alt: "Kizuna Proxy — personal shopper in Tokyo, shipped worldwide" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kizuna Proxy — Buy Any Item from Japan",
-    description: "Tokyo-based Japan proxy service. Mercari, Yahoo Auctions, Tokyo stores, Pokémon cards, Supreme drops. Worldwide shipping. Reply within 24h.",
+    title: "Kizuna Proxy — Personal Shopper in Tokyo",
+    description: "Tokyo-based personal shopper: physical store visits, pop-ups, fixed-price Mercari & Rakuma listings, Pokémon cards, Supreme drops. Worldwide shipping. Reply within 24h.",
     images: ["https://kizunaproxy.com/og-image.png"],
   },
   robots: {
@@ -68,7 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "@context": "https://schema.org",
           "@type": "LocalBusiness",
           "name": "Kizuna Proxy",
-          "description": "Tokyo-based Japan proxy and personal shopping service. We buy any item from Japan — Mercari, Yahoo Auctions, Tokyo store visits, Pokémon cards, limited sneakers, anime figures — and ship worldwide.",
+          "description": "Tokyo-based personal shopper for physical stores, pop-ups and limited releases. Fixed-price Mercari and Rakuma listings, Japanese online stores, Pokémon cards, limited sneakers, anime figures — shipped worldwide.",
           "url": "https://kizunaproxy.com",
           "email": "kizunaproxy@gmail.com",
           "address": {
@@ -109,7 +109,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "@context": "https://schema.org",
           "@type": "FAQPage",
           "mainEntity": [
-            { "@type": "Question", "name": "What is a Japan proxy service?", "acceptedAnswer": { "@type": "Answer", "text": "A Japan proxy service purchases items on your behalf from Japan — online (Mercari, Yahoo Auctions) or in physical stores in Tokyo. Kizuna Proxy acts as your trusted local representative in Tokyo." } },
+            { "@type": "Question", "name": "What is a Japan proxy service?", "acceptedAnswer": { "@type": "Answer", "text": "A Japan proxy service purchases items on your behalf from Japan — online (fixed-price Mercari and Rakuma listings) or in physical stores in Tokyo. Kizuna Proxy acts as your trusted local representative in Tokyo." } },
             { "@type": "Question", "name": "How does Kizuna Proxy work?", "acceptedAnswer": { "@type": "Answer", "text": "Send us your request with item details, we confirm availability and provide a personalised quote, you pay, we purchase and ship directly to your door worldwide." } },
             { "@type": "Question", "name": "How long does it take to get items from Japan?", "acceptedAnswer": { "@type": "Answer", "text": "For online orders we generally purchase within the same day. Shipping takes 5-14 days depending on the method chosen. We always reply within 24 hours." } },
             { "@type": "Question", "name": "Can you buy Pokémon cards from Japan?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — we buy Japanese Pokémon card sets, exclusive booster packs, and limited edition products directly from Pokémon Center Tokyo and ship worldwide." } },
@@ -126,13 +126,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "name": "Japan Proxy Shopping — Kizuna Proxy",
           "provider": { "@type": "Organization", "name": "Kizuna Proxy", "url": "https://kizunaproxy.com" },
           "areaServed": "Worldwide",
-          "description": "Personal proxy shopping service based in Tokyo. We buy any item from Japan — Mercari, Yahoo Auctions, physical stores, exclusive events — and ship worldwide.",
+          "description": "Personal shopper service based in Tokyo. Physical store visits, pop-ups and exclusive events, plus fixed-price Mercari and Rakuma listings — shipped worldwide.",
           "serviceType": "Proxy Shopping",
           "hasOfferCatalog": {
             "@type": "OfferCatalog",
             "name": "Japan Proxy Services",
             "itemListElement": [
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Online Proxy (Mercari, Yahoo Auctions)" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Online Proxy (Mercari, Rakuma — fixed-price listings)" } },
               { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Tokyo Store Visits" } },
               { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Tokyo Events & Exclusive Drops" } }
             ]

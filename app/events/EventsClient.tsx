@@ -36,7 +36,7 @@ const EVENTS_CONTENT = {
   ],
   faqs: [
     { q: "How far in advance should I contact you?", a: "As early as possible — ideally at least a week before. Some events require pre-registration. The earlier you reach out, the better we can prepare." },
-    { q: "What if the item sells out?", a: "We always inform you in advance if an item is likely to sell out quickly. If we cannot secure it, you owe us nothing for the attempt." },
+    { q: "What if the item sells out?", a: "We always tell you honestly if an item is likely to sell out quickly. The event or visit fee still applies even if we can't secure the item, since it covers our time and travel — we'll never charge for the item itself unless we actually bought it." },
     { q: "Can you attend events outside Tokyo?", a: "Our primary coverage is Tokyo. Other cities may be possible but require additional discussion and travel costs." },
     { q: "Do you do live video calls during events?", a: "Yes — we can arrange a live video call so you can see items in person before we purchase. This has been very popular with our clients." },
     { q: "Is there a minimum order?", a: "No minimum. One promo card or a full event haul — we treat every request with the same level of care." },
@@ -115,6 +115,10 @@ export default function EventsClient() {
             <p>{ep.ctaText || c.ctaText}</p>
             <a href="/#request-wrap" className="btn btn-gold">{ep.ctaBtn || c.ctaBtn}</a>
           </div>
+
+          <p style={{ fontSize: ".82rem", marginTop: "1.5rem" }}>
+            Looking for a specific pop-up or collab? See our <a href="/japan-pop-up-store-proxy">Japan pop-up store proxy</a> page for how it works.
+          </p>
 
           <hr className="blog-hr" />
 
