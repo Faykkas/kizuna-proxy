@@ -51,7 +51,7 @@ const ADMIN_LANGS = {
     orderAdded: "✓ Order added.", orderUpdated: "✓ Order updated.",
     totalOrders: "Total orders", totalFees: "Total fees (JPY)", activeOrders: "Active orders",
     actionRequired: "Action required", revenueSummary: "Revenue summary",
-    totalFeesLabel: "Total fees (JPY)", estEur: "Est. EUR (÷185)", ordersDelivered: "Orders delivered",
+    totalFeesLabel: "Total fees (JPY)", estEur: "Est. EUR", ordersDelivered: "Orders delivered",
     // Stats
     monthlyRevenue: "Monthly revenue", feesOnly: "Service fees only",
     topCountries: "Top countries", orderStatus: "Order status",
@@ -93,7 +93,7 @@ const ADMIN_LANGS = {
     orderAdded: "✓ Commande ajoutée.", orderUpdated: "✓ Commande mise à jour.",
     totalOrders: "Total commandes", totalFees: "Total honoraires (JPY)", activeOrders: "Commandes actives",
     actionRequired: "Action requise", revenueSummary: "Résumé des revenus",
-    totalFeesLabel: "Total honoraires (JPY)", estEur: "Est. EUR (÷185)", ordersDelivered: "Commandes livrées",
+    totalFeesLabel: "Total honoraires (JPY)", estEur: "Est. EUR", ordersDelivered: "Commandes livrées",
     monthlyRevenue: "Revenus mensuels", feesOnly: "Honoraires uniquement",
     topCountries: "Top pays", orderStatus: "Statut des commandes",
     monthlyBreakdown: "Détail mensuel", totalEarned: "Total gagné",
@@ -134,7 +134,7 @@ const ADMIN_LANGS = {
     orderAdded: "✓ 注文を追加しました。", orderUpdated: "✓ 注文を更新しました。",
     totalOrders: "総注文数", totalFees: "総手数料 (JPY)", activeOrders: "進行中の注文",
     actionRequired: "要対応", revenueSummary: "収益サマリー",
-    totalFeesLabel: "総手数料 (JPY)", estEur: "EUR換算 (÷185)", ordersDelivered: "配送完了",
+    totalFeesLabel: "総手数料 (JPY)", estEur: "EUR換算", ordersDelivered: "配送完了",
     monthlyRevenue: "月別収益", feesOnly: "手数料のみ",
     topCountries: "上位国", orderStatus: "注文ステータス",
     monthlyBreakdown: "月別詳細", totalEarned: "総収益",
@@ -155,18 +155,37 @@ const emptyNews    = { title: "", content: "", category: "general" };
 const emptyGallery = { title: "", subtitle: "", image_url: "", sort_order: 0 };
 
 // ─── DESIGN TOKENS ───────────────────────────────────────────────────────────
-// Phosphore palette — same tokens as the public site, so the admin no
-// longer looks like a different product.
-const BG      = "#150d28";   // deep night blue
-const SURFACE = "#251845";
-const SURFACE2= "#2d1d54";
-const BORDER  = "#4a3a75";
-const RED     = "#a8e04a";   // phosphor green — the accent
-const RED_D   = "#8fc23d";
-const VIOLET  = "#c77dff";
-const ALERT   = "#ff5060";
-const INK     = "#f0edf7";
-const MUTED   = "rgba(240,237,247,.42)";
+// Aligned with the public site's own brand palette (see globals.css
+// ":root" — --ink-dark / --surface / --red) instead of the "--px-*" neon
+// arcade palette used for fun, customer-facing pixel-art widgets elsewhere
+// on the site. This is an internal back-office handling real orders and
+// real money, so it reads as a plain business dashboard, not a game HUD.
+const BG      = "#0c0c0e";   // near-black, matches the site's --ink-dark
+const SURFACE = "#18181b";
+const SURFACE2= "#212124";
+const BORDER  = "rgba(255,255,255,.11)";
+const RED     = "#e0303f";   // brand red — same accent as the public site
+const RED_D   = "#b8222f";
+const VIOLET  = "#5b8ff0";   // repurposed as the "info / in progress" blue
+const ALERT   = "#ef4444";   // distinct, more orange-leaning red so it never
+                              // gets confused with the brand accent above
+const INK     = "#f5f5f6";
+const MUTED   = "rgba(245,245,246,.52)"; // was .42 — bumped for legibility
+// Status colours are their own reserved palette, never doubled up with the
+// brand accent or with each other — see the STATUS_COLORS maps below.
+const GOOD     = "#22c55e"; // Delivered
+const WARNING  = "#f5a623"; // in-progress stages that need occasional eyes
+const CRITICAL = ALERT;     // needs action now
+const NEUTRAL  = "#7d7d85"; // pending / cancelled / unknown
+const SHIPPED  = "#38bdf8"; // on its way to the customer — its own colour so
+                             // it never reads the same as "Purchased" (still
+                             // being handled) in a status legend where the
+                             // two sit right next to each other
+
+// Locale thousands separators (fr-FR's U+202F narrow no-break space, or a
+// plain comma) read as one glued number at a glance. A real space is the
+// one separator that's actually visible at KPI-card font sizes.
+const fmtNum = (n) => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 // PIXEL used to be the retro 'Press Start 2P' game font. Kept as the same
 // name (it's threaded through every tab component via `tokens`/module scope)
 // but pointed at the normal typeface — a business tool showing real orders
@@ -176,38 +195,38 @@ const PIXEL   = "'Outfit', system-ui, sans-serif";
 const BODY    = "'Outfit', system-ui, sans-serif";
 
 const lbl = {
-  fontSize: ".74rem", fontWeight: 600, letterSpacing: ".02em", textTransform: "uppercase" as const,
+  fontSize: ".76rem", fontWeight: 600, letterSpacing: ".02em", textTransform: "uppercase" as const,
   color: MUTED, display: "block", marginBottom: ".4rem", fontFamily: BODY,
 };
 const inp = {
   width: "100%", padding: ".65rem .85rem",
   border: `1px solid ${BORDER}`, borderRadius: "8px",
-  fontSize: ".88rem", fontFamily: BODY,
+  fontSize: ".92rem", fontFamily: BODY,
   background: BG, color: INK, outline: "none",
   boxSizing: "border-box" as const, transition: "border-color .15s",
 };
 const btnPrimary = {
-  background: RED, color: BG, border: "none",
+  background: RED, color: "#fff", border: "none",
   padding: ".65rem 1.2rem", borderRadius: "8px",
-  fontSize: ".82rem", fontWeight: 600,
+  fontSize: ".84rem", fontWeight: 600,
   fontFamily: BODY, cursor: "pointer", lineHeight: 1.3,
   boxShadow: "none",
 };
 const btnGhost = {
   background: "transparent", color: MUTED,
   border: `1px solid ${BORDER}`, padding: ".65rem 1.1rem", borderRadius: "8px",
-  fontSize: ".82rem", fontWeight: 500,
+  fontSize: ".84rem", fontWeight: 500,
   fontFamily: BODY, cursor: "pointer", lineHeight: 1.3,
 };
 const btnSmall = {
   border: `1px solid ${BORDER}`, padding: ".4rem .7rem", borderRadius: "6px",
-  fontSize: ".78rem", fontFamily: BODY, cursor: "pointer",
+  fontSize: ".8rem", fontFamily: BODY, cursor: "pointer",
   color: INK, background: BG,
 };
 const btnDanger = {
-  border: `1px solid rgba(255,80,96,.3)`, padding: ".4rem .7rem", borderRadius: "6px",
-  fontSize: ".78rem", fontFamily: BODY, cursor: "pointer",
-  color: ALERT, background: "rgba(255,80,96,.1)",
+  border: `1px solid rgba(239,68,68,.35)`, padding: ".4rem .7rem", borderRadius: "6px",
+  fontSize: ".8rem", fontFamily: BODY, cursor: "pointer",
+  color: ALERT, background: "rgba(239,68,68,.1)",
 };
 const card = {
   background: SURFACE, border: `1px solid ${BORDER}`,
@@ -215,11 +234,11 @@ const card = {
   boxShadow: "0 1px 3px rgba(0,0,0,.2)",
 };
 const cardHeader = {
-  fontSize: "1rem", fontWeight: 600,
+  fontSize: "1.05rem", fontWeight: 600,
   color: INK, marginBottom: "1.25rem", fontFamily: BODY,
 };
-const msgOk  = { fontSize: ".82rem", color: RED, marginBottom: ".75rem", fontFamily: BODY, fontWeight: 500 };
-const msgErr = { fontSize: ".82rem", color: ALERT, marginBottom: ".75rem", fontFamily: BODY, fontWeight: 500 };
+const msgOk  = { fontSize: ".84rem", color: GOOD, marginBottom: ".75rem", fontFamily: BODY, fontWeight: 500 };
+const msgErr = { fontSize: ".84rem", color: ALERT, marginBottom: ".75rem", fontFamily: BODY, fontWeight: 500 };
 const sep    = { height: "1px", background: BORDER, margin: "1.5rem 0" };
 
 // ─── ADMIN PAGE ───────────────────────────────────────────────────────────────
@@ -731,6 +750,19 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
   // Full-featured order panel: status, photos, payment request, internal notes
   const [managing, setManaging] = useState(null);
 
+  // Live EUR/JPY rate for the "Revenue summary" card below — same source
+  // and same default (185) as the Stats tab, so the two tabs never show
+  // two different EUR estimates for the same JPY total. (This used to be
+  // hardcoded to a stale ÷145 here while Stats used ÷185 — that mismatch
+  // was the "wrong stats" bug.)
+  const [eurRate, setEurRate] = useState(185);
+  useEffect(() => {
+    fetch("https://api.frankfurter.dev/v1/latest?from=EUR&to=JPY")
+      .then(r => r.json())
+      .then(d => { if (d?.rates?.JPY) setEurRate(Math.round(d.rates.JPY)); })
+      .catch(() => {});
+  }, []);
+
   // Opens an order's panel directly when arriving from the header quick-search
   useEffect(() => {
     if (!jumpToOrderId || orders.length === 0) return;
@@ -756,24 +788,27 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
   };
   const [form, setForm] = useState(emptyOrder);
 
-  // Shared with the customer dashboard so a status never means two things
+  // Shared with the customer dashboard so a status never means two things.
+  // Colours below are a reserved status palette (good / info / warning /
+  // critical / neutral) — never the brand accent, so a status badge is
+  // never confused with a button or a revenue figure.
   const STATUSES = ALL_STATUSES;
   const STATUS_COLORS = {
-    "Delivered":           RED,
-    "Shipped":             VIOLET,
-    "Purchased":           "#f59e0b",
-    "Purchased — Awaiting Delivery": "#f59e0b",
-    "Purchased — Awaiting Event":    "#f59e0b",
-    "Action Required":     ALERT,
-    "Pending":             "#6b7280",
-    "Cancelled":           "#374151",
+    "Delivered":           GOOD,
+    "Shipped":             SHIPPED,
+    "Purchased":           VIOLET,
+    "Purchased — Awaiting Delivery": VIOLET,
+    "Purchased — Awaiting Event":    VIOLET,
+    "Action Required":     CRITICAL,
+    "Pending":             NEUTRAL,
+    "Cancelled":           NEUTRAL,
     // New dashboard statuses
-    "Purchasing":               "#f59e0b",
-    "Seller Shipped":           "#f59e0b",
-    "Received in Japan":        "#a8e04a",
-    "Photos Uploaded":          "#c77dff",
-    "Packing":                  "#c77dff",
-    "Awaiting Shipping Payment":ALERT,
+    "Purchasing":               WARNING,
+    "Seller Shipped":           VIOLET,
+    "Received in Japan":        VIOLET,
+    "Photos Uploaded":          WARNING,
+    "Packing":                  WARNING,
+    "Awaiting Shipping Payment":CRITICAL,
   };
 
   useEffect(() => { load(); }, []);
@@ -872,7 +907,12 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
   const filteredTotal = filtered.reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
 
   // Stats
-  const totalFee   = orders.reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
+  // Revenue (here and in the "Revenue summary" card below) only counts
+  // orders past "Pending" — nothing has been charged yet while a request
+  // is still under review — and excludes "Cancelled". Same rule as the
+  // Stats tab, so the two tabs never disagree on what "earned" means.
+  const earnedOrders = orders.filter(o => o.status !== "Pending" && o.status !== "Cancelled");
+  const totalFee   = earnedOrders.reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
   const delivered  = orders.filter(o => o.status === "Delivered").length;
   const active     = orders.filter(o => !["Delivered","Cancelled"].includes(o.status)).length;
   const actionReq  = orders.filter(o => o.status === "Action Required").length;
@@ -886,7 +926,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
       <div className="adm-stat-grid" style={{ "--cols":4 }}>
         {[
           { label:al.totalOrders,      value: orders.length,           color:INK },
-          { label:al.totalFees,  value:`¥${totalFee.toLocaleString()}`, color:RED },
+          { label:al.totalFees,  value:`¥${fmtNum(totalFee)}`, color:RED },
           { label:al.activeOrders,     value: active,                   color:VIOLET },
           { label:al.actionRequired,   value: actionReq,                color: actionReq > 0 ? ALERT : MUTED },
         ].map(s => (
@@ -1004,7 +1044,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
         <div style={{ padding:".6rem 1rem", background:SURFACE, border:`1px solid ${BORDER}`, borderRadius:"8px", fontSize:".75rem", color:MUTED, display:"flex", alignItems:"center", gap:".5rem" }}>
           <span>{filtered.length} order{filtered.length !== 1 ? "s" : ""}</span>
           <span style={{ color:BORDER }}>·</span>
-          <span>fees <strong style={{ color:RED }}>¥{filteredTotal.toLocaleString()}</strong></span>
+          <span>fees <strong style={{ color:RED }}>¥{fmtNum(filteredTotal)}</strong></span>
         </div>
       </div>
 
@@ -1071,9 +1111,9 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
                 }
               </div>
               <div style={{ padding:"0 .4rem", color:MUTED, fontSize:".75rem", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }} title={o.items}>{o.items}</div>
-              <div style={{ padding:"0 .4rem", color:RED, fontWeight:500, fontSize:".78rem" }}>¥{(o.service_fee_jpy||0).toLocaleString()}</div>
+              <div style={{ padding:"0 .4rem", color:RED, fontWeight:500, fontSize:".78rem" }}>¥{fmtNum(o.service_fee_jpy||0)}</div>
               <div style={{ padding:"0 .4rem" }}>
-                <span style={{ display:"inline-block", padding:".3rem .55rem", borderRadius:"6px", fontSize:".68rem", fontWeight:600, fontFamily:BODY, lineHeight:1.3, background:`${STATUS_COLORS[o.status]||"#6b7280"}22`, color:STATUS_COLORS[o.status]||MUTED, whiteSpace:"nowrap" }}>
+                <span style={{ display:"inline-block", padding:".3rem .55rem", borderRadius:"6px", fontSize:".68rem", fontWeight:600, fontFamily:BODY, lineHeight:1.3, background:`${STATUS_COLORS[o.status]||NEUTRAL}22`, color:STATUS_COLORS[o.status]||MUTED, whiteSpace:"nowrap" }}>
                   {statusLabelFor(o.status)}
                 </span>
               </div>
@@ -1120,7 +1160,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
                     <div className="adm-order-card-name">{o.client_name}</div>
                     {o.client_email && <div className="adm-order-card-email">{o.client_email}</div>}
                   </div>
-                  <span className="adm-order-card-status" style={{ background:`${STATUS_COLORS[o.status]||"#6b7280"}22`, color:STATUS_COLORS[o.status]||MUTED }}>
+                  <span className="adm-order-card-status" style={{ background:`${STATUS_COLORS[o.status]||NEUTRAL}22`, color:STATUS_COLORS[o.status]||MUTED }}>
                     {statusLabelFor(o.status)}
                   </span>
                 </div>
@@ -1128,7 +1168,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
                 {o.items && <div className="adm-order-card-items">{o.items}</div>}
 
                 <div className="adm-order-card-meta">
-                  <span>¥{(o.service_fee_jpy||0).toLocaleString()}</span>
+                  <span>¥{fmtNum(o.service_fee_jpy||0)}</span>
                   <span>{o.purchase_date ? new Date(o.purchase_date).toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit"}) : "—"}</span>
                   <span>{o.delivery_country || "—"}</span>
                 </div>
@@ -1168,11 +1208,11 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
         <div className="adm-stat-grid" style={{ "--cols":3, marginBottom:0 }}>
           <div>
             <div style={{ fontSize:".72rem", color:MUTED, marginBottom:".3rem" }}>Total fees (JPY)</div>
-            <div style={{ fontSize:"1rem", fontWeight:600, fontFamily:BODY, color:RED }}>¥{totalFee.toLocaleString()}</div>
+            <div style={{ fontSize:"1rem", fontWeight:600, fontFamily:BODY, color:RED }}>¥{fmtNum(totalFee)}</div>
           </div>
           <div>
-            <div style={{ fontSize:".72rem", color:MUTED, marginBottom:".3rem" }}>Est. EUR (÷145)</div>
-            <div style={{ fontSize:"1rem", fontWeight:600, fontFamily:BODY, color:RED }}>{(totalFee/145).toLocaleString("fr-FR",{minimumFractionDigits:0,maximumFractionDigits:0})}€</div>
+            <div style={{ fontSize:".72rem", color:MUTED, marginBottom:".3rem" }}>{al.estEur || "Est. EUR"} (1€ ≈ ¥{eurRate})</div>
+            <div style={{ fontSize:"1rem", fontWeight:600, fontFamily:BODY, color:RED }}>{fmtNum(Math.round(totalFee/eurRate))}€</div>
           </div>
           <div>
             <div style={{ fontSize:".72rem", color:MUTED, marginBottom:".3rem" }}>Orders delivered</div>
@@ -1223,7 +1263,7 @@ function StatsTab({ supabase, al }) {
     }).catch(() => setLoading(false));
 
     // Fetch live EUR/JPY rate
-    fetch("https://api.frankfurter.app/latest?from=EUR&to=JPY")
+    fetch("https://api.frankfurter.dev/v1/latest?from=EUR&to=JPY")
       .then(r => r.json())
       .then(d => { if (d?.rates?.JPY) setRate(Math.round(d.rates.JPY)); })
       .catch(() => {});
@@ -1231,7 +1271,7 @@ function StatsTab({ supabase, al }) {
 
   function fetchLiveRate() {
     setRateFetching(true);
-    fetch("https://api.frankfurter.app/latest?from=EUR&to=JPY")
+    fetch("https://api.frankfurter.dev/v1/latest?from=EUR&to=JPY")
       .then(r => r.json())
       .then(d => { if (d?.rates?.JPY) setRate(Math.round(d.rates.JPY)); })
       .catch(() => {})
@@ -1240,13 +1280,25 @@ function StatsTab({ supabase, al }) {
 
   if (loading) return <p style={{color:MUTED,padding:"2rem",textAlign:"center"}}>Loading…</p>;
 
-  // ── Monthly revenue ──────────────────────────────────────────────
+  // ── Revenue (earned orders only) ───────────────────────────────────
+  // Bug fix: revenue figures (total/avg/monthly) used to sum EVERY order,
+  // including "Pending" (still under review — nothing has been charged
+  // yet, per the timeline in lib/orderStatus.ts) and "Cancelled". That
+  // inflated "Total earned" with money that was never actually collected.
+  // Only orders past Pending, and not Cancelled, count as earned revenue.
+  const earnedOrders = orders.filter(o => o.status !== "Pending" && o.status !== "Cancelled");
+
+  // Bug fix: this used to skip any order whose service_fee_jpy was falsy —
+  // which also throws out orders with a genuine ¥0 fee (comped orders, or
+  // an order not yet priced), silently under-counting both that month's
+  // revenue AND its order count. Only a missing purchase date should be
+  // excluded, since the chart is keyed by month.
   const monthlyMap = {};
-  orders.forEach(o => {
-    if (!o.purchase_date || !o.service_fee_jpy) return;
+  earnedOrders.forEach(o => {
+    if (!o.purchase_date) return;
     const key = o.purchase_date.slice(0, 7); // YYYY-MM
     if (!monthlyMap[key]) monthlyMap[key] = { fee: 0, count: 0 };
-    monthlyMap[key].fee   += o.service_fee_jpy;
+    monthlyMap[key].fee   += (o.service_fee_jpy || 0);
     monthlyMap[key].count += 1;
   });
 
@@ -1260,8 +1312,8 @@ function StatsTab({ supabase, al }) {
     }));
 
   const maxFee = Math.max(...months.map(m => m.fee), 1);
-  const totalFee = orders.reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
-  const avgFee = orders.length ? Math.round(totalFee / orders.length) : 0;
+  const totalFee = earnedOrders.reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
+  const avgFee = earnedOrders.length ? Math.round(totalFee / earnedOrders.length) : 0;
   const bestMonth = months.reduce((best, m) => m.fee > (best?.fee || 0) ? m : best, null);
 
   // ── Country breakdown ─────────────────────────────────────────────
@@ -1288,10 +1340,13 @@ function StatsTab({ supabase, al }) {
   const platforms = Object.entries(platformMap).sort(([,a],[,b]) => b - a);
 
   // ── Status breakdown ──────────────────────────────────────────────
+  // Same reserved status palette as the Orders tab (good/info/warning/
+  // critical/neutral) — kept in sync so the same status never shows a
+  // different colour on two different tabs.
   const STATUS_COLORS = {
-    "Delivered": RED, "Shipped": VIOLET,
-    "Purchased": "#f59e0b", "Action Required": ALERT,
-    "Pending": "#6b7280", "Cancelled": "#374151",
+    "Delivered": GOOD, "Shipped": SHIPPED,
+    "Purchased": VIOLET, "Action Required": CRITICAL,
+    "Pending": NEUTRAL, "Cancelled": NEUTRAL,
   };
   const statusMap = {};
   orders.forEach(o => {
@@ -1300,8 +1355,8 @@ function StatsTab({ supabase, al }) {
   });
 
   const fmt = (jpy) => currency === "EUR"
-    ? `${Math.round(jpy / rate).toLocaleString("fr-FR")}€`
-    : `¥${jpy.toLocaleString()}`;
+    ? `${fmtNum(Math.round(jpy / rate))}€`
+    : `¥${fmtNum(jpy)}`;
 
   return (
     <div style={{ display:"flex", flexDirection:"column", gap:"1.5rem" }}>
@@ -1334,10 +1389,10 @@ function StatsTab({ supabase, al }) {
       {/* KPI Cards */}
       <div className="adm-stat-grid" style={{ "--cols":4, marginBottom:0 }}>
         {[
-          { label:al.totalEarned,      value: fmt(totalFee),        sub: `${orders.length} orders`, color:RED },
+          { label:al.totalEarned,      value: fmt(totalFee),        sub: `${earnedOrders.length} orders`, color:RED },
           { label:al.avgPerOrder,     value: fmt(avgFee),          sub: al.serviceAvg, color:INK },
-          { label:al.bestMonth,        value: bestMonth?.label || "—", sub: bestMonth ? fmt(bestMonth.fee) : "—", color:"#f59e0b" },
-          { label:"Delivered",         value: orders.filter(o=>o.status==="Delivered").length, sub: `of ${orders.length} total`, color:RED },
+          { label:al.bestMonth,        value: bestMonth?.label || "—", sub: bestMonth ? fmt(bestMonth.fee) : "—", color:WARNING },
+          { label:"Delivered",         value: orders.filter(o=>o.status==="Delivered").length, sub: `of ${orders.length} total`, color:GOOD },
         ].map(k => (
           <div key={k.label} style={{ background:SURFACE, border:`1px solid ${BORDER}`, borderRadius:"10px", padding:"1.1rem 1.2rem", boxShadow:"0 1px 3px rgba(0,0,0,.15)" }}>
             <div style={{ fontSize:"1.3rem", fontWeight:600, color:k.color, fontFamily:BODY, lineHeight:1.3 }}>{k.value}</div>
@@ -1353,26 +1408,30 @@ function StatsTab({ supabase, al }) {
           <p style={cardHeader}>Monthly revenue</p>
           <span style={{ fontSize:".68rem", color:MUTED }}>Service fees only</span>
         </div>
-        <div style={{ display:"flex", alignItems:"flex-end", gap:"8px", height:"220px", overflowX:"auto", paddingBottom:".5rem" }}>
+        <div style={{ display:"flex", alignItems:"flex-end", gap:"10px", height:"220px", overflowX:"auto", paddingBottom:".5rem", borderBottom:`1px solid ${BORDER}` }}>
           {months.map((m, i) => (
-            <div key={i} style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:"6px", flex:"0 0 auto", minWidth:"42px" }}>
+            <div key={i} title={`${m.label} — ${fmt(m.fee)} — ${m.count} order${m.count!==1?"s":""}`}
+              style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:"6px", flex:"0 0 auto", minWidth:"44px", cursor:"default" }}>
               {/* Value */}
-              <div style={{ fontSize:".55rem", color:MUTED, textAlign:"center", minHeight:"14px", whiteSpace:"nowrap", overflow:"visible" }}>
+              <div style={{ fontSize:".64rem", color:MUTED, textAlign:"center", minHeight:"16px", whiteSpace:"nowrap", overflow:"visible" }}>
                 {currency==="EUR" ? `${Math.round(m.fee/rate)}€` : `¥${Math.round(m.fee/1000)}k`}
               </div>
               {/* Bar */}
               <div style={{
-                width:"32px", borderRadius:"4px 4px 0 0",
+                width:"34px", borderRadius:"4px 4px 0 0",
                 height:`${Math.round((m.fee / maxFee) * 170)}px`,
                 background: i === months.length - 1
                   ? RED
-                  : `linear-gradient(to top, rgba(168,224,74,.55), rgba(168,224,74,.22))`,
-                transition:"height .3s",
+                  : `linear-gradient(to top, rgba(224,48,63,.85), rgba(224,48,63,.5))`,
+                transition:"height .3s, filter .15s",
                 position:"relative",
                 minHeight:"4px",
-              }} />
+              }}
+              onMouseEnter={e => e.currentTarget.style.filter = "brightness(1.25)"}
+              onMouseLeave={e => e.currentTarget.style.filter = "none"}
+              />
               {/* Label */}
-              <div style={{ fontSize:".58rem", color:MUTED, whiteSpace:"nowrap" }}>{m.label}</div>
+              <div style={{ fontSize:".66rem", color:MUTED, whiteSpace:"nowrap" }}>{m.label}</div>
             </div>
           ))}
         </div>
@@ -1439,7 +1498,7 @@ function StatsTab({ supabase, al }) {
           <thead>
             <tr>
               {["Month","Orders","Revenue (JPY)","Revenue (EUR)","Avg/order"].map(h => (
-                <th key={h} style={{ padding:".5rem .8rem", textAlign:"left", fontSize:".58rem", letterSpacing:".1em", textTransform:"uppercase", color:MUTED, borderBottom:`1px solid ${BORDER}` }}>{h}</th>
+                <th key={h} style={{ padding:".5rem .8rem", textAlign:"left", fontSize:".67rem", letterSpacing:".08em", textTransform:"uppercase", color:MUTED, borderBottom:`1px solid ${BORDER}` }}>{h}</th>
               ))}
             </tr>
           </thead>
@@ -1448,18 +1507,18 @@ function StatsTab({ supabase, al }) {
               <tr key={i} style={{ borderBottom:`1px solid ${BORDER}` }}>
                 <td style={{ padding:".6rem .8rem", color:INK, fontWeight:500 }}>{m.label}</td>
                 <td style={{ padding:".6rem .8rem", color:MUTED }}>{m.count}</td>
-                <td style={{ padding:".6rem .8rem", color:RED }}>¥{m.fee.toLocaleString()}</td>
-                <td style={{ padding:".6rem .8rem", color:RED }}>{m.eur.toLocaleString()}€</td>
-                <td style={{ padding:".6rem .8rem", color:MUTED }}>¥{Math.round(m.fee/m.count).toLocaleString()}</td>
+                <td style={{ padding:".6rem .8rem", color:RED }}>¥{fmtNum(m.fee)}</td>
+                <td style={{ padding:".6rem .8rem", color:RED }}>{fmtNum(m.eur)}€</td>
+                <td style={{ padding:".6rem .8rem", color:MUTED }}>¥{fmtNum(Math.round(m.fee/m.count))}</td>
               </tr>
             ))}
             {/* Total row */}
             <tr style={{ background:BG }}>
               <td style={{ padding:".7rem .8rem", color:INK, fontWeight:600 }}>TOTAL</td>
-              <td style={{ padding:".7rem .8rem", color:INK, fontWeight:600 }}>{orders.length}</td>
-              <td style={{ padding:".7rem .8rem", color:RED, fontWeight:600 }}>¥{totalFee.toLocaleString()}</td>
-              <td style={{ padding:".7rem .8rem", color:RED, fontWeight:600 }}>{Math.round(totalFee/rate).toLocaleString()}€</td>
-              <td style={{ padding:".7rem .8rem", color:MUTED }}>¥{avgFee.toLocaleString()}</td>
+              <td style={{ padding:".7rem .8rem", color:INK, fontWeight:600 }}>{earnedOrders.length}</td>
+              <td style={{ padding:".7rem .8rem", color:RED, fontWeight:600 }}>¥{fmtNum(totalFee)}</td>
+              <td style={{ padding:".7rem .8rem", color:RED, fontWeight:600 }}>{fmtNum(Math.round(totalFee/rate))}€</td>
+              <td style={{ padding:".7rem .8rem", color:MUTED }}>¥{fmtNum(avgFee)}</td>
             </tr>
           </tbody>
         </table>
