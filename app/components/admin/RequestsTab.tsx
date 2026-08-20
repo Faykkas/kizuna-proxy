@@ -19,6 +19,7 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(null);
   const [msg, setMsg] = useState("");
+  const [selected, setSelected] = useState(() => new Set());
 
   // Arriving from the header quick-search: show every status so the match
   // is guaranteed visible, not hidden behind the default "new" filter.
@@ -104,6 +105,21 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
   async function del(id) {
     if (!confirm("Delete this request?")) return;
     await supabase.from("requests").delete().eq("id", id);
+    load();
+  }
+
+  function toggleSelect(id) {
+    setSelected(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  async function delSelected() {
+    if (!confirm(`Delete ${selected.size} request${selected.size !== 1 ? "s" : ""}? This can't be undone.`)) return;
+    await supabase.from("requests").delete().in("id", [...selected]);
+    setSelected(new Set());
     load();
   }
 
@@ -194,6 +210,47 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
         </p>
       )}
 
+      {/* Selection bar: pick several requests (e.g. a batch of spam) and clear them in one go */}
+      {shown.length > 0 && (
+        <div style={{ display: "flex", alignItems: "center", gap: ".75rem", marginBottom: "1rem", flexWrap: "wrap" }}>
+          <label style={{ display: "flex", alignItems: "center", gap: ".4rem", fontSize: ".78rem", color: MUTED, cursor: "pointer" }}>
+            <input
+              type="checkbox"
+              checked={shown.every(r => selected.has(r.id))}
+              onChange={() => {
+                const allShownSelected = shown.every(r => selected.has(r.id));
+                setSelected(prev => {
+                  const next = new Set(prev);
+                  shown.forEach(r => allShownSelected ? next.delete(r.id) : next.add(r.id));
+                  return next;
+                });
+              }}
+            />
+            Select all shown
+          </label>
+
+          {selected.size > 0 && (
+            <div style={{ display: "flex", alignItems: "center", gap: ".75rem", padding: ".55rem .9rem", background: "rgba(255,80,96,.1)", border: `1px solid ${ALERT}`, borderRadius: "10px", flexWrap: "wrap" }}>
+              <span style={{ fontSize: ".8rem", color: INK }}>{selected.size} selected</span>
+              <button onClick={delSelected} style={{
+                background: ALERT, color: "#fff", border: "none",
+                padding: ".5rem .9rem", borderRadius: "8px", fontFamily: BODY,
+                fontSize: ".75rem", fontWeight: 600, cursor: "pointer",
+              }}>
+                🗑 Delete selected
+              </button>
+              <button onClick={() => setSelected(new Set())} style={{
+                background: "transparent", color: MUTED, border: `1px solid ${BORDER}`,
+                padding: ".5rem .9rem", borderRadius: "8px", fontFamily: BODY,
+                fontSize: ".75rem", fontWeight: 500, cursor: "pointer",
+              }}>
+                Clear selection
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
       {loading ? (
         <p style={{ color: MUTED, padding: "2rem", textAlign: "center" }}>Loading…</p>
       ) : shown.length === 0 ? (
@@ -220,7 +277,14 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
 
                 {/* Head */}
                 <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1rem", marginBottom: ".8rem", flexWrap: "wrap" }}>
-                  <div>
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: ".7rem" }}>
+                    <input
+                      type="checkbox"
+                      checked={selected.has(req.id)}
+                      onChange={() => toggleSelect(req.id)}
+                      style={{ marginTop: ".3rem", cursor: "pointer" }}
+                    />
+                    <div>
                     <strong style={{ fontSize: ".95rem", color: INK, display: "block", marginBottom: ".25rem" }}>
                       {req.name}
                     </strong>
@@ -232,6 +296,7 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
                         · {req.country}
                       </span>
                     )}
+                    </div>
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: ".6rem" }}>
                     <span style={{ fontFamily: BODY, fontSize: ".72rem", fontWeight: 600, color: st.color }}>
