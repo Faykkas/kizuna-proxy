@@ -8,6 +8,7 @@ import ShipmentManager from "../components/admin/ShipmentManager";
 import RequestsTab from "../components/admin/RequestsTab";
 import CustomersTab from "../components/admin/CustomersTab";
 import WaitlistTab from "../components/admin/WaitlistTab";
+import ChargesTab from "../components/admin/ChargesTab";
 import QuickSearch from "../components/admin/QuickSearch";
 import { ALL_STATUSES, statusColor, orderTitle } from "../lib/orderStatus";
 
@@ -389,6 +390,7 @@ export default function AdminPage() {
     { id:"stats",    label:al.tabs.stats },
     { id:"events",   label:al.tabs.events || "🎌 Events" },
     { id:"waitlist", label:"🎁 Box Waitlist" },
+    { id:"charges",  label:"💰 Charges JP" },
   ];
 
   return (
@@ -454,6 +456,7 @@ export default function AdminPage() {
         {tab==="stats"    && <StatsTab supabase={supabase} al={al} />}
         {tab==="events"   && <EventsTab supabase={supabase} al={al} />}
         {tab==="waitlist" && <WaitlistTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
+        {tab==="charges"  && <ChargesTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
       </div>
     </div>
   );
