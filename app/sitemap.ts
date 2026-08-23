@@ -19,6 +19,7 @@ const LANDING_SLUGS = [
   "tokyo-in-store-personal-shopper",
   "japan-pop-up-store-proxy",
   "pokemon-one-piece-card-proxy-japan",
+  "business-sourcing",
 ];
 
 const NON_EN_LOCALES = SUPPORTED_LANGS.filter((l) => l !== "en");

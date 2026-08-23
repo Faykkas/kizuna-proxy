@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import BusinessSourcingClient from "./BusinessSourcingClient";
+import { landingLanguageAlternates } from "../landingHreflang";
 
 export const metadata: Metadata = {
   title: "Japan Product Sourcing for Businesses | Kizuna Proxy",
   description: "Professional retail sourcing in Tokyo for international stores, resellers and group-order managers. Access Japan-exclusive products, pop-up stores and limited events with Kizuna Proxy.",
   alternates: {
     canonical: "https://kizunaproxy.com/business-sourcing",
+    languages: landingLanguageAlternates("business-sourcing"),
   },
   openGraph: {
     images: ["https://kizunaproxy.com/og-image.png"],

@@ -3,8 +3,14 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SUPPORTED_LANGS } from "../../translations";
 import { landingTranslations } from "../../landingTranslations";
+import { businessSourcingTranslations } from "../../businessSourcingTranslations";
 import { LANDING_ROUTES, LANDING_SLUGS } from "../../landingRoutes";
 import { landingLanguageAlternates } from "../../landingHreflang";
+
+// businessSourcing lives in its own translations file (not the shared
+// landingTranslations.ts) — merged here so route.key lookups work the same
+// way regardless of which file a landing page's content lives in.
+const ALL_LANDING_TRANSLATIONS = { ...landingTranslations, businessSourcing: businessSourcingTranslations };
 
 const LOCALES = SUPPORTED_LANGS.filter((l) => l !== "en");
 
@@ -25,7 +31,7 @@ export async function generateMetadata({
   const route = LANDING_ROUTES[slug];
   if (!route || !LOCALES.includes(locale)) return {};
 
-  const data = landingTranslations[route.key];
+  const data = ALL_LANDING_TRANSLATIONS[route.key];
   const g = data[locale] || data.en;
 
   return {

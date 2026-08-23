@@ -10,20 +10,7 @@ import ReviewsSection from "../components/sections/ReviewsSection";
 import BusinessRequestForm from "../components/BusinessRequestForm";
 import { BackToTop, useScrollReveal } from "../components/ui";
 import { useLang, useAnnounce } from "../components/useSiteState";
-
-// This page's own visible copy is English-only by design (an international
-// B2B audience), so it doesn't read from the 12-language `translations`
-// dictionary the way the rest of the site does. SiteNav/SiteFooter still
-// need the *site's* current language object for their own labels though —
-// that's what useLang() below is for.
-const bsT = {
-  reviews: {
-    label: "Reviews",
-    title: "Trusted by",
-    titleEm: "buyers worldwide",
-    basedOn: "Based on real, verified reviews",
-  },
-};
+import { businessSourcingTranslations } from "../businessSourcingTranslations";
 
 function Icon({ d, viewBox = "0 0 24 24" }) {
   return (
@@ -49,61 +36,18 @@ const ICONS = {
   users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
 };
 
-const AUDIENCE = [
-  { icon: "gift", title: "K-pop and entertainment retailers", desc: "Photocards, albums, official merch and pop-up exclusives from Tokyo's K-pop and entertainment stores." },
-  { icon: "box", title: "Anime and collectibles stores", desc: "Anime figures, doujinshi, character goods and collab merchandise sourced directly from Japanese retailers." },
-  { icon: "card", title: "Card and hobby businesses", desc: "Trading card boxes, sealed product and hobby items from physical stores and Japanese marketplaces." },
-  { icon: "shield", title: "Japanese fashion resellers", desc: "Streetwear drops, brand exclusives and in-store fashion releases available only in Japan." },
-  { icon: "online", title: "E-commerce sellers", desc: "Shopify, eBay and marketplace sellers who need a reliable local buyer for recurring Japanese inventory." },
-  { icon: "users", title: "Group-order managers", desc: "Coordinated purchasing and consolidation for community group orders with multiple items and participants." },
-];
+// Fixed icon per card index — content (title/desc) comes from the
+// translated data, the icon set itself doesn't need to vary by language.
+const AUDIENCE_ICONS = ["gift", "box", "card", "shield", "online", "users"];
+const CAPABILITY_ICONS = ["pin", "gift", "online", "camera", "budget", "check", "receipt", "box", "repeat"];
 
-const CAPABILITIES = [
-  { icon: "pin", title: "Targeted store & event visits", desc: "Targeted visits to Tokyo stores and pop-up events on your behalf." },
-  { icon: "gift", title: "Exclusive merchandise", desc: "Japan-exclusive and venue-exclusive merchandise you can't access from outside Japan." },
-  { icon: "online", title: "Online marketplace purchasing", desc: "Purchasing from Japanese marketplaces and retailers that don't ship internationally." },
-  { icon: "camera", title: "Live photo confirmation", desc: "Live photographs and product confirmation before purchase, when the venue permits it." },
-  { icon: "budget", title: "Priorities & budget limits", desc: "Purchasing according to your priorities, quantities and budget limits." },
-  { icon: "check", title: "Promotional gifts", desc: "Collection of legitimately provided purchase benefits and promotional gifts." },
-  { icon: "receipt", title: "Proof of purchase", desc: "Receipt and proof-of-purchase collection when available from the store or seller." },
-  { icon: "box", title: "Consolidation & shipping", desc: "Consolidation, protective packaging and tracked international shipping." },
-  { icon: "repeat", title: "Recurring sourcing", desc: "Recurring sourcing operations for established business partners." },
-];
-
-const STEPS = [
-  { n: "01", title: "Submit your sourcing request", body: "Send us the links, dates, quantities, priorities, budget and accepted alternatives." },
-  { n: "02", title: "Receive a tailored quotation", body: "We check feasibility and event conditions, and prepare a quotation before any payment." },
-  { n: "03", title: "Live sourcing and purchasing", body: "We purchase online or visit the store in Tokyo, communicating live when needed and permitted." },
-  { n: "04", title: "Consolidation and shipping", body: "Products are consolidated, protected and shipped internationally with tracking." },
-];
-
-const BENEFITS = [
-  "Local presence in Tokyo",
-  "Human communication",
-  "Clear budgets and purchasing limits",
-  "Live approvals for alternatives",
-  "Transparent service charges",
-  "Purchase evidence and receipts when provided",
-  "Secure PayPal Goods & Services payments",
-  "Worldwide tracked shipping",
-  "Experience with international collectors and professional buyers",
-];
-
-const LIMITS = [
-  "Kizuna provides retail sourcing, not wholesale distribution.",
-  "Kizuna does not guarantee resale value, profitability or future market demand.",
-  "Product availability cannot be guaranteed before purchase.",
-  "Store rules, event rules, identity requirements and purchase limits must be respected.",
-  "Live photography or video depends on venue permission.",
-  "Kizuna cannot circumvent identity checks or purchase restrictions.",
-  "Physical visits are currently available within Tokyo.",
-  "Nothing is reserved or purchased before the scope, quotation and payment have been confirmed.",
-];
-
-export default function BusinessSourcingClient() {
-  const { t } = useLang();
+export default function BusinessSourcingClient({ locale } = {}) {
+  const { lang, t } = useLang();
   const announce = useAnnounce();
   useScrollReveal();
+
+  const data = businessSourcingTranslations;
+  const g = data[locale || lang] || data.en;
 
   useEffect(() => { track("business_sourcing_page_view"); }, []);
 
@@ -118,20 +62,18 @@ export default function BusinessSourcingClient() {
           <div className="hero-center-inner">
             <div className="highlight-pill">
               <span className="highlight-pill-dot" />
-              <span className="highlight-pill-text">Business Sourcing</span>
+              <span className="highlight-pill-text">{g.heroBadge}</span>
             </div>
             <h1 className="hero-h1">
-              Local sourcing in Tokyo<br /><em>for international businesses</em>
+              {g.heroTitle1}<br /><em>{g.heroTitleEm}</em>
             </h1>
-            <p className="hero-desc">
-              Access Japan-exclusive merchandise, pop-up stores, limited releases and retail products with a reliable local purchasing partner.
-            </p>
+            <p className="hero-desc">{g.heroDesc}</p>
             <div className="hero-btns hero-btns-center">
-              <a href="#business-form" className="btn btn-gold">Request a Business Quote</a>
-              <a href="#how-it-works-b2b" className="btn btn-outline">How It Works</a>
+              <a href="#business-form" className="btn btn-gold">{g.heroCta}</a>
+              <a href="#how-it-works-b2b" className="btn btn-outline">{g.heroCtaSecondary}</a>
             </div>
             <p style={{ fontSize: ".72rem", letterSpacing: ".06em", color: "var(--warm)", textAlign: "center" }}>
-              Tokyo-based • Live purchasing support • Worldwide tracked shipping
+              {g.heroTagline}
             </p>
           </div>
         </section>
@@ -140,13 +82,13 @@ export default function BusinessSourcingClient() {
         <section className="section reveal">
           <div className="wrap">
             <div className="sec-head">
-              <p className="sec-label">Who it&apos;s for</p>
-              <h2>Built for <em>professional buyers</em></h2>
+              <p className="sec-label">{g.audienceLabel}</p>
+              <h2>{g.audienceTitle} <em>{g.audienceTitleEm}</em></h2>
             </div>
             <div className="services-grid">
-              {AUDIENCE.map((a, i) => (
+              {g.audience.map((a, i) => (
                 <div key={i} className="svc-card">
-                  <div className="svc-icon"><Icon d={ICONS[a.icon]} /></div>
+                  <div className="svc-icon"><Icon d={ICONS[AUDIENCE_ICONS[i]]} /></div>
                   <div className="svc-title">{a.title}</div>
                   <p className="svc-desc">{a.desc}</p>
                 </div>
@@ -159,14 +101,14 @@ export default function BusinessSourcingClient() {
         <section className="section reveal" style={{ background: "var(--paper)" }}>
           <div className="wrap">
             <div className="sec-head">
-              <p className="sec-label">Capabilities</p>
-              <h2>What Kizuna <em>can handle</em></h2>
-              <p className="desc">Store rules, event rules and purchase limits are always respected.</p>
+              <p className="sec-label">{g.capabilitiesLabel}</p>
+              <h2>{g.capabilitiesTitle} <em>{g.capabilitiesTitleEm}</em></h2>
+              <p className="desc">{g.capabilitiesDesc}</p>
             </div>
             <div className="pricing-custom-grid" style={{ marginBottom: 0 }}>
-              {CAPABILITIES.map((c, i) => (
+              {g.capabilities.map((c, i) => (
                 <div key={i} className="pcg-card">
-                  <div className="pcg-icon"><Icon d={ICONS[c.icon]} /></div>
+                  <div className="pcg-icon"><Icon d={ICONS[CAPABILITY_ICONS[i]]} /></div>
                   <h3>{c.title}</h3>
                   <p>{c.desc}</p>
                 </div>
@@ -179,13 +121,13 @@ export default function BusinessSourcingClient() {
         <section id="how-it-works-b2b" className="section reveal">
           <div className="wrap">
             <div className="sec-head">
-              <p className="sec-label">Process</p>
-              <h2>How business <em>sourcing works</em></h2>
+              <p className="sec-label">{g.processLabel}</p>
+              <h2>{g.processTitle} <em>{g.processTitleEm}</em></h2>
             </div>
             <div className="hiw-steps hiw-steps-4">
-              {STEPS.map((s, i) => (
+              {g.steps.map((s, i) => (
                 <div key={i} className="hiw-step">
-                  <div className="hiw-step-num">{s.n}</div>
+                  <div className="hiw-step-num">{String(i + 1).padStart(2, "0")}</div>
                   <div className="hiw-step-body">
                     <strong>{s.title}</strong>
                     <p>{s.body}</p>
@@ -200,64 +142,64 @@ export default function BusinessSourcingClient() {
         <section className="section reveal" style={{ background: "var(--paper)" }}>
           <div className="wrap">
             <div className="sec-head">
-              <p className="sec-label">Pricing</p>
-              <h2>Flexible pricing for <em>professional buyers</em></h2>
-              <p className="desc">Business pricing is adapted to the order value, complexity, required locations and expected purchase frequency. Recurring and higher-volume partners receive preferential rates.</p>
+              <p className="sec-label">{g.pricingLabel}</p>
+              <h2>{g.pricingTitle} <em>{g.pricingTitleEm}</em></h2>
+              <p className="desc">{g.pricingDesc}</p>
             </div>
 
             <div className="highlight-pill">
               <span className="highlight-pill-dot" />
-              <span className="highlight-pill-text">Purchasing commission from 5%</span>
+              <span className="highlight-pill-text">{g.highlightBadge}</span>
             </div>
 
             <div className="pricing-formula-grid">
               <div className="pcg-card">
                 <div className="pcg-icon"><Icon d={ICONS.online} /></div>
-                <h3>Online purchasing</h3>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.5rem", fontWeight: 600, color: "var(--red)" }}>From ¥3,000 + 5%</div>
-                <p>Purchasing commission on top of the base fee, quoted before any payment.</p>
+                <h3>{g.priceOnlineTitle}</h3>
+                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.5rem", fontWeight: 600, color: "var(--red)" }}>{g.priceOnlineValue}</div>
+                <p>{g.priceOnlineDesc}</p>
               </div>
               <div className="pcg-card">
                 <div className="pcg-icon"><Icon d={ICONS.pin} /></div>
-                <h3>Targeted visit to one Tokyo location</h3>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.5rem", fontWeight: 600, color: "var(--red)" }}>From ¥6,000 + 5%</div>
-                <p>Purchasing commission on top of the base fee, quoted before any payment.</p>
+                <h3>{g.priceVisitTitle}</h3>
+                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.5rem", fontWeight: 600, color: "var(--red)" }}>{g.priceVisitValue}</div>
+                <p>{g.priceVisitDesc}</p>
               </div>
             </div>
 
             <div className="pricing-custom-grid">
               <div className="pcg-card">
                 <div className="pcg-icon"><Icon d={ICONS.globe} /></div>
-                <h3>Extended or multi-location sourcing</h3>
-                <p>From ¥12,000 + 5% purchasing commission</p>
+                <h3>{g.priceMultiTitle}</h3>
+                <p>{g.priceMultiValue}</p>
               </div>
               <div className="pcg-card">
                 <div className="pcg-icon"><Icon d={ICONS.repeat} /></div>
-                <h3>Recurring and higher-volume operations</h3>
-                <p>Tailored volume pricing</p>
+                <h3>{g.priceRecurringTitle}</h3>
+                <p>{g.priceRecurringValue}</p>
               </div>
               <div className="pcg-card">
                 <div className="pcg-icon"><Icon d={ICONS.budget} /></div>
-                <h3>Recommended merchandise budget</h3>
-                <p>From ¥50,000 per operation</p>
+                <h3>{g.priceBudgetTitle}</h3>
+                <p>{g.priceBudgetValue}</p>
               </div>
             </div>
 
             <div className="shipping-notice">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <span>The final quotation depends on the requested products, location, queueing requirements, purchase restrictions and total merchandise budget. Every cost is confirmed before payment or reservation.</span>
+              <span>{g.noteQuotation}</span>
             </div>
             <div className="shipping-notice">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <span>Product costs, admission fees, exceptional transportation, protective packaging, international shipping and payment-processing fees are charged separately when applicable.</span>
+              <span>{g.noteCosts}</span>
             </div>
 
             <div className="pcg-cta">
               <div className="pcg-cta-left">
-                <strong>Planning your first sourcing test?</strong>
-                <p>Contact us with your target products, event or store, quantities and merchandise budget. We can prepare a tailored quotation for your first professional sourcing operation.</p>
+                <strong>{g.promoTitle}</strong>
+                <p>{g.promoText}</p>
               </div>
-              <a href="#business-form" className="btn btn-gold">Request a Business Quote</a>
+              <a href="#business-form" className="btn btn-gold">{g.promoBtn}</a>
             </div>
           </div>
         </section>
@@ -266,11 +208,11 @@ export default function BusinessSourcingClient() {
         <section className="section reveal">
           <div className="wrap">
             <div className="sec-head">
-              <p className="sec-label">Why Kizuna</p>
-              <h2>Why work with <em>Kizuna Proxy</em></h2>
+              <p className="sec-label">{g.whyLabel}</p>
+              <h2>{g.whyTitle} <em>{g.whyTitleEm}</em></h2>
             </div>
             <div className="why-grid-v2">
-              {BENEFITS.map((b, i) => (
+              {g.benefits.map((b, i) => (
                 <div key={i} className="why-card-v2">
                   <div className="why-card-v2-top">
                     <span className="why-card-v2-n">{String(i + 1).padStart(2, "0")}</span>
@@ -284,18 +226,18 @@ export default function BusinessSourcingClient() {
         </section>
 
         {/* ── Reviews (real reviews, existing component) ── */}
-        <ReviewsSection t={bsT} />
+        <ReviewsSection t={{ reviews: { label: g.reviewsLabel, title: g.reviewsTitle, titleEm: g.reviewsTitleEm, basedOn: g.reviewsBasedOn } }} />
 
         {/* ── 7. Important information ── */}
         <section className="section reveal" style={{ background: "var(--paper)" }}>
           <div className="wrap" style={{ maxWidth: "760px" }}>
             <div className="sec-head">
-              <p className="sec-label">Transparency</p>
-              <h2>Important <em>information</em></h2>
+              <p className="sec-label">{g.transparencyLabel}</p>
+              <h2>{g.transparencyTitle} <em>{g.transparencyTitleEm}</em></h2>
             </div>
             <div className="p-note">
               <ul style={{ display: "flex", flexDirection: "column", gap: ".75rem", listStyle: "none" }}>
-                {LIMITS.map((l, i) => (
+                {g.limits.map((l, i) => (
                   <li key={i} style={{ display: "flex", gap: ".6rem", alignItems: "flex-start" }}>
                     <span style={{ color: "var(--red)", flexShrink: 0 }}>—</span>
                     <span>{l}</span>
@@ -310,14 +252,14 @@ export default function BusinessSourcingClient() {
         <section id="business-form" className="section reveal">
           <div className="wrap" style={{ maxWidth: "760px" }}>
             <div className="sec-head">
-              <p className="sec-label">Get started</p>
-              <h2>Request a <em>business quote</em></h2>
+              <p className="sec-label">{g.formLabel}</p>
+              <h2>{g.formTitle} <em>{g.formTitleEm}</em></h2>
               <p className="desc">
-                Tell us what you need — we&apos;ll review your sourcing request and get back to you with the next steps.
-                Prefer email? <a href="mailto:kizunaproxy@gmail.com?subject=Business%20sourcing%20request" onClick={() => track("business_contact_click")} style={{ color: "var(--red)" }}>kizunaproxy@gmail.com</a>
+                {g.formDesc}{" "}
+                {g.formEmailPrefix} <a href="mailto:kizunaproxy@gmail.com?subject=Business%20sourcing%20request" onClick={() => track("business_contact_click")} style={{ color: "var(--red)" }}>kizunaproxy@gmail.com</a>
               </p>
             </div>
-            <BusinessRequestForm />
+            <BusinessRequestForm t={g.form} />
           </div>
         </section>
 
