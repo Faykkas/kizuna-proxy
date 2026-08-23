@@ -116,9 +116,9 @@ export default function BusinessSourcingClient() {
         {/* ── 1. Hero ── */}
         <section className="hero-center" style={{ padding: "7rem 2rem 5rem" }}>
           <div className="hero-center-inner">
-            <div className="hero-badge-row">
-              <span className="hero-badge-dot" />
-              <span className="hero-badge-text">Business Sourcing</span>
+            <div className="highlight-pill">
+              <span className="highlight-pill-dot" />
+              <span className="highlight-pill-text">Business Sourcing</span>
             </div>
             <h1 className="hero-h1">
               Local sourcing in Tokyo<br /><em>for international businesses</em>
@@ -201,21 +201,26 @@ export default function BusinessSourcingClient() {
           <div className="wrap">
             <div className="sec-head">
               <p className="sec-label">Pricing</p>
-              <h2>Transparent <em>business pricing</em></h2>
-              <p className="desc">Starting prices, not a universal guarantee — every operation is quoted before payment.</p>
+              <h2>Flexible pricing for <em>professional buyers</em></h2>
+              <p className="desc">Business pricing is adapted to the order value, complexity, required locations and expected purchase frequency. Recurring and higher-volume partners receive preferential rates.</p>
+            </div>
+
+            <div className="highlight-pill">
+              <span className="highlight-pill-dot" />
+              <span className="highlight-pill-text">Purchasing commission from 5%</span>
             </div>
 
             <div className="pricing-formula-grid">
               <div className="pcg-card">
                 <div className="pcg-icon"><Icon d={ICONS.online} /></div>
                 <h3>Online purchasing</h3>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.7rem", fontWeight: 600, color: "var(--red)" }}>from ¥5,000 + 10%</div>
+                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.5rem", fontWeight: 600, color: "var(--red)" }}>From ¥3,000 + 5%</div>
                 <p>Purchasing commission on top of the base fee, quoted before any payment.</p>
               </div>
               <div className="pcg-card">
                 <div className="pcg-icon"><Icon d={ICONS.pin} /></div>
-                <h3>Targeted Tokyo visit</h3>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.7rem", fontWeight: 600, color: "var(--red)" }}>from ¥8,000 + 10%</div>
+                <h3>Targeted visit to one Tokyo location</h3>
+                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.5rem", fontWeight: 600, color: "var(--red)" }}>From ¥6,000 + 5%</div>
                 <p>Purchasing commission on top of the base fee, quoted before any payment.</p>
               </div>
             </div>
@@ -224,12 +229,12 @@ export default function BusinessSourcingClient() {
               <div className="pcg-card">
                 <div className="pcg-icon"><Icon d={ICONS.globe} /></div>
                 <h3>Extended or multi-location sourcing</h3>
-                <p>Custom quotation</p>
+                <p>From ¥12,000 + 5% purchasing commission</p>
               </div>
               <div className="pcg-card">
                 <div className="pcg-icon"><Icon d={ICONS.repeat} /></div>
-                <h3>Recurring sourcing partnerships</h3>
-                <p>Custom quotation</p>
+                <h3>Recurring and higher-volume operations</h3>
+                <p>Tailored volume pricing</p>
               </div>
               <div className="pcg-card">
                 <div className="pcg-icon"><Icon d={ICONS.budget} /></div>
@@ -240,7 +245,19 @@ export default function BusinessSourcingClient() {
 
             <div className="shipping-notice">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <span>Product costs, admission or reservation fees, exceptional transportation, protective packaging, international shipping and payment-processing fees are quoted separately when applicable.</span>
+              <span>The final quotation depends on the requested products, location, queueing requirements, purchase restrictions and total merchandise budget. Every cost is confirmed before payment or reservation.</span>
+            </div>
+            <div className="shipping-notice">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>Product costs, admission fees, exceptional transportation, protective packaging, international shipping and payment-processing fees are charged separately when applicable.</span>
+            </div>
+
+            <div className="pcg-cta">
+              <div className="pcg-cta-left">
+                <strong>Planning your first sourcing test?</strong>
+                <p>Contact us with your target products, event or store, quantities and merchandise budget. We can prepare a tailored quotation for your first professional sourcing operation.</p>
+              </div>
+              <a href="#business-form" className="btn btn-gold">Request a Business Quote</a>
             </div>
           </div>
         </section>

@@ -382,6 +382,13 @@ nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,11,.92); ba
 @media (max-width: 900px) { .hiw-steps-4 { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .hiw-steps-4 { grid-template-columns: 1fr; } }
 
+/* Highlight pill (business sourcing pricing) — same look as the old
+   .hero-badge-row, but that class is force-hidden site-wide (see "HERO
+   SANS BADGE" below), so this needs its own name. */
+.highlight-pill { display: inline-flex; align-items: center; gap: .6rem; background: rgba(224,48,64,.1); border: 1px solid rgba(224,48,64,.25); border-radius: 20px; padding: .35rem .9rem .35rem .6rem; margin-bottom: 2rem; }
+.highlight-pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); flex-shrink: 0; animation: pulse-dot 1.8s infinite; }
+.highlight-pill-text { font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; color: var(--red); font-weight: 500; }
+
 /* ── WORLD MAP ── */
 #world-map { background: var(--paper); }
 .world-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; padding: 2rem; margin-top: 2rem; }
