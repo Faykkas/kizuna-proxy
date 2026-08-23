@@ -49,6 +49,26 @@ export default function Home() {
         </a>
       </div>
 
+      {/* B2B PROMO — points business/reseller visitors to /business-sourcing.
+          Kept in English like the other landing-page pointers (Guides
+          dropdown, "Kizuna Box") rather than wired into the 12-language
+          translations dictionary. */}
+      <section className="section reveal" style={{ paddingTop: "0" }}>
+        <div className="wrap">
+          <div className="pcg-cta">
+            <div className="pcg-cta-left">
+              <div className="highlight-pill" style={{ marginBottom: ".9rem" }}>
+                <span className="highlight-pill-dot" />
+                <span className="highlight-pill-text">For businesses &amp; resellers</span>
+              </div>
+              <strong>Running a store or reselling business?</strong>
+              <p>K-pop, anime, cards, streetwear or group orders — we offer dedicated B2B sourcing in Tokyo with volume-friendly pricing.</p>
+            </div>
+            <a href="/business-sourcing" className="btn btn-gold">Explore Business Sourcing →</a>
+          </div>
+        </div>
+      </section>
+
       {/* WHY KIZUNA */}
       <WhyKizunaHomeSection t={t} />
 
