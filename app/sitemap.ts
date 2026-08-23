@@ -41,6 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/tokyo-in-store-personal-shopper`, priority: 0.8, changeFrequency: "monthly" as const },
     { url: `${BASE}/japan-pop-up-store-proxy`, priority: 0.8, changeFrequency: "monthly" as const },
     { url: `${BASE}/pokemon-one-piece-card-proxy-japan`, priority: 0.8, changeFrequency: "monthly" as const },
+    { url: `${BASE}/business-sourcing`, priority: 0.8, changeFrequency: "monthly" as const },
   ];
 
   const blog = BLOG_SLUGS.map(slug => ({

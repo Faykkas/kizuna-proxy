@@ -24,22 +24,43 @@ export async function POST(request) {
       return Response.json({ ok: false }, { status: 503 });
     }
 
-    const { name, email, country, items, budget, contact, quantity, purchaseType, deadline, partialOk } = await request.json();
+    const {
+      name, email, country, items, budget, contact, quantity, purchaseType, deadline, partialOk,
+      // Business sourcing form only — absent on the consumer request form
+      leadType, businessName, businessWebsite, businessType, productCategory,
+      recurringSourcing, contactPlatform, discoverySource,
+      utmSource, utmMedium, utmCampaign, utmContent, utmTerm,
+    } = await request.json();
+
+    const isBusiness = leadType === "business";
 
     const resend = new Resend(key);
     const { error } = await resend.emails.send({
       from: "Kizuna Proxy <onboarding@resend.dev>",
       to: process.env.NOTIFY_EMAIL || "kizunaproxy@gmail.com",
-      subject: `Nouvelle requête — ${name || email}`,
+      subject: isBusiness
+        ? `Nouvelle demande B2B — ${businessName || name || email}`
+        : `Nouvelle requête — ${name || email}`,
       text: [
         `De : ${name || "—"} <${email}>`,
         `Pays : ${country || "—"}`,
-        quantity ? `Quantité : ${quantity}` : null,
-        purchaseType ? `Type d'achat : ${purchaseType === "visit" ? "Visite en boutique" : "Achat en ligne"}` : null,
+        isBusiness ? `Entreprise : ${businessName || "—"}` : null,
+        isBusiness && businessWebsite ? `Site / profil : ${businessWebsite}` : null,
+        isBusiness && businessType ? `Type d'entreprise : ${businessType}` : null,
+        isBusiness && productCategory ? `Catégorie produit : ${productCategory}` : null,
+        isBusiness && contactPlatform ? `Plateforme de contact préférée : ${contactPlatform}` : null,
+        isBusiness && recurringSourcing ? `Sourcing récurrent : ${recurringSourcing}` : null,
+        isBusiness && discoverySource ? `Découvert via : ${discoverySource}` : null,
+        !isBusiness && quantity ? `Quantité : ${quantity}` : null,
+        !isBusiness && purchaseType ? `Type d'achat : ${purchaseType === "visit" ? "Visite en boutique" : "Achat en ligne"}` : null,
+        isBusiness && quantity ? `Quantités souhaitées : ${quantity}` : null,
         deadline ? `Date limite : ${deadline}` : null,
         budget ? `Budget : ${budget}` : null,
         contact ? `Contact préféré : ${contact}` : null,
         `Envoi partiel accepté : ${partialOk ? "Oui" : "Non"}`,
+        (utmSource || utmMedium || utmCampaign || utmContent || utmTerm)
+          ? `UTM : source=${utmSource || "—"} medium=${utmMedium || "—"} campaign=${utmCampaign || "—"} content=${utmContent || "—"} term=${utmTerm || "—"}`
+          : null,
         "",
         items || "",
       ].filter(Boolean).join("\n"),

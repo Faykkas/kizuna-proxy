@@ -286,8 +286,18 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
                     />
                     <div>
                     <strong style={{ fontSize: ".95rem", color: INK, display: "block", marginBottom: ".25rem" }}>
-                      {req.name}
+                      {req.lead_type === "business" && (
+                        <span style={{ fontSize: ".62rem", fontWeight: 700, color: VIOLET, border: `1px solid ${VIOLET}`, borderRadius: "5px", padding: ".1rem .4rem", marginRight: ".5rem", verticalAlign: "middle" }}>
+                          🏢 BUSINESS
+                        </span>
+                      )}
+                      {req.lead_type === "business" ? (req.business_name || req.name) : req.name}
                     </strong>
+                    {req.lead_type === "business" && req.business_name && (
+                      <span style={{ fontSize: ".72rem", color: MUTED, display: "block", marginBottom: ".2rem" }}>
+                        Contact: {req.name}
+                      </span>
+                    )}
                     <a href={`mailto:${req.email}`} style={{ fontSize: ".78rem", color: RED, textDecoration: "none" }}>
                       {req.email}
                     </a>
@@ -329,6 +339,48 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
                     {req.partial_ok != null && (
                       <span style={{ fontSize: ".72rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
                         Partial: {req.partial_ok ? "OK" : "All or nothing"}
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                {/* Business-only chips: type, category, website, recurring, contact platform, discovery source */}
+                {req.lead_type === "business" && (
+                  <div style={{ display: "flex", gap: ".5rem", flexWrap: "wrap", marginBottom: ".8rem" }}>
+                    {req.business_type && (
+                      <span style={{ fontSize: ".72rem", color: VIOLET, border: `1px solid ${VIOLET}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
+                        {req.business_type}
+                      </span>
+                    )}
+                    {req.product_category && (
+                      <span style={{ fontSize: ".72rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
+                        Category: {req.product_category}
+                      </span>
+                    )}
+                    {req.business_website && (
+                      <a href={req.business_website.startsWith("http") ? req.business_website : `https://${req.business_website}`} target="_blank" rel="noopener noreferrer"
+                        style={{ fontSize: ".72rem", color: RED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem", textDecoration: "none" }}>
+                        🔗 Business site
+                      </a>
+                    )}
+                    {req.recurring_sourcing && (
+                      <span style={{ fontSize: ".72rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
+                        Recurring: {req.recurring_sourcing}
+                      </span>
+                    )}
+                    {req.contact_platform && (
+                      <span style={{ fontSize: ".72rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
+                        Contact via: {req.contact_platform}
+                      </span>
+                    )}
+                    {req.discovery_source && (
+                      <span style={{ fontSize: ".72rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
+                        Found us: {req.discovery_source}
+                      </span>
+                    )}
+                    {(req.utm_source || req.utm_campaign) && (
+                      <span style={{ fontSize: ".72rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
+                        UTM: {[req.utm_source, req.utm_medium, req.utm_campaign].filter(Boolean).join(" / ")}
                       </span>
                     )}
                   </div>

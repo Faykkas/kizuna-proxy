@@ -21,6 +21,7 @@ const BLOG_ITEMS = [
   { href:"/tokyo-in-store-personal-shopper",        emoji:"🏬", label:"In-Store Shopper" },
   { href:"/japan-pop-up-store-proxy",               emoji:"🎪", label:"Pop-Up Store Proxy" },
   { href:"/pokemon-one-piece-card-proxy-japan",     emoji:"🎴", label:"Card Proxy" },
+  { href:"/business-sourcing",                      emoji:"💼", label:"Business Sourcing" },
 ];
 
 export default function SiteNav() {

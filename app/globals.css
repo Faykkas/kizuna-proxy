@@ -377,6 +377,11 @@ nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,11,.92); ba
 .hiw-step-body p { font-size: .82rem; line-height: 1.8; color: var(--warm); font-weight: 300; margin: 0; }
 @media (max-width: 768px) { .hiw-steps { grid-template-columns: 1fr; } .hiw-step:not(:last-child)::after { display: none; } }
 
+/* 4-step variant (business sourcing page) */
+.hiw-steps-4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 900px) { .hiw-steps-4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .hiw-steps-4 { grid-template-columns: 1fr; } }
+
 /* ── WORLD MAP ── */
 #world-map { background: var(--paper); }
 .world-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; padding: 2rem; margin-top: 2rem; }
