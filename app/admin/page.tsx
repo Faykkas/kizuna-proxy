@@ -9,6 +9,7 @@ import RequestsTab from "../components/admin/RequestsTab";
 import CustomersTab from "../components/admin/CustomersTab";
 import WaitlistTab from "../components/admin/WaitlistTab";
 import ChargesTab from "../components/admin/ChargesTab";
+import PaymentLinksTab from "../components/admin/PaymentLinksTab";
 import QuickSearch from "../components/admin/QuickSearch";
 import { ALL_STATUSES, statusColor, orderTitle } from "../lib/orderStatus";
 
@@ -391,6 +392,7 @@ export default function AdminPage() {
     { id:"events",   label:al.tabs.events || "🎌 Events" },
     { id:"waitlist", label:"🎁 Box Waitlist" },
     { id:"charges",  label:"💰 Charges JP" },
+    { id:"paylinks", label:"💳 Liens de paiement" },
   ];
 
   return (
@@ -457,6 +459,7 @@ export default function AdminPage() {
         {tab==="events"   && <EventsTab supabase={supabase} al={al} />}
         {tab==="waitlist" && <WaitlistTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
         {tab==="charges"  && <ChargesTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
+        {tab==="paylinks" && <PaymentLinksTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
       </div>
     </div>
   );
