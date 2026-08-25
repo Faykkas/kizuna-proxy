@@ -196,12 +196,18 @@ export default function ChargesTab({ tokens }) {
       const key = o.purchase_date.slice(0, 7);
       map[key] = (map[key] || 0) + (o.service_fee_jpy || 0);
     });
+    // Expenses are configured as an ongoing run-rate, not tracked per actual
+    // month, so each month absorbs an even 1/12 share of the annual total.
+    const monthlyExpenseShare = annualExpenses / 12;
     let cumulative = 0;
+    let cumulativeProfit = 0;
     return Array.from({ length: 12 }, (_, i) => {
       const key = `${year}-${String(i + 1).padStart(2, "0")}`;
       const rev = map[key] || 0;
+      const profit = rev - monthlyExpenseShare;
       cumulative += rev;
-      return { key, label: new Date(key + "-01").toLocaleDateString("fr-FR", { month: "short" }), revenue: rev, cumulative };
+      cumulativeProfit += profit;
+      return { key, label: new Date(key + "-01").toLocaleDateString("fr-FR", { month: "short" }), revenue: rev, cumulative, profit, cumulativeProfit };
     });
   }, [orders, year]);
 
@@ -511,10 +517,11 @@ export default function ChargesTab({ tokens }) {
 
       {/* Monthly revenue context */}
       <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "12px", padding: "1.3rem", marginBottom: "1.5rem", overflowX: "auto" }}>
-        <p style={{ fontSize: "1rem", fontWeight: 600, color: INK, marginBottom: "1rem" }}>CA mois par mois — {year}</p>
+        <p style={{ fontSize: "1rem", fontWeight: 600, color: INK, marginBottom: ".3rem" }}>CA et bénéfice mois par mois — {year}</p>
+        <p style={{ fontSize: ".68rem", color: MUTED, marginBottom: "1rem" }}>Le bénéfice mensuel répartit les dépenses professionnelles annualisées à parts égales sur les 12 mois (¥{fmtYen(annualExpenses / 12).slice(1)}/mois) — ce n'est pas un suivi de dépenses réelles mois par mois.</p>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: ".8rem" }}>
           <thead>
-            <tr>{["Mois", "CA du mois", "Cumulé"].map(h => (
+            <tr>{["Mois", "CA du mois", "CA cumulé", "Bénéfice du mois", "Bénéfice cumulé"].map(h => (
               <th key={h} style={{ padding: ".5rem .7rem", textAlign: "left", fontSize: ".64rem", letterSpacing: ".06em", textTransform: "uppercase", color: MUTED, borderBottom: `1px solid ${BORDER}` }}>{h}</th>
             ))}</tr>
           </thead>
@@ -523,7 +530,9 @@ export default function ChargesTab({ tokens }) {
               <tr key={m.key} style={{ borderBottom: `1px solid ${BORDER}` }}>
                 <td style={{ padding: ".5rem .7rem", color: INK, fontWeight: 500, textTransform: "capitalize" }}>{m.label}</td>
                 <td style={{ padding: ".5rem .7rem", color: MUTED }}>{fmtYen(m.revenue)}</td>
-                <td style={{ padding: ".5rem .7rem", color: RED }}>{fmtYen(m.cumulative)}</td>
+                <td style={{ padding: ".5rem .7rem", color: MUTED }}>{fmtYen(m.cumulative)}</td>
+                <td style={{ padding: ".5rem .7rem", color: m.profit >= 0 ? RED : ALERT, fontWeight: 500 }}>{fmtYen(m.profit)}</td>
+                <td style={{ padding: ".5rem .7rem", color: m.cumulativeProfit >= 0 ? RED : ALERT }}>{fmtYen(m.cumulativeProfit)}</td>
               </tr>
             ))}
           </tbody>
