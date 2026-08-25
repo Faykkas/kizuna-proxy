@@ -3,63 +3,72 @@
 // app/components/admin/ChargesTab.tsx
 //
 // "Combien dois-je mettre de côté pour mes charges japonaises ?" — un
-// calculateur, pas un conseil fiscal. Chaque ligne (assurance, retraite,
-// impôts, frais Kizuna...) est soit un pourcentage du chiffre d'affaires,
-// soit un montant fixe annuel, et entièrement modifiable : les valeurs de
-// départ sont des repères grossiers pour un auto-entrepreneur (kojin
-// jigyou), pas des taux réels — l'impôt sur le revenu japonais en
-// particulier est progressif et ne peut pas être approximé par un seul
-// pourcentage plat. À vérifier avec un comptable (税理士) ou le bureau des
-// impôts / la mairie avant de s'y fier.
+// calculateur, pas un conseil fiscal.
+//
+// v2: the old model applied every rate directly to revenue (CA), which
+// overstates everything — most Japanese charges are computed from PROFIT,
+// TAXABLE income, or the PRIOR YEAR's income, not raw turnover. This
+// version builds a real base (CA − dépenses = bénéfice), then applies each
+// charge's actual formula against the right base:
+//   - Kokuho (health insurance) & Jūminzei (resident tax): prior-year income
+//   - Shotokuzei (income tax): this year's profit minus deductions, bracket
+//   - Kojin Jigyōzei (business tax): this year's profit minus a threshold
+//   - Nenkin (pension): flat, unrelated to income
+// Every rate/threshold/deduction stays editable in Settings — Japanese
+// municipal rates and national brackets change every year.
 
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "../../lib/supabase";
 
-// Sourced from official/authoritative Japanese references (checked August
-// 2026, FY2026 = avril 2026-mars 2027). Health insurance and income tax are
-// genuinely formula/bracket-based, not flat rates — the % here is a rough
-// starting point only; the real structure and sources are in each note.
-const STARTER_CHARGES = [
-  { label: "Assurance maladie (Kokumin Kenkō Hoken)", type: "percentage", rate: 10, fixed_amount_jpy: null,
-    notes: "Calcul réel = (revenu N-1 − 430 000¥ d'abattement) × taux communal + part forfaitaire par personne — le % ici n'est qu'un repère. Plafond national FY2026 : ¥1 130 000/an (médical ¥670k + soutien seniors ¥260k + dépendance 40-64 ans ¥170k + nouvelle part enfance ¥30k, incluse). Vérifie le taux exact auprès de ta mairie. Sources : décret 令和8年政令第2号 (janv. 2026), résumé sur freee.co.jp/kb/kb-trend/national-health-insurance-cap-increase, guide de Shinjuku city.shinjuku.lg.jp/content/000339876.pdf",
-    sort_order: 1 },
-  { label: "Retraite nationale (Kokumin Nenkin)", type: "fixed", rate: null, fixed_amount_jpy: 215040,
-    notes: "Cotisation fixe nationale FY2026 (avril 2026-mars 2027) : ¥17 920/mois × 12. Revalorisée chaque avril — vérifie le montant en vigueur. Une remise existe si tu paies plusieurs mois à l'avance (前納). Source officielle (日本年金機構) : nenkin.go.jp/service/kokunen/hokenryo/hokenryo.html",
-    sort_order: 2 },
-  { label: "Impôt sur le revenu (Shotokuzei)", type: "percentage", rate: 5, fixed_amount_jpy: null,
-    notes: "Progressif par tranches (barème national) : 5% jusqu'à ¥1 949 000, 10% jusqu'à ¥3 299 000 (-¥97 500), 20% jusqu'à ¥6 949 000 (-¥427 500), 23% jusqu'à ¥8 999 000 (-¥636 000), 33% au-delà. + 2,1% de surtaxe de reconstruction sur l'impôt dû. Recalcule avec ton revenu net réel — 5% est un repère bas revenu, pas un taux fixe. Source (国税庁) : nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm",
-    sort_order: 3 },
-  { label: "Taxe d'habitant — part proportionnelle (Jūminzei)", type: "percentage", rate: 10, fixed_amount_jpy: null,
-    notes: "10% du revenu imposable de l'année précédente (4% préfecture + 6% commune) — taux standard national. Source (総務省) : soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/150790_06.html",
-    sort_order: 4 },
-  { label: "Taxe d'habitant — part forfaitaire (Kintō-wari)", type: "fixed", rate: null, fixed_amount_jpy: 5000,
-    notes: "Part fixe par personne : ¥4 000/an standard + ¥1 000/an de taxe environnementale forestière (depuis FY2024) = ¥5 000/an. Source (総務省) : soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/150790_18.html",
-    sort_order: 5 },
-  { label: "Taxe professionnelle individuelle (Kojin Jigyōzei)", type: "percentage", rate: 5, fixed_amount_jpy: null,
-    notes: "5% sur (bénéfice − abattement de ¥2 900 000/an) — en dessous du seuil, pas de taxe. La vente pour compte de tiers (代理業) et la vente de biens (物品販売業) — ce que fait Kizuna — sont explicitement des catégories imposées à 5% selon la métropole de Tokyo. Source : tax.metro.tokyo.lg.jp/kazei/work/kojin_ji",
-    sort_order: 6 },
-  { label: "Taxe sur la consommation (Shōhizei)", type: "fixed", rate: null, fixed_amount_jpy: 0,
-    notes: "Exonéré tant que le CA imposable des 2 années précédentes ≤ ¥10 000 000. Mais si tu t'inscris comme émetteur de factures qualifiées (インボイス制度, pour des clients B2B qui en ont besoin), tu deviens redevable même en dessous — une mesure transitoire plafonne alors la taxe à 20% de la TVA collectée les premières années. Mets à jour si ta situation change. Source (国税庁) : nta.go.jp/taxes/shiraberu/taxanswer/shohi/6501.htm",
-    sort_order: 7 },
-  { label: "Frais professionnels Kizuna (annuels)", type: "fixed", rate: null, fixed_amount_jpy: 0,
-    notes: "Hébergement, logiciels, comptable, renouvellements divers — à remplir toi-même.",
-    sort_order: 8 },
-];
-
 function fmtYen(n) {
-  return "¥" + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  const sign = n < 0 ? "-" : "";
+  return sign + "¥" + Math.round(Math.abs(n || 0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
+// 国税庁 (National Tax Agency) progressive bracket table — nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm
+const INCOME_TAX_BRACKETS = [
+  { upTo: 1949000, rate: 0.05, deduction: 0 },
+  { upTo: 3299000, rate: 0.10, deduction: 97500 },
+  { upTo: 6949000, rate: 0.20, deduction: 427500 },
+  { upTo: 8999000, rate: 0.23, deduction: 636000 },
+  { upTo: 17999000, rate: 0.33, deduction: 1536000 },
+  { upTo: 39999000, rate: 0.40, deduction: 2796000 },
+  { upTo: Infinity, rate: 0.45, deduction: 4796000 },
+];
+function incomeTaxBracket(taxable) {
+  if (taxable <= 0) return 0;
+  const b = INCOME_TAX_BRACKETS.find(b => taxable <= b.upTo);
+  return Math.max(taxable * b.rate - b.deduction, 0);
+}
+
+const DEFAULT_SETTINGS = {
+  prev_year_income_override: null,
+  kokuho_rate_pct: 10.58, kokuho_flat_jpy: 67073, kokuho_deduction_jpy: 430000, kokuho_proration_months: 12,
+  nenkin_monthly_jpy: 17920,
+  income_tax_base_deduction_jpy: 480000, income_tax_blue_return_deduction_jpy: 0, income_tax_other_deductions_jpy: 0,
+  reconstruction_surtax_pct: 2.1,
+  juminzei_deduction_jpy: 430000, juminzei_proportional_pct: 10, juminzei_flat_jpy: 5000,
+  jigyozei_threshold_jpy: 2900000, jigyozei_rate_pct: 5,
+  consumption_tax_subject: false, consumption_tax_invoice_registered: false, consumption_tax_manual_amount_jpy: 0,
+  safety_reserve_pct: 25,
+};
+
+const EXPENSE_CATEGORIES = ["Hébergement", "Domaine", "Logiciels", "Publicité", "Frais PayPal/Stripe", "Comptable", "Déplacements", "Fournitures", "Autre"];
+
 export default function ChargesTab({ tokens }) {
-  const { BG, SURFACE, SURFACE2, BORDER, RED, VIOLET, ALERT, INK, MUTED, PIXEL, BODY } = tokens;
+  const { BG, SURFACE, BORDER, RED, VIOLET, ALERT, INK, MUTED, BODY } = tokens;
 
   const [orders, setOrders] = useState([]);
-  const [charges, setCharges] = useState([]);
+  const [settings, setSettings] = useState(null);
+  const [expenses, setExpenses] = useState([]);
   const [savings, setSavings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [year, setYear] = useState(new Date().getFullYear());
-  const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState(null);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
+  const [settingsForm, setSettingsForm] = useState(null);
+  const [expenseEditing, setExpenseEditing] = useState(null);
+  const [expenseForm, setExpenseForm] = useState(null);
   const [savingsInput, setSavingsInput] = useState("");
   const [msg, setMsg] = useState("");
 
@@ -67,24 +76,42 @@ export default function ChargesTab({ tokens }) {
 
   async function load() {
     setLoading(true);
-    const [{ data: o }, { data: c }, { data: s }] = await Promise.all([
+    const [{ data: o }, { data: s }, { data: e }, { data: sv }] = await Promise.all([
       supabase.from("orders").select("purchase_date, service_fee_jpy"),
-      supabase.from("business_charges").select("*").order("sort_order"),
+      supabase.from("business_tax_settings").select("*").limit(1).maybeSingle(),
+      supabase.from("business_expenses").select("*").order("sort_order"),
       supabase.from("business_savings").select("*").limit(1).maybeSingle(),
     ]);
     setOrders(o || []);
-    setCharges(c || []);
-    setSavings(s || null);
-    setSavingsInput(s?.reserved_jpy != null ? String(s.reserved_jpy) : "");
+    setSettings(s || null);
+    setSettingsForm(s || DEFAULT_SETTINGS);
+    setExpenses(e || []);
+    setSavings(sv || null);
+    setSavingsInput(sv?.reserved_jpy != null ? String(sv.reserved_jpy) : "");
     setLoading(false);
   }
 
-  // Explicit, one-time action rather than an auto-insert-on-empty-load side
-  // effect — the latter double-fires (and double-inserts) under React
-  // StrictMode's dev double-invoke of effects.
-  async function seedStarters() {
-    const { data: seeded } = await supabase.from("business_charges").insert(STARTER_CHARGES).select();
-    setCharges(seeded || []);
+  // Explicit action, not an auto-insert-on-empty-load side effect — the
+  // latter double-fires (and double-inserts) under React StrictMode's dev
+  // double-invoke of effects.
+  async function initSettings() {
+    const { data } = await supabase.from("business_tax_settings").insert(DEFAULT_SETTINGS).select().single();
+    setSettings(data);
+    setSettingsForm(data);
+  }
+
+  async function saveSettings() {
+    const payload = { ...settingsForm, updated_at: new Date().toISOString() };
+    delete payload.id;
+    if (settings?.id) {
+      await supabase.from("business_tax_settings").update(payload).eq("id", settings.id);
+      setSettings(prev => ({ ...prev, ...payload }));
+    } else {
+      const { data } = await supabase.from("business_tax_settings").insert(payload).select().single();
+      setSettings(data);
+    }
+    setMsg("✓ Paramètres enregistrés.");
+    setTimeout(() => setMsg(""), 3000);
   }
 
   const years = useMemo(() => {
@@ -93,91 +120,130 @@ export default function ChargesTab({ tokens }) {
     return [...set].sort((a, b) => b - a);
   }, [orders]);
 
-  const revenue = useMemo(() => {
-    return orders
-      .filter(o => o.purchase_date?.slice(0, 4) === String(year))
-      .reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
-  }, [orders, year]);
-
-  // What one charge line costs for a given month's actual revenue — the
-  // fixed ones (nenkin, kintō-wari...) are billed the same every month
-  // regardless of how much came in, so they're just the annual amount ÷ 12;
-  // the percentage ones scale with that month's real revenue.
-  function chargeForMonth(c, monthRevenue) {
-    return c.type === "percentage" ? monthRevenue * (Number(c.rate) || 0) / 100 : (Number(c.fixed_amount_jpy) || 0) / 12;
+  function revenueForYear(y) {
+    return orders.filter(o => o.purchase_date?.slice(0, 4) === String(y)).reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
   }
 
-  // Month-by-month: real revenue per month → real charges per month, rather
-  // than one annual lump smeared evenly across 12 months.
+  // Expenses are configured as an ongoing monthly/annual run-rate, not a
+  // historical per-year ledger — so the same annualised total is used for
+  // whichever year is being looked at (including the prior year, when
+  // estimating last year's profit for Kokuho/Jūminzei below).
+  const annualExpenses = useMemo(() => {
+    return expenses.reduce((s, e) => s + (e.frequency === "monthly" ? (Number(e.amount_jpy) || 0) * 12 : (Number(e.amount_jpy) || 0)), 0);
+  }, [expenses]);
+
+  function profitForYear(y) {
+    return revenueForYear(y) - annualExpenses;
+  }
+
+  const calc = useMemo(() => {
+    const st = settings || DEFAULT_SETTINGS;
+    const revenue = revenueForYear(year);
+    const profit = profitForYear(year); // can be negative (déficit) — shown as-is
+
+    const prevYearProfit = profitForYear(year - 1);
+    const prevYearIncome = st.prev_year_income_override != null && st.prev_year_income_override !== ""
+      ? Number(st.prev_year_income_override)
+      : Math.max(prevYearProfit, 0);
+
+    // ── Kokuho (health insurance) — based on prior-year income, prorated ──
+    const kokuhoFull = Math.max(prevYearIncome - Number(st.kokuho_deduction_jpy), 0) * (Number(st.kokuho_rate_pct) / 100) + Number(st.kokuho_flat_jpy);
+    const kokuho = kokuhoFull * (Math.min(Math.max(Number(st.kokuho_proration_months), 0), 12) / 12);
+
+    // ── Nenkin (pension) — flat, unrelated to income ──
+    const nenkin = Number(st.nenkin_monthly_jpy) * 12;
+
+    // ── Shotokuzei (income tax) — this year's profit, minus deductions ──
+    const socialPremiumsPaid = kokuho + nenkin; // 社会保険料控除
+    const taxableIncome = Math.max(
+      profit
+      - Number(st.income_tax_base_deduction_jpy)
+      - socialPremiumsPaid
+      - Number(st.income_tax_blue_return_deduction_jpy)
+      - Number(st.income_tax_other_deductions_jpy),
+      0
+    );
+    const incomeTaxBase = incomeTaxBracket(taxableIncome);
+    const incomeTax = incomeTaxBase * (1 + Number(st.reconstruction_surtax_pct) / 100);
+
+    // ── Jūminzei (resident tax) — prior-year income, simplified single deduction ──
+    const juminzeiTaxable = Math.max(prevYearIncome - Number(st.juminzei_deduction_jpy), 0);
+    const juminzeiProportional = juminzeiTaxable * (Number(st.juminzei_proportional_pct) / 100);
+    const juminzei = juminzeiProportional + Number(st.juminzei_flat_jpy);
+
+    // ── Kojin Jigyōzei (individual business tax) — this year's profit, threshold ──
+    const jigyozei = Math.max(profit - Number(st.jigyozei_threshold_jpy), 0) * (Number(st.jigyozei_rate_pct) / 100);
+
+    // ── Shōhizei (consumption tax) — manual, only if flagged as subject ──
+    const shohizei = st.consumption_tax_subject ? Number(st.consumption_tax_manual_amount_jpy) : 0;
+
+    const totalTaxes = kokuho + nenkin + incomeTax + juminzei + jigyozei + shohizei;
+    const remainingIncome = profit - totalTaxes;
+    const safetyReserve = Math.max(profit, 0) * (Number(st.safety_reserve_pct) / 100);
+
+    return {
+      revenue, profit, prevYearProfit, prevYearIncome,
+      kokuho, kokuhoFull, nenkin, socialPremiumsPaid, taxableIncome, incomeTaxBase, incomeTax,
+      juminzeiTaxable, juminzeiProportional, juminzei, jigyozei, shohizei,
+      totalTaxes, remainingIncome, safetyReserve,
+    };
+  }, [orders, settings, annualExpenses, year]);
+
   const monthly = useMemo(() => {
     const map = {};
     orders.forEach(o => {
       if (!o.purchase_date?.startsWith(String(year))) return;
-      const key = o.purchase_date.slice(0, 7); // YYYY-MM
+      const key = o.purchase_date.slice(0, 7);
       map[key] = (map[key] || 0) + (o.service_fee_jpy || 0);
     });
-    const monthKeys = Array.from({ length: 12 }, (_, i) => `${year}-${String(i + 1).padStart(2, "0")}`);
-    return monthKeys.map(key => {
-      const monthRevenue = map[key] || 0;
-      const perCharge = charges.map(c => ({ label: c.label, amount: chargeForMonth(c, monthRevenue) }));
-      const total = perCharge.reduce((s, c) => s + c.amount, 0);
-      const label = new Date(key + "-01").toLocaleDateString("fr-FR", { month: "short" });
-      return { key, label, revenue: monthRevenue, total, perCharge };
+    let cumulative = 0;
+    return Array.from({ length: 12 }, (_, i) => {
+      const key = `${year}-${String(i + 1).padStart(2, "0")}`;
+      const rev = map[key] || 0;
+      cumulative += rev;
+      return { key, label: new Date(key + "-01").toLocaleDateString("fr-FR", { month: "short" }), revenue: rev, cumulative };
     });
-  }, [orders, charges, year]);
+  }, [orders, year]);
 
-  const computed = useMemo(() => {
-    return charges.map(c => ({
-      ...c,
-      amount: c.type === "percentage" ? revenue * (Number(c.rate) || 0) / 100 : Number(c.fixed_amount_jpy) || 0,
-    }));
-  }, [charges, revenue]);
-
-  const totalCharges = monthly.reduce((s, m) => s + m.total, 0);
   const reserved = Number(savings?.reserved_jpy) || 0;
-  const remaining = Math.max(totalCharges - reserved, 0);
-
+  const remainingToSave = Math.max(calc.totalTaxes - reserved, 0);
   const now = new Date();
   const isCurrentYear = year === now.getFullYear();
-  const currentMonthTotal = isCurrentYear ? (monthly[now.getMonth()]?.total || 0) : (totalCharges / 12);
   const monthsLeft = isCurrentYear ? Math.max(12 - now.getMonth(), 1) : 12;
-  const perMonth = remaining / monthsLeft;
+  const perMonth = remainingToSave / monthsLeft;
 
-  function startAdd() {
-    setEditing("new");
-    setForm({ label: "", type: "percentage", rate: 0, fixed_amount_jpy: 0, notes: "", sort_order: charges.length + 1 });
+  function startAddExpense() {
+    setExpenseEditing("new");
+    setExpenseForm({ label: "", category: EXPENSE_CATEGORIES[0], amount_jpy: 0, frequency: "monthly", notes: "", sort_order: expenses.length + 1 });
   }
-  function startEdit(c) {
-    setEditing(c.id);
-    setForm({ ...c });
+  function startEditExpense(e) {
+    setExpenseEditing(e.id);
+    setExpenseForm({ ...e });
   }
-  async function saveForm() {
-    if (!form.label.trim()) return;
+  async function saveExpense() {
+    if (!expenseForm.label.trim()) return;
     const payload = {
-      label: form.label,
-      type: form.type,
-      rate: form.type === "percentage" ? Number(form.rate) || 0 : null,
-      fixed_amount_jpy: form.type === "fixed" ? Number(form.fixed_amount_jpy) || 0 : null,
-      notes: form.notes || null,
-      sort_order: Number(form.sort_order) || 0,
+      label: expenseForm.label, category: expenseForm.category,
+      amount_jpy: Number(expenseForm.amount_jpy) || 0, frequency: expenseForm.frequency,
+      notes: expenseForm.notes || null, sort_order: Number(expenseForm.sort_order) || 0,
     };
-    if (editing === "new") {
-      const { data } = await supabase.from("business_charges").insert(payload).select().single();
-      if (data) setCharges(prev => [...prev, data].sort((a, b) => a.sort_order - b.sort_order));
+    if (expenseEditing === "new") {
+      const { data } = await supabase.from("business_expenses").insert(payload).select().single();
+      if (data) setExpenses(prev => [...prev, data].sort((a, b) => a.sort_order - b.sort_order));
     } else {
-      await supabase.from("business_charges").update(payload).eq("id", editing);
-      setCharges(prev => prev.map(c => c.id === editing ? { ...c, ...payload } : c).sort((a, b) => a.sort_order - b.sort_order));
+      await supabase.from("business_expenses").update(payload).eq("id", expenseEditing);
+      setExpenses(prev => prev.map(e => e.id === expenseEditing ? { ...e, ...payload } : e).sort((a, b) => a.sort_order - b.sort_order));
     }
-    setEditing(null);
-    setForm(null);
+    setExpenseEditing(null);
+    setExpenseForm(null);
   }
-  async function deleteCharge(id) {
-    if (!confirm("Supprimer cette rubrique ?")) return;
-    await supabase.from("business_charges").delete().eq("id", id);
-    setCharges(prev => prev.filter(c => c.id !== id));
+  async function deleteExpense(id) {
+    if (!confirm("Supprimer cette dépense ?")) return;
+    await supabase.from("business_expenses").delete().eq("id", id);
+    setExpenses(prev => prev.filter(e => e.id !== id));
   }
 
-  async function saveSavings() {
+  async function saveSavingsAmount() {
     const amount = Number(savingsInput) || 0;
     if (savings?.id) {
       await supabase.from("business_savings").update({ reserved_jpy: amount, updated_at: new Date().toISOString() }).eq("id", savings.id);
@@ -191,163 +257,277 @@ export default function ChargesTab({ tokens }) {
   }
 
   const inp = { width: "100%", padding: ".55rem .75rem", border: `1px solid ${BORDER}`, borderRadius: "6px", fontSize: ".82rem", fontFamily: BODY, background: BG, color: INK, outline: "none", boxSizing: "border-box" };
-  const lbl = { fontSize: ".68rem", fontWeight: 600, letterSpacing: ".02em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: ".3rem", fontFamily: BODY };
+  const lbl = { fontSize: ".65rem", fontWeight: 600, letterSpacing: ".02em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: ".3rem", fontFamily: BODY };
+  const row = (label, value, opts = {}) => (
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: ".55rem 0", borderBottom: opts.noBorder ? "none" : `1px solid ${BORDER}` }}>
+      <span style={{ fontSize: opts.bold ? ".9rem" : ".82rem", color: opts.bold ? INK : MUTED, fontWeight: opts.bold ? 600 : 400 }}>{label}</span>
+      <span style={{ fontSize: opts.bold ? "1.05rem" : ".88rem", fontWeight: opts.bold ? 700 : 500, color: opts.color || INK }}>{value}</span>
+    </div>
+  );
 
   if (loading) return <p style={{ color: MUTED, padding: "2rem", textAlign: "center" }}>Chargement…</p>;
+
+  if (!settings) {
+    return (
+      <div style={{ textAlign: "center", padding: "3rem" }}>
+        <p style={{ color: MUTED, fontSize: ".85rem", marginBottom: "1rem" }}>Premier lancement — initialise les paramètres de calcul (taux, seuils, déductions).</p>
+        <button onClick={initSettings} style={{ background: RED, color: "#fff", border: "none", borderRadius: "8px", padding: ".6rem 1.2rem", fontSize: ".82rem", fontWeight: 600, cursor: "pointer" }}>
+          Initialiser les paramètres
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div style={{ fontFamily: BODY }}>
 
       {/* Disclaimer */}
       <div style={{ background: "rgba(245,166,35,.1)", border: "1px solid rgba(245,166,35,.35)", borderRadius: "10px", padding: "1rem 1.2rem", marginBottom: "1.5rem", fontSize: ".8rem", color: INK, lineHeight: 1.6 }}>
-        ⚠️ <strong>Outil de calcul indicatif, pas un conseil fiscal.</strong> Les rubriques de départ sont sourcées (voir la note et le lien de chaque ligne, vérifiés août 2026 pour l'exercice FY2026) mais restent des repères pour un auto-entrepreneur (kojin jigyou) — l'assurance maladie et l'impôt sur le revenu dépendent de ton revenu réel, ta commune et ta situation, pas d'un seul pourcentage plat. Vérifie tes vrais montants avec un comptable (税理士) ou ta mairie/le bureau des impôts avant de t'y fier.
+        ⚠️ <strong>Outil de calcul indicatif, pas un conseil fiscal.</strong> Chaque taxe utilise sa vraie base (bénéfice, revenu imposable, ou revenu de l'année précédente selon le cas) plutôt qu'un pourcentage plat du CA — mais les taux, seuils et déductions restent des repères à vérifier avec un comptable (税理士) ou ta mairie. La Jūminzei et le Kokuho utilisent une approximation du revenu N-1 basée sur tes commandes historiques ; remplace-la par le vrai montant de ton avis d'imposition dans les paramètres dès que tu l'as.
       </div>
 
-      {/* Year + revenue */}
-      <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem", flexWrap: "wrap" }}>
-        <div>
-          <label style={lbl}>Année</label>
-          <select value={year} onChange={e => setYear(Number(e.target.value))} style={{ ...inp, width: "auto", padding: ".5rem .8rem" }}>
-            {years.map(y => <option key={y} value={y}>{y}</option>)}
-          </select>
-        </div>
-        <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "10px", padding: "1rem 1.3rem", flex: 1, minWidth: "200px" }}>
-          <div style={{ fontSize: ".68rem", color: MUTED, marginBottom: ".2rem" }}>Chiffre d'affaires {year} (frais de service)</div>
-          <div style={{ fontSize: "1.3rem", fontWeight: 600, color: RED, fontFamily: BODY }}>{fmtYen(revenue)}</div>
-        </div>
+      {/* Year */}
+      <div style={{ marginBottom: "1.5rem" }}>
+        <label style={lbl}>Année</label>
+        <select value={year} onChange={e => setYear(Number(e.target.value))} style={{ ...inp, width: "auto", padding: ".5rem .8rem" }}>
+          {years.map(y => <option key={y} value={y}>{y}</option>)}
+        </select>
       </div>
 
-      {/* Monthly breakdown — each month's charges are computed from that
-          month's actual revenue, not a flat annual average. */}
-      <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "12px", padding: "1.3rem", marginBottom: "1.5rem", overflowX: "auto" }}>
-        <p style={{ fontSize: "1rem", fontWeight: 600, color: INK, marginBottom: "1rem" }}>Mois par mois — {year}</p>
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: ".8rem" }}>
-          <thead>
-            <tr>
-              {["Mois", "CA du mois", "Charges à provisionner", "Reste après charges"].map(h => (
-                <th key={h} style={{ padding: ".5rem .7rem", textAlign: "left", fontSize: ".64rem", letterSpacing: ".06em", textTransform: "uppercase", color: MUTED, borderBottom: `1px solid ${BORDER}` }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {monthly.map(m => (
-              <tr key={m.key} style={{ borderBottom: `1px solid ${BORDER}`, background: isCurrentYear && m.key === `${year}-${String(now.getMonth() + 1).padStart(2, "0")}` ? "rgba(224,48,64,.06)" : "transparent" }}
-                title={m.perCharge.map(pc => `${pc.label}: ${fmtYen(pc.amount)}`).join("\n")}>
-                <td style={{ padding: ".55rem .7rem", color: INK, fontWeight: 500, textTransform: "capitalize" }}>{m.label}</td>
-                <td style={{ padding: ".55rem .7rem", color: MUTED }}>{fmtYen(m.revenue)}</td>
-                <td style={{ padding: ".55rem .7rem", color: RED, fontWeight: 500 }}>{fmtYen(m.total)}</td>
-                <td style={{ padding: ".55rem .7rem", color: m.revenue - m.total >= 0 ? MUTED : ALERT }}>{fmtYen(m.revenue - m.total)}</td>
-              </tr>
-            ))}
-            <tr style={{ background: BG }}>
-              <td style={{ padding: ".6rem .7rem", color: INK, fontWeight: 600 }}>TOTAL</td>
-              <td style={{ padding: ".6rem .7rem", color: INK, fontWeight: 600 }}>{fmtYen(revenue)}</td>
-              <td style={{ padding: ".6rem .7rem", color: RED, fontWeight: 600 }}>{fmtYen(totalCharges)}</td>
-              <td style={{ padding: ".6rem .7rem", color: MUTED, fontWeight: 600 }}>{fmtYen(revenue - totalCharges)}</td>
-            </tr>
-          </tbody>
-        </table>
-        <p style={{ fontSize: ".68rem", color: MUTED, marginTop: ".7rem" }}>Survole une ligne pour voir le détail par rubrique de ce mois.</p>
+      {/* Main dashboard */}
+      <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "12px", padding: "1.5rem", marginBottom: "1.5rem" }}>
+        <p style={{ fontSize: "1rem", fontWeight: 600, color: INK, marginBottom: "1rem" }}>Estimation {year}</p>
+
+        {row("CA Kizuna", fmtYen(calc.revenue), { bold: true })}
+        {row("Dépenses professionnelles", "− " + fmtYen(annualExpenses), { color: MUTED })}
+        {row("Bénéfice", fmtYen(calc.profit), { bold: true, color: calc.profit >= 0 ? RED : ALERT })}
+
+        <div style={{ height: "1px", background: BORDER, margin: ".6rem 0" }} />
+
+        {row("Kokuho estimé (assurance maladie)", "− " + fmtYen(calc.kokuho), { color: MUTED })}
+        {row("Nenkin (retraite)", "− " + fmtYen(calc.nenkin), { color: MUTED })}
+        {row("Impôt sur le revenu estimé", "− " + fmtYen(calc.incomeTax), { color: MUTED })}
+        {row("Jūminzei estimée", "− " + fmtYen(calc.juminzei), { color: MUTED })}
+        {row("Kojin Jigyōzei", "− " + fmtYen(calc.jigyozei), { color: MUTED })}
+        {row("Shōhizei", "− " + fmtYen(calc.shohizei), { color: MUTED, noBorder: !settings.consumption_tax_subject })}
+        {!settings.consumption_tax_subject && (
+          <p style={{ fontSize: ".68rem", color: MUTED, marginTop: "-.3rem", marginBottom: ".5rem" }}>Non assujetti à la TVA (configurable dans Paramètres).</p>
+        )}
+
+        <div style={{ height: "1px", background: BORDER, margin: ".6rem 0" }} />
+
+        {row("Total charges/taxes estimées", fmtYen(calc.totalTaxes), { bold: true, color: RED })}
+        {row("Revenu restant estimé", fmtYen(calc.remainingIncome), { bold: true, color: calc.remainingIncome >= 0 ? "#22c55e" : ALERT, noBorder: true })}
       </div>
 
-      {/* Charges table */}
-      <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "12px", padding: "1.3rem", marginBottom: "1.5rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-          <div>
-            <p style={{ fontSize: "1rem", fontWeight: 600, color: INK, margin: 0 }}>Règles de calcul</p>
-            <p style={{ fontSize: ".72rem", color: MUTED, marginTop: ".2rem" }}>Ce sont les règles appliquées mois par mois ci-dessus — le montant ici est le total sur toute l'année {year}, pour référence.</p>
-          </div>
-          <button onClick={startAdd} style={{ background: RED, color: "#fff", border: "none", padding: ".45rem .85rem", borderRadius: "7px", fontSize: ".75rem", fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>+ Ajouter une rubrique</button>
+      {/* Two distinct results */}
+      <div className="adm-stat-grid" style={{ "--cols": 2, marginBottom: "1.5rem" }}>
+        <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "10px", padding: "1.2rem" }}>
+          <div style={{ fontSize: "1.2rem", fontWeight: 700, color: RED }}>{fmtYen(calc.totalTaxes)}</div>
+          <div style={{ fontSize: ".72rem", color: MUTED, marginTop: ".3rem", fontWeight: 600 }}>Charges fiscales estimées</div>
+          <div style={{ fontSize: ".68rem", color: MUTED, marginTop: ".2rem" }}>Calcul détaillé selon les règles configurées ci-dessous.</div>
         </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: ".6rem" }}>
-          {computed.map(c => (
-            <div key={c.id} style={{ border: `1px solid ${BORDER}`, borderRadius: "8px", padding: ".8rem 1rem" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", flexWrap: "wrap" }}>
-                <div style={{ flex: 1, minWidth: "200px" }}>
-                  <div style={{ fontSize: ".85rem", fontWeight: 500, color: INK }}>{c.label}</div>
-                  <div style={{ fontSize: ".72rem", color: MUTED, marginTop: ".2rem" }}>
-                    {c.type === "percentage" ? `${c.rate}% du CA` : "Montant fixe annuel"}
-                  </div>
-                  {c.notes && <div style={{ fontSize: ".7rem", color: MUTED, marginTop: ".3rem", fontStyle: "italic" }}>{c.notes}</div>}
-                </div>
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: "1rem", fontWeight: 600, color: RED }}>{fmtYen(c.amount)}<span style={{ fontSize: ".68rem", color: MUTED, fontWeight: 400 }}> /an</span></div>
-                  <div style={{ fontSize: ".78rem", color: MUTED, marginTop: ".1rem" }}>{fmtYen(c.amount / 12)} /mois</div>
-                  <div style={{ display: "flex", gap: ".4rem", marginTop: ".4rem" }}>
-                    <button onClick={() => startEdit(c)} style={{ background: "transparent", border: `1px solid ${BORDER}`, color: MUTED, borderRadius: "6px", padding: ".3rem .6rem", fontSize: ".7rem", cursor: "pointer" }}>Modifier</button>
-                    <button onClick={() => deleteCharge(c.id)} style={{ background: "rgba(255,80,96,.1)", border: `1px solid rgba(255,80,96,.3)`, color: ALERT, borderRadius: "6px", padding: ".3rem .6rem", fontSize: ".7rem", cursor: "pointer" }}>Supprimer</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-          {computed.length === 0 && (
-            <div style={{ textAlign: "center", padding: "1.5rem" }}>
-              <p style={{ color: MUTED, fontSize: ".82rem", marginBottom: "1rem" }}>Aucune rubrique.</p>
-              <button onClick={seedStarters} style={{ background: "transparent", border: `1px solid ${RED}`, color: RED, borderRadius: "8px", padding: ".5rem 1rem", fontSize: ".78rem", fontWeight: 600, cursor: "pointer" }}>
-                Charger les rubriques de départ (assurance, retraite, impôts…)
-              </button>
-            </div>
-          )}
+        <div style={{ background: SURFACE, border: `1px solid ${VIOLET}`, borderRadius: "10px", padding: "1.2rem" }}>
+          <div style={{ fontSize: "1.2rem", fontWeight: 700, color: VIOLET }}>{fmtYen(calc.safetyReserve)}</div>
+          <div style={{ fontSize: ".72rem", color: MUTED, marginTop: ".3rem", fontWeight: 600 }}>Réserve de sécurité recommandée ({settings.safety_reserve_pct}% du bénéfice)</div>
+          <div style={{ fontSize: ".68rem", color: MUTED, marginTop: ".2rem" }}>Outil de trésorerie simple — pas le montant réel des taxes.</div>
         </div>
       </div>
 
-      {/* Edit/Add form */}
-      {editing && (
-        <div style={{ background: SURFACE, border: `2px solid ${RED}`, borderRadius: "12px", padding: "1.3rem", marginBottom: "1.5rem" }}>
-          <p style={{ fontSize: ".9rem", fontWeight: 600, color: INK, marginBottom: "1rem" }}>{editing === "new" ? "Nouvelle rubrique" : "Modifier la rubrique"}</p>
-          <div style={{ marginBottom: ".8rem" }}>
-            <label style={lbl}>Nom</label>
-            <input style={inp} value={form.label} onChange={e => setForm(f => ({ ...f, label: e.target.value }))} placeholder="Ex : Mutuelle privée" />
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".8rem", marginBottom: ".8rem" }}>
-            <div>
-              <label style={lbl}>Type</label>
-              <select style={inp} value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))}>
-                <option value="percentage">Pourcentage du CA</option>
-                <option value="fixed">Montant fixe annuel</option>
-              </select>
-            </div>
-            <div>
-              <label style={lbl}>{form.type === "percentage" ? "Taux (%)" : "Montant (¥/an)"}</label>
-              <input style={inp} type="number" value={form.type === "percentage" ? form.rate : form.fixed_amount_jpy}
-                onChange={e => setForm(f => ({ ...f, [form.type === "percentage" ? "rate" : "fixed_amount_jpy"]: e.target.value }))} />
-            </div>
-          </div>
-          <div style={{ marginBottom: "1rem" }}>
-            <label style={lbl}>Note (optionnel)</label>
-            <input style={inp} value={form.notes || ""} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} placeholder="Contexte, source, rappel…" />
-          </div>
-          <div style={{ display: "flex", gap: ".6rem" }}>
-            <button onClick={saveForm} style={{ background: RED, color: "#fff", border: "none", padding: ".6rem 1.1rem", borderRadius: "8px", fontSize: ".8rem", fontWeight: 600, cursor: "pointer" }}>Enregistrer</button>
-            <button onClick={() => { setEditing(null); setForm(null); }} style={{ background: "transparent", border: `1px solid ${BORDER}`, color: MUTED, padding: ".6rem 1.1rem", borderRadius: "8px", fontSize: ".8rem", cursor: "pointer" }}>Annuler</button>
-          </div>
-        </div>
-      )}
-
-      {/* Summary */}
-      <div className="adm-stat-grid" style={{ "--cols": 5, marginBottom: "1.5rem" }}>
+      {/* Monthly reserve tracker */}
+      <div className="adm-stat-grid" style={{ "--cols": 3, marginBottom: "1.5rem" }}>
         <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "10px", padding: "1.1rem 1.2rem" }}>
-          <div style={{ fontSize: "1.15rem", fontWeight: 600, color: RED }}>{fmtYen(totalCharges)}</div>
-          <div style={{ fontSize: ".7rem", color: MUTED, marginTop: ".3rem" }}>Total annuel ({year})</div>
-        </div>
-        <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "10px", padding: "1.1rem 1.2rem" }}>
-          <div style={{ fontSize: "1.15rem", fontWeight: 600, color: RED }}>{fmtYen(currentMonthTotal)}</div>
-          <div style={{ fontSize: ".7rem", color: MUTED, marginTop: ".3rem" }}>{isCurrentYear ? "Ce mois-ci (réel)" : "Moyenne mensuelle"}</div>
-        </div>
-        <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "10px", padding: "1.1rem 1.2rem" }}>
-          <div style={{ fontSize: "1.15rem", fontWeight: 600, color: VIOLET }}>{fmtYen(reserved)}</div>
+          <div style={{ fontSize: "1.1rem", fontWeight: 600, color: VIOLET }}>{fmtYen(reserved)}</div>
           <div style={{ fontSize: ".7rem", color: MUTED, marginTop: ".3rem" }}>Déjà mis de côté</div>
         </div>
         <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "10px", padding: "1.1rem 1.2rem" }}>
-          <div style={{ fontSize: "1.15rem", fontWeight: 600, color: remaining > 0 ? ALERT : "#22c55e" }}>{fmtYen(remaining)}</div>
-          <div style={{ fontSize: ".7rem", color: MUTED, marginTop: ".3rem" }}>Reste à épargner</div>
+          <div style={{ fontSize: "1.1rem", fontWeight: 600, color: remainingToSave > 0 ? ALERT : "#22c55e" }}>{fmtYen(remainingToSave)}</div>
+          <div style={{ fontSize: ".7rem", color: MUTED, marginTop: ".3rem" }}>Reste à épargner (charges fiscales)</div>
         </div>
         <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "10px", padding: "1.1rem 1.2rem" }}>
-          <div style={{ fontSize: "1.15rem", fontWeight: 600, color: INK }}>{fmtYen(perMonth)}</div>
-          <div style={{ fontSize: ".7rem", color: MUTED, marginTop: ".3rem" }}>Par mois ({monthsLeft} mois restants)</div>
+          <div style={{ fontSize: "1.1rem", fontWeight: 600, color: INK }}>{fmtYen(perMonth)}</div>
+          <div style={{ fontSize: ".7rem", color: MUTED, marginTop: ".3rem" }}>Réserve mensuelle recommandée ({monthsLeft} mois restants)</div>
         </div>
+      </div>
+
+      {/* Calculation detail (collapsible) */}
+      <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "12px", padding: "1.3rem", marginBottom: "1.5rem" }}>
+        <button onClick={() => setShowDetail(v => !v)} style={{ background: "transparent", border: "none", color: INK, fontSize: ".9rem", fontWeight: 600, cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: ".5rem" }}>
+          {showDetail ? "▾" : "▸"} Détail du calcul
+        </button>
+        {showDetail && (
+          <div style={{ marginTop: "1rem" }}>
+            {row("Revenu N-1 utilisé (Kokuho + Jūminzei)", fmtYen(calc.prevYearIncome), { color: MUTED })}
+            <p style={{ fontSize: ".68rem", color: MUTED, margin: "-.2rem 0 .6rem" }}>
+              {settings.prev_year_income_override != null && settings.prev_year_income_override !== "" ? "Valeur saisie manuellement dans Paramètres." : `Estimé depuis le bénéfice ${year - 1} (¥${fmtYen(calc.prevYearProfit).slice(1)}) faute de override — à remplacer par ton vrai revenu N-1 dès que possible.`}
+            </p>
+            {row("Kokuho plein tarif (avant prorata)", fmtYen(calc.kokuhoFull), { color: MUTED })}
+            {row("Cotisations sociales déductibles (Kokuho+Nenkin)", fmtYen(calc.socialPremiumsPaid), { color: MUTED })}
+            {row("Revenu imposable (impôt sur le revenu)", fmtYen(calc.taxableIncome), { color: MUTED })}
+            {row("Impôt sur le revenu avant surtaxe", fmtYen(calc.incomeTaxBase), { color: MUTED })}
+            {row("Base imposable Jūminzei", fmtYen(calc.juminzeiTaxable), { color: MUTED })}
+            {row("Jūminzei — part proportionnelle", fmtYen(calc.juminzeiProportional), { color: MUTED, noBorder: true })}
+          </div>
+        )}
+      </div>
+
+      {/* Expenses */}
+      <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "12px", padding: "1.3rem", marginBottom: "1.5rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+          <div>
+            <p style={{ fontSize: "1rem", fontWeight: 600, color: INK, margin: 0 }}>Dépenses professionnelles</p>
+            <p style={{ fontSize: ".72rem", color: MUTED, marginTop: ".2rem" }}>Déduites du CA pour obtenir le bénéfice — total annualisé : {fmtYen(annualExpenses)}</p>
+          </div>
+          <button onClick={startAddExpense} style={{ background: RED, color: "#fff", border: "none", padding: ".45rem .85rem", borderRadius: "7px", fontSize: ".75rem", fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>+ Ajouter une dépense</button>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: ".5rem" }}>
+          {expenses.map(e => (
+            <div key={e.id} style={{ border: `1px solid ${BORDER}`, borderRadius: "8px", padding: ".7rem .9rem", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
+              <div>
+                <span style={{ fontSize: ".83rem", color: INK, fontWeight: 500 }}>{e.label}</span>
+                <span style={{ fontSize: ".7rem", color: MUTED, marginLeft: ".5rem" }}>({e.category || "Autre"})</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: ".7rem" }}>
+                <span style={{ fontSize: ".85rem", color: RED, fontWeight: 600 }}>{fmtYen(e.amount_jpy)} {e.frequency === "monthly" ? "/mois" : "/an"}</span>
+                <button onClick={() => startEditExpense(e)} style={{ background: "transparent", border: `1px solid ${BORDER}`, color: MUTED, borderRadius: "6px", padding: ".3rem .55rem", fontSize: ".68rem", cursor: "pointer" }}>Modifier</button>
+                <button onClick={() => deleteExpense(e.id)} style={{ background: "rgba(255,80,96,.1)", border: `1px solid rgba(255,80,96,.3)`, color: ALERT, borderRadius: "6px", padding: ".3rem .55rem", fontSize: ".68rem", cursor: "pointer" }}>Supprimer</button>
+              </div>
+            </div>
+          ))}
+          {expenses.length === 0 && <p style={{ color: MUTED, fontSize: ".8rem", textAlign: "center", padding: "1rem" }}>Aucune dépense enregistrée — le bénéfice équivaut donc au CA.</p>}
+        </div>
+
+        {expenseEditing && (
+          <div style={{ background: BG, border: `2px solid ${RED}`, borderRadius: "10px", padding: "1rem", marginTop: "1rem" }}>
+            <div style={{ marginBottom: ".7rem" }}>
+              <label style={lbl}>Libellé</label>
+              <input style={inp} value={expenseForm.label} onChange={e => setExpenseForm(f => ({ ...f, label: e.target.value }))} placeholder="Ex : Hébergement Vercel" />
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: ".7rem", marginBottom: ".7rem" }}>
+              <div>
+                <label style={lbl}>Catégorie</label>
+                <select style={inp} value={expenseForm.category} onChange={e => setExpenseForm(f => ({ ...f, category: e.target.value }))}>
+                  {EXPENSE_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div>
+                <label style={lbl}>Montant (¥)</label>
+                <input style={inp} type="number" value={expenseForm.amount_jpy} onChange={e => setExpenseForm(f => ({ ...f, amount_jpy: e.target.value }))} />
+              </div>
+              <div>
+                <label style={lbl}>Fréquence</label>
+                <select style={inp} value={expenseForm.frequency} onChange={e => setExpenseForm(f => ({ ...f, frequency: e.target.value }))}>
+                  <option value="monthly">Mensuelle</option>
+                  <option value="annual">Annuelle</option>
+                </select>
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: ".6rem" }}>
+              <button onClick={saveExpense} style={{ background: RED, color: "#fff", border: "none", padding: ".55rem 1rem", borderRadius: "7px", fontSize: ".78rem", fontWeight: 600, cursor: "pointer" }}>Enregistrer</button>
+              <button onClick={() => { setExpenseEditing(null); setExpenseForm(null); }} style={{ background: "transparent", border: `1px solid ${BORDER}`, color: MUTED, padding: ".55rem 1rem", borderRadius: "7px", fontSize: ".78rem", cursor: "pointer" }}>Annuler</button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Settings */}
+      <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "12px", padding: "1.3rem", marginBottom: "1.5rem" }}>
+        <button onClick={() => setShowSettings(v => !v)} style={{ background: "transparent", border: "none", color: INK, fontSize: "1rem", fontWeight: 600, cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: ".5rem" }}>
+          {showSettings ? "▾" : "▸"} Paramètres (taux, seuils, déductions)
+        </button>
+        {showSettings && (
+          <div style={{ marginTop: "1.2rem" }}>
+
+            <p style={{ fontSize: ".78rem", fontWeight: 600, color: INK, marginBottom: ".6rem" }}>Revenu de l'année précédente</p>
+            <div style={{ marginBottom: "1rem" }}>
+              <label style={lbl}>Override manuel (¥) — laisse vide pour estimer automatiquement</label>
+              <input style={inp} type="number" value={settingsForm.prev_year_income_override ?? ""} onChange={e => setSettingsForm(f => ({ ...f, prev_year_income_override: e.target.value === "" ? null : e.target.value }))} placeholder="Ex : 3500000" />
+            </div>
+
+            <p style={{ fontSize: ".78rem", fontWeight: 600, color: INK, marginBottom: ".6rem" }}>Kokuho (assurance maladie)</p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: ".7rem", marginBottom: "1rem" }}>
+              <div><label style={lbl}>Taux (%)</label><input style={inp} type="number" step="0.01" value={settingsForm.kokuho_rate_pct} onChange={e => setSettingsForm(f => ({ ...f, kokuho_rate_pct: e.target.value }))} /></div>
+              <div><label style={lbl}>Part forfaitaire (¥)</label><input style={inp} type="number" value={settingsForm.kokuho_flat_jpy} onChange={e => setSettingsForm(f => ({ ...f, kokuho_flat_jpy: e.target.value }))} /></div>
+              <div><label style={lbl}>Abattement (¥)</label><input style={inp} type="number" value={settingsForm.kokuho_deduction_jpy} onChange={e => setSettingsForm(f => ({ ...f, kokuho_deduction_jpy: e.target.value }))} /></div>
+              <div><label style={lbl}>Mois d'affiliation</label><input style={inp} type="number" min="0" max="12" value={settingsForm.kokuho_proration_months} onChange={e => setSettingsForm(f => ({ ...f, kokuho_proration_months: e.target.value }))} /></div>
+            </div>
+
+            <p style={{ fontSize: ".78rem", fontWeight: 600, color: INK, marginBottom: ".6rem" }}>Nenkin (retraite)</p>
+            <div style={{ marginBottom: "1rem", maxWidth: "220px" }}>
+              <label style={lbl}>Cotisation mensuelle (¥)</label>
+              <input style={inp} type="number" value={settingsForm.nenkin_monthly_jpy} onChange={e => setSettingsForm(f => ({ ...f, nenkin_monthly_jpy: e.target.value }))} />
+            </div>
+
+            <p style={{ fontSize: ".78rem", fontWeight: 600, color: INK, marginBottom: ".6rem" }}>Impôt sur le revenu (Shotokuzei)</p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: ".7rem", marginBottom: "1rem" }}>
+              <div><label style={lbl}>Déduction de base (¥)</label><input style={inp} type="number" value={settingsForm.income_tax_base_deduction_jpy} onChange={e => setSettingsForm(f => ({ ...f, income_tax_base_deduction_jpy: e.target.value }))} /></div>
+              <div><label style={lbl}>Déduction Blue Return (¥)</label><input style={inp} type="number" value={settingsForm.income_tax_blue_return_deduction_jpy} onChange={e => setSettingsForm(f => ({ ...f, income_tax_blue_return_deduction_jpy: e.target.value }))} /></div>
+              <div><label style={lbl}>Autres déductions (¥)</label><input style={inp} type="number" value={settingsForm.income_tax_other_deductions_jpy} onChange={e => setSettingsForm(f => ({ ...f, income_tax_other_deductions_jpy: e.target.value }))} /></div>
+              <div><label style={lbl}>Surtaxe reconstruction (%)</label><input style={inp} type="number" step="0.1" value={settingsForm.reconstruction_surtax_pct} onChange={e => setSettingsForm(f => ({ ...f, reconstruction_surtax_pct: e.target.value }))} /></div>
+            </div>
+
+            <p style={{ fontSize: ".78rem", fontWeight: 600, color: INK, marginBottom: ".6rem" }}>Jūminzei (taxe d'habitation)</p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: ".7rem", marginBottom: "1rem" }}>
+              <div><label style={lbl}>Abattement (¥)</label><input style={inp} type="number" value={settingsForm.juminzei_deduction_jpy} onChange={e => setSettingsForm(f => ({ ...f, juminzei_deduction_jpy: e.target.value }))} /></div>
+              <div><label style={lbl}>Part proportionnelle (%)</label><input style={inp} type="number" step="0.1" value={settingsForm.juminzei_proportional_pct} onChange={e => setSettingsForm(f => ({ ...f, juminzei_proportional_pct: e.target.value }))} /></div>
+              <div><label style={lbl}>Part forfaitaire (¥/an)</label><input style={inp} type="number" value={settingsForm.juminzei_flat_jpy} onChange={e => setSettingsForm(f => ({ ...f, juminzei_flat_jpy: e.target.value }))} /></div>
+            </div>
+
+            <p style={{ fontSize: ".78rem", fontWeight: 600, color: INK, marginBottom: ".6rem" }}>Kojin Jigyōzei (taxe professionnelle)</p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".7rem", marginBottom: "1rem" }}>
+              <div><label style={lbl}>Seuil / abattement (¥)</label><input style={inp} type="number" value={settingsForm.jigyozei_threshold_jpy} onChange={e => setSettingsForm(f => ({ ...f, jigyozei_threshold_jpy: e.target.value }))} /></div>
+              <div><label style={lbl}>Taux (%)</label><input style={inp} type="number" step="0.1" value={settingsForm.jigyozei_rate_pct} onChange={e => setSettingsForm(f => ({ ...f, jigyozei_rate_pct: e.target.value }))} /></div>
+            </div>
+
+            <p style={{ fontSize: ".78rem", fontWeight: 600, color: INK, marginBottom: ".6rem" }}>Shōhizei (TVA)</p>
+            <div style={{ display: "flex", gap: "1.5rem", marginBottom: "1rem", flexWrap: "wrap", alignItems: "center" }}>
+              <label style={{ display: "flex", alignItems: "center", gap: ".5rem", fontSize: ".82rem", color: INK, cursor: "pointer" }}>
+                <input type="checkbox" checked={!!settingsForm.consumption_tax_subject} onChange={e => setSettingsForm(f => ({ ...f, consumption_tax_subject: e.target.checked }))} />
+                Assujetti à la TVA
+              </label>
+              <label style={{ display: "flex", alignItems: "center", gap: ".5rem", fontSize: ".82rem", color: INK, cursor: "pointer" }}>
+                <input type="checkbox" checked={!!settingsForm.consumption_tax_invoice_registered} onChange={e => setSettingsForm(f => ({ ...f, consumption_tax_invoice_registered: e.target.checked }))} />
+                Inscrit au système Invoice (インボイス)
+              </label>
+              {settingsForm.consumption_tax_subject && (
+                <div style={{ minWidth: "180px" }}>
+                  <label style={lbl}>Montant estimé (¥/an)</label>
+                  <input style={inp} type="number" value={settingsForm.consumption_tax_manual_amount_jpy} onChange={e => setSettingsForm(f => ({ ...f, consumption_tax_manual_amount_jpy: e.target.value }))} />
+                </div>
+              )}
+            </div>
+
+            <p style={{ fontSize: ".78rem", fontWeight: 600, color: INK, marginBottom: ".6rem" }}>Réserve de sécurité</p>
+            <div style={{ marginBottom: "1.2rem", maxWidth: "220px" }}>
+              <label style={lbl}>% du bénéfice</label>
+              <input style={inp} type="number" value={settingsForm.safety_reserve_pct} onChange={e => setSettingsForm(f => ({ ...f, safety_reserve_pct: e.target.value }))} />
+            </div>
+
+            <button onClick={saveSettings} style={{ background: RED, color: "#fff", border: "none", padding: ".6rem 1.2rem", borderRadius: "8px", fontSize: ".82rem", fontWeight: 600, cursor: "pointer" }}>Enregistrer les paramètres</button>
+            {msg && <p style={{ color: "#22c55e", fontSize: ".78rem", marginTop: ".6rem" }}>{msg}</p>}
+          </div>
+        )}
+      </div>
+
+      {/* Monthly revenue context */}
+      <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "12px", padding: "1.3rem", marginBottom: "1.5rem", overflowX: "auto" }}>
+        <p style={{ fontSize: "1rem", fontWeight: 600, color: INK, marginBottom: "1rem" }}>CA mois par mois — {year}</p>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: ".8rem" }}>
+          <thead>
+            <tr>{["Mois", "CA du mois", "Cumulé"].map(h => (
+              <th key={h} style={{ padding: ".5rem .7rem", textAlign: "left", fontSize: ".64rem", letterSpacing: ".06em", textTransform: "uppercase", color: MUTED, borderBottom: `1px solid ${BORDER}` }}>{h}</th>
+            ))}</tr>
+          </thead>
+          <tbody>
+            {monthly.map(m => (
+              <tr key={m.key} style={{ borderBottom: `1px solid ${BORDER}` }}>
+                <td style={{ padding: ".5rem .7rem", color: INK, fontWeight: 500, textTransform: "capitalize" }}>{m.label}</td>
+                <td style={{ padding: ".5rem .7rem", color: MUTED }}>{fmtYen(m.revenue)}</td>
+                <td style={{ padding: ".5rem .7rem", color: RED }}>{fmtYen(m.cumulative)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* Savings tracker */}
@@ -358,9 +538,8 @@ export default function ChargesTab({ tokens }) {
             <label style={lbl}>Montant réservé (¥)</label>
             <input style={inp} type="number" value={savingsInput} onChange={e => setSavingsInput(e.target.value)} placeholder="0" />
           </div>
-          <button onClick={saveSavings} style={{ background: RED, color: "#fff", border: "none", padding: ".6rem 1.1rem", borderRadius: "8px", fontSize: ".8rem", fontWeight: 600, cursor: "pointer" }}>Mettre à jour</button>
+          <button onClick={saveSavingsAmount} style={{ background: RED, color: "#fff", border: "none", padding: ".6rem 1.1rem", borderRadius: "8px", fontSize: ".8rem", fontWeight: 600, cursor: "pointer" }}>Mettre à jour</button>
         </div>
-        {msg && <p style={{ color: "#22c55e", fontSize: ".78rem", marginTop: ".6rem" }}>{msg}</p>}
       </div>
     </div>
   );
