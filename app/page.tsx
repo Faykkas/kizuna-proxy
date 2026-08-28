@@ -31,6 +31,31 @@ export default function Home() {
 
       <HeroSection t={t} />
 
+      {/* HOBONICHI TECHO EVENT PROMO — time-sensitive announcement for the
+          Sept 20, 2026 reservation slots at the Gransta Tokyo store opening,
+          placed as the very first section after the hero for maximum
+          visibility. Remove (or move to /events) once the slots are gone. */}
+      <section className="section-sm reveal">
+        <div className="wrap">
+          <div className="p-event-card" style={{ borderLeftColor: "var(--gold-d)" }}>
+            <div className="p-event-body">
+              <div className="highlight-pill" style={{ marginBottom: ".8rem" }}>
+                <span className="highlight-pill-dot" />
+                <span className="highlight-pill-text">🐧 {t.eventPromo?.badge}</span>
+              </div>
+              <strong style={{ fontSize: "1.05rem" }}>{t.eventPromo?.title}</strong>
+              <p>{t.eventPromo?.desc}</p>
+              <div className="event-slot-row">
+                <span className="event-slot-pill"><span className="event-slot-dot" />{t.eventPromo?.slot}</span>
+              </div>
+              <p style={{ marginTop: ".5rem" }}>{t.eventPromo?.fee}</p>
+              <p style={{ marginTop: ".3rem", fontSize: ".7rem", fontStyle: "italic", opacity: .8 }}>{t.eventPromo?.note}</p>
+            </div>
+            <a href="/request" className="btn btn-gold">{t.eventPromo?.cta}</a>
+          </div>
+        </div>
+      </section>
+
       {/* B2B PROMO — points business/reseller visitors to /business-sourcing,
           placed right under the hero for maximum visibility. Kept in English
           like the other landing-page pointers (Guides dropdown, "Kizuna Box")
