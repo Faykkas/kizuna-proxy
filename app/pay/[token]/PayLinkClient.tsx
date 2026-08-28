@@ -60,9 +60,15 @@ export default function PayLinkClient({ token }) {
         {link && link.status === "pending" && !paidJustNow && (
           <>
             <p style={{ fontSize: ".78rem", letterSpacing: ".08em", textTransform: "uppercase", color: "var(--warm)", marginBottom: ".5rem" }}>{link.label}</p>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.3rem", fontWeight: 600, color: "var(--red)", marginBottom: "1.75rem" }}>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.3rem", fontWeight: 600, color: "var(--red)", marginBottom: link.feeAmountJpy > 0 ? ".5rem" : "1.75rem" }}>
               {formatJPY(link.amountJpy)}
             </p>
+            {link.feeAmountJpy > 0 && (
+              <div style={{ fontSize: ".72rem", color: "var(--mist)", marginBottom: "1.5rem", lineHeight: 1.6 }}>
+                <div>Item: {formatJPY(link.itemAmountJpy)}</div>
+                <div>Kizuna Proxy service fee: {formatJPY(link.feeAmountJpy)}</div>
+              </div>
+            )}
             <PayLinkButton token={token} onPaid={() => setPaidJustNow(true)} />
             <p style={{ fontSize: ".68rem", color: "var(--mist)", marginTop: "1.25rem" }}>
               No PayPal account needed — pay by debit or credit card through PayPal's secure checkout.

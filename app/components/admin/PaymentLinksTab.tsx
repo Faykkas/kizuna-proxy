@@ -19,7 +19,7 @@ export default function PaymentLinksTab({ tokens }) {
 
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({ label: "", amount_jpy: "", client_name: "", client_email: "" });
+  const [form, setForm] = useState({ label: "", item_amount_jpy: "", fee_amount_jpy: "", client_name: "", client_email: "" });
   const [creating, setCreating] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
   const [msg, setMsg] = useState("");
@@ -34,16 +34,19 @@ export default function PaymentLinksTab({ tokens }) {
   }
 
   async function createLink() {
-    const amount = Number(form.amount_jpy);
-    if (!form.label.trim() || !amount || amount <= 0) {
-      setMsg("Indique un libellé et un montant en yen valide.");
+    const itemAmount = Number(form.item_amount_jpy);
+    const feeAmount = Number(form.fee_amount_jpy) || 0;
+    if (!form.label.trim() || !itemAmount || itemAmount <= 0) {
+      setMsg("Indique un libellé et un prix produit en yen valide.");
       setTimeout(() => setMsg(""), 3000);
       return;
     }
     setCreating(true);
     const { data, error } = await supabase.from("payment_links").insert({
       label: form.label.trim(),
-      amount_jpy: amount,
+      item_amount_jpy: itemAmount,
+      fee_amount_jpy: feeAmount,
+      amount_jpy: itemAmount + feeAmount,
       client_name: form.client_name.trim() || null,
       client_email: form.client_email.trim() || null,
       status: "pending",
@@ -55,7 +58,7 @@ export default function PaymentLinksTab({ tokens }) {
       return;
     }
     setLinks(prev => [data, ...prev]);
-    setForm({ label: "", amount_jpy: "", client_name: "", client_email: "" });
+    setForm({ label: "", item_amount_jpy: "", fee_amount_jpy: "", client_name: "", client_email: "" });
   }
 
   async function cancelLink(id) {
@@ -90,18 +93,29 @@ export default function PaymentLinksTab({ tokens }) {
           <label style={lbl}>Libellé (ce que le client voit)</label>
           <input style={inp} value={form.label} onChange={e => setForm(f => ({ ...f, label: e.target.value }))} placeholder="Ex : Commande figurines x3 + envoi" />
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: ".8rem", marginBottom: "1rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".8rem", marginBottom: ".8rem" }}>
           <div>
-            <label style={lbl}>Montant (¥)</label>
-            <input style={inp} type="number" min="1" value={form.amount_jpy} onChange={e => setForm(f => ({ ...f, amount_jpy: e.target.value }))} placeholder="15000" />
+            <label style={lbl}>Prix produit (¥)</label>
+            <input style={inp} type="number" min="1" value={form.item_amount_jpy} onChange={e => setForm(f => ({ ...f, item_amount_jpy: e.target.value }))} placeholder="12000" />
           </div>
+          <div>
+            <label style={lbl}>Frais Kizuna (¥)</label>
+            <input style={inp} type="number" min="0" value={form.fee_amount_jpy} onChange={e => setForm(f => ({ ...f, fee_amount_jpy: e.target.value }))} placeholder="3000" />
+          </div>
+        </div>
+        {(Number(form.item_amount_jpy) > 0 || Number(form.fee_amount_jpy) > 0) && (
+          <p style={{ fontSize: ".78rem", color: MUTED, marginBottom: ".8rem" }}>
+            Total facturé au client : <strong style={{ color: INK }}>{formatJPY((Number(form.item_amount_jpy) || 0) + (Number(form.fee_amount_jpy) || 0))}</strong> — apparaîtra en 2 lignes séparées (produit + frais) dans le paiement PayPal.
+          </p>
+        )}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".8rem", marginBottom: "1rem" }}>
           <div>
             <label style={lbl}>Nom du client (optionnel)</label>
             <input style={inp} value={form.client_name} onChange={e => setForm(f => ({ ...f, client_name: e.target.value }))} />
           </div>
           <div>
             <label style={lbl}>Email du client (optionnel)</label>
-            <input style={inp} type="email" value={form.client_email} onChange={e => setForm(f => ({ ...f, client_email: e.target.value }))} />
+            <input style={inp} type="email" value={form.client_email} onChange={e => setForm(f => ({ ...f, client_email: e.target.value }))} placeholder="Rempli automatiquement avec l'email PayPal une fois payé" />
           </div>
         </div>
         <button onClick={createLink} disabled={creating} style={{ background: RED, color: "#fff", border: "none", padding: ".65rem 1.2rem", borderRadius: "8px", fontSize: ".82rem", fontWeight: 600, cursor: "pointer", opacity: creating ? .6 : 1 }}>
@@ -121,17 +135,22 @@ export default function PaymentLinksTab({ tokens }) {
             const st = STATUS_STYLE[l.status] || STATUS_STYLE.pending;
             return (
               <div key={l.id} style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "10px", padding: "1rem 1.2rem", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
-                <div style={{ flex: 1, minWidth: "220px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: ".6rem", marginBottom: ".2rem" }}>
-                    <strong style={{ fontSize: ".88rem", color: INK }}>{l.label}</strong>
-                    <span style={{ fontSize: ".65rem", fontWeight: 600, color: st.color, border: `1px solid ${st.color}`, borderRadius: "5px", padding: ".05rem .45rem" }}>{st.label}</span>
+                <div style={{ flex: "1 1 220px", minWidth: 0 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: ".6rem", marginBottom: ".2rem", flexWrap: "wrap" }}>
+                    <strong style={{ fontSize: ".88rem", color: INK, wordBreak: "break-word", overflowWrap: "anywhere" }}>{l.label}</strong>
+                    <span style={{ fontSize: ".65rem", fontWeight: 600, color: st.color, border: `1px solid ${st.color}`, borderRadius: "5px", padding: ".05rem .45rem", flexShrink: 0 }}>{st.label}</span>
                   </div>
-                  <div style={{ fontSize: ".78rem", color: MUTED }}>
+                  <div style={{ fontSize: ".78rem", color: MUTED, wordBreak: "break-word", overflowWrap: "anywhere" }}>
                     {l.client_name && `${l.client_name} · `}{l.client_email && `${l.client_email} · `}
                     {new Date(l.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}
                   </div>
+                  {l.fee_amount_jpy > 0 && (
+                    <div style={{ fontSize: ".72rem", color: MUTED, marginTop: ".2rem" }}>
+                      Produit {formatJPY(l.item_amount_jpy)} + frais {formatJPY(l.fee_amount_jpy)}
+                    </div>
+                  )}
                 </div>
-                <div style={{ fontSize: "1.05rem", fontWeight: 600, color: RED, whiteSpace: "nowrap" }}>{formatJPY(l.amount_jpy)}</div>
+                <div style={{ fontSize: "1.05rem", fontWeight: 600, color: RED, whiteSpace: "nowrap", flexShrink: 0 }}>{formatJPY(l.amount_jpy)}</div>
                 <div style={{ display: "flex", gap: ".4rem", flexShrink: 0 }}>
                   {l.status === "pending" && (
                     <>

@@ -68,23 +68,48 @@ export async function POST(request) {
     if (action === "get") {
       const { data: link } = await admin
         .from("payment_links")
-        .select("label, amount_jpy, status")
+        .select("label, amount_jpy, item_amount_jpy, fee_amount_jpy, status")
         .eq("id", token)
         .single();
       if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
-      return Response.json({ label: link.label, amountJpy: link.amount_jpy, status: link.status });
+      return Response.json({
+        label: link.label,
+        amountJpy: link.amount_jpy,
+        itemAmountJpy: link.item_amount_jpy,
+        feeAmountJpy: link.fee_amount_jpy,
+        status: link.status,
+      });
     }
 
     // ── Create the PayPal order ──
     if (action === "create") {
       const { data: link } = await admin
         .from("payment_links")
-        .select("id, label, amount_jpy, status")
+        .select("id, label, amount_jpy, item_amount_jpy, fee_amount_jpy, status")
         .eq("id", token)
         .single();
       if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
       if (link.status !== "pending") {
         return Response.json({ error: "This link is no longer payable" }, { status: 400 });
+      }
+
+      // Break the order into a "product" line and a separate "Kizuna fee"
+      // line whenever both are set, so the payer's PayPal review page and
+      // receipt show the fee explicitly instead of one opaque total.
+      const hasBreakdown = link.item_amount_jpy > 0 && link.fee_amount_jpy > 0;
+      const purchaseUnit = {
+        reference_id: `LINK-${link.id}`,
+        description: (link.label || "Kizuna Proxy payment").slice(0, 127),
+        amount: { currency_code: "JPY", value: String(link.amount_jpy) },
+      };
+      if (hasBreakdown) {
+        purchaseUnit.amount.breakdown = {
+          item_total: { currency_code: "JPY", value: String(link.item_amount_jpy + link.fee_amount_jpy) },
+        };
+        purchaseUnit.items = [
+          { name: (link.label || "Item").slice(0, 127), quantity: "1", unit_amount: { currency_code: "JPY", value: String(link.item_amount_jpy) } },
+          { name: "Kizuna Proxy — service fee", quantity: "1", unit_amount: { currency_code: "JPY", value: String(link.fee_amount_jpy) } },
+        ];
       }
 
       const ppToken = await paypalToken();
@@ -93,13 +118,7 @@ export async function POST(request) {
         headers: { Authorization: `Bearer ${ppToken}`, "Content-Type": "application/json" },
         body: JSON.stringify({
           intent: "CAPTURE",
-          purchase_units: [
-            {
-              reference_id: `LINK-${link.id}`,
-              description: (link.label || "Kizuna Proxy payment").slice(0, 127),
-              amount: { currency_code: "JPY", value: String(link.amount_jpy) },
-            },
-          ],
+          purchase_units: [purchaseUnit],
         }),
       });
       const data = await res.json();
@@ -134,9 +153,20 @@ export async function POST(request) {
         return Response.json({ error: "Payment not completed" }, { status: 402 });
       }
 
+      // The payer's real PayPal email/name — this is the one place we can
+      // actually get it, since guest card checkouts don't always surface
+      // the payer's email in the PayPal merchant dashboard.
+      const payerEmail = data.payer?.email_address || null;
+      const payerName = [data.payer?.name?.given_name, data.payer?.name?.surname].filter(Boolean).join(" ") || null;
+
       await admin
         .from("payment_links")
-        .update({ status: "paid", paid_at: new Date().toISOString() })
+        .update({
+          status: "paid",
+          paid_at: new Date().toISOString(),
+          ...(payerEmail && { client_email: payerEmail }),
+          ...(payerName && { client_name: payerName }),
+        })
         .eq("id", token);
 
       return Response.json({ ok: true });
