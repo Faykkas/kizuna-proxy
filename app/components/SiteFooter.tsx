@@ -47,6 +47,8 @@ export default function SiteFooter({ t }: { t: any }) {
             <a href="/japan-pop-up-store-proxy" className="footer-link">Pop-Up Store Proxy</a>
             <a href="/pokemon-one-piece-card-proxy-japan" className="footer-link">Pokémon & One Piece Cards</a>
             <a href="/business-sourcing" className="footer-link">Business Sourcing</a>
+            <a href="/blog/comiket-japan-guide" className="footer-link">Comiket Guide</a>
+            <a href="/blog/comitia-japan-guide" className="footer-link">COMITIA Guide</a>
           </div>
           <div>
             <p className="footer-col-title">Contact</p>

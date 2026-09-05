@@ -9,7 +9,7 @@ import { LANG_LABELS } from "../translations";
 import { useAuth } from "../lib/auth";
 import {
   IconShoppingBag, IconAuction, IconCards, IconStore, IconApparel,
-  IconSneaker, IconFigure, IconBox, IconEvent, IconBusiness,
+  IconSneaker, IconFigure, IconBox, IconEvent, IconBusiness, IconBook,
 } from "./pixel/PixelIcons";
 
 const BLOG_ITEMS = [
@@ -26,6 +26,8 @@ const BLOG_ITEMS = [
   { href:"/japan-pop-up-store-proxy",               Icon:IconEvent,       label:"Pop-Up Store Proxy" },
   { href:"/pokemon-one-piece-card-proxy-japan",     Icon:IconCards,       label:"Card Proxy" },
   { href:"/business-sourcing",                      Icon:IconBusiness,    label:"Business Sourcing" },
+  { href:"/blog/comiket-japan-guide",               Icon:IconBook,        label:"Comiket Guide" },
+  { href:"/blog/comitia-japan-guide",               Icon:IconBook,        label:"COMITIA Guide" },
 ];
 
 export default function SiteNav() {

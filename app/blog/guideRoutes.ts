@@ -14,6 +14,8 @@ import NikeClient from "./nike-japan-exclusives-guide/NikeClient";
 import PokemonCenterClient from "./pokemon-center-tokyo-exclusives/PokemonCenterClient";
 import SupremeClient from "./supreme-japan-drops-guide/SupremeClient";
 import YahooClient from "./yahoo-auctions-japan-guide/YahooClient";
+import ComiketClient from "./comiket-japan-guide/ComiketClient";
+import ComitiaClient from "./comitia-japan-guide/ComitiaClient";
 
 export const GUIDE_ROUTES = {
   "best-pokemon-cards-japan-2026": { Component: PokemonCardsClient, key: "pokemonCards" },
@@ -25,6 +27,8 @@ export const GUIDE_ROUTES = {
   "pokemon-center-tokyo-exclusives": { Component: PokemonCenterClient, key: "pokemonCenter" },
   "supreme-japan-drops-guide": { Component: SupremeClient, key: "supreme" },
   "yahoo-auctions-japan-guide": { Component: YahooClient, key: "yahoo" },
+  "comiket-japan-guide": { Component: ComiketClient, key: "comiket" },
+  "comitia-japan-guide": { Component: ComitiaClient, key: "comitia" },
 };
 
 export const BLOG_SLUGS = Object.keys(GUIDE_ROUTES);

@@ -13,6 +13,8 @@ const BLOG_SLUGS = [
   "anime-figures-japan-guide",
   "japanese-trading-cards-guide-2026",
   "japan-shipping-guide-2026",
+  "comiket-japan-guide",
+  "comitia-japan-guide",
 ];
 
 const LANDING_SLUGS = [
