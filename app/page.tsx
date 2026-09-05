@@ -31,10 +31,9 @@ export default function Home() {
 
       <HeroSection t={t} />
 
-      {/* HOBONICHI TECHO EVENT PROMO — time-sensitive announcement for the
-          Sept 20, 2026 reservation slots at the Gransta Tokyo store opening,
-          placed as the very first section after the hero for maximum
-          visibility. Remove (or move to /events) once the slots are gone. */}
+      {/* HOBONICHI TECHO EVENT — no client bookings are being taken for this
+          event; entry depends on a Sept 15 evening (JP time) lottery. Update
+          or remove once the lottery result is known. */}
       <section className="section-sm reveal">
         <div className="wrap">
           <div className="p-event-card" style={{ borderLeftColor: "var(--gold-d)" }}>
@@ -45,13 +44,9 @@ export default function Home() {
               </div>
               <strong style={{ fontSize: "1.05rem" }}>{t.eventPromo?.title}</strong>
               <p>{t.eventPromo?.desc}</p>
-              <div className="event-slot-row">
-                <span className="event-slot-pill"><span className="event-slot-dot" />{t.eventPromo?.slot}</span>
-              </div>
-              <p style={{ marginTop: ".5rem" }}>{t.eventPromo?.fee}</p>
               <p style={{ marginTop: ".3rem", fontSize: ".7rem", fontStyle: "italic", opacity: .8 }}>{t.eventPromo?.note}</p>
             </div>
-            <a href="/request" className="btn btn-gold">{t.eventPromo?.cta}</a>
+            <a href="mailto:kizunaproxy@gmail.com?subject=Hobonichi%20Techo%20Store%20%E2%80%94%20reservation%20request" className="btn btn-gold">{t.eventPromo?.cta}</a>
           </div>
         </div>
       </section>

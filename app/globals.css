@@ -389,10 +389,6 @@ nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,11,.92); ba
 .highlight-pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); flex-shrink: 0; animation: pulse-dot 1.8s infinite; }
 .highlight-pill-text { font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; color: var(--red); font-weight: 500; }
 
-.event-slot-row { display: flex; gap: .6rem; flex-wrap: wrap; margin: .7rem 0; }
-.event-slot-pill { display: inline-flex; align-items: center; gap: .45rem; background: var(--surface); border: 1px solid var(--border-gold); border-radius: 20px; padding: .32rem .85rem; font-size: .72rem; color: var(--ink); font-weight: 500; }
-.event-slot-dot { width: 6px; height: 6px; border-radius: 50%; background: #1a6934; flex-shrink: 0; }
-
 /* ── WORLD MAP ── */
 #world-map { background: var(--paper); }
 .world-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; padding: 2rem; margin-top: 2rem; }
