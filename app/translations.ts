@@ -28,6 +28,13 @@ const en = {
     cta: "Email us to request a spot →",
     note: "We'll only reach out if we actually get a lottery spot.",
   },
+  weekndPromo: {
+    badge: "Tokyo event",
+    title: "The Weeknd's pop-up store in Harajuku — we can go for you",
+    desc: "The official \"After Hours Til Dawn Tokyo Pop-Up Store\" runs September 11–21, 2026 at Universal Music Store Harajuku (1-20-6 Jingumae, Shibuya) — exclusive tour merch, free entry with a time-slot reservation during busy hours.",
+    cta: "Request this pickup →",
+    note: "Reservation slots and stock aren't guaranteed — we'll check before queuing.",
+  },
   nav: { request: "Request an item", pricing: "Pricing", faq: "FAQ", gallery: "Gallery", events: "Events", services: "Services", howItWorks: "How it works", reviews: "Reviews", signIn: "Sign in", myOrders: "My orders", shipping: "Shipping" },
   box: {
     bubble: "Something new is brewing", breadcrumb: "Kizuna Box", title: "Kizuna Box", titleEm: "— coming soon",
@@ -405,6 +412,13 @@ const fr: Copy = {
     cta: "Envoyez-nous un email pour demander une place →",
     note: "Nous ne vous recontacterons que si nous obtenons réellement une place au tirage au sort.",
   },
+  weekndPromo: {
+    badge: "Événement à Tokyo",
+    title: "Le pop-up store de The Weeknd à Harajuku — on peut y aller pour vous",
+    desc: "L'\"After Hours Til Dawn Tokyo Pop-Up Store\" officiel se tient du 11 au 21 septembre 2026 à l'Universal Music Store Harajuku (1-20-6 Jingumae, Shibuya) — produits exclusifs de la tournée, entrée gratuite avec réservation de créneau aux heures d'affluence.",
+    cta: "Demander cet achat →",
+    note: "Les créneaux et le stock ne sont pas garantis — nous vérifions avant de faire la queue.",
+  },
   nav: { request: "Demander un article", pricing: "Tarifs", faq: "FAQ", gallery: "Galerie", events: "Événements", services: "Services", howItWorks: "Comment ça marche", reviews: "Avis", signIn: "Connexion", myOrders: "Mes commandes", shipping: "Livraison" },
   box: {
     bubble: "Quelque chose se prépare", breadcrumb: "Kizuna Box", title: "Kizuna Box", titleEm: "— bientôt disponible",
@@ -779,6 +793,13 @@ const ja: Copy = {
     desc: "現在このイベントのご予約は承っておらず、確約もできません。参加の可否は9月15日夜（日本時間）に行われる抽選で決まります — 当選した場合のみ、2名様分の対応が可能です。",
     cta: "予約をご希望の方はメールでお問い合わせください →",
     note: "抽選に当選した場合のみこちらからご連絡します。",
+  },
+  weekndPromo: {
+    badge: "東京のイベント",
+    title: "The Weeknd 原宿ポップアップストア — 現地での購入を代行します",
+    desc: "公式「After Hours Til Dawn Tokyo Pop-Up Store」が2026年9月11日〜21日、UNIVERSAL MUSIC STORE HARAJUKU（東京都渋谷区神宮前1-20-6）で開催。ツアー限定グッズを販売、入場無料（混雑時間帯は入店予約制）。",
+    cta: "購入代行をリクエストする →",
+    note: "予約枠や在庫は保証されません — 並ぶ前に状況を確認します。",
   },
   nav: { request: "商品をリクエスト", pricing: "料金", faq: "よくある質問", gallery: "ギャラリー", events: "イベント", services: "サービス", howItWorks: "ご利用の流れ", reviews: "レビュー", signIn: "ログイン", myOrders: "マイ注文", shipping: "配送" },
   box: {
@@ -1155,6 +1176,13 @@ const es: Copy = {
     cta: "Escríbenos por email para solicitar una plaza →",
     note: "Solo te contactaremos si realmente conseguimos una plaza en el sorteo.",
   },
+  weekndPromo: {
+    badge: "Evento en Tokio",
+    title: "La tienda pop-up de The Weeknd en Harajuku — podemos ir por ti",
+    desc: "La tienda pop-up oficial \"After Hours Til Dawn Tokyo\" estará del 11 al 21 de septiembre de 2026 en Universal Music Store Harajuku (1-20-6 Jingumae, Shibuya) — merchandising exclusivo de la gira, entrada gratuita con reserva de horario en las horas de más afluencia.",
+    cta: "Solicitar esta compra →",
+    note: "Los turnos y el stock no están garantizados — lo comprobamos antes de hacer la cola.",
+  },
   nav: { request: "Solicitar un artículo", pricing: "Precios", faq: "Preguntas frecuentes", gallery: "Galería", events: "Eventos", services: "Servicios", howItWorks: "Cómo funciona", reviews: "Opiniones", signIn: "Iniciar sesión", myOrders: "Mis pedidos", shipping: "Envíos" },
   box: {
     bubble: "Algo nuevo se está cocinando", breadcrumb: "Kizuna Box", title: "Kizuna Box", titleEm: "— próximamente",
@@ -1529,6 +1557,13 @@ const it: Copy = {
     desc: "Al momento non accettiamo clienti per questo evento e non possiamo fare alcuna promessa. L'accesso dipende da un sorteggio la sera del 15 settembre (ora del Giappone) — se vinciamo, potremo prendere 2 clienti.",
     cta: "Scrivici una email per richiedere un posto →",
     note: "Ti contatteremo solo se otteniamo davvero un posto al sorteggio.",
+  },
+  weekndPromo: {
+    badge: "Evento a Tokyo",
+    title: "Il pop-up store di The Weeknd a Harajuku — possiamo andarci per te",
+    desc: "L'ufficiale \"After Hours Til Dawn Tokyo Pop-Up Store\" si terrà dall'11 al 21 settembre 2026 presso Universal Music Store Harajuku (1-20-6 Jingumae, Shibuya) — merchandise esclusivo del tour, ingresso gratuito con prenotazione della fascia oraria nelle ore di punta.",
+    cta: "Richiedi questo acquisto →",
+    note: "Le fasce orarie e le scorte non sono garantite — verifichiamo prima di metterci in coda.",
   },
   nav: { request: "Richiedi un articolo", pricing: "Prezzi", faq: "FAQ", gallery: "Galleria", events: "Eventi", services: "Servizi", howItWorks: "Come funziona", reviews: "Recensioni", signIn: "Accedi", myOrders: "I miei ordini", shipping: "Spedizioni" },
   box: {
@@ -1905,6 +1940,13 @@ const de: Copy = {
     cta: "Schreiben Sie uns eine E-Mail, um einen Platz anzufragen →",
     note: "Wir melden uns nur, falls wir tatsächlich einen Platz bei der Verlosung bekommen.",
   },
+  weekndPromo: {
+    badge: "Event in Tokio",
+    title: "The Weeknds Pop-up-Store in Harajuku — wir gehen für Sie hin",
+    desc: "Der offizielle \"After Hours Til Dawn Tokyo Pop-Up Store\" läuft vom 11. bis 21. September 2026 im Universal Music Store Harajuku (1-20-6 Jingumae, Shibuya) — exklusive Tour-Merchandise, freier Eintritt mit Zeitfenster-Reservierung zu Stoßzeiten.",
+    cta: "Diesen Einkauf anfragen →",
+    note: "Zeitfenster und Bestand sind nicht garantiert — wir prüfen es, bevor wir uns anstellen.",
+  },
   nav: { request: "Artikel anfragen", pricing: "Preise", faq: "FAQ", gallery: "Galerie", events: "Events", services: "Leistungen", howItWorks: "So funktioniert's", reviews: "Bewertungen", signIn: "Anmelden", myOrders: "Meine Bestellungen", shipping: "Versand" },
   box: {
     bubble: "Etwas Neues braut sich zusammen", breadcrumb: "Kizuna Box", title: "Kizuna Box", titleEm: "— bald verfügbar",
@@ -2279,6 +2321,13 @@ const ko: Copy = {
     desc: "현재 이 이벤트에 대한 클라이언트를 받고 있지 않으며, 어떠한 약속도 드릴 수 없습니다. 참여 여부는 9월 15일 저녁(일본 시간) 추첨으로 결정됩니다 — 당첨될 경우 2분의 고객을 받을 수 있습니다.",
     cta: "예약을 원하시면 이메일로 문의해 주세요 →",
     note: "추첨에 당첨된 경우에만 연락드립니다.",
+  },
+  weekndPromo: {
+    badge: "도쿄 이벤트",
+    title: "The Weeknd 하라주쿠 팝업스토어 — 저희가 대신 다녀올 수 있습니다",
+    desc: "공식 'After Hours Til Dawn Tokyo Pop-Up Store'가 2026년 9월 11일~21일 Universal Music Store Harajuku(도쿄 시부야구 진구마에 1-20-6)에서 열립니다 — 투어 한정 굿즈 판매, 무료 입장(혼잡 시간대는 예약제).",
+    cta: "이 구매 대행 요청하기 →",
+    note: "예약 슬롯과 재고는 보장되지 않습니다 — 줄서기 전에 확인해드립니다.",
   },
   nav: { request: "상품 요청하기", pricing: "요금", faq: "자주 묻는 질문", gallery: "갤러리", events: "이벤트", services: "서비스", howItWorks: "이용 방법", reviews: "리뷰", signIn: "로그인", myOrders: "내 주문", shipping: "배송" },
   box: {
@@ -2655,6 +2704,13 @@ const zh: Copy = {
     cta: "请发邮件联系我们申请名额 →",
     note: "只有在真正中签后，我们才会联系您。",
   },
+  weekndPromo: {
+    badge: "东京活动",
+    title: "The Weeknd 原宿快闪店 — 我们可以为您代购",
+    desc: "官方「After Hours Til Dawn Tokyo Pop-Up Store」将于2026年9月11日至21日在Universal Music Store Harajuku（涩谷区神宮前1-20-6）举行 — 巡演限定周边，免费入场（高峰时段需预约）。",
+    cta: "申请代购 →",
+    note: "预约名额和库存无法保证 — 排队前我们会先确认情况。",
+  },
   nav: { request: "提交求购", pricing: "价格", faq: "常见问题", gallery: "画廊", events: "活动", services: "服务", howItWorks: "运作方式", reviews: "评价", signIn: "登录", myOrders: "我的订单", shipping: "配送" },
   box: {
     bubble: "新东西正在筹备中", breadcrumb: "Kizuna Box", title: "Kizuna Box", titleEm: "— 即将推出",
@@ -3029,6 +3085,13 @@ const pt: Copy = {
     desc: "No momento não estamos aceitando clientes para este evento, e não podemos fazer nenhuma promessa. O acesso depende de um sorteio na noite de 15 de setembro (horário do Japão) — se ganharmos, poderemos atender 2 clientes.",
     cta: "Envie-nos um email para solicitar uma vaga →",
     note: "Só entraremos em contato se realmente conseguirmos uma vaga no sorteio.",
+  },
+  weekndPromo: {
+    badge: "Evento em Tóquio",
+    title: "A loja pop-up de The Weeknd em Harajuku — podemos ir por você",
+    desc: "A oficial \"After Hours Til Dawn Tokyo Pop-Up Store\" acontece de 11 a 21 de setembro de 2026 na Universal Music Store Harajuku (1-20-6 Jingumae, Shibuya) — produtos exclusivos da turnê, entrada gratuita com reserva de horário nos horários de pico.",
+    cta: "Solicitar esta compra →",
+    note: "Horários e estoque não são garantidos — verificamos antes de entrar na fila.",
   },
   nav: { request: "Solicitar um artigo", pricing: "Preços", faq: "Perguntas frequentes", gallery: "Galeria", events: "Eventos", services: "Serviços", howItWorks: "Como funciona", reviews: "Avaliações", signIn: "Entrar", myOrders: "Minhas encomendas", shipping: "Envio" },
   box: {
@@ -3405,6 +3468,13 @@ const id: Copy = {
     cta: "Kirim email untuk meminta slot →",
     note: "Kami hanya akan menghubungi Anda jika benar-benar mendapat slot dari undian.",
   },
+  weekndPromo: {
+    badge: "Acara di Tokyo",
+    title: "Toko pop-up The Weeknd di Harajuku — kami bisa pergi untuk Anda",
+    desc: "\"After Hours Til Dawn Tokyo Pop-Up Store\" resmi berlangsung 11–21 September 2026 di Universal Music Store Harajuku (1-20-6 Jingumae, Shibuya) — merchandise eksklusif tur, masuk gratis dengan reservasi slot waktu saat jam ramai.",
+    cta: "Minta pembelian ini →",
+    note: "Slot reservasi dan stok tidak dijamin — kami cek dulu sebelum mengantre.",
+  },
   nav: { request: "Ajukan permintaan", pricing: "Harga", faq: "FAQ", gallery: "Galeri", events: "Acara", services: "Layanan", howItWorks: "Cara kerja", reviews: "Ulasan", signIn: "Masuk", myOrders: "Pesanan saya", shipping: "Pengiriman" },
   box: {
     bubble: "Sesuatu yang baru sedang disiapkan", breadcrumb: "Kizuna Box", title: "Kizuna Box", titleEm: "— segera hadir",
@@ -3780,6 +3850,13 @@ const vi: Copy = {
     cta: "Gửi email cho chúng tôi để yêu cầu một chỗ →",
     note: "Chúng tôi chỉ liên hệ lại nếu thực sự trúng suất bốc thăm.",
   },
+  weekndPromo: {
+    badge: "Sự kiện tại Tokyo",
+    title: "Cửa hàng pop-up của The Weeknd tại Harajuku — chúng tôi có thể đi mua giúp bạn",
+    desc: "\"After Hours Til Dawn Tokyo Pop-Up Store\" chính thức diễn ra từ 11–21/9/2026 tại Universal Music Store Harajuku (1-20-6 Jingumae, Shibuya) — hàng lưu niệm tour độc quyền, vào cửa miễn phí, có đặt chỗ theo khung giờ vào giờ cao điểm.",
+    cta: "Yêu cầu mua giúp →",
+    note: "Suất đặt chỗ và hàng tồn kho không được đảm bảo — chúng tôi sẽ kiểm tra trước khi xếp hàng.",
+  },
   nav: { request: "Yêu cầu mua hàng", pricing: "Bảng giá", faq: "Câu hỏi thường gặp", gallery: "Thư viện ảnh", events: "Sự kiện", services: "Dịch vụ", howItWorks: "Cách hoạt động", reviews: "Đánh giá", signIn: "Đăng nhập", myOrders: "Đơn hàng của tôi", shipping: "Vận chuyển" },
   box: {
     bubble: "Điều gì đó mới đang được chuẩn bị", breadcrumb: "Kizuna Box", title: "Kizuna Box", titleEm: "— sắp ra mắt",
@@ -4154,6 +4231,13 @@ const nl: Copy = {
     desc: "We nemen momenteel geen klanten aan voor dit evenement en kunnen niets beloven. Toegang wordt bepaald door een loting op de avond van 15 september (Japanse tijd) — als we winnen, kunnen we 2 klanten aannemen.",
     cta: "Mail ons om een plek aan te vragen →",
     note: "We nemen alleen contact op als we daadwerkelijk een plek bij de loting krijgen.",
+  },
+  weekndPromo: {
+    badge: "Evenement in Tokio",
+    title: "De pop-up store van The Weeknd in Harajuku — wij kunnen voor je gaan",
+    desc: "De officiële \"After Hours Til Dawn Tokyo Pop-Up Store\" loopt van 11 t/m 21 september 2026 bij Universal Music Store Harajuku (1-20-6 Jingumae, Shibuya) — exclusieve tourmerchandise, gratis toegang met tijdslotreservering tijdens drukke uren.",
+    cta: "Deze aankoop aanvragen →",
+    note: "Tijdsloten en voorraad zijn niet gegarandeerd — we checken het voordat we in de rij gaan staan.",
   },
   nav: { request: "Artikel aanvragen", pricing: "Prijzen", faq: "Veelgestelde vragen", gallery: "Galerij", events: "Evenementen", services: "Diensten", howItWorks: "Hoe het werkt", reviews: "Beoordelingen", signIn: "Inloggen", myOrders: "Mijn bestellingen", shipping: "Verzending" },
   box: {

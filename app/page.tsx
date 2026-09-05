@@ -11,6 +11,7 @@ import WhyKizunaHomeSection from "./components/sections/WhyKizunaHomeSection";
 import ServiceRulesSection from "./components/sections/ServiceRulesSection";
 import NewsPreviewSection from "./components/sections/NewsPreviewSection";
 import GallerySection from "./components/sections/GallerySection";
+import EventCarousel from "./components/EventCarousel";
 import { BackToTop, useScrollReveal } from "./components/ui";
 import usePixelCanvas from "./components/pixel/usePixelCanvas";
 import { useLang, useAnnounce, useGallery } from "./components/useSiteState";
@@ -31,23 +32,35 @@ export default function Home() {
 
       <HeroSection t={t} />
 
-      {/* HOBONICHI TECHO EVENT — no client bookings are being taken for this
-          event; entry depends on a Sept 15 evening (JP time) lottery. Update
-          or remove once the lottery result is known. */}
+      {/* TOKYO EVENTS CAROUSEL — Hobonichi Techo Store lottery status +
+          The Weeknd's Harajuku pop-up. Update/remove slides as each event's
+          status changes. */}
       <section className="section-sm reveal">
         <div className="wrap">
-          <div className="p-event-card" style={{ borderLeftColor: "var(--gold-d)" }}>
-            <div className="p-event-body">
-              <div className="highlight-pill" style={{ marginBottom: ".8rem" }}>
-                <span className="highlight-pill-dot" />
-                <span className="highlight-pill-text">🐧 {t.eventPromo?.badge}</span>
-              </div>
-              <strong style={{ fontSize: "1.05rem" }}>{t.eventPromo?.title}</strong>
-              <p>{t.eventPromo?.desc}</p>
-              <p style={{ marginTop: ".3rem", fontSize: ".7rem", fontStyle: "italic", opacity: .8 }}>{t.eventPromo?.note}</p>
-            </div>
-            <a href="mailto:kizunaproxy@gmail.com?subject=Hobonichi%20Techo%20Store%20%E2%80%94%20reservation%20request" className="btn btn-gold">{t.eventPromo?.cta}</a>
-          </div>
+          <EventCarousel
+            slides={[
+              {
+                illustration: "penguin",
+                accent: "var(--gold-d)",
+                badge: `🐧 ${t.eventPromo?.badge}`,
+                title: t.eventPromo?.title,
+                desc: t.eventPromo?.desc,
+                note: t.eventPromo?.note,
+                cta: t.eventPromo?.cta,
+                ctaHref: "mailto:kizunaproxy@gmail.com?subject=Hobonichi%20Techo%20Store%20%E2%80%94%20reservation%20request",
+              },
+              {
+                illustration: "moonMic",
+                accent: "var(--red)",
+                badge: `🎤 ${t.weekndPromo?.badge}`,
+                title: t.weekndPromo?.title,
+                desc: t.weekndPromo?.desc,
+                note: t.weekndPromo?.note,
+                cta: t.weekndPromo?.cta,
+                ctaHref: "/request",
+              },
+            ]}
+          />
         </div>
       </section>
 
