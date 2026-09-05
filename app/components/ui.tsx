@@ -2,6 +2,12 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { IconEvent } from "./pixel/PixelIcons";
+
+export {
+  IconSearch, IconTrash, IconLink, IconWarning, IconMail, IconRefresh,
+  IconSettings, IconClock, IconPin, IconPlus, IconEdit, IconUpload,
+} from "./icons/UiIcons";
 
 // ─── ICONS ───────────────────────────────────────────────────────────────────
 export function IconInstagram({ size = 15 }) {
@@ -128,11 +134,11 @@ export function EventsFloat({ t }: { t: any }) {
       <button className="events-float-close" onClick={() => { setVisible(false); setTimeout(() => setDismissed(true), 400); }}>
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
-      <div className="events-float-icon">🎌</div>
+      <div className="events-float-icon"><IconEvent size={28} /></div>
       <div className="events-float-body">
         <strong>{ef.title || "Tokyo Events"}</strong>
         <p>{ef.desc || "Pokémon Center, Nintendo, Supreme drops & more — we attend in person."}</p>
-        <p style={{color:"var(--red)",fontSize:".6rem",fontWeight:500,marginTop:"-.3rem"}}>{ef.urgency || "⚡ High demand — book early to avoid delays."}</p>
+        <p style={{color:"var(--red)",fontSize:".6rem",fontWeight:500,marginTop:"-.3rem"}}>{ef.urgency || "High demand — book early to avoid delays."}</p>
         <a href="/events" className="events-float-btn">{ef.cta || "Learn more"} <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg></a>
       </div>
     </div>

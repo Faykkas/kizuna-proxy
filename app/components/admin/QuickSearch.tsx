@@ -9,6 +9,7 @@
 // match, so there's no guessing which tab to open first.
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { IconSearch } from "../icons/UiIcons";
 
 export default function QuickSearch({ supabase, tokens, onJumpToOrder, onJumpToRequest }) {
   const { SURFACE, BORDER, RED, INK, MUTED, PIXEL, BODY } = tokens;
@@ -92,13 +93,14 @@ export default function QuickSearch({ supabase, tokens, onJumpToOrder, onJumpToR
 
   return (
     <div ref={wrapRef} style={{ position: "relative", flex: "1 1 220px", minWidth: "180px", maxWidth: "320px" }}>
+      <span style={{ position: "absolute", left: ".8rem", top: "50%", transform: "translateY(-50%)", color: MUTED, display: "flex", pointerEvents: "none" }}><IconSearch size={14} /></span>
       <input
         value={query}
         onChange={e => { setQuery(e.target.value); setOpen(true); }}
         onFocus={() => setOpen(true)}
-        placeholder="🔍 Search orders & requests…"
+        placeholder="Search orders & requests…"
         style={{
-          width: "100%", padding: ".55rem .8rem", boxSizing: "border-box",
+          width: "100%", padding: ".55rem .8rem .55rem 2.1rem", boxSizing: "border-box",
           background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "8px",
           color: INK, fontSize: ".82rem", fontFamily: BODY, outline: "none",
         }}

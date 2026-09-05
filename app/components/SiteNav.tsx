@@ -7,21 +7,25 @@ import Image from "next/image";
 import { useLanguage } from "../lib/language";
 import { LANG_LABELS } from "../translations";
 import { useAuth } from "../lib/auth";
+import {
+  IconShoppingBag, IconAuction, IconCards, IconStore, IconApparel,
+  IconSneaker, IconFigure, IconBox, IconEvent, IconBusiness,
+} from "./pixel/PixelIcons";
 
 const BLOG_ITEMS = [
-  { href:"/blog/how-to-buy-from-mercari-japan",    emoji:"🛍️", label:"Mercari Japan" },
-  { href:"/blog/yahoo-auctions-japan-guide",        emoji:"🏷️", label:"Yahoo Auctions" },
-  { href:"/blog/best-pokemon-cards-japan-2026",     emoji:"🎴", label:"Pokémon Cards" },
-  { href:"/blog/pokemon-center-tokyo-exclusives",   emoji:"⭐", label:"Pokémon Center" },
-  { href:"/blog/supreme-japan-drops-guide",         emoji:"👕", label:"Supreme Japan" },
-  { href:"/blog/nike-japan-exclusives-guide",       emoji:"👟", label:"Nike Japan" },
-  { href:"/blog/anime-figures-japan-guide",         emoji:"🗿", label:"Anime Figures" },
-  { href:"/blog/japanese-trading-cards-guide-2026", emoji:"🃏", label:"Trading Cards" },
-  { href:"/blog/japan-shipping-guide-2026",         emoji:"📦", label:"Shipping Guide" },
-  { href:"/tokyo-in-store-personal-shopper",        emoji:"🏬", label:"In-Store Shopper" },
-  { href:"/japan-pop-up-store-proxy",               emoji:"🎪", label:"Pop-Up Store Proxy" },
-  { href:"/pokemon-one-piece-card-proxy-japan",     emoji:"🎴", label:"Card Proxy" },
-  { href:"/business-sourcing",                      emoji:"💼", label:"Business Sourcing" },
+  { href:"/blog/how-to-buy-from-mercari-japan",    Icon:IconShoppingBag, label:"Mercari Japan" },
+  { href:"/blog/yahoo-auctions-japan-guide",        Icon:IconAuction,     label:"Yahoo Auctions" },
+  { href:"/blog/best-pokemon-cards-japan-2026",     Icon:IconCards,       label:"Pokémon Cards" },
+  { href:"/blog/pokemon-center-tokyo-exclusives",   Icon:IconStore,       label:"Pokémon Center" },
+  { href:"/blog/supreme-japan-drops-guide",         Icon:IconApparel,     label:"Supreme Japan" },
+  { href:"/blog/nike-japan-exclusives-guide",       Icon:IconSneaker,     label:"Nike Japan" },
+  { href:"/blog/anime-figures-japan-guide",         Icon:IconFigure,      label:"Anime Figures" },
+  { href:"/blog/japanese-trading-cards-guide-2026", Icon:IconCards,       label:"Trading Cards" },
+  { href:"/blog/japan-shipping-guide-2026",         Icon:IconBox,         label:"Shipping Guide" },
+  { href:"/tokyo-in-store-personal-shopper",        Icon:IconStore,       label:"In-Store Shopper" },
+  { href:"/japan-pop-up-store-proxy",               Icon:IconEvent,       label:"Pop-Up Store Proxy" },
+  { href:"/pokemon-one-piece-card-proxy-japan",     Icon:IconCards,       label:"Card Proxy" },
+  { href:"/business-sourcing",                      Icon:IconBusiness,    label:"Business Sourcing" },
 ];
 
 export default function SiteNav() {
@@ -86,7 +90,7 @@ export default function SiteNav() {
               <div className="nav-dropdown">
                 {BLOG_ITEMS.map(item => (
                   <a key={item.href} href={item.href} className="nav-dropdown-item">
-                    <span className="nav-dropdown-emoji">{item.emoji}</span>
+                    <span className="nav-dropdown-emoji"><item.Icon size={20} /></span>
                     <span>{item.label}</span>
                   </a>
                 ))}
@@ -166,8 +170,9 @@ export default function SiteNav() {
               <div style={{paddingLeft:"1rem",paddingTop:".25rem"}}>
                 {BLOG_ITEMS.map(item => (
                   <a key={item.href} href={item.href} className="mobile-menu-guide"
-                    onClick={() => setMobileOpen(false)}>
-                    {item.emoji} {item.label}
+                    onClick={() => setMobileOpen(false)}
+                    style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
+                    <item.Icon size={18} /> {item.label}
                   </a>
                 ))}
               </div>

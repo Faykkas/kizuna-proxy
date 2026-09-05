@@ -3,6 +3,9 @@
 
 import { WHY_CARDS_DATA, TICKER_ITEMS } from "../data";
 import WhyIcon from "../WhyIcon";
+import { IconCards, IconSneaker, IconGaming, IconApparel, IconFigure, IconBook } from "../pixel/PixelIcons";
+
+const TICKER_ICONS = { cards: IconCards, sneaker: IconSneaker, gaming: IconGaming, apparel: IconApparel, figure: IconFigure, book: IconBook };
 
 export default function HowItWorksSection({ t }: { t: any }) {
   return (
@@ -64,9 +67,14 @@ export default function HowItWorksSection({ t }: { t: any }) {
             <div className="ticker-label"><span className="ticker-dot"/>{t.howItWorks?.whyKizuna?.ticker || t.whyKizuna?.ticker || "Recent orders"}</div>
             <div className="ticker-track">
               <div className="ticker-inner">
-                {TICKER_ITEMS.concat(TICKER_ITEMS).map((item, i) => (
-                  <span key={i} className="ticker-item">{item}</span>
-                ))}
+                {TICKER_ITEMS.concat(TICKER_ITEMS).map((item, i) => {
+                  const TickerIcon = TICKER_ICONS[item.icon];
+                  return (
+                    <span key={i} className="ticker-item">
+                      <TickerIcon size={16} /> {item.text} → {item.flag}
+                    </span>
+                  );
+                })}
               </div>
             </div>
           </div>

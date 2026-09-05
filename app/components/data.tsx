@@ -50,12 +50,12 @@ function WhyIcon({ i }: { i: number }) {
 }
 
 export const TICKER_ITEMS = [
-  "🎴 Pokémon cards — Akihabara → 🇺🇸 USA",
-  "👟 Nike Japan collab → 🇫🇷 France",
-  "🎮 Nintendo exclusive → 🇨🇦 Canada",
-  "👕 Supreme Japan drop → 🇩🇪 Germany",
-  "🗿 Anime figure — Good Smile → 🇬🇷 Greece",
-  "📚 Vintage manga — Mercari → 🇬🇧 UK",
-  "🎴 One Piece TCG box → 🇮🇩 Indonesia",
-  "👟 Asics Japan collab → 🇰🇷 Korea",
+  { icon: "cards",    text: "Pokémon cards — Akihabara", flag: "🇺🇸 USA" },
+  { icon: "sneaker",  text: "Nike Japan collab",         flag: "🇫🇷 France" },
+  { icon: "gaming",   text: "Nintendo exclusive",        flag: "🇨🇦 Canada" },
+  { icon: "apparel",  text: "Supreme Japan drop",        flag: "🇩🇪 Germany" },
+  { icon: "figure",   text: "Anime figure — Good Smile", flag: "🇬🇷 Greece" },
+  { icon: "book",     text: "Vintage manga — Mercari",   flag: "🇬🇧 UK" },
+  { icon: "cards",    text: "One Piece TCG box",         flag: "🇮🇩 Indonesia" },
+  { icon: "sneaker",  text: "Asics Japan collab",        flag: "🇰🇷 Korea" },
 ];

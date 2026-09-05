@@ -3,6 +3,7 @@
 
 import Image from "next/image";
 import { IconInstagram, IconTiktok } from "./ui";
+import { IconEvent } from "./pixel/PixelIcons";
 
 export default function SiteFooter({ t }: { t: any }) {
   return (
@@ -27,7 +28,9 @@ export default function SiteFooter({ t }: { t: any }) {
 <a href="/reviews" className="footer-link">{t.footerNav?.reviews || "Reviews"}</a>
             <a href="/pricing" className="footer-link">{t.nav.pricing}</a>
             <a href="/faq" className="footer-link">FAQ</a>
-<a href="/events" className="footer-link">{t.footerNav?.events || "Tokyo Events 🎌"}</a>
+            <a href="/events" className="footer-link" style={{ display: "flex", alignItems: "center", gap: ".4rem" }}>
+              <IconEvent size={13} /> {t.footerNav?.events || "Tokyo Events"}
+            </a>
           </div>
           <div>
             <p className="footer-col-title">Guides</p>

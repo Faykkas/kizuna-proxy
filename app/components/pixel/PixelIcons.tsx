@@ -176,3 +176,173 @@ export const CATEGORY_ICONS = [
   IconGaming,
   IconStore,
 ];
+
+/* ── NAV GUIDES / ADMIN / MISC CONTENT ICONS ──────────────────────────────
+   Same Sprite/P primitives as above — kept in this file so every "content"
+   glyph (as opposed to functional UI controls, see icons/UiIcons.tsx) shares
+   one visual language and re-themes together via the --px-* tokens. */
+
+export function IconShoppingBag({ size = 48 }) {
+  return (
+    <Sprite size={size} label="Marketplace">
+      <P x={5} y={2} w={1} h={3} c="var(--px-muted)" />
+      <P x={10} y={2} w={1} h={3} c="var(--px-muted)" />
+      <P x={5} y={2} w={6} h={1} c="var(--px-muted)" />
+      <P x={3} y={5} w={10} h={11} c="var(--px-accent)" />
+      <P x={3} y={5} w={10} h={2} c="var(--px-accent2)" />
+      <P x={6} y={9} w={4} h={1} c="var(--px-bg)" />
+    </Sprite>
+  );
+}
+
+export function IconAuction({ size = 48 }) {
+  return (
+    <Sprite size={size} label="Auctions">
+      <P x={8} y={1} w={5} h={4} c="var(--px-accent)" />
+      <P x={5} y={4} w={5} h={4} c="var(--px-accent)" />
+      <P x={3} y={9} w={7} h={2} c="var(--px-accent2)" />
+      <P x={3} y={11} w={2} h={5} c="var(--px-ink)" />
+      <P x={1} y={16} w={7} h={1} c="var(--px-border)" />
+    </Sprite>
+  );
+}
+
+export function IconApparel({ size = 48 }) {
+  return (
+    <Sprite size={size} label="Apparel">
+      <P x={5} y={2} w={6} h={2} c="var(--px-muted)" />
+      <P x={2} y={3} w={3} h={3} c="var(--px-accent2)" />
+      <P x={11} y={3} w={3} h={3} c="var(--px-accent2)" />
+      <P x={4} y={4} w={8} h={12} c="var(--px-accent)" />
+      <P x={7} y={4} w={2} h={2} c="var(--px-bg)" />
+    </Sprite>
+  );
+}
+
+export function IconEvent({ size = 48 }) {
+  return (
+    <Sprite size={size} label="Events">
+      <P x={1} y={4} w={14} h={2} c="var(--px-red)" />
+      <P x={3} y={1} w={2} h={4} c="var(--px-red)" />
+      <P x={11} y={1} w={2} h={4} c="var(--px-red)" />
+      <P x={3} y={6} w={2} h={10} c="var(--px-accent2)" />
+      <P x={11} y={6} w={2} h={10} c="var(--px-accent2)" />
+      <P x={1} y={16} w={14} h={1} c="var(--px-border)" />
+    </Sprite>
+  );
+}
+
+export function IconBusiness({ size = 48 }) {
+  return (
+    <Sprite size={size} label="Business">
+      <P x={6} y={2} w={4} h={2} c="var(--px-muted)" />
+      <P x={2} y={5} w={12} h={9} c="var(--px-accent)" />
+      <P x={2} y={5} w={12} h={2} c="var(--px-accent2)" />
+      <P x={7} y={5} w={2} h={9} c="var(--px-bg)" />
+    </Sprite>
+  );
+}
+
+export function IconRequests({ size = 32 }) {
+  return (
+    <Sprite size={size} label="Requests">
+      <P x={2} y={3} w={12} h={9} c="var(--px-surface)" />
+      <P x={2} y={3} w={12} h={9} c="var(--px-border)" />
+      <P x={3} y={4} w={10} h={7} c="var(--px-bg)" />
+      <P x={1} y={11} w={14} h={4} c="var(--px-accent)" />
+      <P x={1} y={11} w={5} h={1} c="var(--px-accent2)" />
+      <P x={10} y={11} w={5} h={1} c="var(--px-accent2)" />
+    </Sprite>
+  );
+}
+
+export function IconCustomers({ size = 32 }) {
+  return (
+    <Sprite size={size} label="Customers">
+      <P x={6} y={2} w={4} h={4} c="var(--px-ink)" />
+      <P x={3} y={7} w={10} h={8} c="var(--px-accent)" />
+      <P x={5} y={9} w={2} h={2} c="var(--px-bg)" />
+      <P x={9} y={9} w={2} h={2} c="var(--px-bg)" />
+    </Sprite>
+  );
+}
+
+export function IconStats({ size = 32 }) {
+  return (
+    <Sprite size={size} label="Stats">
+      <P x={2} y={10} w={3} h={6} c="var(--px-accent2)" />
+      <P x={6} y={6} w={3} h={10} c="var(--px-accent)" />
+      <P x={10} y={9} w={3} h={7} c="var(--px-accent2)" />
+      <P x={1} y={16} w={14} h={1} c="var(--px-border)" />
+    </Sprite>
+  );
+}
+
+export function IconGallery({ size = 32 }) {
+  return (
+    <Sprite size={size} label="Gallery">
+      <P x={1} y={2} w={14} h={12} c="var(--px-border)" />
+      <P x={2} y={3} w={12} h={10} c="var(--px-bg)" />
+      <P x={3} y={9} w={4} h={3} c="var(--px-accent)" />
+      <P x={9} y={7} w={4} h={5} c="var(--px-accent2)" />
+      <P x={4} y={4} w={2} h={2} c="var(--px-muted)" />
+    </Sprite>
+  );
+}
+
+export function IconNews({ size = 32 }) {
+  return (
+    <Sprite size={size} label="News">
+      <P x={2} y={2} w={11} h={13} c="var(--px-bg)" />
+      <P x={2} y={2} w={11} h={13} c="var(--px-border)" />
+      <P x={4} y={4} w={5} h={4} c="var(--px-accent)" />
+      <P x={4} y={9} w={7} h={1} c="var(--px-muted)" />
+      <P x={4} y={11} w={7} h={1} c="var(--px-muted)" />
+      <P x={4} y={13} w={5} h={1} c="var(--px-muted)" />
+    </Sprite>
+  );
+}
+
+export function IconBanner({ size = 32 }) {
+  return (
+    <Sprite size={size} label="Banner">
+      <P x={1} y={5} w={5} h={4} c="var(--px-accent)" />
+      <P x={6} y={3} w={6} h={8} c="var(--px-accent2)" />
+      <P x={12} y={6} w={2} h={2} c="var(--px-red)" />
+      <P x={3} y={9} w={2} h={5} c="var(--px-muted)" />
+    </Sprite>
+  );
+}
+
+export function IconCharges({ size = 32 }) {
+  return (
+    <Sprite size={size} label="Charges">
+      <P x={4} y={2} w={8} h={12} c="var(--px-accent2)" />
+      <P x={7} y={4} w={2} h={1} c="var(--px-bg)" />
+      <P x={7} y={5} w={2} h={6} c="var(--px-bg)" />
+      <P x={5} y={11} w={6} h={1} c="var(--px-bg)" />
+    </Sprite>
+  );
+}
+
+export function IconBook({ size = 32 }) {
+  return (
+    <Sprite size={size} label="Manga">
+      <P x={3} y={2} w={10} h={13} c="var(--px-accent)" />
+      <P x={3} y={2} w={2} h={13} c="var(--px-accent2)" />
+      <P x={6} y={5} w={5} h={1} c="var(--px-bg)" />
+      <P x={6} y={7} w={5} h={1} c="var(--px-bg)" />
+      <P x={6} y={9} w={3} h={1} c="var(--px-bg)" />
+    </Sprite>
+  );
+}
+
+export function IconPaymentLink({ size = 32 }) {
+  return (
+    <Sprite size={size} label="Payment link">
+      <P x={1} y={4} w={14} h={9} c="var(--px-accent)" />
+      <P x={1} y={4} w={14} h={2} c="var(--px-red)" />
+      <P x={3} y={9} w={5} h={2} c="var(--px-bg)" />
+    </Sprite>
+  );
+}

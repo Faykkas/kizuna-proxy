@@ -65,7 +65,9 @@ function ShipmentCard({ shipment, orders }) {
   return (
     <a href={`/account/shipments/${shipment.id}`} className={`acc-order-card${action ? " is-action" : ""}`}>
       <div className="acc-order-top">
-        <span className="acc-order-ref">📦 {a.packageLabel || "PACKAGE"} · {orders.length} {a.ordersCount || "ORDERS"}</span>
+        <span className="acc-order-ref" style={{ display: "inline-flex", alignItems: "center", gap: ".35rem" }}>
+          <IconBox size={14} /> {a.packageLabel || "PACKAGE"} · {orders.length} {a.ordersCount || "ORDERS"}
+        </span>
         <span className="acc-order-status" style={{ color: meta.color }}>
           {meta.label}
         </span>

@@ -12,6 +12,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "../../lib/supabase";
 import { formatJPY } from "../../lib/orderStatus";
+import { IconSearch, IconWarning, IconMail } from "../icons/UiIcons";
 
 // Names used as a placeholder for several different, unrelated people —
 // grouping by name would silently merge strangers into one "customer".
@@ -111,12 +112,15 @@ export default function CustomersTab({ tokens }) {
 
       {/* ── Search ── */}
       <div style={{ display: "flex", gap: ".75rem", flexWrap: "wrap", marginBottom: "1rem" }}>
-        <input
-          style={{ flex: 1, minWidth: "200px", padding: ".6rem 1rem", background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "8px", color: INK, fontSize: ".85rem", fontFamily: BODY }}
-          placeholder="Search a customer by name or email…"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
+        <div style={{ position: "relative", flex: 1, minWidth: "200px" }}>
+          <span style={{ position: "absolute", left: ".8rem", top: "50%", transform: "translateY(-50%)", color: MUTED, display: "flex" }}><IconSearch size={14} /></span>
+          <input
+            style={{ width: "100%", padding: ".6rem 1rem .6rem 2.1rem", background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "8px", color: INK, fontSize: ".85rem", fontFamily: BODY, boxSizing: "border-box" }}
+            placeholder="Search a customer by name or email…"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+        </div>
         <div style={{ padding: ".6rem 1rem", background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "8px", fontSize: ".75rem", color: MUTED, display: "flex", alignItems: "center" }}>
           {filtered.length} customer{filtered.length !== 1 ? "s" : ""}
         </div>
@@ -156,8 +160,8 @@ export default function CustomersTab({ tokens }) {
               </div>
               <div style={{ padding: "0 .4rem" }}>
                 {c.outstanding > 0 && (
-                  <span style={{ fontSize: ".68rem", fontWeight: 600, fontFamily: BODY, color: ALERT, background: `${ALERT}22`, padding: ".3rem .55rem", borderRadius: "6px", whiteSpace: "nowrap" }}>
-                    ⚠ ¥{c.outstanding.toLocaleString()} due
+                  <span style={{ fontSize: ".68rem", fontWeight: 600, fontFamily: BODY, color: ALERT, background: `${ALERT}22`, padding: ".3rem .55rem", borderRadius: "6px", whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: ".3rem" }}>
+                    <IconWarning size={11} /> ¥{c.outstanding.toLocaleString()} due
                   </span>
                 )}
               </div>
@@ -185,9 +189,9 @@ export default function CustomersTab({ tokens }) {
                 {selected.email ? (
                   <a
                     href={`mailto:${selected.email}?subject=Kizuna Proxy&body=Hi ${selected.name},%0A%0A`}
-                    style={{ color: RED, fontSize: ".82rem", textDecoration: "none" }}
+                    style={{ color: RED, fontSize: ".82rem", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: ".4rem" }}
                   >
-                    ✉ {selected.email}
+                    <IconMail size={13} /> {selected.email}
                   </a>
                 ) : (
                   <span style={{ color: MUTED, fontSize: ".82rem" }}>No email on file</span>

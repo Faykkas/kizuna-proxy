@@ -8,6 +8,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { supabase } from "../../lib/supabase";
+import { IconSearch } from "../icons/UiIcons";
 
 export default function WaitlistTab({ tokens }) {
   const { BG, SURFACE, BORDER, RED, ALERT, INK, MUTED, PIXEL, BODY } = tokens;
@@ -68,12 +69,15 @@ export default function WaitlistTab({ tokens }) {
 
       {/* ── Search ── */}
       <div style={{ display: "flex", gap: ".75rem", flexWrap: "wrap", marginBottom: "1rem" }}>
-        <input
-          style={{ flex: 1, minWidth: "200px", padding: ".6rem 1rem", background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "8px", color: INK, fontSize: ".85rem", fontFamily: BODY }}
-          placeholder="🔍 Search by email…"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
+        <div style={{ position: "relative", flex: 1, minWidth: "200px" }}>
+          <span style={{ position: "absolute", left: ".8rem", top: "50%", transform: "translateY(-50%)", color: MUTED, display: "flex" }}><IconSearch size={14} /></span>
+          <input
+            style={{ width: "100%", padding: ".6rem 1rem .6rem 2.1rem", background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "8px", color: INK, fontSize: ".85rem", fontFamily: BODY, boxSizing: "border-box" }}
+            placeholder="Search by email…"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+        </div>
         {filtered.length > 0 && (
           <button onClick={copyAll} style={{
             background: "transparent", color: MUTED, border: `1px solid ${BORDER}`,

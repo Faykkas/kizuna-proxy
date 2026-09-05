@@ -8,6 +8,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "../../lib/supabase";
+import { IconSearch, IconTrash, IconLink, IconPin } from "../icons/UiIcons";
 
 export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
   const { BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY } = tokens;
@@ -167,10 +168,11 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
     <div style={{ fontFamily: BODY }}>
 
       {/* Search */}
-      <div style={{ marginBottom: "1rem" }}>
+      <div style={{ marginBottom: "1rem", position: "relative", maxWidth: "360px" }}>
+        <span style={{ position: "absolute", left: ".8rem", top: "50%", transform: "translateY(-50%)", color: MUTED, display: "flex" }}><IconSearch size={14} /></span>
         <input
-          style={{ width: "100%", maxWidth: "360px", padding: ".6rem 1rem", background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "8px", color: INK, fontSize: ".85rem", fontFamily: BODY, boxSizing: "border-box" }}
-          placeholder="🔍 Search name, email, item…"
+          style={{ width: "100%", padding: ".6rem 1rem .6rem 2.1rem", background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "8px", color: INK, fontSize: ".85rem", fontFamily: BODY, boxSizing: "border-box" }}
+          placeholder="Search name, email, item…"
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
@@ -236,8 +238,9 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
                 background: ALERT, color: "#fff", border: "none",
                 padding: ".5rem .9rem", borderRadius: "8px", fontFamily: BODY,
                 fontSize: ".75rem", fontWeight: 600, cursor: "pointer",
+                display: "inline-flex", alignItems: "center", gap: ".4rem",
               }}>
-                🗑 Delete selected
+                <IconTrash size={14} /> Delete selected
               </button>
               <button onClick={() => setSelected(new Set())} style={{
                 background: "transparent", color: MUTED, border: `1px solid ${BORDER}`,
@@ -287,8 +290,8 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
                     <div>
                     <strong style={{ fontSize: ".95rem", color: INK, display: "block", marginBottom: ".25rem" }}>
                       {req.lead_type === "business" && (
-                        <span style={{ fontSize: ".62rem", fontWeight: 700, color: VIOLET, border: `1px solid ${VIOLET}`, borderRadius: "5px", padding: ".1rem .4rem", marginRight: ".5rem", verticalAlign: "middle" }}>
-                          🏢 BUSINESS
+                        <span style={{ fontSize: ".62rem", fontWeight: 700, color: VIOLET, border: `1px solid ${VIOLET}`, borderRadius: "5px", padding: ".1rem .4rem", marginRight: ".5rem", verticalAlign: "middle", display: "inline-flex", alignItems: "center", gap: ".3rem" }}>
+                          <IconPin size={11} /> BUSINESS
                         </span>
                       )}
                       {req.lead_type === "business" ? (req.business_name || req.name) : req.name}
@@ -359,8 +362,8 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
                     )}
                     {req.business_website && (
                       <a href={req.business_website.startsWith("http") ? req.business_website : `https://${req.business_website}`} target="_blank" rel="noopener noreferrer"
-                        style={{ fontSize: ".72rem", color: RED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem", textDecoration: "none" }}>
-                        🔗 Business site
+                        style={{ fontSize: ".72rem", color: RED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: ".35rem" }}>
+                        <IconLink size={12} /> Business site
                       </a>
                     )}
                     {req.recurring_sourcing && (

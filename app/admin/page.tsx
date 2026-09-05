@@ -12,6 +12,14 @@ import ChargesTab from "../components/admin/ChargesTab";
 import PaymentLinksTab from "../components/admin/PaymentLinksTab";
 import QuickSearch from "../components/admin/QuickSearch";
 import { ALL_STATUSES, statusColor, orderTitle } from "../lib/orderStatus";
+import {
+  IconRequests, IconCustomers, IconEvent, IconBox, IconCharges,
+  IconPaymentLink, IconStats, IconGallery, IconNews, IconBanner,
+  IconCards, IconGaming, IconApparel, IconFigure, IconMarketplace,
+} from "../components/pixel/PixelIcons";
+import {
+  IconWarning, IconMail, IconSettings, IconTrash, IconClock, IconPin, IconRefresh,
+} from "../components/icons/UiIcons";
 
 
 // ─── ADMIN TRANSLATIONS ───────────────────────────────────────────────────────
@@ -20,34 +28,34 @@ const ADMIN_LANGS = {
     signIn: "Sign in to manage your site",
     email: "Email", password: "Password", signInBtn: "Sign in",
     backToSite: "← Back to site", signOut: "Sign out",
-    tabs: { announce: "📢 Banner", news: "🗞 News", gallery: "🖼 Gallery", orders: "📦 Orders", stats: "📊 Stats" },
+    tabs: { announce: "Banner", news: "News", gallery: "Gallery", orders: "Orders", stats: "Stats" },
     // Banner
     bannerTitle: "Announcement Banner",
     bannerVisible: "Banner visible on site", bannerHidden: "Banner hidden",
     bannerMsg: "Message", bannerMsgHint: "This message appears at the top of the site.",
     bannerFrom: "From", bannerTo: "To", bannerSave: "Save", bannerSaving: "Saving…", bannerSaved: "✓ Banner updated.",
     // News
-    newArticle: "➕ New article", editArticle: "✏️ Edit article",
+    newArticle: "New article", editArticle: "Edit article",
     titleField: "Title *", contentField: "Content *", categoryField: "Category",
     publish: "Publish", update: "Update", cancel: "Cancel", sending: "Saving…",
     noArticles: "No articles yet.",
     published: "✓ Published.", updated: "✓ Updated.",
     titleRequired: "Title and content are required.",
     // Gallery
-    addPhoto: "➕ Add photo", editPhoto: "✏️ Edit photo",
+    addPhoto: "Add photo", editPhoto: "Edit photo",
     photoTitle: "Title *", photoSubtitle: "Subtitle", photoUrl: "Image URL or upload",
-    uploadBtn: "📁 Upload image", uploading: "⏳ Uploading…",
+    uploadBtn: "Upload image", uploading: "Uploading…",
     addPhotoBtn: "Add photo", noPhotos: "No photos yet. Add your first one above.",
     photoAdded: "✓ Added.", photoUpdated: "✓ Updated.",
     titleImgRequired: "Title and image are required.",
     // Orders
-    newOrder: "New order", editOrder: "✏️ Edit order",
+    newOrder: "New order", editOrder: "Edit order",
     clientName: "Client name *", country: "Country", platform: "Platform",
     communication: "Communication", items: "Items *", itemPrice: "Item price (JPY)",
     serviceFee: "Service fee (JPY)", status: "Status", purchaseDate: "Purchase date",
     shippingMethod: "Shipping method", trackingNumber: "Tracking number",
     paymentMethod: "Payment method", paymentReceived: "Payment received",
-    notes: "Notes", searchPlaceholder: "🔍 Search client, item, country, tracking…",
+    notes: "Notes", searchPlaceholder: "Search client, item, country, tracking…",
     allStatuses: "All statuses", noOrders: "No orders found.",
     addOrder: "Add order", clientRequired: "Client name is required.",
     orderAdded: "✓ Order added.", orderUpdated: "✓ Order updated.",
@@ -66,30 +74,30 @@ const ADMIN_LANGS = {
     signIn: "Connectez-vous pour gérer votre site",
     email: "Email", password: "Mot de passe", signInBtn: "Se connecter",
     backToSite: "← Retour au site", signOut: "Déconnexion",
-    tabs: { announce: "📢 Bannière", news: "🗞 Actualités", gallery: "🖼 Galerie", orders: "📦 Commandes", stats: "📊 Stats" },
+    tabs: { announce: "Bannière", news: "Actualités", gallery: "Galerie", orders: "Commandes", stats: "Stats" },
     bannerTitle: "Bannière d'annonce",
     bannerVisible: "Bannière visible sur le site", bannerHidden: "Bannière masquée",
     bannerMsg: "Message", bannerMsgHint: "Ce message apparaît en haut du site.",
     bannerFrom: "Du", bannerTo: "Au", bannerSave: "Enregistrer", bannerSaving: "Enregistrement…", bannerSaved: "✓ Bannière mise à jour.",
-    newArticle: "➕ Nouvel article", editArticle: "✏️ Modifier l'article",
+    newArticle: "Nouvel article", editArticle: "Modifier l'article",
     titleField: "Titre *", contentField: "Contenu *", categoryField: "Catégorie",
     publish: "Publier", update: "Mettre à jour", cancel: "Annuler", sending: "Enregistrement…",
     noArticles: "Aucun article pour l'instant.",
     published: "✓ Publié.", updated: "✓ Mis à jour.",
     titleRequired: "Le titre et le contenu sont requis.",
-    addPhoto: "➕ Ajouter une photo", editPhoto: "✏️ Modifier la photo",
+    addPhoto: "Ajouter une photo", editPhoto: "Modifier la photo",
     photoTitle: "Titre *", photoSubtitle: "Sous-titre", photoUrl: "URL de l'image ou télécharger",
-    uploadBtn: "📁 Télécharger une image", uploading: "⏳ Téléchargement…",
+    uploadBtn: "Télécharger une image", uploading: "Téléchargement…",
     addPhotoBtn: "Ajouter la photo", noPhotos: "Aucune photo. Ajoutez-en une ci-dessus.",
     photoAdded: "✓ Ajoutée.", photoUpdated: "✓ Mise à jour.",
     titleImgRequired: "Le titre et l'image sont requis.",
-    newOrder: "Nouvelle commande", editOrder: "✏️ Modifier la commande",
+    newOrder: "Nouvelle commande", editOrder: "Modifier la commande",
     clientName: "Nom du client *", country: "Pays", platform: "Plateforme",
     communication: "Contact", items: "Articles *", itemPrice: "Prix article (JPY)",
     serviceFee: "Honoraires (JPY)", status: "Statut", purchaseDate: "Date d'achat",
     shippingMethod: "Mode d'expédition", trackingNumber: "Numéro de suivi",
     paymentMethod: "Méthode de paiement", paymentReceived: "Paiement reçu",
-    notes: "Notes", searchPlaceholder: "🔍 Recherche client, article, pays, suivi…",
+    notes: "Notes", searchPlaceholder: "Recherche client, article, pays, suivi…",
     allStatuses: "Tous les statuts", noOrders: "Aucune commande trouvée.",
     addOrder: "Ajouter la commande", clientRequired: "Le nom du client est requis.",
     orderAdded: "✓ Commande ajoutée.", orderUpdated: "✓ Commande mise à jour.",
@@ -107,30 +115,30 @@ const ADMIN_LANGS = {
     signIn: "サイト管理にログイン",
     email: "メール", password: "パスワード", signInBtn: "ログイン",
     backToSite: "← サイトに戻る", signOut: "ログアウト",
-    tabs: { announce: "📢 バナー", news: "🗞 ニュース", gallery: "🖼 ギャラリー", orders: "📦 注文", stats: "📊 統計" },
+    tabs: { announce: "バナー", news: "ニュース", gallery: "ギャラリー", orders: "注文", stats: "統計" },
     bannerTitle: "お知らせバナー",
     bannerVisible: "バナーをサイトに表示中", bannerHidden: "バナーは非表示",
     bannerMsg: "メッセージ", bannerMsgHint: "このメッセージはサイトの上部に表示されます。",
     bannerFrom: "開始日", bannerTo: "終了日", bannerSave: "保存", bannerSaving: "保存中…", bannerSaved: "✓ バナーを更新しました。",
-    newArticle: "➕ 新しい記事", editArticle: "✏️ 記事を編集",
+    newArticle: "新しい記事", editArticle: "記事を編集",
     titleField: "タイトル *", contentField: "内容 *", categoryField: "カテゴリー",
     publish: "公開", update: "更新", cancel: "キャンセル", sending: "保存中…",
     noArticles: "記事がありません。",
     published: "✓ 公開しました。", updated: "✓ 更新しました。",
     titleRequired: "タイトルと内容は必須です。",
-    addPhoto: "➕ 写真を追加", editPhoto: "✏️ 写真を編集",
+    addPhoto: "写真を追加", editPhoto: "写真を編集",
     photoTitle: "タイトル *", photoSubtitle: "サブタイトル", photoUrl: "画像URLまたはアップロード",
-    uploadBtn: "📁 画像をアップロード", uploading: "⏳ アップロード中…",
+    uploadBtn: "画像をアップロード", uploading: "アップロード中…",
     addPhotoBtn: "写真を追加", noPhotos: "写真がありません。上から追加してください。",
     photoAdded: "✓ 追加しました。", photoUpdated: "✓ 更新しました。",
     titleImgRequired: "タイトルと画像は必須です。",
-    newOrder: "新しい注文", editOrder: "✏️ 注文を編集",
+    newOrder: "新しい注文", editOrder: "注文を編集",
     clientName: "クライアント名 *", country: "国", platform: "プラットフォーム",
     communication: "連絡方法", items: "商品 *", itemPrice: "商品価格 (JPY)",
     serviceFee: "手数料 (JPY)", status: "ステータス", purchaseDate: "購入日",
     shippingMethod: "配送方法", trackingNumber: "追跡番号",
     paymentMethod: "支払い方法", paymentReceived: "入金済み",
-    notes: "メモ", searchPlaceholder: "🔍 クライアント、商品、国、追跡番号で検索…",
+    notes: "メモ", searchPlaceholder: "クライアント、商品、国、追跡番号で検索…",
     allStatuses: "すべてのステータス", noOrders: "注文が見つかりません。",
     addOrder: "注文を追加", clientRequired: "クライアント名は必須です。",
     orderAdded: "✓ 注文を追加しました。", orderUpdated: "✓ 注文を更新しました。",
@@ -147,26 +155,29 @@ const ADMIN_LANGS = {
 };
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 const NEWS_CATS = [
-  { value: "shipping", label: "🚚 Shipping", color: "#4d148c" },
-  { value: "service",  label: "⭐ Service",  color: "#e03040" },
-  { value: "event",    label: "🎌 Event",    color: "#1a6934" },
-  { value: "general",  label: "📢 General",  color: "#1a2744" },
+  { value: "shipping", label: "Shipping", color: "#4d148c" },
+  { value: "service",  label: "Service",  color: "#e03040" },
+  { value: "event",    label: "Event",    color: "#1a6934" },
+  { value: "general",  label: "General",  color: "#1a2744" },
 ];
 
 const emptyNews    = { title: "", content: "", category: "general" };
 const emptyGallery = { title: "", subtitle: "", image_url: "", sort_order: 0 };
 
 // ─── DESIGN TOKENS ───────────────────────────────────────────────────────────
-// Aligned with the public site's own brand palette (see globals.css
-// ":root" — --ink-dark / --surface / --red) instead of the "--px-*" neon
-// arcade palette used for fun, customer-facing pixel-art widgets elsewhere
-// on the site. This is an internal back-office handling real orders and
-// real money, so it reads as a plain business dashboard, not a game HUD.
-const BG      = "#0c0c0e";   // near-black, matches the site's --ink-dark
+// Deliberately NOT the public site's "--px-*" neon phosphor/violet arcade
+// palette — this is an internal, single-operator back-office handling real
+// orders and real money, kept as a plain business dashboard rather than a
+// game HUD. Plain JS constants on purpose (not CSS custom properties), so
+// this palette can't drift into the kind of multi-patch mess that built up
+// in globals.css. Pixel icons reused here (see PixelIcons.tsx) still read
+// correctly because their "--px-*" variables are re-scoped for the ".adm-shell"
+// wrapper this file renders into (see globals.css).
+const BG      = "#0c0c0e";
 const SURFACE = "#18181b";
 const SURFACE2= "#212124";
 const BORDER  = "rgba(255,255,255,.11)";
-const RED     = "#e0303f";   // brand red — same accent as the public site
+const RED     = "#e0303f";
 const RED_D   = "#b8222f";
 const VIOLET  = "#5b8ff0";   // repurposed as the "info / in progress" blue
 const ALERT   = "#ef4444";   // distinct, more orange-leaning red so it never
@@ -336,8 +347,8 @@ export default function AdminPage() {
         </div>
         <p style={{ fontSize:".8rem", color:MUTED, marginBottom:"2rem", fontFamily:"'Inter',sans-serif" }}>{al.signIn}</p>
         {locked && (
-          <div style={{ background:"rgba(224,48,64,.1)", border:`1px solid rgba(224,48,64,.2)`, padding:".75rem 1rem", marginBottom:"1rem", fontSize:".78rem", color:RED, borderRadius:"8px" }}>
-            🔒 Locked. Try again in {lockTimer}s.
+          <div style={{ background:"rgba(224,48,64,.1)", border:`1px solid rgba(224,48,64,.2)`, padding:".75rem 1rem", marginBottom:"1rem", fontSize:".78rem", color:RED, borderRadius:"8px", display:"flex", alignItems:"center", gap:".5rem" }}>
+            <IconWarning size={14} /> Locked. Try again in {lockTimer}s.
           </div>
         )}
         <label style={lbl}>{al.email}</label>
@@ -382,17 +393,17 @@ export default function AdminPage() {
   );
 
   const TABS = [
-    { id:"requests", label:"📥 Requests", badge: newRequests },
-    { id:"announce", label:al.tabs.announce },
-    { id:"news",     label:al.tabs.news },
-    { id:"gallery",  label:al.tabs.gallery },
-    { id:"orders",   label:al.tabs.orders },
-    { id:"customers",label:"👤 Customers" },
-    { id:"stats",    label:al.tabs.stats },
-    { id:"events",   label:al.tabs.events || "🎌 Events" },
-    { id:"waitlist", label:"🎁 Box Waitlist" },
-    { id:"charges",  label:"💰 Charges JP" },
-    { id:"paylinks", label:"💳 Liens de paiement" },
+    { id:"requests", label:"Requests", badge: newRequests, icon: IconRequests },
+    { id:"announce", label:al.tabs.announce, icon: IconBanner },
+    { id:"news",     label:al.tabs.news, icon: IconNews },
+    { id:"gallery",  label:al.tabs.gallery, icon: IconGallery },
+    { id:"orders",   label:al.tabs.orders, icon: IconBox },
+    { id:"customers",label:"Customers", icon: IconCustomers },
+    { id:"stats",    label:al.tabs.stats, icon: IconStats },
+    { id:"events",   label:al.tabs.events || "Events", icon: IconEvent },
+    { id:"waitlist", label:"Box Waitlist", icon: IconBox },
+    { id:"charges",  label:"Charges JP", icon: IconCharges },
+    { id:"paylinks", label:"Liens de paiement", icon: IconPaymentLink },
   ];
 
   return (
@@ -426,6 +437,7 @@ export default function AdminPage() {
         <div style={{ display:"flex", gap:"4px", marginBottom:"2rem", flexWrap:"wrap", borderBottom:`1px solid ${BORDER}`, paddingBottom:"2px" }}>
           {TABS.map(t => (
             <button key={t.id} onClick={()=>setTab(t.id)} style={{
+              display:"flex", alignItems:"center", gap:".4rem",
               padding:".6rem .95rem", borderRadius:"8px 8px 0 0", cursor:"pointer",
               fontFamily:BODY, fontSize:".82rem", fontWeight: tab===t.id ? 600 : 500,
               lineHeight:1.4, border:"none",
@@ -434,6 +446,7 @@ export default function AdminPage() {
               color: tab===t.id ? INK : MUTED,
               transition:"color .15s, border-color .15s",
             }}>
+              <t.icon size={16} />
               {t.label}
               {t.badge > 0 && (
                 <span style={{
@@ -491,7 +504,7 @@ function AnnounceTab({ al }) {
 
   return (
     <div style={card}>
-      <p style={cardHeader}>📢 Announcement Banner</p>
+      <p style={{...cardHeader, display:"flex", alignItems:"center", gap:".5rem"}}><IconBanner size={18} /> Announcement Banner</p>
 
       {/* Toggle */}
       <div style={{ display:"flex", alignItems:"center", gap:"1rem", marginBottom:"1.5rem", padding:"1rem 1.2rem", background:data.active?"rgba(74,222,128,.06)":"rgba(255,255,255,.03)", border:`1px solid ${data.active?"rgba(74,222,128,.2)":BORDER}`, borderRadius:"8px" }}>
@@ -567,7 +580,7 @@ function NewsTab({ al }) {
   return (
     <>
       <div style={card}>
-        <p style={cardHeader}>{editing?"✏️ Edit article":"➕ New article"}</p>
+        <p style={cardHeader}>{editing?"Edit article":"New article"}</p>
         <div style={{marginBottom:"1rem"}}>
           <label style={lbl}>Title *</label>
           <input style={inp} value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))} placeholder="Weekly shipping update" />
@@ -681,7 +694,7 @@ function GalleryTab({ al }) {
   return (
     <>
       <div style={card}>
-        <p style={cardHeader}>{editing?"✏️ Edit photo":"➕ Add photo"}</p>
+        <p style={cardHeader}>{editing?"Edit photo":"Add photo"}</p>
         <div className="adm-row2">
           <div><label style={lbl}>Title *</label><input style={inp} value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))} placeholder="Pokémon Center Tokyo" /></div>
           <div><label style={lbl}>Subtitle</label><input style={inp} value={form.subtitle} onChange={e=>setForm(f=>({...f,subtitle:e.target.value}))} placeholder="Rare cards · Japan" /></div>
@@ -695,7 +708,7 @@ function GalleryTab({ al }) {
             if(url) setForm(f=>({...f,image_url:url}));
           }} />
           <button onClick={()=>fileRef.current?.click()} style={{...btnGhost,fontSize:".65rem"}} disabled={uploading}>
-            {uploading?"⏳ Uploading…":"📁 Upload image"}
+            {uploading?"Uploading…":"Upload image"}
           </button>
         </div>
         {form.image_url && (
@@ -891,7 +904,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
   }
 
   function statusLabelFor(status) {
-    return status?.replace("Purchased — Awaiting Delivery", "Seller shipped").replace("Purchased — Awaiting Event", "Awaiting Event").replace("Awaiting Shipping Payment", "⚠ Payment due").replace("Action Required", "⚠ Action");
+    return status?.replace("Purchased — Awaiting Delivery", "Seller shipped").replace("Purchased — Awaiting Event", "Awaiting Event").replace("Awaiting Shipping Payment", "Payment due").replace("Action Required", "Action");
   }
 
   // Filtered + searched orders
@@ -955,7 +968,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
       {/* ── Add / Edit form ── */}
       {showForm && (
         <div style={card}>
-          <p style={cardHeader}>{editing ? "✏️ Edit order" : "➕ New order"}</p>
+          <p style={cardHeader}>{editing ? "Edit order" : "New order"}</p>
           {msg && <p style={msg.startsWith("✓") ? msgOk : msgErr}>{msg}</p>}
 
           <div className="adm-row2">
@@ -1059,12 +1072,12 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
         <div style={{ display:"flex", alignItems:"center", gap:".75rem", marginBottom:"1rem", padding:".7rem 1rem", background:`${VIOLET}18`, border:`2px solid ${VIOLET}`, borderRadius:"10px", flexWrap:"wrap" }}>
           <span style={{ fontSize:".8rem", color:INK }}>{selected.size} order{selected.size !== 1 ? "s" : ""} selected</span>
           <button
-            style={{ ...btnPrimary, padding:".5rem .9rem", fontSize:".7rem" }}
+            style={{ ...btnPrimary, padding:".5rem .9rem", fontSize:".7rem", display:"inline-flex", alignItems:"center", gap:".4rem" }}
             disabled={selected.size < 2}
             title={selected.size < 2 ? "Select at least 2 orders to bundle" : ""}
             onClick={() => setShipmentPanel({ mode:"new", orderIds:[...selected] })}
           >
-            📦 Group into package
+            <IconBox size={14} /> Group into package
           </button>
           <button style={{ ...btnGhost, padding:".5rem .9rem", fontSize:".7rem" }} onClick={() => setSelected(new Set())}>
             Clear selection
@@ -1111,7 +1124,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
                   ? <a href={`mailto:${o.client_email}?subject=Thank you for your Kizuna Proxy order!&body=Hi ${o.client_name},%0A%0AYour order has been delivered! We hope everything arrived safely.%0A%0AWe would really appreciate if you could leave us a review on Trustpilot:%0Ahttps://fr.trustpilot.com/evaluate/kizunaproxy.com%0A%0AThank you so much!%0AKizuna Proxy Team`}
                       style={{fontSize:".62rem",color:RED,textDecoration:"none",display:"block",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}
                       title={`Email: ${o.client_email}`}>
-                      ✉ {o.client_email}
+                      {o.client_email}
                     </a>
                   : <span style={{fontSize:".6rem",color:MUTED}}>no email</span>
                 }
@@ -1132,7 +1145,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
                     onClick={e => { e.stopPropagation(); setShipmentPanel({ mode:"edit", shipment: shipmentFor(o) }); }}
                     title="Part of a package — click to manage"
                   >
-                    📦 PKG #{o.shipment_id}
+                    <IconBox size={11} /> PKG #{o.shipment_id}
                   </span>
                 ) : track ? (
                   <a href={track.url} target="_blank" rel="noopener noreferrer"
@@ -1143,8 +1156,8 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
                 ) : <span style={{ color:MUTED, fontSize:".65rem" }}>—</span>}
               </div>
               <div style={{ padding:"0 .4rem", display:"flex", gap:"3px" }}>
-                <button onClick={()=>setManaging(o)} style={{...btnSmall, padding:".3rem .55rem", fontSize:".7rem", borderColor:RED, color:RED}} title="Open order">⚙</button>
-                <button onClick={()=>del(o.id)} style={{...btnDanger, padding:".3rem .55rem", fontSize:".7rem"}} title="Delete">🗑</button>
+                <button onClick={()=>setManaging(o)} style={{...btnSmall, padding:".3rem .55rem", fontSize:".7rem", borderColor:RED, color:RED, display:"inline-flex"}} title="Open order"><IconSettings size={13} /></button>
+                <button onClick={()=>del(o.id)} style={{...btnDanger, padding:".3rem .55rem", fontSize:".7rem", display:"inline-flex"}} title="Delete"><IconTrash size={13} /></button>
               </div>
             </div>
             );
@@ -1184,7 +1197,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
                     className="adm-ship-badge"
                     onClick={e => { e.stopPropagation(); setShipmentPanel({ mode:"edit", shipment }); }}
                   >
-                    📦 Package #{o.shipment_id}
+                    <IconBox size={11} /> Package #{o.shipment_id}
                   </span>
                 ) : track ? (
                   <a href={track.url} target="_blank" rel="noopener noreferrer"
@@ -1375,8 +1388,8 @@ function StatsTab({ supabase, al }) {
             style={{ ...inp, width:"80px", padding:".3rem .6rem", fontSize:".78rem" }} />
           <label style={{ fontSize:".65rem", color:MUTED }}>¥</label>
           <button onClick={fetchLiveRate} disabled={rateFetching}
-            style={{ fontSize:".6rem", color:RED, background:"none", border:"none", cursor:"pointer", padding:0 }}>
-            {rateFetching ? "⏳" : "🔄 refresh"}
+            style={{ fontSize:".6rem", color:RED, background:"none", border:"none", cursor:"pointer", padding:0, display:"inline-flex", alignItems:"center", gap:".3rem" }}>
+            <IconRefresh size={11} style={rateFetching ? { animation: "spin 1s linear infinite" } : undefined} /> {rateFetching ? "…" : "refresh"}
           </button>
         </div>
         <div style={{ display:"flex", gap:".4rem" }}>
@@ -1547,22 +1560,22 @@ function EventsTab({ supabase, al }) {
   const [msg,     setMsg]     = useState("");
 
   const CATEGORIES = [
-    { value:"pokemon",    label:"🎴 Pokémon Center",   color:"#e03040" },
-    { value:"nintendo",   label:"🎮 Nintendo",          color:"#e4000f" },
-    { value:"supreme",    label:"👕 Supreme / Streetwear", color:"#000" },
-    { value:"anime",      label:"🗿 Anime / Manga",     color:"#7c3aed" },
-    { value:"tcg",        label:"🃏 Trading Cards",     color:"#d97706" },
-    { value:"popup",      label:"🏮 Pop-up / Collab",   color:"#059669" },
-    { value:"market",     label:"🛍️ Market / Store",    color:"#2563eb" },
-    { value:"other",      label:"📌 Other",             color:"#6b7280" },
+    { value:"pokemon",    label:"Pokémon Center",   color:"#e03040", icon:IconCards },
+    { value:"nintendo",   label:"Nintendo",          color:"#e4000f", icon:IconGaming },
+    { value:"supreme",    label:"Supreme / Streetwear", color:"#000", icon:IconApparel },
+    { value:"anime",      label:"Anime / Manga",     color:"#7c3aed", icon:IconFigure },
+    { value:"tcg",        label:"Trading Cards",     color:"#d97706", icon:IconCards },
+    { value:"popup",      label:"Pop-up / Collab",   color:"#059669", icon:IconEvent },
+    { value:"market",     label:"Market / Store",    color:"#2563eb", icon:IconMarketplace },
+    { value:"other",      label:"Other",             color:"#6b7280", icon:null },
   ];
 
   const STATUSES = [
-    { value:"upcoming",   label:"🟢 Upcoming",   color:RED },
-    { value:"confirmed",  label:"✅ Confirmed",  color:VIOLET },
-    { value:"full",       label:"🔴 Full",        color:ALERT },
-    { value:"cancelled",  label:"⚫ Cancelled",  color:"#6b7280" },
-    { value:"completed",  label:"✓ Completed",   color:"#374151" },
+    { value:"upcoming",   label:"Upcoming",   color:RED },
+    { value:"confirmed",  label:"Confirmed",  color:VIOLET },
+    { value:"full",       label:"Full",        color:ALERT },
+    { value:"cancelled",  label:"Cancelled",  color:"#6b7280" },
+    { value:"completed",  label:"Completed",   color:"#374151" },
   ];
 
   useEffect(() => { load(); }, []);
@@ -1634,7 +1647,7 @@ function EventsTab({ supabase, al }) {
 
       {/* Form */}
       <div style={card}>
-        <p style={cardHeader}>{editing ? "✏️ Edit event" : "➕ New event"}</p>
+        <p style={cardHeader}>{editing ? "Edit event" : "New event"}</p>
         {msg && <p style={msg.startsWith("✓") ? msgOk : msgErr}>{msg}</p>}
 
         <div className="adm-row2">
@@ -1715,12 +1728,17 @@ function EventsTab({ supabase, al }) {
                   {/* Info */}
                   <div style={{flex:1,minWidth:0}}>
                     <div style={{display:"flex",alignItems:"center",gap:".5rem",marginBottom:".2rem",flexWrap:"wrap"}}>
-                      <span style={{fontSize:".62rem",fontWeight:500,color:"#fff",background:cat.color,padding:".1rem .45rem",borderRadius:"4px"}}>{cat.label}</span>
-                      <span style={{fontSize:".62rem",color:stat.color}}>{stat.label}</span>
-                      {ev.time && <span style={{fontSize:".65rem",color:MUTED}}>🕐 {ev.time}</span>}
+                      <span style={{fontSize:".62rem",fontWeight:500,color:"#fff",background:cat.color,padding:".1rem .45rem",borderRadius:"4px",display:"inline-flex",alignItems:"center",gap:".3rem"}}>
+                        {cat.icon && <cat.icon size={11} />} {cat.label}
+                      </span>
+                      <span style={{fontSize:".62rem",color:stat.color,display:"inline-flex",alignItems:"center",gap:".3rem"}}>
+                        <span style={{width:"6px",height:"6px",borderRadius:"50%",background:stat.color,display:"inline-block"}} />
+                        {stat.label}
+                      </span>
+                      {ev.time && <span style={{fontSize:".65rem",color:MUTED,display:"inline-flex",alignItems:"center",gap:".25rem"}}><IconClock size={11} /> {ev.time}</span>}
                     </div>
                     <strong style={{fontSize:".88rem",color:INK,display:"block"}}>{ev.title}</strong>
-                    {ev.location && <span style={{fontSize:".72rem",color:MUTED}}>📍 {ev.location}</span>}
+                    {ev.location && <span style={{fontSize:".72rem",color:MUTED,display:"inline-flex",alignItems:"center",gap:".25rem"}}><IconPin size={11} /> {ev.location}</span>}
                     {ev.description && <p style={{fontSize:".75rem",color:MUTED,margin:".25rem 0 0",lineHeight:1.5,overflow:"hidden",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical"}}>{ev.description}</p>}
                   </div>
                   {/* Capacity */}

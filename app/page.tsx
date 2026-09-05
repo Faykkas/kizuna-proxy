@@ -42,7 +42,7 @@ export default function Home() {
               {
                 illustration: "penguin",
                 accent: "var(--gold-d)",
-                badge: `🐧 ${t.eventPromo?.badge}`,
+                badge: t.eventPromo?.badge,
                 title: t.eventPromo?.title,
                 desc: t.eventPromo?.desc,
                 note: t.eventPromo?.note,
@@ -52,7 +52,7 @@ export default function Home() {
               {
                 illustration: "moonMic",
                 accent: "var(--red)",
-                badge: `🎤 ${t.weekndPromo?.badge}`,
+                badge: t.weekndPromo?.badge,
                 title: t.weekndPromo?.title,
                 desc: t.weekndPromo?.desc,
                 note: t.weekndPromo?.note,

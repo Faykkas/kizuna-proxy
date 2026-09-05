@@ -5,6 +5,11 @@ import SiteNav from "../components/SiteNav";
 import SiteFooter from "../components/SiteFooter";
 import Maneki from "../components/pixel/Maneki";
 import { useLang } from "../components/useSiteState";
+import { IconCards, IconGaming, IconSneaker, IconEvent, IconStore } from "../components/pixel/PixelIcons";
+
+// Card icons are positional, not translated — the 6 cards are the same
+// categories in every language, only title/desc text changes per locale.
+const CARD_ICONS = [IconCards, IconGaming, IconSneaker, IconEvent, IconCards, IconStore];
 
 // ─── EVENTS CONTENT ───────────────────────────────────────────────────────────
 const EVENTS_CONTENT = {
@@ -78,13 +83,16 @@ export default function EventsClient() {
 
           <h2>{ep.whatTitle || c.whatTitle}</h2>
           <div className="ev-grid">
-            {cards.map((item, i) => (
+            {cards.map((item, i) => {
+              const CardIcon = CARD_ICONS[i] || IconStore;
+              return (
               <div key={i} className="ev-card">
-                <div className="ev-icon">{item.icon}</div>
+                <div className="ev-icon"><CardIcon size={40} /></div>
                 <h3>{item.title}</h3>
                 <p>{item.desc}</p>
               </div>
-            ))}
+              );
+            })}
           </div>
 
           <hr className="blog-hr" />

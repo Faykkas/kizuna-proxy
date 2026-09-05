@@ -19,6 +19,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "../../lib/supabase";
+import { IconWarning } from "../icons/UiIcons";
 
 function fmtYen(n) {
   const sign = n < 0 ? "-" : "";
@@ -367,8 +368,9 @@ export default function ChargesTab({ tokens }) {
     <div style={{ fontFamily: BODY }}>
 
       {/* Disclaimer */}
-      <div style={{ background: "rgba(245,166,35,.1)", border: "1px solid rgba(245,166,35,.35)", borderRadius: "10px", padding: "1rem 1.2rem", marginBottom: "1.5rem", fontSize: ".8rem", color: INK, lineHeight: 1.6 }}>
-        ⚠️ <strong>Outil de calcul indicatif, pas un conseil fiscal.</strong> Chaque taxe utilise sa vraie base (bénéfice, revenu imposable, ou revenu de l'année précédente selon le cas) plutôt qu'un pourcentage plat du CA — mais les taux, seuils et déductions restent des repères à vérifier avec un comptable (税理士) ou ta mairie. La Jūminzei et le Kokuho utilisent une approximation du revenu N-1 basée sur tes commandes historiques ; remplace-la par le vrai montant de ton avis d'imposition dans les paramètres dès que tu l'as.
+      <div style={{ background: "rgba(245,166,35,.1)", border: "1px solid rgba(245,166,35,.35)", borderRadius: "10px", padding: "1rem 1.2rem", marginBottom: "1.5rem", fontSize: ".8rem", color: INK, lineHeight: 1.6, display: "flex", gap: ".6rem" }}>
+        <IconWarning size={16} style={{ flexShrink: 0, marginTop: ".15rem" }} />
+        <span><strong>Outil de calcul indicatif, pas un conseil fiscal.</strong> Chaque taxe utilise sa vraie base (bénéfice, revenu imposable, ou revenu de l'année précédente selon le cas) plutôt qu'un pourcentage plat du CA — mais les taux, seuils et déductions restent des repères à vérifier avec un comptable (税理士) ou ta mairie. La Jūminzei et le Kokuho utilisent une approximation du revenu N-1 basée sur tes commandes historiques ; remplace-la par le vrai montant de ton avis d'imposition dans les paramètres dès que tu l'as.</span>
       </div>
 
       {/* Year */}
@@ -456,8 +458,9 @@ export default function ChargesTab({ tokens }) {
             {row("Jūminzei — exonérée (revenu N-1 ≤ seuil) ?", calc.juminzeiExempt ? "Oui" : "Non", { color: MUTED })}
             {row("Base imposable Jūminzei", fmtYen(calc.juminzeiTaxable), { color: MUTED })}
             {row("Jūminzei — part proportionnelle", fmtYen(calc.juminzeiProportional), { color: MUTED, noBorder: true })}
-            <p style={{ fontSize: ".68rem", color: MUTED, marginTop: ".6rem" }}>
-              ⚠️ ¥0 d'impôt sur le revenu ne veut pas dire ¥0 de Jūminzei — ce sont deux impôts distincts avec des seuils différents (le seuil de non-imposition Jūminzei, ~¥450 000 de revenu N-1 pour une personne seule à Nerima, est bien plus bas que la déduction de base de l'impôt sur le revenu).
+            <p style={{ fontSize: ".68rem", color: MUTED, marginTop: ".6rem", display: "flex", gap: ".4rem" }}>
+              <IconWarning size={12} style={{ flexShrink: 0, marginTop: "2px" }} />
+              <span>¥0 d'impôt sur le revenu ne veut pas dire ¥0 de Jūminzei — ce sont deux impôts distincts avec des seuils différents (le seuil de non-imposition Jūminzei, ~¥450 000 de revenu N-1 pour une personne seule à Nerima, est bien plus bas que la déduction de base de l'impôt sur le revenu).</span>
             </p>
           </div>
         )}

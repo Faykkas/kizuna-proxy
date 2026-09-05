@@ -11,6 +11,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabase";
 import { formatJPY } from "../../lib/orderStatus";
+import { IconLink } from "../icons/UiIcons";
 
 const SITE_URL = "https://kizunaproxy.com";
 
@@ -154,8 +155,8 @@ export default function PaymentLinksTab({ tokens }) {
                 <div style={{ display: "flex", gap: ".4rem", flexShrink: 0 }}>
                   {l.status === "pending" && (
                     <>
-                      <button onClick={() => copyLink(l.id)} style={{ background: "transparent", border: `1px solid ${BORDER}`, color: copiedId === l.id ? "#22c55e" : INK, borderRadius: "6px", padding: ".4rem .7rem", fontSize: ".72rem", cursor: "pointer" }}>
-                        {copiedId === l.id ? "✓ Copié" : "🔗 Copier"}
+                      <button onClick={() => copyLink(l.id)} style={{ background: "transparent", border: `1px solid ${BORDER}`, color: copiedId === l.id ? "#22c55e" : INK, borderRadius: "6px", padding: ".4rem .7rem", fontSize: ".72rem", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: ".35rem" }}>
+                        {copiedId === l.id ? "✓ Copié" : <><IconLink size={12} /> Copier</>}
                       </button>
                       <button onClick={() => cancelLink(l.id)} style={{ background: "rgba(255,80,96,.1)", border: `1px solid rgba(255,80,96,.3)`, color: ALERT, borderRadius: "6px", padding: ".4rem .7rem", fontSize: ".72rem", cursor: "pointer" }}>
                         Annuler
