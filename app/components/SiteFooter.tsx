@@ -34,6 +34,7 @@ export default function SiteFooter({ t }: { t: any }) {
           </div>
           <div>
             <p className="footer-col-title">Guides</p>
+            <a href="/blog" className="footer-link">All Guides</a>
             <a href="/blog/how-to-buy-from-mercari-japan" className="footer-link">Mercari Japan Guide</a>
             <a href="/blog/yahoo-auctions-japan-guide" className="footer-link">Yahoo Auctions Guide</a>
             <a href="/blog/best-pokemon-cards-japan-2026" className="footer-link">Pokémon Cards Japan</a>

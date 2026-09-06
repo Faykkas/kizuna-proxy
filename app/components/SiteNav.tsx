@@ -100,6 +100,9 @@ export default function SiteNav() {
                     <span>{item.label}</span>
                   </a>
                 ))}
+                <a href="/blog" className="nav-dropdown-item" style={{ borderTop: "1px solid var(--border)", fontWeight: 600 }}>
+                  <span>All Guides →</span>
+                </a>
               </div>
             )}
           </li>
@@ -181,6 +184,11 @@ export default function SiteNav() {
                     <item.Icon size={18} /> {item.label}
                   </a>
                 ))}
+                <a href="/blog" className="mobile-menu-guide"
+                  onClick={() => setMobileOpen(false)}
+                  style={{ fontWeight: 600 }}>
+                  All Guides →
+                </a>
               </div>
             )}
           </div>
