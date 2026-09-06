@@ -32,9 +32,9 @@ export default function Home() {
 
       <HeroSection t={t} />
 
-      {/* TOKYO EVENTS CAROUSEL — Hobonichi Techo Store lottery status +
-          The Weeknd's Harajuku pop-up. Update/remove slides as each event's
-          status changes. */}
+      {/* TOKYO EVENTS CAROUSEL — Hobonichi Techo Store lottery status,
+          The Weeknd's Harajuku pop-up, and the next Comiket/COMITIA dates.
+          Update/remove slides as each event's status changes. */}
       <section className="section-sm reveal">
         <div className="wrap">
           <EventCarousel
@@ -58,6 +58,26 @@ export default function Home() {
                 note: t.weekndPromo?.note,
                 cta: t.weekndPromo?.cta,
                 ctaHref: "/request",
+              },
+              {
+                illustration: "bookStack",
+                accent: "var(--gold)",
+                badge: t.comiketPromo?.badge,
+                title: t.comiketPromo?.title,
+                desc: t.comiketPromo?.desc,
+                note: t.comiketPromo?.note,
+                cta: t.comiketPromo?.cta,
+                ctaHref: "/blog/comiket-japan-guide",
+              },
+              {
+                illustration: "penAndBook",
+                accent: "var(--red-d)",
+                badge: t.comitiaPromo?.badge,
+                title: t.comitiaPromo?.title,
+                desc: t.comitiaPromo?.desc,
+                note: t.comitiaPromo?.note,
+                cta: t.comitiaPromo?.cta,
+                ctaHref: "/blog/comitia-japan-guide",
               },
             ]}
           />

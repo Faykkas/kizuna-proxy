@@ -66,9 +66,60 @@ function MoonMicIllustration() {
   );
 }
 
+function BookStackIllustration() {
+  return (
+    <svg viewBox="0 0 160 160" width="100%" height="100%" role="img" aria-hidden="true">
+      <circle cx="80" cy="80" r="78" fill="var(--beige)" />
+      <ellipse cx="80" cy="128" rx="36" ry="8" fill="rgba(0,0,0,.08)" />
+      {/* fanned books */}
+      <g transform="translate(80 96) rotate(-16)">
+        <rect x="-30" y="-38" width="52" height="38" rx="2" fill="var(--gold)" />
+      </g>
+      <g transform="translate(80 98) rotate(4)">
+        <rect x="-28" y="-40" width="52" height="40" rx="2" fill="var(--red)" />
+      </g>
+      <g transform="translate(84 96) rotate(20)">
+        <rect x="-26" y="-36" width="48" height="36" rx="2" fill="#fbf7ee" stroke="var(--border-gold)" />
+        <line x1="-18" y1="-24" x2="10" y2="-24" stroke="var(--warm)" strokeWidth="2" opacity=".6" />
+        <line x1="-18" y1="-16" x2="4" y2="-16" stroke="var(--warm)" strokeWidth="2" opacity=".6" />
+      </g>
+      {/* cash tag */}
+      <g transform="translate(112 116)">
+        <circle r="15" fill="#fff" stroke="var(--border-gold)" />
+        <text x="0" y="5" textAnchor="middle" fontSize="15" fontWeight="700" fill="var(--red)">¥</text>
+      </g>
+    </svg>
+  );
+}
+
+function PenAndBookIllustration() {
+  return (
+    <svg viewBox="0 0 160 160" width="100%" height="100%" role="img" aria-hidden="true">
+      <circle cx="80" cy="80" r="78" fill="var(--beige)" />
+      <ellipse cx="80" cy="128" rx="36" ry="8" fill="rgba(0,0,0,.08)" />
+      {/* open book */}
+      <path d="M40 96c14-6 26-6 40 0 14-6 26-6 40 0v22c-14-6-26-6-40 0-14-6-26-6-40 0z" fill="#fbf7ee" stroke="var(--border-gold)" />
+      <line x1="80" y1="96" x2="80" y2="118" stroke="var(--border-gold)" />
+      <line x1="50" y1="100" x2="70" y2="98" stroke="var(--warm)" strokeWidth="2" opacity=".6" />
+      <line x1="50" y1="108" x2="66" y2="106" stroke="var(--warm)" strokeWidth="2" opacity=".6" />
+      <line x1="90" y1="98" x2="110" y2="100" stroke="var(--warm)" strokeWidth="2" opacity=".6" />
+      <line x1="94" y1="106" x2="110" y2="108" stroke="var(--warm)" strokeWidth="2" opacity=".6" />
+      {/* pen resting across the page */}
+      <g transform="translate(80 70) rotate(-18)">
+        <rect x="-38" y="-4" width="70" height="8" rx="4" fill="var(--red)" />
+        <path d="M32 -4 L44 0 L32 4 Z" fill="var(--gold)" />
+      </g>
+      {/* sparkle = original work */}
+      <path d="M118 46l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="var(--gold)" opacity=".9" />
+    </svg>
+  );
+}
+
 export const CAROUSEL_ILLUSTRATIONS = {
   penguin: PenguinIllustration,
   moonMic: MoonMicIllustration,
+  bookStack: BookStackIllustration,
+  penAndBook: PenAndBookIllustration,
 };
 
 export default function EventCarousel({ slides }) {
