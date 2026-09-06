@@ -15,6 +15,9 @@ const BLOG_SLUGS = [
   "japan-shipping-guide-2026",
   "comiket-japan-guide",
   "comitia-japan-guide",
+  "ichiban-kuji-japan-guide",
+  "tokyo-anime-events-guide",
+  "kpop-photocards-japan-guide",
 ];
 
 const LANDING_SLUGS = [

@@ -346,3 +346,29 @@ export function IconPaymentLink({ size = 32 }) {
     </Sprite>
   );
 }
+
+export function IconGacha({ size = 48 }) {
+  return (
+    <Sprite size={size} label="Ichiban Kuji">
+      <P x={3} y={1} w={10} h={7} c="var(--px-accent2)" />
+      <P x={4} y={2} w={8} h={5} c="var(--px-bg)" />
+      <P x={6} y={4} w={2} h={2} c="var(--px-accent)" />
+      <P x={9} y={3} w={2} h={2} c="var(--px-red)" />
+      <P x={2} y={8} w={12} h={2} c="var(--px-border)" />
+      <P x={3} y={10} w={10} h={6} c="var(--px-accent)" />
+      <P x={6} y={12} w={4} h={2} c="var(--px-bg)" />
+    </Sprite>
+  );
+}
+
+export function IconMusicNote({ size = 48 }) {
+  return (
+    <Sprite size={size} label="K-pop">
+      <P x={9} y={1} w={2} h={10} c="var(--px-ink)" />
+      <P x={9} y={1} w={5} h={2} c="var(--px-ink)" />
+      <P x={12} y={1} w={2} h={5} c="var(--px-ink)" />
+      <P x={4} y={11} w={5} h={4} c="var(--px-accent)" />
+      <P x={10} y={6} w={5} h={4} c="var(--px-accent2)" />
+    </Sprite>
+  );
+}

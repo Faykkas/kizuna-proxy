@@ -49,6 +49,9 @@ export default function SiteFooter({ t }: { t: any }) {
             <a href="/business-sourcing" className="footer-link">Business Sourcing</a>
             <a href="/blog/comiket-japan-guide" className="footer-link">Comiket Guide</a>
             <a href="/blog/comitia-japan-guide" className="footer-link">COMITIA Guide</a>
+            <a href="/blog/ichiban-kuji-japan-guide" className="footer-link">Ichiban Kuji Guide</a>
+            <a href="/blog/tokyo-anime-events-guide" className="footer-link">Tokyo Anime Events</a>
+            <a href="/blog/kpop-photocards-japan-guide" className="footer-link">K-pop Photocards</a>
           </div>
           <div>
             <p className="footer-col-title">Contact</p>

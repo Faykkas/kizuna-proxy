@@ -16,6 +16,9 @@ import SupremeClient from "./supreme-japan-drops-guide/SupremeClient";
 import YahooClient from "./yahoo-auctions-japan-guide/YahooClient";
 import ComiketClient from "./comiket-japan-guide/ComiketClient";
 import ComitiaClient from "./comitia-japan-guide/ComitiaClient";
+import IchibanKujiClient from "./ichiban-kuji-japan-guide/IchibanKujiClient";
+import AnimeEventsClient from "./tokyo-anime-events-guide/AnimeEventsClient";
+import KpopClient from "./kpop-photocards-japan-guide/KpopClient";
 
 export const GUIDE_ROUTES = {
   "best-pokemon-cards-japan-2026": { Component: PokemonCardsClient, key: "pokemonCards" },
@@ -29,6 +32,9 @@ export const GUIDE_ROUTES = {
   "yahoo-auctions-japan-guide": { Component: YahooClient, key: "yahoo" },
   "comiket-japan-guide": { Component: ComiketClient, key: "comiket" },
   "comitia-japan-guide": { Component: ComitiaClient, key: "comitia" },
+  "ichiban-kuji-japan-guide": { Component: IchibanKujiClient, key: "ichibanKuji" },
+  "tokyo-anime-events-guide": { Component: AnimeEventsClient, key: "animeEvents" },
+  "kpop-photocards-japan-guide": { Component: KpopClient, key: "kpop" },
 };
 
 export const BLOG_SLUGS = Object.keys(GUIDE_ROUTES);
