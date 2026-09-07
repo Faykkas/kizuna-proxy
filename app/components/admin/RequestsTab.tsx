@@ -266,20 +266,20 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
           </p>
         </div>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: ".75rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: ".55rem" }}>
           {shown.map(req => {
             const st = STATUS_STYLE[req.status] || STATUS_STYLE.read;
             return (
               <div key={req.id} style={{
                 background: SURFACE,
                 border: `1px solid ${req.status === "new" ? RED : BORDER}`,
-                borderRadius: "12px",
-                padding: "1.1rem 1.3rem",
+                borderRadius: "10px",
+                padding: ".8rem 1rem",
                 boxShadow: "0 1px 3px rgba(0,0,0,.15)",
               }}>
 
                 {/* Head */}
-                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1rem", marginBottom: ".8rem", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1rem", marginBottom: ".55rem", flexWrap: "wrap" }}>
                   <div style={{ display: "flex", alignItems: "flex-start", gap: ".7rem" }}>
                     <input
                       type="checkbox"
@@ -323,24 +323,24 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
 
                 {/* Meta chips: quantity, purchase type, deadline, partial fulfillment */}
                 {(req.quantity || req.purchase_type || req.deadline || req.partial_ok != null) && (
-                  <div style={{ display: "flex", gap: ".5rem", flexWrap: "wrap", marginBottom: ".8rem" }}>
+                  <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap", marginBottom: ".55rem" }}>
                     {req.quantity && (
-                      <span style={{ fontSize: ".72rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
+                      <span style={{ fontSize: ".7rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".15rem .5rem" }}>
                         Qty: {req.quantity}
                       </span>
                     )}
                     {req.purchase_type && (
-                      <span style={{ fontSize: ".72rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
+                      <span style={{ fontSize: ".7rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".15rem .5rem" }}>
                         {req.purchase_type === "visit" ? "Store visit" : "Online"}
                       </span>
                     )}
                     {req.deadline && (
-                      <span style={{ fontSize: ".72rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
+                      <span style={{ fontSize: ".7rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".15rem .5rem" }}>
                         Deadline: {new Date(req.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
                       </span>
                     )}
                     {req.partial_ok != null && (
-                      <span style={{ fontSize: ".72rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
+                      <span style={{ fontSize: ".7rem", color: MUTED, border: `1px solid ${BORDER}`, borderRadius: "6px", padding: ".15rem .5rem" }}>
                         Partial: {req.partial_ok ? "OK" : "All or nothing"}
                       </span>
                     )}
@@ -349,7 +349,7 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
 
                 {/* Business-only chips: type, category, website, recurring, contact platform, discovery source */}
                 {req.lead_type === "business" && (
-                  <div style={{ display: "flex", gap: ".5rem", flexWrap: "wrap", marginBottom: ".8rem" }}>
+                  <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap", marginBottom: ".55rem" }}>
                     {req.business_type && (
                       <span style={{ fontSize: ".72rem", color: VIOLET, border: `1px solid ${VIOLET}`, borderRadius: "6px", padding: ".25rem .6rem" }}>
                         {req.business_type}
@@ -391,15 +391,15 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
 
                 {/* Body */}
                 <p style={{
-                  fontSize: ".86rem", color: MUTED, lineHeight: 1.7,
-                  whiteSpace: "pre-line", marginBottom: ".9rem",
-                  background: BG, borderRadius: "8px", padding: ".8rem .9rem",
+                  fontSize: ".82rem", color: MUTED, lineHeight: 1.5,
+                  whiteSpace: "pre-line", wordBreak: "break-word", marginBottom: ".6rem",
+                  background: BG, borderRadius: "8px", padding: ".6rem .75rem",
                 }}>
                   {req.items}
                 </p>
 
                 {req.notes && (
-                  <p style={{ fontSize: ".78rem", color: MUTED, marginBottom: ".9rem" }}>
+                  <p style={{ fontSize: ".76rem", color: MUTED, marginBottom: ".6rem" }}>
                     {req.notes}
                   </p>
                 )}
@@ -412,8 +412,8 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
                       disabled={busy === req.id}
                       style={{
                         background: RED, color: BG, border: "none",
-                        padding: ".6rem 1.1rem", borderRadius: "8px",
-                        fontFamily: BODY, fontSize: ".82rem", fontWeight: 600,
+                        padding: ".45rem .9rem", borderRadius: "7px",
+                        fontFamily: BODY, fontSize: ".78rem", fontWeight: 600,
                         cursor: "pointer",
                         opacity: busy === req.id ? .5 : 1,
                       }}
@@ -424,9 +424,9 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
 
                   {req.status === "converted" && req.order_id && (
                     <span style={{
-                      fontFamily: BODY, fontSize: ".78rem", fontWeight: 600, color: VIOLET,
-                      border: `1px solid ${BORDER}`, borderRadius: "8px",
-                      padding: ".6rem .9rem",
+                      fontFamily: BODY, fontSize: ".74rem", fontWeight: 600, color: VIOLET,
+                      border: `1px solid ${BORDER}`, borderRadius: "7px",
+                      padding: ".45rem .8rem",
                     }}>
                       Order #{req.order_id}
                     </span>
@@ -435,8 +435,8 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
                   {req.status === "new" && (
                     <button onClick={() => setStatus(req, "read")} style={{
                       background: "transparent", color: MUTED, border: `1px solid ${BORDER}`,
-                      padding: ".6rem 1rem", borderRadius: "8px", fontFamily: BODY,
-                      fontSize: ".82rem", fontWeight: 500, cursor: "pointer",
+                      padding: ".45rem .8rem", borderRadius: "7px", fontFamily: BODY,
+                      fontSize: ".78rem", fontWeight: 500, cursor: "pointer",
                     }}>
                       Mark read
                     </button>
@@ -445,8 +445,8 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
                   {req.status !== "declined" && req.status !== "converted" && (
                     <button onClick={() => setStatus(req, "declined")} style={{
                       background: "transparent", color: MUTED, border: `1px solid ${BORDER}`,
-                      padding: ".6rem 1rem", borderRadius: "8px", fontFamily: BODY,
-                      fontSize: ".82rem", fontWeight: 500, cursor: "pointer",
+                      padding: ".45rem .8rem", borderRadius: "7px", fontFamily: BODY,
+                      fontSize: ".78rem", fontWeight: 500, cursor: "pointer",
                     }}>
                       Decline
                     </button>
@@ -455,8 +455,8 @@ export default function RequestsTab({ tokens, jumpToQuery, onJumped }) {
                   <button onClick={() => del(req.id)} style={{
                     background: "rgba(255,80,96,.1)", color: ALERT,
                     border: `1px solid rgba(255,80,96,.3)`,
-                    padding: ".6rem .9rem", borderRadius: "8px", fontFamily: BODY,
-                    fontSize: ".82rem", fontWeight: 500, cursor: "pointer",
+                    padding: ".45rem .8rem", borderRadius: "7px", fontFamily: BODY,
+                    fontSize: ".78rem", fontWeight: 500, cursor: "pointer",
                     marginLeft: "auto",
                   }}>
                     Delete
