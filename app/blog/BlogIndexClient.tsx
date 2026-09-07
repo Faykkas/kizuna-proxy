@@ -44,9 +44,8 @@ export default function BlogIndexClient() {
           {GUIDES.map(({ slug, key, Icon }) => {
             const data = guideTranslations[key];
             const g = data[lang] || data.en;
-            const href = lang === "en" ? `/blog/${slug}` : `/blog/${lang}/${slug}`;
             return (
-              <a key={slug} href={href} className="ev-card" style={{ display: "block", textDecoration: "none" }}>
+              <a key={slug} href={`/blog/${slug}`} className="ev-card" style={{ display: "block", textDecoration: "none" }}>
                 <div className="ev-icon"><Icon size={40} /></div>
                 <h3>{g.title}{g.titleEm}</h3>
                 <p>{g.lead}</p>
