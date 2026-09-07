@@ -7,13 +7,11 @@ import OrderManager from "../components/admin/OrderManager";
 import ShipmentManager from "../components/admin/ShipmentManager";
 import RequestsTab from "../components/admin/RequestsTab";
 import CustomersTab from "../components/admin/CustomersTab";
-import WaitlistTab from "../components/admin/WaitlistTab";
-import ChargesTab from "../components/admin/ChargesTab";
 import PaymentLinksTab from "../components/admin/PaymentLinksTab";
 import QuickSearch from "../components/admin/QuickSearch";
 import { ALL_STATUSES, statusColor, orderTitle } from "../lib/orderStatus";
 import {
-  IconRequests, IconCustomers, IconEvent, IconBox, IconCharges,
+  IconRequests, IconCustomers, IconEvent, IconBox,
   IconPaymentLink, IconStats, IconGallery, IconNews, IconBanner,
   IconCards, IconGaming, IconApparel, IconFigure, IconMarketplace,
 } from "../components/pixel/PixelIcons";
@@ -400,9 +398,6 @@ export default function AdminPage() {
     { id:"orders",   label:al.tabs.orders, icon: IconBox },
     { id:"customers",label:"Customers", icon: IconCustomers },
     { id:"stats",    label:al.tabs.stats, icon: IconStats },
-    { id:"events",   label:al.tabs.events || "Events", icon: IconEvent },
-    { id:"waitlist", label:"Box Waitlist", icon: IconBox },
-    { id:"charges",  label:"Charges JP", icon: IconCharges },
     { id:"paylinks", label:"Liens de paiement", icon: IconPaymentLink },
   ];
 
@@ -469,9 +464,6 @@ export default function AdminPage() {
         {tab==="orders"   && <OrdersTab supabase={supabase} al={al} jumpToOrderId={jumpToOrderId} onJumped={() => setJumpToOrderId(null)} />}
         {tab==="customers"&& <CustomersTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
         {tab==="stats"    && <StatsTab supabase={supabase} al={al} />}
-        {tab==="events"   && <EventsTab supabase={supabase} al={al} />}
-        {tab==="waitlist" && <WaitlistTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
-        {tab==="charges"  && <ChargesTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
         {tab==="paylinks" && <PaymentLinksTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
       </div>
     </div>
