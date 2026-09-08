@@ -34,12 +34,18 @@ function loadPayPalSdk(clientId) {
   });
 }
 
-export default function PayLinkButton({ token, onPaid }) {
+export default function PayLinkButton({ token, phone, shippingAddress, onPaid }) {
   const containerRef = useRef(null);
   const [state, setState] = useState("idle"); // idle | ready | paying | done | error
   const [message, setMessage] = useState("");
 
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+
+  // Read via a ref inside createOrder so a later edit to phone/address
+  // (the PayPal button stays mounted once rendered) isn't lost to a stale
+  // closure from whenever the SDK button was first created.
+  const detailsRef = useRef({ phone, shippingAddress });
+  useEffect(() => { detailsRef.current = { phone, shippingAddress }; }, [phone, shippingAddress]);
 
   useEffect(() => {
     if (!clientId || !containerRef.current) return;
@@ -58,7 +64,7 @@ export default function PayLinkButton({ token, onPaid }) {
               const res = await fetch("/api/payment-link", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ action: "create", token }),
+                body: JSON.stringify({ action: "create", token, ...detailsRef.current }),
               });
               const data = await res.json();
               if (!res.ok) throw new Error(data.error || "Could not start payment");

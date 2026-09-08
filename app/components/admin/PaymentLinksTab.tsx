@@ -20,7 +20,7 @@ export default function PaymentLinksTab({ tokens }) {
 
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({ label: "", item_amount_jpy: "", fee_amount_jpy: "", client_name: "", client_email: "" });
+  const [form, setForm] = useState({ label: "", item_amount_jpy: "", fee_amount_jpy: "", paypal_fee_jpy: "", client_name: "", client_email: "" });
   const [creating, setCreating] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
   const [msg, setMsg] = useState("");
@@ -37,6 +37,7 @@ export default function PaymentLinksTab({ tokens }) {
   async function createLink() {
     const itemAmount = Number(form.item_amount_jpy);
     const feeAmount = Number(form.fee_amount_jpy) || 0;
+    const paypalFeeAmount = Number(form.paypal_fee_jpy) || 0;
     if (!form.label.trim() || !itemAmount || itemAmount <= 0) {
       setMsg("Indique un libellé et un prix produit en yen valide.");
       setTimeout(() => setMsg(""), 3000);
@@ -47,7 +48,8 @@ export default function PaymentLinksTab({ tokens }) {
       label: form.label.trim(),
       item_amount_jpy: itemAmount,
       fee_amount_jpy: feeAmount,
-      amount_jpy: itemAmount + feeAmount,
+      paypal_fee_jpy: paypalFeeAmount,
+      amount_jpy: itemAmount + feeAmount + paypalFeeAmount,
       client_name: form.client_name.trim() || null,
       client_email: form.client_email.trim() || null,
       status: "pending",
@@ -59,7 +61,7 @@ export default function PaymentLinksTab({ tokens }) {
       return;
     }
     setLinks(prev => [data, ...prev]);
-    setForm({ label: "", item_amount_jpy: "", fee_amount_jpy: "", client_name: "", client_email: "" });
+    setForm({ label: "", item_amount_jpy: "", fee_amount_jpy: "", paypal_fee_jpy: "", client_name: "", client_email: "" });
   }
 
   async function cancelLink(id) {
@@ -94,7 +96,7 @@ export default function PaymentLinksTab({ tokens }) {
           <label style={lbl}>Libellé (ce que le client voit)</label>
           <input style={inp} value={form.label} onChange={e => setForm(f => ({ ...f, label: e.target.value }))} placeholder="Ex : Commande figurines x3 + envoi" />
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".8rem", marginBottom: ".8rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: ".8rem", marginBottom: ".8rem" }}>
           <div>
             <label style={lbl}>Prix produit (¥)</label>
             <input style={inp} type="number" min="1" value={form.item_amount_jpy} onChange={e => setForm(f => ({ ...f, item_amount_jpy: e.target.value }))} placeholder="12000" />
@@ -103,10 +105,14 @@ export default function PaymentLinksTab({ tokens }) {
             <label style={lbl}>Frais Kizuna (¥)</label>
             <input style={inp} type="number" min="0" value={form.fee_amount_jpy} onChange={e => setForm(f => ({ ...f, fee_amount_jpy: e.target.value }))} placeholder="3000" />
           </div>
+          <div>
+            <label style={lbl}>Frais PayPal G&amp;S (¥)</label>
+            <input style={inp} type="number" min="0" value={form.paypal_fee_jpy} onChange={e => setForm(f => ({ ...f, paypal_fee_jpy: e.target.value }))} placeholder="500" />
+          </div>
         </div>
-        {(Number(form.item_amount_jpy) > 0 || Number(form.fee_amount_jpy) > 0) && (
+        {(Number(form.item_amount_jpy) > 0 || Number(form.fee_amount_jpy) > 0 || Number(form.paypal_fee_jpy) > 0) && (
           <p style={{ fontSize: ".78rem", color: MUTED, marginBottom: ".8rem" }}>
-            Total facturé au client : <strong style={{ color: INK }}>{formatJPY((Number(form.item_amount_jpy) || 0) + (Number(form.fee_amount_jpy) || 0))}</strong> — apparaîtra en 2 lignes séparées (produit + frais) dans le paiement PayPal.
+            Total facturé au client : <strong style={{ color: INK }}>{formatJPY((Number(form.item_amount_jpy) || 0) + (Number(form.fee_amount_jpy) || 0) + (Number(form.paypal_fee_jpy) || 0))}</strong> — apparaîtra en lignes séparées (produit, frais Kizuna, frais PayPal) dans le paiement PayPal.
           </p>
         )}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".8rem", marginBottom: "1rem" }}>
@@ -145,9 +151,21 @@ export default function PaymentLinksTab({ tokens }) {
                     {l.client_name && `${l.client_name} · `}{l.client_email && `${l.client_email} · `}
                     {new Date(l.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}
                   </div>
-                  {l.fee_amount_jpy > 0 && (
+                  {(l.fee_amount_jpy > 0 || l.paypal_fee_jpy > 0) && (
                     <div style={{ fontSize: ".72rem", color: MUTED, marginTop: ".2rem" }}>
-                      Produit {formatJPY(l.item_amount_jpy)} + frais {formatJPY(l.fee_amount_jpy)}
+                      Produit {formatJPY(l.item_amount_jpy)}
+                      {l.fee_amount_jpy > 0 && ` + frais Kizuna ${formatJPY(l.fee_amount_jpy)}`}
+                      {l.paypal_fee_jpy > 0 && ` + frais PayPal ${formatJPY(l.paypal_fee_jpy)}`}
+                    </div>
+                  )}
+                  {l.client_phone && (
+                    <div style={{ fontSize: ".72rem", color: MUTED, marginTop: ".2rem" }}>
+                      Tél : {l.client_phone}
+                    </div>
+                  )}
+                  {l.shipping_address && (
+                    <div style={{ fontSize: ".72rem", color: VIOLET, marginTop: ".2rem", whiteSpace: "pre-line" }}>
+                      Adresse d'envoi différente : {l.shipping_address}
                     </div>
                   )}
                 </div>

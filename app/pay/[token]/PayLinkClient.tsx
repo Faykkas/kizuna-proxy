@@ -9,6 +9,9 @@ export default function PayLinkClient({ token }) {
   const [link, setLink] = useState(null); // { label, amountJpy, status }
   const [error, setError] = useState("");
   const [paidJustNow, setPaidJustNow] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [wantsAltAddress, setWantsAltAddress] = useState(false);
+  const [altAddress, setAltAddress] = useState("");
 
   useEffect(() => {
     fetch("/api/payment-link", {
@@ -60,16 +63,58 @@ export default function PayLinkClient({ token }) {
         {link && link.status === "pending" && !paidJustNow && (
           <>
             <p style={{ fontSize: ".78rem", letterSpacing: ".08em", textTransform: "uppercase", color: "var(--warm)", marginBottom: ".5rem" }}>{link.label}</p>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.3rem", fontWeight: 600, color: "var(--red)", marginBottom: link.feeAmountJpy > 0 ? ".5rem" : "1.75rem" }}>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.3rem", fontWeight: 600, color: "var(--red)", marginBottom: (link.feeAmountJpy > 0 || link.paypalFeeAmountJpy > 0) ? ".5rem" : "1.75rem" }}>
               {formatJPY(link.amountJpy)}
             </p>
-            {link.feeAmountJpy > 0 && (
+            {(link.feeAmountJpy > 0 || link.paypalFeeAmountJpy > 0) && (
               <div style={{ fontSize: ".72rem", color: "var(--mist)", marginBottom: "1.5rem", lineHeight: 1.6 }}>
                 <div>Item: {formatJPY(link.itemAmountJpy)}</div>
-                <div>Kizuna Proxy service fee: {formatJPY(link.feeAmountJpy)}</div>
+                {link.feeAmountJpy > 0 && <div>Kizuna Proxy service fee: {formatJPY(link.feeAmountJpy)}</div>}
+                {link.paypalFeeAmountJpy > 0 && <div>PayPal Goods &amp; Services fee: {formatJPY(link.paypalFeeAmountJpy)}</div>}
               </div>
             )}
-            <PayLinkButton token={token} onPaid={() => setPaidJustNow(true)} />
+
+            <div style={{ textAlign: "left", marginBottom: "1.25rem" }}>
+              <label style={{ display: "block", fontSize: ".72rem", fontWeight: 600, color: "var(--warm)", marginBottom: ".35rem" }}>
+                Phone number *
+              </label>
+              <input
+                type="tel"
+                required
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+                placeholder="+1 555 123 4567"
+                style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border-gold)", borderRadius: "8px", fontSize: ".85rem", background: "var(--beige)", color: "var(--ink)", outline: "none", boxSizing: "border-box" }}
+              />
+
+              <label style={{ display: "flex", alignItems: "center", gap: ".45rem", fontSize: ".78rem", color: "var(--warm)", marginTop: "1rem", cursor: "pointer" }}>
+                <input type="checkbox" checked={wantsAltAddress} onChange={e => setWantsAltAddress(e.target.checked)} />
+                Ship to a different address than usual
+              </label>
+              {wantsAltAddress && (
+                <textarea
+                  value={altAddress}
+                  onChange={e => setAltAddress(e.target.value)}
+                  placeholder="Full name, address, city, postal code, country…"
+                  rows={3}
+                  style={{ width: "100%", marginTop: ".5rem", padding: ".6rem .8rem", border: "1px solid var(--border-gold)", borderRadius: "8px", fontSize: ".85rem", background: "var(--beige)", color: "var(--ink)", outline: "none", boxSizing: "border-box", fontFamily: "inherit", resize: "vertical" }}
+                />
+              )}
+            </div>
+
+            {phone.trim() ? (
+              <PayLinkButton
+                token={token}
+                phone={phone.trim()}
+                shippingAddress={wantsAltAddress ? altAddress.trim() : ""}
+                onPaid={() => setPaidJustNow(true)}
+              />
+            ) : (
+              <p style={{ fontSize: ".78rem", color: "var(--mist)", padding: ".8rem", border: "1px dashed var(--border-gold)", borderRadius: "8px" }}>
+                Enter your phone number above to continue to payment.
+              </p>
+            )}
+
             <p style={{ fontSize: ".68rem", color: "var(--mist)", marginTop: "1.25rem" }}>
               No PayPal account needed — pay by debit or credit card through PayPal's secure checkout.
             </p>

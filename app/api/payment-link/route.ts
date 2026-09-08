@@ -61,14 +61,14 @@ export async function POST(request) {
       return Response.json({ error: "Payments are not configured yet." }, { status: 503 });
     }
     const body = await request.json();
-    const { action, token, paypalOrderId } = body;
+    const { action, token, paypalOrderId, phone, shippingAddress } = body;
     if (!token) return Response.json({ error: "Missing token" }, { status: 400 });
 
     // ── Fetch label/amount/status for the public page to render ──
     if (action === "get") {
       const { data: link } = await admin
         .from("payment_links")
-        .select("label, amount_jpy, item_amount_jpy, fee_amount_jpy, status")
+        .select("label, amount_jpy, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, status")
         .eq("id", token)
         .single();
       if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
@@ -77,15 +77,20 @@ export async function POST(request) {
         amountJpy: link.amount_jpy,
         itemAmountJpy: link.item_amount_jpy,
         feeAmountJpy: link.fee_amount_jpy,
+        paypalFeeAmountJpy: link.paypal_fee_jpy,
         status: link.status,
       });
     }
 
     // ── Create the PayPal order ──
     if (action === "create") {
+      if (!phone || !String(phone).trim()) {
+        return Response.json({ error: "Phone number is required" }, { status: 400 });
+      }
+
       const { data: link } = await admin
         .from("payment_links")
-        .select("id, label, amount_jpy, item_amount_jpy, fee_amount_jpy, status")
+        .select("id, label, amount_jpy, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, status")
         .eq("id", token)
         .single();
       if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
@@ -93,10 +98,24 @@ export async function POST(request) {
         return Response.json({ error: "This link is no longer payable" }, { status: 400 });
       }
 
-      // Break the order into a "product" line and a separate "Kizuna fee"
-      // line whenever both are set, so the payer's PayPal review page and
-      // receipt show the fee explicitly instead of one opaque total.
-      const hasBreakdown = link.item_amount_jpy > 0 && link.fee_amount_jpy > 0;
+      // Save the payer's phone (required) and optional alternate shipping
+      // address before starting checkout, so they're on file even if the
+      // payer abandons PayPal's own approval step.
+      await admin
+        .from("payment_links")
+        .update({
+          client_phone: String(phone).trim(),
+          ...(shippingAddress && String(shippingAddress).trim() ? { shipping_address: String(shippingAddress).trim() } : {}),
+        })
+        .eq("id", token);
+
+      // Break the order into a "product" line and separate "Kizuna fee" /
+      // "PayPal G&S fee" lines whenever set, so the payer's PayPal review
+      // page and receipt show each charge explicitly instead of one opaque
+      // total.
+      const feeAmount = link.fee_amount_jpy || 0;
+      const paypalFeeAmount = link.paypal_fee_jpy || 0;
+      const hasBreakdown = link.item_amount_jpy > 0 && (feeAmount > 0 || paypalFeeAmount > 0);
       const purchaseUnit = {
         reference_id: `LINK-${link.id}`,
         description: (link.label || "Kizuna Proxy payment").slice(0, 127),
@@ -104,11 +123,12 @@ export async function POST(request) {
       };
       if (hasBreakdown) {
         purchaseUnit.amount.breakdown = {
-          item_total: { currency_code: "JPY", value: String(link.item_amount_jpy + link.fee_amount_jpy) },
+          item_total: { currency_code: "JPY", value: String(link.item_amount_jpy + feeAmount + paypalFeeAmount) },
         };
         purchaseUnit.items = [
           { name: (link.label || "Item").slice(0, 127), quantity: "1", unit_amount: { currency_code: "JPY", value: String(link.item_amount_jpy) } },
-          { name: "Kizuna Proxy — service fee", quantity: "1", unit_amount: { currency_code: "JPY", value: String(link.fee_amount_jpy) } },
+          ...(feeAmount > 0 ? [{ name: "Kizuna Proxy — service fee", quantity: "1", unit_amount: { currency_code: "JPY", value: String(feeAmount) } }] : []),
+          ...(paypalFeeAmount > 0 ? [{ name: "PayPal Goods & Services fee", quantity: "1", unit_amount: { currency_code: "JPY", value: String(paypalFeeAmount) } }] : []),
         ];
       }
 
