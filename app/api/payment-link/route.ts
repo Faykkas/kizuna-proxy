@@ -155,7 +155,7 @@ export async function POST(request) {
     if (action === "capture") {
       const { data: link } = await admin
         .from("payment_links")
-        .select("id, status")
+        .select("id, status, label, client_name, client_email, client_phone, shipping_address, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy")
         .eq("id", token)
         .single();
       if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
@@ -188,6 +188,28 @@ export async function POST(request) {
           ...(payerName && { client_name: payerName }),
         })
         .eq("id", token);
+
+      // Turn the paid link into a regular order, same pipeline as everything
+      // else in the admin — only ever runs here, on the transition into
+      // "paid", so links that were already paid before this existed are
+      // never retroactively converted.
+      const adminNoteParts = [
+        `From payment link: item ¥${link.item_amount_jpy || 0}, Kizuna fee ¥${link.fee_amount_jpy || 0}, PayPal fee ¥${link.paypal_fee_jpy || 0}.`,
+        `Phone: ${link.client_phone || "—"}.`,
+      ];
+      if (link.shipping_address) adminNoteParts.push(`Alt shipping address: ${link.shipping_address}`);
+
+      await admin.from("orders").insert({
+        client_name: payerName || link.client_name || null,
+        client_email: payerEmail || link.client_email || null,
+        items: link.label,
+        status: "Pending",
+        purchase_date: new Date().toISOString().split("T")[0],
+        platform: "Payment link",
+        item_price_jpy: link.item_amount_jpy || 0,
+        service_fee_jpy: link.fee_amount_jpy || 0,
+        admin_notes: adminNoteParts.join(" "),
+      });
 
       return Response.json({ ok: true });
     }
