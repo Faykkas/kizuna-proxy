@@ -1326,26 +1326,26 @@ em { color: var(--red); font-style: normal; font-weight: 600; }
    s'enfonce au clic, comme une vraie touche. */
 .btn, .nav-cta {
   font-family: var(--font-pixel);
-  font-size: .55rem;
+  font-size: .46rem;
   letter-spacing: .04em;
-  border-radius: 8px;
+  border-radius: 6px;
   transition: transform .08s var(--ease-step), box-shadow .08s var(--ease-step), background .2s;
 }
 
 .btn-gold, .nav-cta {
   background: var(--red);
   color: var(--px-bg);
-  box-shadow: 0 4px 0 var(--red-d);
+  box-shadow: 0 3px 0 var(--red-d);
   border: none;
-  padding: .85rem 1.6rem;
+  padding: .55rem 1.1rem;
 }
 .btn-gold:hover, .nav-cta:hover {
   background: var(--red-l);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 0 var(--red-d);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 var(--red-d);
 }
 .btn-gold:active, .nav-cta:active {
-  transform: translateY(4px);
+  transform: translateY(3px);
   box-shadow: 0 0 0 var(--red-d);
 }
 
@@ -1353,16 +1353,16 @@ em { color: var(--red); font-style: normal; font-weight: 600; }
   background: var(--surface);
   color: var(--ink);
   border: 2px solid var(--px-border);
-  box-shadow: 0 4px 0 rgba(0,0,0,.3);
-  padding: .8rem 1.5rem;
+  box-shadow: 0 3px 0 rgba(0,0,0,.3);
+  padding: .5rem 1.05rem;
 }
 .btn-outline:hover {
   border-color: var(--red);
   color: var(--red);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 0 rgba(0,0,0,.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 rgba(0,0,0,.3);
 }
-.btn-outline:active { transform: translateY(4px); box-shadow: none; }
+.btn-outline:active { transform: translateY(3px); box-shadow: none; }
 
 /* ── 4. NAVIGATION ────────────────────────────────────────────────────── */
 nav {
@@ -1856,7 +1856,7 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 @media (max-width: 768px) {
   .hero-h1 { font-size: clamp(1.9rem, 8vw, 2.6rem); }
-  .btn, .nav-cta { font-size: .48rem; padding: .75rem 1.2rem; }
+  .btn, .nav-cta { font-size: .4rem; padding: .5rem .95rem; }
   .sec-label { font-size: .45rem; }
   .reviews-big-num { font-size: 1.5rem; }
 }
