@@ -10,7 +10,7 @@ import { useAuth } from "../lib/auth";
 import {
   IconShoppingBag, IconAuction, IconCards, IconStore, IconApparel,
   IconSneaker, IconFigure, IconBox, IconEvent, IconBusiness, IconBook,
-  IconGacha, IconMusicNote,
+  IconGacha, IconMusicNote, IconTruck,
 } from "./pixel/PixelIcons";
 
 const BLOG_ITEMS = [
@@ -32,6 +32,7 @@ const BLOG_ITEMS = [
   { href:"/blog/ichiban-kuji-japan-guide",          Icon:IconGacha,       label:"Ichiban Kuji" },
   { href:"/blog/tokyo-anime-events-guide",          Icon:IconEvent,       label:"Tokyo Anime Events" },
   { href:"/blog/kpop-photocards-japan-guide",       Icon:IconMusicNote,   label:"K-pop Photocards" },
+  { href:"/blog/japan-package-forwarding-guide",    Icon:IconTruck,       label:"Package Forwarding" },
 ];
 
 export default function SiteNav() {

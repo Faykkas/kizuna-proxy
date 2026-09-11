@@ -53,6 +53,7 @@ export default function SiteFooter({ t }: { t: any }) {
             <a href="/blog/ichiban-kuji-japan-guide" className="footer-link">Ichiban Kuji Guide</a>
             <a href="/blog/tokyo-anime-events-guide" className="footer-link">Tokyo Anime Events</a>
             <a href="/blog/kpop-photocards-japan-guide" className="footer-link">K-pop Photocards</a>
+            <a href="/blog/japan-package-forwarding-guide" className="footer-link">Package Forwarding & Storage</a>
           </div>
           <div>
             <p className="footer-col-title">Contact</p>

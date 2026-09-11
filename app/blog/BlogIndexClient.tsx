@@ -6,6 +6,7 @@ import { guideTranslations } from "../guideTranslations";
 import {
   IconShoppingBag, IconAuction, IconCards, IconStore, IconApparel,
   IconSneaker, IconFigure, IconBox, IconEvent, IconBook, IconGacha, IconMusicNote,
+  IconTruck,
 } from "../components/pixel/PixelIcons";
 
 const GUIDES = [
@@ -23,6 +24,7 @@ const GUIDES = [
   { slug: "ichiban-kuji-japan-guide",          key: "ichibanKuji",   Icon: IconGacha },
   { slug: "tokyo-anime-events-guide",          key: "animeEvents",   Icon: IconEvent },
   { slug: "kpop-photocards-japan-guide",       key: "kpop",          Icon: IconMusicNote },
+  { slug: "japan-package-forwarding-guide",    key: "forwarding",   Icon: IconTruck },
 ];
 
 export default function BlogIndexClient() {

@@ -19,6 +19,7 @@ import ComitiaClient from "./comitia-japan-guide/ComitiaClient";
 import IchibanKujiClient from "./ichiban-kuji-japan-guide/IchibanKujiClient";
 import AnimeEventsClient from "./tokyo-anime-events-guide/AnimeEventsClient";
 import KpopClient from "./kpop-photocards-japan-guide/KpopClient";
+import ForwardingClient from "./japan-package-forwarding-guide/ForwardingClient";
 
 export const GUIDE_ROUTES = {
   "best-pokemon-cards-japan-2026": { Component: PokemonCardsClient, key: "pokemonCards" },
@@ -35,6 +36,7 @@ export const GUIDE_ROUTES = {
   "ichiban-kuji-japan-guide": { Component: IchibanKujiClient, key: "ichibanKuji" },
   "tokyo-anime-events-guide": { Component: AnimeEventsClient, key: "animeEvents" },
   "kpop-photocards-japan-guide": { Component: KpopClient, key: "kpop" },
+  "japan-package-forwarding-guide": { Component: ForwardingClient, key: "forwarding" },
 };
 
 export const BLOG_SLUGS = Object.keys(GUIDE_ROUTES);

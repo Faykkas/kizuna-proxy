@@ -18,6 +18,7 @@ const BLOG_SLUGS = [
   "ichiban-kuji-japan-guide",
   "tokyo-anime-events-guide",
   "kpop-photocards-japan-guide",
+  "japan-package-forwarding-guide",
 ];
 
 const LANDING_SLUGS = [
