@@ -6,16 +6,18 @@ import SiteFooter from "./components/SiteFooter";
 import AnnounceBar from "./components/AnnounceBar";
 import HeroSection from "./components/sections/HeroSection";
 import SearchWidget from "./components/SearchWidget";
+import ExplainerSection from "./components/sections/ExplainerSection";
 import ServicesSection from "./components/sections/ServicesSection";
 import WhyKizunaHomeSection from "./components/sections/WhyKizunaHomeSection";
 import ServiceRulesSection from "./components/sections/ServiceRulesSection";
 import NewsPreviewSection from "./components/sections/NewsPreviewSection";
 import GallerySection from "./components/sections/GallerySection";
 import EventCarousel from "./components/EventCarousel";
+import Carousel from "./components/Carousel";
 import { BackToTop, useScrollReveal } from "./components/ui";
 import usePixelCanvas from "./components/pixel/usePixelCanvas";
 import { useLang, useAnnounce, useGallery } from "./components/useSiteState";
-import { REAL_REVIEWS } from "./components/data";
+import { REAL_REVIEWS, SLIDES } from "./components/data";
 
 export default function Home() {
   const { lang, t } = useLang();
@@ -31,6 +33,21 @@ export default function Home() {
       <SiteNav />
 
       <HeroSection t={t} />
+
+      {/* EXPLAINER STRIP — what a proxy service is, how Kizuna's process
+          works, who's behind it, and what services are covered. Answers
+          the "what am I looking at" question right after the hero. */}
+      <ExplainerSection t={t} />
+
+      {/* REAL PHOTO CAROUSEL — moved up near the top: real order photos
+          make the "we're a real team, not a template" case immediately,
+          before any promo content. Full-size gallery section (with its own
+          heading) also still appears further down for deeper browsing. */}
+      <section className="section-sm reveal">
+        <div className="wrap">
+          <Carousel slides={gallery.length > 0 ? gallery.map(g => ({ src: g.image_url, alt: g.title, title: g.title, sub: g.subtitle || "" })) : SLIDES} />
+        </div>
+      </section>
 
       {/* TOKYO EVENTS CAROUSEL — Hobonichi Techo Store lottery status,
           The Weeknd's Harajuku pop-up, and the next Comiket/COMITIA dates.

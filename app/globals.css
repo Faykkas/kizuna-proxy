@@ -198,6 +198,25 @@ nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,11,.92); ba
   .why-row-desc, .why-row-rev .why-row-desc { max-width: none; margin: 0 auto; }
 }
 
+/* ── Explainer strip (near the top): what/how/who/services ─────────────── */
+.explainer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.explainer-card {
+  display: block; background: var(--surface); border: 1px solid var(--border-gold);
+  border-left: 3px solid var(--red); border-radius: 10px; padding: 1.3rem 1.4rem;
+  text-decoration: none; transition: transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s;
+}
+.explainer-card:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(0,0,0,.28); }
+.explainer-card:nth-child(2) { border-left-color: var(--gold); }
+.explainer-card:nth-child(3) { border-left-color: var(--px-kraft); }
+.explainer-card:nth-child(4) { border-left-color: var(--px-pink); }
+.explainer-card strong {
+  display: block; font-family: 'Cormorant Garamond', serif; font-size: 1.05rem;
+  font-weight: 600; color: var(--ink); margin-bottom: .5rem; line-height: 1.3;
+}
+.explainer-card p { font-size: .8rem; line-height: 1.6; color: var(--warm); font-weight: 300; margin: 0; }
+@media (max-width: 900px) { .explainer-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .explainer-grid { grid-template-columns: 1fr; } }
+
 /* ══════════════════════════════════════════════════════════
    CALENDAR — Elegant Redesign
    ══════════════════════════════════════════════════════════ */

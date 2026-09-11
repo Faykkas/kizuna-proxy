@@ -156,6 +156,14 @@ const en = {
   news: { label: "Latest news", title: "Updates &", titleEm: "announcements", seeAll: "See all announcements", emptyDesc: "Nothing new to report right now — check out upcoming Tokyo events or our shopping guides instead.", ctaEvents: "Tokyo events", ctaGuides: "Read our guides" },
   blog: { label: "Guides", title: "Learn how to", titleEm: "buy from Japan", desc: "Practical guides to help you find and buy from Japan.", cta: "Read guide →" },
   whyKizuna: { label: "Why Kizuna", title: "Personal service,", titleEm: "not a platform", desc: "Big proxy services are automated. We are real people in Tokyo.", ticker: "Recent orders" },
+  explainer: {
+    items: [
+      { title: "What's a proxy shopping service?", desc: "We buy items on your behalf from Japanese stores and marketplaces, then ship them to you — wherever you are." },
+      { title: "How it works", desc: "Send your request → we confirm price & availability → you pay → we buy and ship. Most requests confirmed within 24 hours." },
+      { title: "Who is Kizuna Proxy?", desc: "A small, real team based in Tokyo — not a warehouse, not a bot. Every order is handled personally, with photos and proof along the way." },
+      { title: "Our services", desc: "Physical store visits, pop-ups & events, Mercari & Rakuma listings, Pokémon cards, sneakers, anime figures and more." },
+    ],
+  },
   whyKizunaHome: {
     label: "Why Kizuna", title: "A personal shopper,", titleEm: "not a platform",
     desc: "Real people in Tokyo — not a warehouse, not a bot.",
@@ -542,6 +550,14 @@ const fr: Copy = {
   news: { label: "Dernières actualités", title: "Mises à jour &", titleEm: "annonces", seeAll: "Voir toutes les annonces", emptyDesc: "Rien de nouveau à annoncer pour le moment — découvrez plutôt nos événements à Tokyo ou nos guides d'achat.", ctaEvents: "Événements à Tokyo", ctaGuides: "Lire nos guides" },
   blog: { label: "Guides", title: "Apprenez à", titleEm: "acheter depuis le Japon", desc: "Des guides pratiques pour vous aider à trouver et acheter depuis le Japon.", cta: "Lire le guide →" },
   whyKizuna: { label: "Pourquoi Kizuna", title: "Un service personnel,", titleEm: "pas une plateforme", desc: "Les gros services de proxy sont automatisés. Nous sommes de vraies personnes à Tokyo.", ticker: "Commandes récentes" },
+  explainer: {
+    items: [
+      { title: "C'est quoi un service d'achat proxy ?", desc: "Nous achetons vos articles pour vous auprès de boutiques et sites japonais, puis nous les expédions — où que vous soyez." },
+      { title: "Comment ça marche", desc: "Envoyez votre demande → nous confirmons le prix et la disponibilité → vous payez → nous achetons et expédions. La plupart des demandes confirmées sous 24h." },
+      { title: "Qui est Kizuna Proxy ?", desc: "Une petite équipe bien réelle basée à Tokyo — pas un entrepôt, pas un bot. Chaque commande est traitée personnellement, avec photos et preuves à chaque étape." },
+      { title: "Nos services", desc: "Visites en boutique, pop-up et événements, annonces Mercari & Rakuma, cartes Pokémon, sneakers, figurines anime et plus encore." },
+    ],
+  },
   whyKizunaHome: {
     label: "Pourquoi Kizuna", title: "Un acheteur personnel,", titleEm: "pas une plateforme",
     desc: "De vraies personnes à Tokyo — pas un entrepôt, pas un bot.",
@@ -926,6 +942,14 @@ const ja: Copy = {
   news: { label: "最新ニュース", title: "アップデート &", titleEm: "お知らせ", seeAll: "すべてのお知らせを見る", emptyDesc: "現在新しいお知らせはありません — 東京のイベントやショッピングガイドをぜひご覧ください。", ctaEvents: "東京イベント", ctaGuides: "ガイドを読む" },
   blog: { label: "ガイド", title: "日本からの購入方法を", titleEm: "学ぶ", desc: "日本の商品を見つけて購入するための実用的なガイド。", cta: "ガイドを読む →" },
   whyKizuna: { label: "Kizunaの理由", title: "パーソナルなサービス、", titleEm: "プラットフォームではない", desc: "大手プロキシサービスは自動化されています。私たちは東京にいる本物のスタッフです。", ticker: "最近の注文" },
+  explainer: {
+    items: [
+      { title: "プロキシ購入代行サービスとは？", desc: "日本の店舗やマーケットプレイスから、お客様に代わって商品を購入し、世界中どこへでも発送します。" },
+      { title: "ご利用の流れ", desc: "ご依頼 → 価格・在庫を確認 → お支払い → 購入・発送。ほとんどのご依頼は24時間以内にご返信します。" },
+      { title: "Kizuna Proxyとは？", desc: "東京を拠点とする、本物の少人数チームです — 倉庫でもボットでもありません。すべてのご注文を担当者が直接対応し、写真と証拠をお届けします。" },
+      { title: "私たちのサービス", desc: "店舗・ポップアップ・イベントへの訪問、メルカリ＆ラクマの出品、ポケモンカード、スニーカー、アニメフィギュアなど。" },
+    ],
+  },
   whyKizunaHome: {
     label: "Kizunaの理由", title: "パーソナルショッパー、", titleEm: "プラットフォームではない",
     desc: "東京にいる本物のスタッフ — 倉庫でもボットでもありません。",
@@ -1310,6 +1334,14 @@ const es: Copy = {
   news: { label: "Últimas noticias", title: "Actualizaciones y", titleEm: "anuncios", seeAll: "Ver todos los anuncios", emptyDesc: "No hay nada nuevo que anunciar por ahora — descubre nuestros próximos eventos en Tokio o nuestras guías de compra.", ctaEvents: "Eventos en Tokio", ctaGuides: "Leer nuestras guías" },
   blog: { label: "Guías", title: "Aprende a", titleEm: "comprar desde Japón", desc: "Guías prácticas para ayudarte a encontrar y comprar desde Japón.", cta: "Leer guía →" },
   whyKizuna: { label: "Por qué Kizuna", title: "Servicio personal,", titleEm: "no una plataforma", desc: "Los grandes servicios proxy están automatizados. Nosotros somos personas reales en Tokio.", ticker: "Pedidos recientes" },
+  explainer: {
+    items: [
+      { title: "¿Qué es un servicio de compra proxy?", desc: "Compramos artículos en tu nombre en tiendas y mercados japoneses, y te los enviamos — estés donde estés." },
+      { title: "Cómo funciona", desc: "Envías tu solicitud → confirmamos precio y disponibilidad → pagas → compramos y enviamos. La mayoría de solicitudes confirmadas en 24 horas." },
+      { title: "¿Quién es Kizuna Proxy?", desc: "Un pequeño equipo real con base en Tokio — no un almacén, no un bot. Cada pedido se gestiona personalmente, con fotos y pruebas en cada paso." },
+      { title: "Nuestros servicios", desc: "Visitas a tiendas físicas, pop-ups y eventos, publicaciones de Mercari y Rakuma, cartas Pokémon, zapatillas, figuras de anime y más." },
+    ],
+  },
   whyKizunaHome: {
     label: "Por qué Kizuna", title: "Un comprador personal,", titleEm: "no una plataforma",
     desc: "Personas reales en Tokio — no un almacén, no un bot.",
@@ -1694,6 +1726,14 @@ const it: Copy = {
   news: { label: "Ultime notizie", title: "Aggiornamenti e", titleEm: "annunci", seeAll: "Vedi tutti gli annunci", emptyDesc: "Al momento non ci sono novità — dai un'occhiata ai prossimi eventi a Tokyo o alle nostre guide.", ctaEvents: "Eventi a Tokyo", ctaGuides: "Leggi le guide" },
   blog: { label: "Guide", title: "Impara a", titleEm: "comprare dal Giappone", desc: "Guide pratiche per aiutarti a trovare e acquistare dal Giappone.", cta: "Leggi la guida →" },
   whyKizuna: { label: "Perché Kizuna", title: "Servizio personale,", titleEm: "non una piattaforma", desc: "I grandi servizi proxy sono automatizzati. Noi siamo persone reali a Tokyo.", ticker: "Ordini recenti" },
+  explainer: {
+    items: [
+      { title: "Cos'è un servizio di acquisto proxy?", desc: "Acquistiamo articoli per te da negozi e marketplace giapponesi, poi te li spediamo — ovunque tu sia." },
+      { title: "Come funziona", desc: "Invii la richiesta → confermiamo prezzo e disponibilità → paghi → acquistiamo e spediamo. La maggior parte delle richieste confermate entro 24 ore." },
+      { title: "Chi è Kizuna Proxy?", desc: "Un piccolo team reale con base a Tokyo — non un magazzino, non un bot. Ogni ordine è gestito personalmente, con foto e prove lungo il percorso." },
+      { title: "I nostri servizi", desc: "Visite in negozio, pop-up ed eventi, annunci Mercari e Rakuma, carte Pokémon, sneaker, figure anime e altro ancora." },
+    ],
+  },
   whyKizunaHome: {
     label: "Perché Kizuna", title: "Un personal shopper,", titleEm: "non una piattaforma",
     desc: "Persone reali a Tokyo — non un magazzino, non un bot.",
@@ -2078,6 +2118,14 @@ const de: Copy = {
   news: { label: "Neueste Nachrichten", title: "Updates &", titleEm: "Ankündigungen", seeAll: "Alle Ankündigungen ansehen", emptyDesc: "Aktuell gibt es nichts Neues — schau dir stattdessen unsere Tokio-Events oder Einkaufsratgeber an.", ctaEvents: "Tokio-Events", ctaGuides: "Ratgeber lesen" },
   blog: { label: "Ratgeber", title: "Lerne, wie man", titleEm: "aus Japan kauft", desc: "Praktische Anleitungen, die dir helfen, Artikel aus Japan zu finden und zu kaufen.", cta: "Ratgeber lesen →" },
   whyKizuna: { label: "Warum Kizuna", title: "Persönlicher Service,", titleEm: "keine Plattform", desc: "Große Proxy-Services sind automatisiert. Wir sind echte Menschen in Tokio.", ticker: "Aktuelle Bestellungen" },
+  explainer: {
+    items: [
+      { title: "Was ist ein Proxy-Kaufservice?", desc: "Wir kaufen Artikel in Ihrem Namen bei japanischen Shops und Marktplätzen und versenden sie dann an Sie — egal wo Sie sind." },
+      { title: "So funktioniert's", desc: "Sie senden Ihre Anfrage → wir bestätigen Preis & Verfügbarkeit → Sie bezahlen → wir kaufen und versenden. Die meisten Anfragen werden innerhalb von 24 Stunden bestätigt." },
+      { title: "Wer ist Kizuna Proxy?", desc: "Ein kleines, echtes Team mit Sitz in Tokio — kein Lager, kein Bot. Jede Bestellung wird persönlich bearbeitet, mit Fotos und Nachweisen auf jedem Schritt." },
+      { title: "Unsere Leistungen", desc: "Ladenbesuche, Pop-ups und Events, Mercari- & Rakuma-Angebote, Pokémon-Karten, Sneaker, Anime-Figuren und mehr." },
+    ],
+  },
   whyKizunaHome: {
     label: "Warum Kizuna", title: "Ein persönlicher Einkäufer,", titleEm: "keine Plattform",
     desc: "Echte Menschen in Tokio — kein Lager, kein Bot.",
@@ -2462,6 +2510,14 @@ const ko: Copy = {
   news: { label: "최신 소식", title: "업데이트 &", titleEm: "공지사항", seeAll: "모든 공지 보기", emptyDesc: "현재 새로운 소식이 없습니다 — 대신 도쿄 이벤트나 쇼핑 가이드를 확인해 보세요.", ctaEvents: "도쿄 이벤트", ctaGuides: "가이드 읽기" },
   blog: { label: "가이드", title: "일본에서 구매하는 방법을", titleEm: "알아보세요", desc: "일본 상품을 찾고 구매하는 데 도움이 되는 실용적인 가이드.", cta: "가이드 읽기 →" },
   whyKizuna: { label: "Kizuna를 선택하는 이유", title: "플랫폼이 아닌", titleEm: "개인 맞춤 서비스", desc: "대형 프록시 서비스는 자동화되어 있습니다. 저희는 도쿄에 있는 실제 사람입니다.", ticker: "최근 주문" },
+  explainer: {
+    items: [
+      { title: "구매대행 서비스란?", desc: "일본 매장과 마켓플레이스에서 고객님을 대신해 상품을 구매한 뒤, 어디에 계시든 배송해드립니다." },
+      { title: "이용 방법", desc: "의뢰 접수 → 가격·재고 확인 → 결제 → 구매 및 배송. 대부분의 의뢰는 24시간 이내에 확인해드립니다." },
+      { title: "Kizuna Proxy는 누구인가요?", desc: "도쿄에 기반을 둔 소규모의 진짜 팀입니다 — 창고도, 봇도 아닙니다. 모든 주문은 담당자가 직접 처리하며, 사진과 증빙을 함께 전달해드립니다." },
+      { title: "저희 서비스", desc: "매장·팝업·이벤트 방문, 메르카리 & 라쿠마 대행, 포켓몬 카드, 스니커즈, 애니메이션 피규어 등." },
+    ],
+  },
   whyKizunaHome: {
     label: "Kizuna를 선택하는 이유", title: "플랫폼이 아닌", titleEm: "퍼스널 쇼퍼",
     desc: "도쿄에 있는 실제 사람 — 창고도, 봇도 아닙니다.",
@@ -2846,6 +2902,14 @@ const zh: Copy = {
   news: { label: "最新动态", title: "更新与", titleEm: "公告", seeAll: "查看所有公告", emptyDesc: "目前暂无新公告 — 不妨看看东京活动或我们的购物指南。", ctaEvents: "东京活动", ctaGuides: "阅读指南" },
   blog: { label: "指南", title: "学习如何", titleEm: "从日本购物", desc: "实用指南，帮助您找到并购买日本商品。", cta: "阅读指南 →" },
   whyKizuna: { label: "为什么选择 Kizuna", title: "个性化服务，", titleEm: "而非平台", desc: "大型代购服务是自动化的。我们是身处东京的真实的人。", ticker: "最近订单" },
+  explainer: {
+    items: [
+      { title: "什么是代购服务？", desc: "我们代您从日本店铺和平台购买商品，然后发货给您 —— 无论您身在何处。" },
+      { title: "服务流程", desc: "提交需求 → 我们确认价格与库存 → 您付款 → 我们购买并发货。大多数请求会在24小时内确认。" },
+      { title: "Kizuna Proxy 是谁？", desc: "一个总部位于东京的真实小团队 —— 不是仓库，也不是机器人。每一笔订单都由专人亲自处理，全程提供照片和凭证。" },
+      { title: "我们的服务", desc: "实体店铺、快闪店与活动代购，Mercari 与 Rakuma 代购，宝可梦卡牌、球鞋、动漫手办等。" },
+    ],
+  },
   whyKizunaHome: {
     label: "为什么选择 Kizuna", title: "私人代购，", titleEm: "而非平台",
     desc: "身处东京的真实的人 — 不是仓库，也不是机器人。",
@@ -3230,6 +3294,14 @@ const pt: Copy = {
   news: { label: "Últimas notícias", title: "Atualizações e", titleEm: "anúncios", seeAll: "Ver todos os anúncios", emptyDesc: "Nada de novo para anunciar neste momento — veja os próximos eventos em Tóquio ou os nossos guias de compra.", ctaEvents: "Eventos em Tóquio", ctaGuides: "Ler os nossos guias" },
   blog: { label: "Guias", title: "Aprenda a", titleEm: "comprar do Japão", desc: "Guias práticos para o ajudar a encontrar e comprar do Japão.", cta: "Ler guia →" },
   whyKizuna: { label: "Porquê a Kizuna", title: "Serviço pessoal,", titleEm: "não uma plataforma", desc: "Os grandes serviços de proxy são automatizados. Nós somos pessoas reais em Tóquio.", ticker: "Pedidos recentes" },
+  explainer: {
+    items: [
+      { title: "O que é um serviço de compra proxy?", desc: "Compramos itens em seu nome em lojas e marketplaces japoneses e enviamos até você — onde quer que esteja." },
+      { title: "Como funciona", desc: "Você envia o pedido → confirmamos preço e disponibilidade → você paga → compramos e enviamos. A maioria dos pedidos é confirmada em 24 horas." },
+      { title: "Quem é a Kizuna Proxy?", desc: "Uma pequena equipe real baseada em Tóquio — não um depósito, não um robô. Cada pedido é tratado pessoalmente, com fotos e provas em cada etapa." },
+      { title: "Nossos serviços", desc: "Visitas a lojas físicas, pop-ups e eventos, anúncios do Mercari e Rakuma, cartas Pokémon, tênis, figures de anime e muito mais." },
+    ],
+  },
   whyKizunaHome: {
     label: "Porquê a Kizuna", title: "Um personal shopper,", titleEm: "não uma plataforma",
     desc: "Pessoas reais em Tóquio — não um armazém, não um bot.",
@@ -3614,6 +3686,14 @@ const id: Copy = {
   news: { label: "Berita terbaru", title: "Pembaruan &", titleEm: "pengumuman", seeAll: "Lihat semua pengumuman", emptyDesc: "Belum ada kabar baru saat ini — lihat acara Tokyo mendatang atau panduan belanja kami.", ctaEvents: "Acara Tokyo", ctaGuides: "Baca panduan kami" },
   blog: { label: "Panduan", title: "Pelajari cara", titleEm: "membeli dari Jepang", desc: "Panduan praktis untuk membantu Anda menemukan dan membeli barang dari Jepang.", cta: "Baca panduan →" },
   whyKizuna: { label: "Mengapa Kizuna", title: "Layanan personal,", titleEm: "bukan platform", desc: "Layanan proxy besar bersifat otomatis. Kami adalah orang sungguhan di Tokyo.", ticker: "Pesanan terbaru" },
+  explainer: {
+    items: [
+      { title: "Apa itu jasa titip (proxy)?", desc: "Kami membeli barang atas nama Anda dari toko dan marketplace Jepang, lalu mengirimkannya kepada Anda — di mana pun Anda berada." },
+      { title: "Cara kerjanya", desc: "Kirim permintaan Anda → kami konfirmasi harga & ketersediaan → Anda membayar → kami membeli dan mengirim. Sebagian besar permintaan dikonfirmasi dalam 24 jam." },
+      { title: "Siapa Kizuna Proxy?", desc: "Tim kecil yang nyata berbasis di Tokyo — bukan gudang, bukan bot. Setiap pesanan ditangani secara personal, lengkap dengan foto dan bukti di setiap langkah." },
+      { title: "Layanan kami", desc: "Kunjungan toko fisik, pop-up & acara, listing Mercari & Rakuma, kartu Pokémon, sneaker, figure anime, dan banyak lagi." },
+    ],
+  },
   whyKizunaHome: {
     label: "Mengapa Kizuna", title: "Personal shopper,", titleEm: "bukan platform",
     desc: "Orang sungguhan di Tokyo — bukan gudang, bukan bot.",
@@ -3998,6 +4078,14 @@ const vi: Copy = {
   news: { label: "Tin tức mới nhất", title: "Cập nhật &", titleEm: "thông báo", seeAll: "Xem tất cả thông báo", emptyDesc: "Hiện chưa có tin gì mới — hãy xem các sự kiện sắp tới ở Tokyo hoặc các hướng dẫn mua sắm của chúng tôi.", ctaEvents: "Sự kiện Tokyo", ctaGuides: "Đọc hướng dẫn" },
   blog: { label: "Hướng dẫn", title: "Tìm hiểu cách", titleEm: "mua hàng từ Nhật Bản", desc: "Hướng dẫn thực tế giúp bạn tìm và mua hàng từ Nhật Bản.", cta: "Đọc hướng dẫn →" },
   whyKizuna: { label: "Vì sao chọn Kizuna", title: "Dịch vụ cá nhân hóa,", titleEm: "không phải nền tảng tự động", desc: "Các dịch vụ proxy lớn đều tự động hóa. Chúng tôi là những con người thật ở Tokyo.", ticker: "Đơn hàng gần đây" },
+  explainer: {
+    items: [
+      { title: "Dịch vụ mua hộ (proxy) là gì?", desc: "Chúng tôi mua hàng thay bạn từ các cửa hàng và sàn thương mại Nhật Bản, sau đó gửi đến bạn — dù bạn ở bất cứ đâu." },
+      { title: "Cách thức hoạt động", desc: "Bạn gửi yêu cầu → chúng tôi xác nhận giá & tình trạng còn hàng → bạn thanh toán → chúng tôi mua và gửi hàng. Hầu hết yêu cầu được xác nhận trong 24 giờ." },
+      { title: "Kizuna Proxy là ai?", desc: "Một đội ngũ nhỏ, có thật, đặt tại Tokyo — không phải nhà kho, không phải bot. Mỗi đơn hàng đều được xử lý trực tiếp bởi con người, kèm hình ảnh và bằng chứng ở mỗi bước." },
+      { title: "Dịch vụ của chúng tôi", desc: "Ghé cửa hàng, pop-up và sự kiện, mua hộ trên Mercari & Rakuma, thẻ bài Pokémon, giày sneaker, mô hình anime và nhiều hơn nữa." },
+    ],
+  },
   whyKizunaHome: {
     label: "Vì sao chọn Kizuna", title: "Người mua sắm cá nhân,", titleEm: "không phải nền tảng",
     desc: "Những con người thật ở Tokyo — không phải kho hàng, không phải bot.",
@@ -4382,6 +4470,14 @@ const nl: Copy = {
   news: { label: "Laatste nieuws", title: "Updates &", titleEm: "aankondigingen", seeAll: "Bekijk alle aankondigingen", emptyDesc: "Op dit moment niets nieuws te melden — bekijk in plaats daarvan onze aankomende Tokio-evenementen of shopgidsen.", ctaEvents: "Tokio-evenementen", ctaGuides: "Lees onze gidsen" },
   blog: { label: "Gidsen", title: "Leer hoe je", titleEm: "uit Japan koopt", desc: "Praktische gidsen om je te helpen artikelen uit Japan te vinden en te kopen.", cta: "Lees gids →" },
   whyKizuna: { label: "Waarom Kizuna", title: "Persoonlijke service,", titleEm: "geen platform", desc: "Grote proxyservices zijn geautomatiseerd. Wij zijn echte mensen in Tokio.", ticker: "Recente bestellingen" },
+  explainer: {
+    items: [
+      { title: "Wat is een proxy-inkoopdienst?", desc: "Wij kopen artikelen namens jou bij Japanse winkels en marktplaatsen, en sturen ze naar je op — waar je ook bent." },
+      { title: "Zo werkt het", desc: "Je stuurt je verzoek → wij bevestigen prijs & beschikbaarheid → jij betaalt → wij kopen en verzenden. De meeste verzoeken binnen 24 uur bevestigd." },
+      { title: "Wie is Kizuna Proxy?", desc: "Een klein, echt team gevestigd in Tokio — geen magazijn, geen bot. Elke bestelling wordt persoonlijk afgehandeld, met foto's en bewijs bij elke stap." },
+      { title: "Onze diensten", desc: "Bezoeken aan fysieke winkels, pop-ups en evenementen, Mercari- & Rakuma-aanbiedingen, Pokémon-kaarten, sneakers, anime-figuren en meer." },
+    ],
+  },
   whyKizunaHome: {
     label: "Waarom Kizuna", title: "Een personal shopper,", titleEm: "geen platform",
     desc: "Echte mensen in Tokio — geen magazijn, geen bot.",
