@@ -59,11 +59,18 @@ export default function CustomersTab({ tokens }) {
     // "Spent" is what the customer paid in total (item + fee) — the item
     // price just passes through what we paid to buy it, it isn't ours.
     // "Fees" is the service fee alone: the actual revenue we earned.
+    //
+    // Same "earned" definition as the Stats tab: a "Pending" order hasn't
+    // been charged yet and a "Cancelled" one never was, so neither counts
+    // toward money actually spent or earned — otherwise this tab's totals
+    // silently drift ahead of Stats' by exactly however much sits in
+    // Pending/Cancelled orders.
     return [...map.values()].map(c => {
-      const totalSpent = c.orders.reduce(
+      const earnedOrders = c.orders.filter(o => o.status !== "Pending" && o.status !== "Cancelled");
+      const totalSpent = earnedOrders.reduce(
         (s, o) => s + (o.item_price_jpy || 0) + (o.service_fee_jpy || 0), 0
       );
-      const totalFees = c.orders.reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
+      const totalFees = earnedOrders.reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
       const outstanding = c.orders
         .filter(o => !o.shipping_paid && (o.shipping_cost_jpy || 0) > 0)
         .reduce((s, o) => s + o.shipping_cost_jpy, 0);
