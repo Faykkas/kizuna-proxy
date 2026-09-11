@@ -178,6 +178,26 @@ nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,11,.92); ba
 .svc-arrow { position: absolute; bottom: 1.5rem; right: 1.5rem; width: 28px; height: 28px; border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--red); opacity: 0; transition: opacity .2s; }
 .svc-card:hover .svc-arrow { opacity: 1; }
 
+/* ── Left-right alternating feature rows (Why Kizuna) ──────────────────
+   An asymmetric row layout instead of a repeated centered card grid —
+   icon/number on one side, title+text on the other, sides alternate. */
+.why-rows { margin-top: 2.5rem; border-top: 1px solid var(--border-gold); }
+.why-row { display: flex; align-items: center; gap: 3rem; padding: 2.4rem 0; border-bottom: 1px solid var(--border-gold); }
+.why-row-rev { flex-direction: row-reverse; }
+.why-row-visual { flex: 0 0 160px; position: relative; height: 130px; display: flex; align-items: center; justify-content: center; }
+.why-row-num { position: absolute; font-family: 'Cormorant Garamond', serif; font-size: 4.6rem; font-weight: 600; color: var(--border-gold); line-height: 1; user-select: none; }
+.why-row-icon { position: relative; width: 66px; height: 66px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border-gold); display: flex; align-items: center; justify-content: center; }
+.why-row-icon svg { width: 28px; height: 28px; }
+.why-row-text { flex: 1; min-width: 0; }
+.why-row-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; color: var(--ink); margin-bottom: .6rem; }
+.why-row-desc { font-size: .92rem; line-height: 1.75; color: var(--warm); font-weight: 300; max-width: 480px; }
+.why-row-rev .why-row-desc { margin-left: auto; }
+@media (max-width: 720px) {
+  .why-row, .why-row-rev { flex-direction: column; gap: 1.1rem; text-align: center; padding: 2rem 0; }
+  .why-row-visual { flex: none; height: auto; padding: .5rem 0; }
+  .why-row-desc, .why-row-rev .why-row-desc { max-width: none; margin: 0 auto; }
+}
+
 /* ══════════════════════════════════════════════════════════
    CALENDAR — Elegant Redesign
    ══════════════════════════════════════════════════════════ */
