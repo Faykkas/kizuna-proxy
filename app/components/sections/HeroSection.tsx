@@ -3,7 +3,6 @@
 
 import { IconInstagram, IconTiktok } from "../ui";
 import Maneki from "../pixel/Maneki";
-import { IconStore, IconTruck, IconMarketplace } from "../pixel/PixelIcons";
 
 export default function HeroSection({ t }: { t: any }) {
   return (
@@ -33,16 +32,17 @@ export default function HeroSection({ t }: { t: any }) {
           </a>
 
           {/* Our services, at a glance — three clickable pillars instead of
-              a row of plain badges, each linking straight to where you can
-              act on it. */}
+              a row of plain badges, each with its own little mascot scene
+              (out shopping, home with parcels, at the computer) instead of
+              a flat icon, each linking straight to where you can act on it. */}
           <div className="hero-services">
             {[
-              { Icon: IconStore,       title: t.hero.prop5 || "Physical stores in Tokyo", desc: "We visit stores, pop-ups & events for you", href: "/services" },
-              { Icon: IconTruck,       title: t.hero.prop2 || "Package forwarding & storage", desc: "We hold your purchases until you're ready", href: "/blog/japan-package-forwarding-guide" },
-              { Icon: IconMarketplace, title: "Online orders from Japan", desc: "Famous Japanese sites & marketplaces, ordered and shipped for you", href: "/blog/how-to-buy-from-mercari-japan" },
-            ].map(({ Icon, title, desc, href }, i) => (
+              { prop: "bag",    title: t.hero.prop5 || "Physical stores in Tokyo", desc: "We visit stores, pop-ups & events for you", href: "/services" },
+              { prop: "parcel", title: t.hero.prop2 || "Package forwarding & storage", desc: "We hold your purchases until you're ready", href: "/blog/japan-package-forwarding-guide" },
+              { prop: "laptop", title: "Online orders from Japan", desc: "Famous Japanese sites & marketplaces, ordered and shipped for you", href: "/blog/how-to-buy-from-mercari-japan" },
+            ].map(({ prop, title, desc, href }, i) => (
               <a key={i} href={href} className="hero-service-card">
-                <Icon size={30} />
+                <Maneki state="idle" prop={prop} size={40} />
                 <strong>{title}</strong>
                 <span>{desc}</span>
               </a>

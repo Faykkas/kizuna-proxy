@@ -97,11 +97,32 @@ const PROPS = {
       <P x={16} y={13} h={3} c="var(--px-border)" />
     </>
   ),
+
+  /** Sac de shopping — visites en boutique physique */
+  bag: (
+    <>
+      <P x={15} y={8} w={1} h={2} c="var(--px-ink)" />
+      <P x={18} y={8} w={1} h={2} c="var(--px-ink)" />
+      <P x={14} y={10} w={6} h={6} c="var(--px-accent2)" />
+      <P x={14} y={10} w={6} c="var(--px-accent)" />
+      <P x={16} y={12} w={2} h={2} c="var(--px-bg)" />
+    </>
+  ),
+
+  /** Ordinateur portable — achats en ligne */
+  laptop: (
+    <>
+      <P x={13} y={8} w={7} h={5} c="var(--px-border)" />
+      <P x={14} y={9} w={5} h={3} c="var(--px-accent2)" />
+      <P x={12} y={13} w={9} h={1} c="var(--px-kraft)" />
+      <P x={15} y={10} w={2} h={1} c="var(--px-bg)" />
+    </>
+  ),
 };
 
 /**
  * @param state "idle" | "success"  — success = yeux souriants + étincelles
- * @param prop  clé de PROPS : parcel, coins, card, glass, heart, mail, sign
+ * @param prop  clé de PROPS : parcel, coins, card, glass, heart, mail, sign, bag, laptop
  * @param size  largeur en px
  * @param float active l'oscillation verticale
  * @param flip  retourne le chat horizontalement
