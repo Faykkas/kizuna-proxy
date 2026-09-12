@@ -264,6 +264,12 @@ export default function OrderManager({ order, onClose, onSaved }) {
                 placeholder="Email"
               />
             </div>
+            <input
+              type="tel"
+              value={form.client_phone || ""}
+              onChange={e => set("client_phone", e.target.value)}
+              placeholder="Phone"
+            />
             <select
               value={form.customer_id || ""}
               onChange={e => set("customer_id", e.target.value || null)}
@@ -358,6 +364,12 @@ export default function OrderManager({ order, onClose, onSaved }) {
               value={form.tracking_number || ""}
               onChange={e => set("tracking_number", e.target.value)}
               placeholder="Tracking number"
+            />
+            <textarea
+              rows={2}
+              value={form.shipping_address || ""}
+              onChange={e => set("shipping_address", e.target.value)}
+              placeholder="Full shipping address"
             />
           </section>
 

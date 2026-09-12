@@ -34,6 +34,45 @@ function getAdmin() {
   return _admin;
 }
 
+// ISO 3166-1 alpha-2 → English name, for turning PayPal's shipping
+// country_code into the readable string the admin's delivery_country
+// field expects (it's plain text, not an enum).
+const COUNTRY_NAMES = {
+  US: "United States", CA: "Canada", MX: "Mexico", GB: "United Kingdom", IE: "Ireland",
+  FR: "France", DE: "Germany", ES: "Spain", PT: "Portugal", IT: "Italy", NL: "Netherlands",
+  BE: "Belgium", LU: "Luxembourg", CH: "Switzerland", AT: "Austria", SE: "Sweden",
+  NO: "Norway", DK: "Denmark", FI: "Finland", IS: "Iceland", PL: "Poland", CZ: "Czechia",
+  SK: "Slovakia", HU: "Hungary", RO: "Romania", BG: "Bulgaria", GR: "Greece", HR: "Croatia",
+  SI: "Slovenia", EE: "Estonia", LV: "Latvia", LT: "Lithuania", MT: "Malta", CY: "Cyprus",
+  UA: "Ukraine", TR: "Turkey", RU: "Russia", JP: "Japan", KR: "South Korea", CN: "China",
+  HK: "Hong Kong", TW: "Taiwan", SG: "Singapore", MY: "Malaysia", TH: "Thailand",
+  VN: "Vietnam", PH: "Philippines", ID: "Indonesia", IN: "India", PK: "Pakistan",
+  BD: "Bangladesh", AU: "Australia", NZ: "New Zealand", ZA: "South Africa", EG: "Egypt",
+  NG: "Nigeria", KE: "Kenya", MA: "Morocco", IL: "Israel", AE: "United Arab Emirates",
+  SA: "Saudi Arabia", QA: "Qatar", KW: "Kuwait", BR: "Brazil", AR: "Argentina",
+  CL: "Chile", CO: "Colombia", PE: "Peru", UY: "Uruguay", EC: "Ecuador", VE: "Venezuela",
+  CR: "Costa Rica", PA: "Panama", DO: "Dominican Republic", JM: "Jamaica",
+};
+function countryNameFromCode(code) {
+  if (!code) return null;
+  return COUNTRY_NAMES[code.toUpperCase()] || code;
+}
+
+// Formats PayPal's shipping object (from a capture response) into a single
+// readable address string — the orders table has no separate
+// street/city/postal columns, just one free-text field for the admin.
+function formatShippingAddress(shipping) {
+  if (!shipping?.address) return null;
+  const a = shipping.address;
+  const lines = [
+    shipping.name?.full_name,
+    [a.address_line_1, a.address_line_2].filter(Boolean).join(", "),
+    [a.admin_area_2, a.admin_area_1, a.postal_code].filter(Boolean).join(", "),
+    countryNameFromCode(a.country_code),
+  ].filter(Boolean);
+  return lines.length ? lines.join(" — ") : null;
+}
+
 async function paypalToken() {
   const auth = Buffer.from(
     `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_SECRET}`
@@ -179,6 +218,13 @@ export async function POST(request) {
       const payerEmail = data.payer?.email_address || null;
       const payerName = [data.payer?.name?.given_name, data.payer?.name?.surname].filter(Boolean).join(" ") || null;
 
+      // PayPal collects a shipping address as part of its own checkout by
+      // default (we never set shipping_preference to skip it) — read it
+      // back here instead of asking the payer to type it in a second time.
+      const shipping = data.purchase_units?.[0]?.shipping;
+      const deliveryCountry = countryNameFromCode(shipping?.address?.country_code);
+      const paypalShippingAddress = formatShippingAddress(shipping);
+
       await admin
         .from("payment_links")
         .update({
@@ -193,22 +239,24 @@ export async function POST(request) {
       // else in the admin — only ever runs here, on the transition into
       // "paid", so links that were already paid before this existed are
       // never retroactively converted.
-      const adminNoteParts = [
-        `From payment link: item ¥${link.item_amount_jpy || 0}, Kizuna fee ¥${link.fee_amount_jpy || 0}, PayPal fee ¥${link.paypal_fee_jpy || 0}.`,
-        `Phone: ${link.client_phone || "—"}.`,
-      ];
-      if (link.shipping_address) adminNoteParts.push(`Alt shipping address: ${link.shipping_address}`);
-
+      //
+      // The customer's own "ship to a different address" override (if they
+      // used it) wins over PayPal's captured address for where the parcel
+      // actually goes, but the destination country still comes from PayPal
+      // since that's the one address we know is verified.
       await admin.from("orders").insert({
         client_name: payerName || link.client_name || null,
         client_email: payerEmail || link.client_email || null,
+        client_phone: link.client_phone || null,
+        delivery_country: deliveryCountry,
+        shipping_address: link.shipping_address || paypalShippingAddress,
         items: link.label,
         status: "Pending",
         purchase_date: new Date().toISOString().split("T")[0],
         platform: "Payment link",
         item_price_jpy: link.item_amount_jpy || 0,
         service_fee_jpy: link.fee_amount_jpy || 0,
-        admin_notes: adminNoteParts.join(" "),
+        admin_notes: `From payment link: item ¥${link.item_amount_jpy || 0}, Kizuna fee ¥${link.fee_amount_jpy || 0}, PayPal fee ¥${link.paypal_fee_jpy || 0}.`,
       });
 
       return Response.json({ ok: true });
