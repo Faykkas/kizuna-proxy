@@ -107,7 +107,7 @@ export async function POST(request) {
     if (action === "get") {
       const { data: link } = await admin
         .from("payment_links")
-        .select("label, amount_jpy, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, status")
+        .select("label, amount_jpy, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, items_breakdown, status")
         .eq("id", token)
         .single();
       if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
@@ -117,6 +117,7 @@ export async function POST(request) {
         itemAmountJpy: link.item_amount_jpy,
         feeAmountJpy: link.fee_amount_jpy,
         paypalFeeAmountJpy: link.paypal_fee_jpy,
+        itemsBreakdown: link.items_breakdown || null,
         status: link.status,
       });
     }
@@ -129,7 +130,7 @@ export async function POST(request) {
 
       const { data: link } = await admin
         .from("payment_links")
-        .select("id, label, amount_jpy, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, status")
+        .select("id, label, amount_jpy, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, items_breakdown, status")
         .eq("id", token)
         .single();
       if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
@@ -148,13 +149,16 @@ export async function POST(request) {
         })
         .eq("id", token);
 
-      // Break the order into a "product" line and separate "Kizuna fee" /
-      // "PayPal G&S fee" lines whenever set, so the payer's PayPal review
+      // Break the order into one line per item (when set — a reservation
+      // fee paid before we've bought anything has none) plus separate
+      // "Kizuna fee" / "PayPal G&S fee" lines, so the payer's PayPal review
       // page and receipt show each charge explicitly instead of one opaque
       // total.
       const feeAmount = link.fee_amount_jpy || 0;
       const paypalFeeAmount = link.paypal_fee_jpy || 0;
-      const hasBreakdown = link.item_amount_jpy > 0 && (feeAmount > 0 || paypalFeeAmount > 0);
+      const items = Array.isArray(link.items_breakdown) ? link.items_breakdown : [];
+      const lineCount = items.length + (feeAmount > 0 ? 1 : 0) + (paypalFeeAmount > 0 ? 1 : 0);
+      const hasBreakdown = lineCount > 1;
       const purchaseUnit = {
         reference_id: `LINK-${link.id}`,
         description: (link.label || "Kizuna Proxy payment").slice(0, 127),
@@ -165,7 +169,9 @@ export async function POST(request) {
           item_total: { currency_code: "JPY", value: String(link.item_amount_jpy + feeAmount + paypalFeeAmount) },
         };
         purchaseUnit.items = [
-          { name: (link.label || "Item").slice(0, 127), quantity: "1", unit_amount: { currency_code: "JPY", value: String(link.item_amount_jpy) } },
+          ...(items.length > 0
+            ? items.map(it => ({ name: (it.name || "Item").slice(0, 127), quantity: "1", unit_amount: { currency_code: "JPY", value: String(it.price_jpy) } }))
+            : (link.item_amount_jpy > 0 ? [{ name: (link.label || "Item").slice(0, 127), quantity: "1", unit_amount: { currency_code: "JPY", value: String(link.item_amount_jpy) } }] : [])),
           ...(feeAmount > 0 ? [{ name: "Kizuna Proxy — service fee", quantity: "1", unit_amount: { currency_code: "JPY", value: String(feeAmount) } }] : []),
           ...(paypalFeeAmount > 0 ? [{ name: "PayPal Goods & Services fee", quantity: "1", unit_amount: { currency_code: "JPY", value: String(paypalFeeAmount) } }] : []),
         ];
