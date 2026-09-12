@@ -9,9 +9,8 @@ export default function HeroSection({ t }: { t: any }) {
   return (
       <section className="hero-center">
         <canvas id="hero-canvas" style={{position:"absolute",inset:0,width:"100%",height:"100%",pointerEvents:"none",zIndex:0}} />
+        <div className="hero-kizuna-mark">Kizuna</div>
         <div className="hero-center-inner">
-          <div className="hero-kana">絆</div>
-
           {/* Main headline */}
           <h1 className="hero-h1">
             {t.hero.title1}<br/>

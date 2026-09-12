@@ -32,26 +32,16 @@ export default function Home() {
       <AnnounceBar announce={announce} />
       <SiteNav />
 
-      <HeroSection t={t} />
-
       {/* EXPLAINER STRIP — what a proxy service is, how Kizuna's process
-          works, who's behind it, and what services are covered. Answers
-          the "what am I looking at" question right after the hero. */}
+          works, who's behind it, and what services are covered. Leads the
+          page (like FromJapan's own explainer boxes), before the hero. */}
       <ExplainerSection t={t} />
-
-      {/* REAL PHOTO CAROUSEL — moved up near the top: real order photos
-          make the "we're a real team, not a template" case immediately,
-          before any promo content. Full-size gallery section (with its own
-          heading) also still appears further down for deeper browsing. */}
-      <section className="section-sm reveal">
-        <div className="wrap">
-          <Carousel slides={gallery.length > 0 ? gallery.map(g => ({ src: g.image_url, alt: g.title, title: g.title, sub: g.subtitle || "" })) : SLIDES} />
-        </div>
-      </section>
 
       {/* TOKYO EVENTS CAROUSEL — Hobonichi Techo Store lottery status,
           The Weeknd's Harajuku pop-up, and the next Comiket/COMITIA dates.
-          Update/remove slides as each event's status changes. */}
+          Sits right under the explainer strip, ahead of the hero, so
+          current happenings are visible immediately. Update/remove slides
+          as each event's status changes. */}
       <section className="section-sm reveal">
         <div className="wrap">
           <EventCarousel
@@ -98,6 +88,18 @@ export default function Home() {
               },
             ]}
           />
+        </div>
+      </section>
+
+      <HeroSection t={t} />
+
+      {/* REAL PHOTO CAROUSEL — real order photos make the "we're a real
+          team, not a template" case right after the hero, before any promo
+          content. Full-size gallery section (with its own heading) also
+          still appears further down for deeper browsing. */}
+      <section className="section-sm reveal">
+        <div className="wrap">
+          <Carousel slides={gallery.length > 0 ? gallery.map(g => ({ src: g.image_url, alt: g.title, title: g.title, sub: g.subtitle || "" })) : SLIDES} />
         </div>
       </section>
 

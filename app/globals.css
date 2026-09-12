@@ -120,6 +120,15 @@ nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,11,.92); ba
 .hero-h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 6vw, 5rem); font-weight: 300; line-height: 1.05; margin-bottom: 2rem; color: var(--ink); letter-spacing: -.02em; }
 .hero-h1 em { color: var(--red); font-style: italic; display: block; }
 
+/* Small wordmark, top-right of the hero — replaces the animated pixel-by-
+   pixel "KIZUNA" watermark that used to fill the background. */
+.hero-kizuna-mark {
+  position: absolute; top: 1.5rem; right: 1.5rem; z-index: 1;
+  font-family: var(--font-pixel); font-size: .55rem; letter-spacing: .05em;
+  color: var(--red); pointer-events: none;
+}
+@media (max-width: 640px) { .hero-kizuna-mark { top: 1rem; right: 1rem; font-size: .42rem; } }
+
 /* ── HERO BADGES — static, visible on load (was an easy-to-miss marquee) ── */
 .hero-badges { display: flex; flex-wrap: wrap; gap: .6rem; justify-content: center; margin-bottom: 2rem; }
 .hero-badge {

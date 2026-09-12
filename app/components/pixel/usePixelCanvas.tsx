@@ -1,23 +1,13 @@
 // @ts-nocheck
 // app/components/pixel/usePixelCanvas.tsx
-// Remplace useSakuraCanvas. Deux couches :
-//  1. Le mot KIZUNA qui se compose lettre par lettre sur une grille de pixels
-//  2. Des pétales-pixels qui tombent en escalier (pas de diagonale lisse —
-//     un vrai sprite d'époque se déplace par pas entiers)
+// Remplace useSakuraCanvas. Des pétales-pixels qui tombent en escalier (pas
+// de diagonale lisse — un vrai sprite d'époque se déplace par pas entiers)
+// derrière le hero. Dessinait aussi le mot KIZUNA en filigrane pixel par
+// pixel — retiré : le wordmark vit maintenant en petit et en vert à côté
+// du titre, pas en animation de fond.
 "use client";
 
 import { useEffect } from "react";
-
-const GLYPHS = {
-  K: ["10001", "10010", "10100", "11000", "10100", "10010", "10001"],
-  I: ["11111", "00100", "00100", "00100", "00100", "00100", "11111"],
-  Z: ["11111", "00001", "00010", "00100", "01000", "10000", "11111"],
-  U: ["10001", "10001", "10001", "10001", "10001", "10001", "01110"],
-  N: ["10001", "11001", "10101", "10011", "10001", "10001", "10001"],
-  A: ["01110", "10001", "10001", "11111", "10001", "10001", "10001"],
-};
-
-const WORD = ["K", "I", "Z", "U", "N", "A"];
 
 export default function usePixelCanvas() {
   useEffect(() => {
@@ -26,11 +16,7 @@ export default function usePixelCanvas() {
     const cx = cv.getContext("2d");
     if (!cx) return;
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    let W = 0, H = 0, raf, frame = 0;
-    let px = 6;          // taille d'un pixel logique
-    let cells = [];      // pixels du mot
+    let W = 0, H = 0, raf;
     let petals = [];
 
     const ACCENT = "#a8e04a";
@@ -45,40 +31,6 @@ export default function usePixelCanvas() {
       cx.setTransform(1, 0, 0, 1, 0, 0);
       cx.scale(devicePixelRatio, devicePixelRatio);
       cx.imageSmoothingEnabled = false;
-      build();
-    }
-
-    function build() {
-      // Taille de pixel adaptée à la largeur : le mot occupe ~62% de l'écran
-      const glyphW = 5, glyphH = 7, gap = 2;
-      const totalCols = WORD.length * glyphW + (WORD.length - 1) * gap;
-      // Contraint par la largeur ET la hauteur : le mot doit rester un
-      // filigrane discret derrière le titre, pas occuper tout l'écran.
-      const byWidth  = (W * 0.56) / totalCols;
-      const byHeight = (H * 0.22) / glyphH;
-      px = Math.max(2, Math.floor(Math.min(byWidth, byHeight)));
-
-      const wordW = totalCols * px;
-      const ox = (W - wordW) / 2;
-      const oy = H * 0.07;
-
-      cells = [];
-      WORD.forEach((ch, gi) => {
-        const g = GLYPHS[ch];
-        g.forEach((row, ry) => {
-          row.split("").forEach((bit, rx) => {
-            if (bit !== "1") return;
-            cells.push({
-              x: ox + (gi * (glyphW + gap) + rx) * px,
-              y: oy + ry * px,
-              // Ordre d'apparition : par lettre, puis colonne, puis ligne
-              order: gi * 100 + rx * 10 + ry,
-              on: 0,
-            });
-          });
-        });
-      });
-
       petals = Array.from({ length: 14 }, () => spawnPetal(true));
     }
 
@@ -117,31 +69,6 @@ export default function usePixelCanvas() {
       });
       cx.globalAlpha = 1;
 
-      // ── Le mot, pixel par pixel ──
-      const reveal = reduced ? 9999 : frame * 1.6;
-      cells.forEach(c => {
-        if (c.order < reveal) c.on = Math.min(1, c.on + 0.14);
-        if (c.on <= 0) return;
-
-        cx.globalAlpha = c.on * 0.22;
-        cx.fillStyle = ACCENT;
-        cx.fillRect(c.x, c.y, px, px);
-
-        // Liseré plus clair en haut-gauche : donne du relief au sprite
-        if (c.on > 0.9) {
-          cx.globalAlpha = 0.06;
-          cx.fillStyle = "#d4f08a";
-          cx.fillRect(c.x, c.y, px, Math.max(1, px * 0.22));
-        }
-      });
-      cx.globalAlpha = 1;
-
-      frame++;
-      // Le mot se recompose toutes les ~20 s
-      if (!reduced && frame > 1400) {
-        frame = 0;
-        cells.forEach(c => (c.on = 0));
-      }
       raf = requestAnimationFrame(draw);
     }
 
