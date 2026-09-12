@@ -244,20 +244,52 @@ export async function POST(request) {
       // used it) wins over PayPal's captured address for where the parcel
       // actually goes, but the destination country still comes from PayPal
       // since that's the one address we know is verified.
-      await admin.from("orders").insert({
-        client_name: payerName || link.client_name || null,
-        client_email: payerEmail || link.client_email || null,
-        client_phone: link.client_phone || null,
-        delivery_country: deliveryCountry,
-        shipping_address: link.shipping_address || paypalShippingAddress,
-        items: link.label,
-        status: "Pending",
-        purchase_date: new Date().toISOString().split("T")[0],
-        platform: "Payment link",
-        item_price_jpy: link.item_amount_jpy || 0,
-        service_fee_jpy: link.fee_amount_jpy || 0,
-        admin_notes: `From payment link: item ¥${link.item_amount_jpy || 0}, Kizuna fee ¥${link.fee_amount_jpy || 0}, PayPal fee ¥${link.paypal_fee_jpy || 0}.`,
-      });
+      const shippingAddressForOrder = link.shipping_address || paypalShippingAddress;
+      const email = payerEmail || link.client_email || null;
+      const feeNote = `item ¥${link.item_amount_jpy || 0}, Kizuna fee ¥${link.fee_amount_jpy || 0}, PayPal fee ¥${link.paypal_fee_jpy || 0}`;
+
+      // A customer who already has an order still in progress gets this
+      // purchase folded into it instead of starting a second one — but only
+      // while that order hasn't shipped yet. Once it's Shipped, Delivered,
+      // or Cancelled, that shipment is done and a new payment starts a
+      // fresh order instead of reopening a closed one.
+      let openOrder = null;
+      if (email) {
+        const { data: existingOrders } = await admin
+          .from("orders")
+          .select("id, items, item_price_jpy, service_fee_jpy, admin_notes, status, client_name, client_phone, delivery_country, shipping_address")
+          .ilike("client_email", email)
+          .order("created_at", { ascending: false });
+        openOrder = (existingOrders || []).find(o => !["Shipped", "Delivered", "Cancelled"].includes(o.status)) || null;
+      }
+
+      if (openOrder) {
+        await admin.from("orders").update({
+          items: [openOrder.items, link.label].filter(Boolean).join("\n"),
+          item_price_jpy: (openOrder.item_price_jpy || 0) + (link.item_amount_jpy || 0),
+          service_fee_jpy: (openOrder.service_fee_jpy || 0) + (link.fee_amount_jpy || 0),
+          client_name: openOrder.client_name || payerName || link.client_name || null,
+          client_phone: openOrder.client_phone || link.client_phone || null,
+          delivery_country: openOrder.delivery_country || deliveryCountry,
+          shipping_address: openOrder.shipping_address || shippingAddressForOrder,
+          admin_notes: [openOrder.admin_notes, `+ payment link (${new Date().toISOString().split("T")[0]}): ${feeNote}.`].filter(Boolean).join(" "),
+        }).eq("id", openOrder.id);
+      } else {
+        await admin.from("orders").insert({
+          client_name: payerName || link.client_name || null,
+          client_email: email,
+          client_phone: link.client_phone || null,
+          delivery_country: deliveryCountry,
+          shipping_address: shippingAddressForOrder,
+          items: link.label,
+          status: "Pending",
+          purchase_date: new Date().toISOString().split("T")[0],
+          platform: "Payment link",
+          item_price_jpy: link.item_amount_jpy || 0,
+          service_fee_jpy: link.fee_amount_jpy || 0,
+          admin_notes: `From payment link: ${feeNote}.`,
+        });
+      }
 
       return Response.json({ ok: true });
     }
