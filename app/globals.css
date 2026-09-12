@@ -143,15 +143,18 @@ nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,11,.92); ba
   overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
 }
 
-/* ── HERO BADGES — static, visible on load (was an easy-to-miss marquee) ── */
-.hero-badges { display: flex; flex-wrap: wrap; gap: .6rem; justify-content: center; margin-bottom: 2rem; }
-.hero-badge {
-  display: inline-flex; align-items: center; gap: .5rem;
-  font-size: .78rem; color: var(--ink); white-space: nowrap; letter-spacing: .02em;
-  background: rgba(21,13,40,.72); border: 1px solid var(--border-gold);
-  border-radius: 999px; padding: .5rem 1rem;
+/* ── HERO SERVICES — three clickable pillars, at a glance ───────────────── */
+.hero-services { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; width: 100%; margin-bottom: 1.75rem; }
+.hero-service-card {
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: .5rem;
+  background: rgba(21,13,40,.72); border: 1px solid var(--border-gold); border-radius: 10px;
+  padding: 1.2rem 1rem; text-decoration: none; color: var(--ink);
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s;
 }
-.hero-badge svg { flex-shrink: 0; }
+.hero-service-card:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(0,0,0,.3); border-color: var(--red); }
+.hero-service-card strong { font-size: .78rem; letter-spacing: .02em; }
+.hero-service-card span { font-size: .68rem; color: var(--warm); font-weight: 300; line-height: 1.4; }
+@media (max-width: 720px) { .hero-services { grid-template-columns: 1fr; } }
 
 .hero-desc { font-size: .9rem; line-height: 1.85; color: rgba(244,244,245,.6); font-weight: 300; max-width: 560px; margin: 0 auto 2.5rem; text-align: center; }
 .hero-btns-center { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.25rem; }
@@ -1514,9 +1517,9 @@ nav {
 
 .hero-desc { color: var(--warm); font-weight: 300; line-height: 1.75; }
 
-.hero-badge {
+.hero-service-card strong {
   font-family: var(--font-pixel);
-  font-size: .44rem;
+  font-size: .58rem;
   letter-spacing: .02em;
   color: var(--ink);
 }
@@ -1952,7 +1955,7 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 .hero-desc { text-shadow: 0 1px 12px rgba(21,13,40,.9); }
 
 
-.hero-badge { backdrop-filter: blur(3px); }
+.hero-service-card { backdrop-filter: blur(3px); }
 
 /* ── LOGO PIXEL ───────────────────────────────────────────────────────── */
 .logo { gap: .65rem; }
@@ -1967,15 +1970,10 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
    chargement. `svh` (small viewport height) tient compte des barres d'outils
    mobiles qui se rétractent — `vh` seul provoque un saut de mise en page. */
 .hero-center {
-  min-height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 5rem 2rem 4rem;
-}
-@supports not (min-height: 100svh) {
-  .hero-center { min-height: 100vh; }
+  padding: 4rem 2rem 3.5rem;
 }
 
 .hero-center-inner {

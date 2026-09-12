@@ -3,7 +3,7 @@
 
 import { IconInstagram, IconTiktok } from "../ui";
 import Maneki from "../pixel/Maneki";
-import { IconStore, IconTruck, IconMarketplace, IconCards, IconEvent } from "../pixel/PixelIcons";
+import { IconStore, IconTruck, IconMarketplace } from "../pixel/PixelIcons";
 
 export default function HeroSection({ t }: { t: any }) {
   return (
@@ -16,35 +16,11 @@ export default function HeroSection({ t }: { t: any }) {
         <h1 className="sr-only">{t.hero.title1} {t.hero.title2}</h1>
 
         <div className="hero-topright">
-          <Maneki state="idle" size={26} />
+          <Maneki state="idle" size={72} float />
           <span className="hero-kizuna-mark">Kizuna</span>
         </div>
 
         <div className="hero-center-inner">
-          {/* What we do — static and visible on load, not a scrolling
-              marquee someone can miss on first paint. */}
-          <div className="hero-badges">
-            {[
-              { Icon: IconCards,       label: t.hero.prop1 || "Pokémon Center drops" },
-              { Icon: IconTruck,       label: t.hero.prop2 || "Package forwarding & storage" },
-              { Icon: IconEvent,       label: t.hero.prop3 || "Nintendo Tokyo events" },
-              { Icon: IconMarketplace, label: t.hero.prop4 || "Mercari & Rakuma" },
-              { Icon: IconStore,       label: t.hero.prop5 || "Physical stores in Tokyo" },
-            ].map(({ Icon, label }, i) => (
-              <span key={i} className="hero-badge">
-                <Icon size={18} />
-                {label}
-              </span>
-            ))}
-          </div>
-
-          <p className="hero-desc">{t.hero.desc}</p>
-
-          <div className="hero-btns hero-btns-center">
-            <a href="/request" className="btn btn-gold">{t.hero.cta}</a>
-            <a href="/pricing" className="btn btn-outline">{t.hero.ctaSecondary}</a>
-          </div>
-
           <a
             href="https://fr.trustpilot.com/review/kizunaproxy.com"
             target="_blank"
@@ -56,20 +32,36 @@ export default function HeroSection({ t }: { t: any }) {
             <span>{t.hero.trustBadge || "Rated Excellent on Trustpilot"}</span>
           </a>
 
+          {/* Our services, at a glance — three clickable pillars instead of
+              a row of plain badges, each linking straight to where you can
+              act on it. */}
+          <div className="hero-services">
+            {[
+              { Icon: IconStore,       title: t.hero.prop5 || "Physical stores in Tokyo", desc: "We visit stores, pop-ups & events for you", href: "/services" },
+              { Icon: IconTruck,       title: t.hero.prop2 || "Package forwarding & storage", desc: "We hold your purchases until you're ready", href: "/blog/japan-package-forwarding-guide" },
+              { Icon: IconMarketplace, title: "Online orders from Japan", desc: "Famous Japanese sites & marketplaces, ordered and shipped for you", href: "/blog/how-to-buy-from-mercari-japan" },
+            ].map(({ Icon, title, desc, href }, i) => (
+              <a key={i} href={href} className="hero-service-card">
+                <Icon size={30} />
+                <strong>{title}</strong>
+                <span>{desc}</span>
+              </a>
+            ))}
+          </div>
+
+          <p className="hero-desc">{t.hero.desc}</p>
+
+          <div className="hero-btns hero-btns-center">
+            <a href="/request" className="btn btn-gold">{t.hero.cta}</a>
+            <a href="/pricing" className="btn btn-outline">{t.hero.ctaSecondary}</a>
+          </div>
+
           <div className="hero-social-row hero-social-center">
             <span className="social-label">{t.hero.followUs}</span>
             <a className="hero-social-link" href="https://www.instagram.com/kizuna_proxy/" target="_blank" rel="noopener noreferrer"><IconInstagram /></a>
             <a className="hero-social-link" href="https://www.tiktok.com/@kizunaproxy" target="_blank" rel="noopener noreferrer"><IconTiktok /></a>
           </div>
         </div>
-        <button
-          className="px-scroll-hint"
-          onClick={() => window.scrollBy({ top: window.innerHeight * 0.85, behavior: "smooth" })}
-          aria-label="Scroll down"
-        >
-          <span>SCROLL</span>
-          <span className="px-scroll-hint-arrow" aria-hidden="true" />
-        </button>
       </section>
   );
 }
