@@ -9,14 +9,18 @@ export default function HeroSection({ t }: { t: any }) {
   return (
       <section className="hero-center">
         <canvas id="hero-canvas" style={{position:"absolute",inset:0,width:"100%",height:"100%",pointerEvents:"none",zIndex:0}} />
-        <div className="hero-kizuna-mark">Kizuna</div>
-        <div className="hero-center-inner">
-          {/* Main headline */}
-          <h1 className="hero-h1">
-            {t.hero.title1}<br/>
-            <em>{t.hero.title2}</em>
-          </h1>
 
+        {/* Kept as a real (but visually hidden) h1 for SEO/accessibility —
+            every page needs exactly one, but the tagline itself reads as
+            filler now that the explainer + events content leads the page. */}
+        <h1 className="sr-only">{t.hero.title1} {t.hero.title2}</h1>
+
+        <div className="hero-topright">
+          <Maneki state="idle" size={26} />
+          <span className="hero-kizuna-mark">Kizuna</span>
+        </div>
+
+        <div className="hero-center-inner">
           {/* What we do — static and visible on load, not a scrolling
               marquee someone can miss on first paint. */}
           <div className="hero-badges">
@@ -66,9 +70,6 @@ export default function HeroSection({ t }: { t: any }) {
           <span>SCROLL</span>
           <span className="px-scroll-hint-arrow" aria-hidden="true" />
         </button>
-        <div className="px-mascot-hero">
-          <Maneki state="idle" size={130} float />
-        </div>
       </section>
   );
 }
