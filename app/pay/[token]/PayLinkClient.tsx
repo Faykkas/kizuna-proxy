@@ -89,7 +89,7 @@ export default function PayLinkClient({ token }) {
                 required
                 value={phone}
                 onChange={e => setPhone(e.target.value)}
-                placeholder="+1 555 123 4567"
+                placeholder="Include your country code, e.g. +33, +1, +44…"
                 style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border-gold)", borderRadius: "8px", fontSize: ".85rem", background: "var(--beige)", color: "var(--ink)", outline: "none", boxSizing: "border-box" }}
               />
 
