@@ -107,7 +107,7 @@ export async function POST(request) {
     if (action === "get") {
       const { data: link } = await admin
         .from("payment_links")
-        .select("label, amount_jpy, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, items_breakdown, status")
+        .select("label, amount_jpy, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, items_breakdown, is_shipping, status")
         .eq("id", token)
         .single();
       if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
@@ -118,6 +118,7 @@ export async function POST(request) {
         feeAmountJpy: link.fee_amount_jpy,
         paypalFeeAmountJpy: link.paypal_fee_jpy,
         itemsBreakdown: link.items_breakdown || null,
+        isShipping: !!link.is_shipping,
         status: link.status,
       });
     }
@@ -130,7 +131,7 @@ export async function POST(request) {
 
       const { data: link } = await admin
         .from("payment_links")
-        .select("id, label, amount_jpy, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, items_breakdown, status")
+        .select("id, label, amount_jpy, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, items_breakdown, is_shipping, status")
         .eq("id", token)
         .single();
       if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
@@ -172,7 +173,7 @@ export async function POST(request) {
           ...(items.length > 0
             ? items.map(it => ({ name: (it.name || "Item").slice(0, 127), quantity: "1", unit_amount: { currency_code: "JPY", value: String(it.price_jpy) } }))
             : (link.item_amount_jpy > 0 ? [{ name: (link.label || "Item").slice(0, 127), quantity: "1", unit_amount: { currency_code: "JPY", value: String(link.item_amount_jpy) } }] : [])),
-          ...(feeAmount > 0 ? [{ name: "Kizuna Proxy — service fee", quantity: "1", unit_amount: { currency_code: "JPY", value: String(feeAmount) } }] : []),
+          ...(feeAmount > 0 ? [{ name: link.is_shipping ? "Shipping" : "Kizuna Proxy — service fee", quantity: "1", unit_amount: { currency_code: "JPY", value: String(feeAmount) } }] : []),
           ...(paypalFeeAmount > 0 ? [{ name: "PayPal Goods & Services fee", quantity: "1", unit_amount: { currency_code: "JPY", value: String(paypalFeeAmount) } }] : []),
         ];
       }
@@ -200,7 +201,7 @@ export async function POST(request) {
     if (action === "capture") {
       const { data: link } = await admin
         .from("payment_links")
-        .select("id, status, label, client_name, client_email, client_phone, shipping_address, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy")
+        .select("id, status, label, client_name, client_email, client_phone, shipping_address, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, is_shipping")
         .eq("id", token)
         .single();
       if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
@@ -252,7 +253,10 @@ export async function POST(request) {
       // since that's the one address we know is verified.
       const shippingAddressForOrder = link.shipping_address || paypalShippingAddress;
       const email = payerEmail || link.client_email || null;
-      const feeNote = `item ¥${link.item_amount_jpy || 0}, Kizuna fee ¥${link.fee_amount_jpy || 0}, PayPal fee ¥${link.paypal_fee_jpy || 0}`;
+      const isShippingPayment = !!link.is_shipping;
+      const feeNote = isShippingPayment
+        ? `shipping ¥${link.fee_amount_jpy || 0}, PayPal fee ¥${link.paypal_fee_jpy || 0}`
+        : `item ¥${link.item_amount_jpy || 0}, Kizuna fee ¥${link.fee_amount_jpy || 0}, PayPal fee ¥${link.paypal_fee_jpy || 0}`;
 
       // A customer who already has an order still in progress gets this
       // purchase folded into it instead of starting a second one — but only
@@ -263,17 +267,25 @@ export async function POST(request) {
       if (email) {
         const { data: existingOrders } = await admin
           .from("orders")
-          .select("id, items, item_price_jpy, service_fee_jpy, admin_notes, status, client_name, client_phone, delivery_country, shipping_address")
+          .select("id, items, item_price_jpy, service_fee_jpy, shipping_cost_jpy, admin_notes, status, client_name, client_phone, delivery_country, shipping_address")
           .ilike("client_email", email)
           .order("created_at", { ascending: false });
         openOrder = (existingOrders || []).find(o => !["Shipped", "Delivered", "Cancelled"].includes(o.status)) || null;
       }
 
+      // A shipping payment never touches item/service-fee totals — it's
+      // its own tracked field on the order (same one OrderManager's
+      // "Request payment" button uses), so it never gets double-counted as
+      // revenue from the item itself.
       if (openOrder) {
         await admin.from("orders").update({
-          items: [openOrder.items, link.label].filter(Boolean).join("\n"),
-          item_price_jpy: (openOrder.item_price_jpy || 0) + (link.item_amount_jpy || 0),
-          service_fee_jpy: (openOrder.service_fee_jpy || 0) + (link.fee_amount_jpy || 0),
+          items: isShippingPayment ? openOrder.items : [openOrder.items, link.label].filter(Boolean).join("\n"),
+          ...(isShippingPayment
+            ? { shipping_cost_jpy: (openOrder.shipping_cost_jpy || 0) + (link.fee_amount_jpy || 0), shipping_paid: true }
+            : {
+                item_price_jpy: (openOrder.item_price_jpy || 0) + (link.item_amount_jpy || 0),
+                service_fee_jpy: (openOrder.service_fee_jpy || 0) + (link.fee_amount_jpy || 0),
+              }),
           client_name: openOrder.client_name || payerName || link.client_name || null,
           client_phone: openOrder.client_phone || link.client_phone || null,
           delivery_country: openOrder.delivery_country || deliveryCountry,
@@ -287,12 +299,13 @@ export async function POST(request) {
           client_phone: link.client_phone || null,
           delivery_country: deliveryCountry,
           shipping_address: shippingAddressForOrder,
-          items: link.label,
+          items: isShippingPayment ? "Shipping payment" : link.label,
           status: "Pending",
           purchase_date: new Date().toISOString().split("T")[0],
           platform: "Payment link",
-          item_price_jpy: link.item_amount_jpy || 0,
-          service_fee_jpy: link.fee_amount_jpy || 0,
+          item_price_jpy: isShippingPayment ? 0 : (link.item_amount_jpy || 0),
+          service_fee_jpy: isShippingPayment ? 0 : (link.fee_amount_jpy || 0),
+          ...(isShippingPayment ? { shipping_cost_jpy: link.fee_amount_jpy || 0, shipping_paid: true } : {}),
           admin_notes: `From payment link: ${feeNote}.`,
         });
       }

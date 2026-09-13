@@ -75,7 +75,7 @@ export default function PayLinkClient({ token }) {
                 ) : (
                   link.itemAmountJpy > 0 && <div>Item: {formatJPY(link.itemAmountJpy)}</div>
                 )}
-                {link.feeAmountJpy > 0 && <div>Kizuna Proxy service fee: {formatJPY(link.feeAmountJpy)}</div>}
+                {link.feeAmountJpy > 0 && <div>{link.isShipping ? "Shipping" : "Kizuna Proxy service fee"}: {formatJPY(link.feeAmountJpy)}</div>}
                 {link.paypalFeeAmountJpy > 0 && <div>PayPal Goods &amp; Services fee: {formatJPY(link.paypalFeeAmountJpy)}</div>}
               </div>
             )}

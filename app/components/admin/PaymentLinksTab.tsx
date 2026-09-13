@@ -20,7 +20,7 @@ export default function PaymentLinksTab({ tokens }) {
 
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({ label: "", items: [{ name: "", price: "" }], fee_amount_jpy: "", client_name: "", client_email: "" });
+  const [form, setForm] = useState({ label: "", items: [{ name: "", price: "" }], fee_amount_jpy: "", client_name: "", client_email: "", isShipping: false });
 
   function setItem(i, field, value) {
     setForm(f => ({ ...f, items: f.items.map((it, idx) => idx === i ? { ...it, [field]: value } : it) }));
@@ -54,8 +54,11 @@ export default function PaymentLinksTab({ tokens }) {
 
   async function createLink() {
     // Items are optional — a deposit/reservation fee paid before we even go
-    // buy anything is just a Kizuna fee with no item attached yet.
-    const validItems = form.items
+    // buy anything is just a Kizuna fee with no item attached yet. A
+    // shipping link has no items at all — the fee field holds the shipping
+    // cost instead, and gets routed to the order's shipping_cost_jpy
+    // (rather than item/service fee totals) once paid.
+    const validItems = form.isShipping ? [] : form.items
       .map(it => ({ name: it.name.trim(), price_jpy: Number(it.price) || 0 }))
       .filter(it => it.name && it.price_jpy > 0);
     const itemAmount = validItems.reduce((s, it) => s + it.price_jpy, 0);
@@ -63,13 +66,16 @@ export default function PaymentLinksTab({ tokens }) {
     const paypalFeeAmount = computePaypalFee(itemAmount, feeAmount);
 
     if (!form.label.trim() || (itemAmount <= 0 && feeAmount <= 0)) {
-      setMsg("Indique un libellé, et au moins un article ou des frais Kizuna.");
+      setMsg(form.isShipping
+        ? "Indique un libellé et un montant de shipping."
+        : "Indique un libellé, et au moins un article ou des frais Kizuna.");
       setTimeout(() => setMsg(""), 3000);
       return;
     }
     setCreating(true);
     const { data, error } = await supabase.from("payment_links").insert({
       label: form.label.trim(),
+      is_shipping: form.isShipping,
       items_breakdown: validItems.length > 0 ? validItems : null,
       item_amount_jpy: itemAmount,
       fee_amount_jpy: feeAmount,
@@ -86,7 +92,7 @@ export default function PaymentLinksTab({ tokens }) {
       return;
     }
     setLinks(prev => [data, ...prev]);
-    setForm({ label: "", items: [{ name: "", price: "" }], fee_amount_jpy: "", client_name: "", client_email: "" });
+    setForm({ label: "", items: [{ name: "", price: "" }], fee_amount_jpy: "", client_name: "", client_email: "", isShipping: false });
   }
 
   async function cancelLink(id) {
@@ -121,44 +127,54 @@ export default function PaymentLinksTab({ tokens }) {
           <label style={lbl}>Libellé (ce que le client voit)</label>
           <input style={inp} value={form.label} onChange={e => setForm(f => ({ ...f, label: e.target.value }))} placeholder="Ex : Commande figurines x3 + envoi" />
         </div>
-        <div style={{ marginBottom: ".8rem" }}>
-          <label style={lbl}>Articles (optionnel — laisse vide pour une réservation/acompte sans article)</label>
-          {form.items.map((it, i) => (
-            <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 140px auto", gap: ".5rem", marginBottom: ".5rem" }}>
-              <input style={inp} value={it.name} onChange={e => setItem(i, "name", e.target.value)} placeholder={`Article ${i + 1} (ex : T-shirt)`} />
-              <input style={inp} type="number" min="0" value={it.price} onChange={e => setItem(i, "price", e.target.value)} placeholder="Prix (¥)" />
-              <button type="button" onClick={() => removeItem(i)} disabled={form.items.length === 1} style={{ background: "transparent", border: `1px solid ${BORDER}`, color: MUTED, borderRadius: "7px", padding: "0 .8rem", cursor: form.items.length === 1 ? "default" : "pointer", opacity: form.items.length === 1 ? .4 : 1 }}>
-                ×
-              </button>
-            </div>
-          ))}
-          <button type="button" onClick={addItem} style={{ background: "transparent", border: `1px dashed ${BORDER}`, color: MUTED, borderRadius: "7px", padding: ".45rem .8rem", fontSize: ".75rem", cursor: "pointer" }}>
-            + Ajouter un article
-          </button>
-        </div>
+        <label style={{ display: "flex", alignItems: "center", gap: ".5rem", fontSize: ".78rem", color: INK, marginBottom: ".9rem", cursor: "pointer" }}>
+          <input
+            type="checkbox"
+            checked={form.isShipping}
+            onChange={e => setForm(f => ({ ...f, isShipping: e.target.checked, items: [{ name: "", price: "" }] }))}
+          />
+          Ceci est un paiement de shipping (pas un article) — sera rangé dans le shipping de l'order, pas dans les articles/frais
+        </label>
+        {!form.isShipping && (
+          <div style={{ marginBottom: ".8rem" }}>
+            <label style={lbl}>Articles (optionnel — laisse vide pour une réservation/acompte sans article)</label>
+            {form.items.map((it, i) => (
+              <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 140px auto", gap: ".5rem", marginBottom: ".5rem" }}>
+                <input style={inp} value={it.name} onChange={e => setItem(i, "name", e.target.value)} placeholder={`Article ${i + 1} (ex : T-shirt)`} />
+                <input style={inp} type="number" min="0" value={it.price} onChange={e => setItem(i, "price", e.target.value)} placeholder="Prix (¥)" />
+                <button type="button" onClick={() => removeItem(i)} disabled={form.items.length === 1} style={{ background: "transparent", border: `1px solid ${BORDER}`, color: MUTED, borderRadius: "7px", padding: "0 .8rem", cursor: form.items.length === 1 ? "default" : "pointer", opacity: form.items.length === 1 ? .4 : 1 }}>
+                  ×
+                </button>
+              </div>
+            ))}
+            <button type="button" onClick={addItem} style={{ background: "transparent", border: `1px dashed ${BORDER}`, color: MUTED, borderRadius: "7px", padding: ".45rem .8rem", fontSize: ".75rem", cursor: "pointer" }}>
+              + Ajouter un article
+            </button>
+          </div>
+        )}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".8rem", marginBottom: ".8rem" }}>
           <div>
-            <label style={lbl}>Frais Kizuna (¥)</label>
-            <input style={inp} type="number" min="0" value={form.fee_amount_jpy} onChange={e => setForm(f => ({ ...f, fee_amount_jpy: e.target.value }))} placeholder="3000" />
+            <label style={lbl}>{form.isShipping ? "Montant du shipping (¥)" : "Frais Kizuna (¥)"}</label>
+            <input style={inp} type="number" min="0" value={form.fee_amount_jpy} onChange={e => setForm(f => ({ ...f, fee_amount_jpy: e.target.value }))} placeholder={form.isShipping ? "2500" : "3000"} />
           </div>
           <div>
             <label style={lbl}>Frais PayPal G&amp;S (auto, 6%)</label>
             <div style={{ ...inp, color: MUTED, display: "flex", alignItems: "center" }}>
               {formatJPY(computePaypalFee(
-                form.items.reduce((s, it) => s + (Number(it.price) || 0), 0),
+                form.isShipping ? 0 : form.items.reduce((s, it) => s + (Number(it.price) || 0), 0),
                 form.fee_amount_jpy
               ))}
             </div>
           </div>
         </div>
         {(() => {
-          const previewItemAmount = form.items.reduce((s, it) => s + (Number(it.price) || 0), 0);
+          const previewItemAmount = form.isShipping ? 0 : form.items.reduce((s, it) => s + (Number(it.price) || 0), 0);
           const previewFee = Number(form.fee_amount_jpy) || 0;
           const previewPaypalFee = computePaypalFee(previewItemAmount, previewFee);
           if (previewItemAmount <= 0 && previewFee <= 0) return null;
           return (
             <p style={{ fontSize: ".78rem", color: MUTED, marginBottom: ".8rem" }}>
-              Total facturé au client : <strong style={{ color: INK }}>{formatJPY(previewItemAmount + previewFee + previewPaypalFee)}</strong> — apparaîtra en lignes séparées (chaque article, frais Kizuna, frais PayPal) dans le paiement PayPal.
+              Total facturé au client : <strong style={{ color: INK }}>{formatJPY(previewItemAmount + previewFee + previewPaypalFee)}</strong> — {form.isShipping ? "sera rangé dans le shipping de l'order une fois payé." : "apparaîtra en lignes séparées (chaque article, frais Kizuna, frais PayPal) dans le paiement PayPal."}
             </p>
           );
         })()}
@@ -193,6 +209,9 @@ export default function PaymentLinksTab({ tokens }) {
                   <div style={{ display: "flex", alignItems: "center", gap: ".6rem", marginBottom: ".2rem", flexWrap: "wrap" }}>
                     <strong style={{ fontSize: ".88rem", color: INK, wordBreak: "break-word", overflowWrap: "anywhere" }}>{l.label}</strong>
                     <span style={{ fontSize: ".65rem", fontWeight: 600, color: st.color, border: `1px solid ${st.color}`, borderRadius: "5px", padding: ".05rem .45rem", flexShrink: 0 }}>{st.label}</span>
+                    {l.is_shipping && (
+                      <span style={{ fontSize: ".65rem", fontWeight: 600, color: VIOLET, border: `1px solid ${VIOLET}`, borderRadius: "5px", padding: ".05rem .45rem", flexShrink: 0 }}>SHIPPING</span>
+                    )}
                   </div>
                   <div style={{ fontSize: ".78rem", color: MUTED, wordBreak: "break-word", overflowWrap: "anywhere" }}>
                     {l.client_name && `${l.client_name} · `}{l.client_email && `${l.client_email} · `}
@@ -206,7 +225,7 @@ export default function PaymentLinksTab({ tokens }) {
                   {(l.item_amount_jpy > 0 && !l.items_breakdown) || l.fee_amount_jpy > 0 || l.paypal_fee_jpy > 0 ? (
                     <div style={{ fontSize: ".72rem", color: MUTED, marginTop: ".2rem" }}>
                       {l.item_amount_jpy > 0 && !l.items_breakdown && `Produit ${formatJPY(l.item_amount_jpy)}`}
-                      {l.fee_amount_jpy > 0 && `${l.item_amount_jpy > 0 && !l.items_breakdown ? " + " : ""}frais Kizuna ${formatJPY(l.fee_amount_jpy)}`}
+                      {l.fee_amount_jpy > 0 && `${l.item_amount_jpy > 0 && !l.items_breakdown ? " + " : ""}${l.is_shipping ? "shipping" : "frais Kizuna"} ${formatJPY(l.fee_amount_jpy)}`}
                       {l.paypal_fee_jpy > 0 && ` + frais PayPal ${formatJPY(l.paypal_fee_jpy)}`}
                     </div>
                   ) : null}
