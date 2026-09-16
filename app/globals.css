@@ -725,6 +725,24 @@ iframe[src*="tawk"], #tawk-bubble-container, .tawk-min-container { display: none
 .pcg-cta-left p { font-size: .82rem; line-height: 1.7; color: var(--warm); font-weight: 300; margin: 0; }
 @media (max-width: 768px) { .pricing-custom-grid { grid-template-columns: 1fr; } .pricing-formula-grid { grid-template-columns: 1fr; } .pcg-cta { flex-direction: column; } }
 
+/* ── HIDDEN PRICING GRID (/grille-tarifaire) ── */
+.tarif-highlight { display: flex; align-items: flex-start; gap: 1rem; padding: 1.4rem 1.6rem; background: var(--surface); border: 1px solid var(--border-gold); border-left: 3px solid var(--red); border-radius: 10px; margin-bottom: 1.5rem; }
+.tarif-highlight svg { flex-shrink: 0; margin-top: 2px; }
+.tarif-highlight strong { display: block; font-size: .9rem; font-weight: 600; color: var(--ink); margin-bottom: .35rem; }
+.tarif-highlight p { font-size: .82rem; line-height: 1.75; color: var(--warm); font-weight: 300; margin: 0; }
+.tarif-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border-gold); margin-bottom: 1.5rem; }
+.tarif-card { background: var(--surface); padding: 2rem 1.8rem; display: flex; flex-direction: column; gap: .5rem; }
+.tarif-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 600; color: var(--ink); }
+.tarif-card-desc { font-size: .8rem; line-height: 1.7; color: var(--warm); font-weight: 300; margin-bottom: .5rem; }
+.tarif-lines { display: flex; flex-direction: column; gap: .9rem; }
+.tarif-line { border-top: 1px solid var(--border); padding-top: .7rem; }
+.tarif-line-top { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+.tarif-line-label { font-size: .82rem; color: var(--ink); font-weight: 500; }
+.tarif-line-price { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; color: var(--red); white-space: nowrap; }
+.tarif-line-note { font-size: .74rem; line-height: 1.6; color: var(--warm); font-weight: 300; margin-top: .25rem; }
+.tarif-card-footnote { font-size: .74rem; line-height: 1.6; color: var(--gold); font-weight: 300; margin-top: .5rem; padding-top: .5rem; border-top: 1px dashed var(--border-gold); }
+@media (max-width: 768px) { .tarif-cards { grid-template-columns: 1fr; } }
+
 .shipping-section { margin-top: 2.5rem; }
 .shipping-title { display: flex; align-items: center; gap: .5rem; font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
 .shipping-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border-gold); margin-bottom: 1rem; }
