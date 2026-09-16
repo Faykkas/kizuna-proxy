@@ -395,6 +395,59 @@ const en = {
     paymentReceived: "PAYMENT RECEIVED", thankYouShip: "Thank you! We'll ship within 24 hours.",
     confirmingPayment: "Confirming payment…",
   },
+  grille: {
+    headTitle: "Pricing",
+    headTitleEm: "sheet",
+    headDesc: "A detailed breakdown of our fees by service type. An exact quote is always confirmed before payment.",
+    headBadge: "Rates up to date",
+    highlightTitle: "Assistance included, no hidden fees",
+    highlightDesc: "We're based in Japan: calling stores, gathering information, taking in-store photos — it's all included in the fees below. You pay nothing else until your package arrives at your door.",
+    categories: [
+      {
+        title: "In-store purchases",
+        desc: "Sourcing and buying items in physical stores, in Tokyo and across Japan.",
+        lines: [
+          { label: "Reservation / travel fee", price: "¥5,000", note: "per store — to be paid as soon as possible, before the visit. Reserves your spot even if the item turns out to be sold out." },
+          { label: "In-store purchase fee", price: "¥1,000", note: "per item purchased" },
+        ],
+        footnote: "From 5 items purchased in a single order, a discount applies to the per-item rate — contact us for details based on quantity.",
+      },
+      {
+        title: "High-demand events",
+        desc: "Lotteries, reservations, pop-up stores, highly sought-after exclusive releases, and stores with long queues or purchase limits on certain items.",
+        lines: [
+          { label: "Store access fee", price: "¥8,000", note: "per event" },
+          { label: "Purchase fee", price: "¥1,000", note: "per item purchased" },
+        ],
+        footnote: "If an item turns out to be unavailable during the event, the reservation fee is refunded at 50% — we will still have travelled there in person (refund net of PayPal fees).",
+      },
+      {
+        title: "Online orders",
+        desc: "Mercari, Yahoo! Flea Market, Yahoo! Auctions and other Japanese online stores.",
+        lines: [
+          { label: "One-off order (1 item)", price: "from ¥3,000", note: "may be higher depending on the value or complexity of the order" },
+          { label: "Active / recurring marketplace buying", price: "¥1,000", note: "per item purchased" },
+        ],
+        footnote: "",
+      },
+      {
+        title: "Businesses & bulk orders",
+        desc: "Kizuna already works with several businesses around the world.",
+        lines: [
+          { label: "Commission", price: "10%", note: "on the value of the merchandise purchased" },
+          { label: "Purchase + shipping", price: "included", note: "we buy the merchandise and ship it anywhere in the world" },
+        ],
+        footnote: "",
+      },
+    ],
+    shippingNote: "These rates don't include international shipping fees. The price depends on the parcel's weight, so we can't provide a fixed rate in advance — it's communicated before any payment.",
+    zonosNote: "US residents — customs duties are settled via Zonos. If you'd like to declare a lower value on the package, Kizuna can do so at your request, but takes no responsibility for any issue related to that declaration.",
+    refundNote: "All refunds are issued net of PayPal fees.",
+    ctaTitle: "Any question about your order?",
+    ctaDesc: "Contact us directly — we always confirm the exact rate before any payment.",
+    ctaContact: "Contact us",
+    ctaRequest: "Make a request",
+  },
 };
 
 type Copy = typeof en;
@@ -789,6 +842,59 @@ const fr: Copy = {
     paymentReceived: "PAIEMENT REÇU", thankYouShip: "Merci ! Nous expédions sous 24 heures.",
     confirmingPayment: "Confirmation du paiement…",
   },
+  grille: {
+    headTitle: "Grille",
+    headTitleEm: "tarifaire",
+    headDesc: "Le détail de nos tarifs par type de service. Un devis précis est toujours confirmé avant paiement.",
+    headBadge: "Tarifs à jour",
+    highlightTitle: "Assistance incluse, sans frais caché",
+    highlightDesc: "Nous sommes basés au Japon : appels aux boutiques, prise de renseignements, photos en magasin... tout est inclus dans les frais annoncés ci-dessous. Vous ne payez rien d'autre jusqu'à l'arrivée du colis chez vous.",
+    categories: [
+      {
+        title: "Achats en boutique",
+        desc: "Repérage et achat d'articles dans les magasins physiques, à Tokyo comme partout au Japon.",
+        lines: [
+          { label: "Frais de réservation / déplacement", price: "¥5,000", note: "par boutique — à régler au plus vite, avant la visite. Réserve votre créneau, même si l'article est finalement épuisé." },
+          { label: "Frais d'achat en boutique", price: "¥1,000", note: "par article acheté" },
+        ],
+        footnote: "À partir de 5 articles achetés en une seule commande, une réduction est appliquée sur le tarif par article — nous consulter pour le détail selon la quantité.",
+      },
+      {
+        title: "Événements à forte demande",
+        desc: "Loteries, réservations, pop-up stores, ventes exclusives très demandées, ainsi que les boutiques avec de longues files d'attente ou des limites d'achat sur certains articles.",
+        lines: [
+          { label: "Frais d'accès en boutique", price: "¥8,000", note: "par événement" },
+          { label: "Frais d'achat", price: "¥1,000", note: "par article acheté" },
+        ],
+        footnote: "Si un article s'avère finalement indisponible durant l'événement, les frais de réservation sont remboursés à 50% — nous nous serons tout de même déplacés sur place (remboursement net des frais PayPal).",
+      },
+      {
+        title: "Achats en ligne",
+        desc: "Mercari, Yahoo! Flea Market, Yahoo! Auctions et autres boutiques japonaises en ligne.",
+        lines: [
+          { label: "Commande occasionnelle (1 article)", price: "dès ¥3,000", note: "peut être plus élevé selon la valeur ou la complexité de la commande" },
+          { label: "Achats actifs / réguliers sur marketplaces", price: "¥1,000", note: "par article acheté" },
+        ],
+        footnote: "",
+      },
+      {
+        title: "Entreprises & grosses commandes",
+        desc: "Kizuna travaille déjà avec plusieurs entreprises à travers le monde.",
+        lines: [
+          { label: "Commission", price: "10%", note: "sur la valeur de la marchandise achetée" },
+          { label: "Achat + expédition", price: "inclus", note: "nous achetons la marchandise et l'expédions n'importe où dans le monde" },
+        ],
+        footnote: "",
+      },
+    ],
+    shippingNote: "Ces tarifs n'incluent pas les frais d'expédition internationale. Le prix dépend du poids du colis, nous ne pouvons donc pas fournir de tarif fixe à l'avance — il est communiqué avant tout paiement.",
+    zonosNote: "Résidents américains — les taxes douanières sont réglées via Zonos. Si vous souhaitez déclarer une valeur réduite sur le colis, Kizuna peut le faire à votre demande, mais décline toute responsabilité en cas de problème lié à cette déclaration.",
+    refundNote: "Tous les remboursements sont effectués nets des frais PayPal.",
+    ctaTitle: "Une question sur votre commande ?",
+    ctaDesc: "Contactez-nous directement, nous confirmons toujours le tarif exact avant tout paiement.",
+    ctaContact: "Nous contacter",
+    ctaRequest: "Faire une demande",
+  },
 };
 
 const ja: Copy = {
@@ -1180,6 +1286,59 @@ const ja: Copy = {
     payFallback: "{amount}をお支払いください — 決済リンクについてはお問い合わせください。", emailUs: "メールする",
     paymentReceived: "お支払いを確認しました", thankYouShip: "ありがとうございます！24時間以内に発送します。",
     confirmingPayment: "お支払いを確認しています…",
+  },
+  grille: {
+    headTitle: "料金",
+    headTitleEm: "一覧表",
+    headDesc: "サービス内容ごとの詳細な料金表です。お支払い前に必ず正確なお見積りをご確認いただけます。",
+    headBadge: "最新の料金",
+    highlightTitle: "サポート込み、追加料金なし",
+    highlightDesc: "私たちは日本を拠点にしています。店舗への電話確認、情報収集、店内での写真撮影など、すべて下記の料金に含まれています。お荷物が届くまで、他の費用は一切かかりません。",
+    categories: [
+      {
+        title: "店舗での購入",
+        desc: "東京をはじめ日本全国の実店舗での商品リサーチ・購入。",
+        lines: [
+          { label: "予約・出張費", price: "¥5,000", note: "店舗ごと — 訪問前にできるだけ早くお支払いください。商品が売り切れていた場合でも、枠は確保されます。" },
+          { label: "店舗購入手数料", price: "¥1,000", note: "購入商品1点ごと" },
+        ],
+        footnote: "1回のご注文で5点以上購入いただく場合、1点あたりの料金に割引が適用されます — 数量に応じた詳細はお問い合わせください。",
+      },
+      {
+        title: "人気イベント",
+        desc: "抽選、予約制、ポップアップストア、争奪戦になる限定販売、また特定の商品に長い行列や購入制限がある店舗も対象です。",
+        lines: [
+          { label: "店舗入場料", price: "¥8,000", note: "イベントごと" },
+          { label: "購入手数料", price: "¥1,000", note: "購入商品1点ごと" },
+        ],
+        footnote: "イベント当日に商品が結局入手できなかった場合、予約費用の50%を返金いたします — 現地までは実際に足を運んでいるためです（返金はPayPal手数料を差し引いた額になります）。",
+      },
+      {
+        title: "オンライン購入",
+        desc: "メルカリ、ヤフーフリマ、ヤフオク、その他日本のオンラインショップ。",
+        lines: [
+          { label: "単発注文（商品1点）", price: "¥3,000〜", note: "注文の金額や内容によってはこれより高くなる場合があります" },
+          { label: "マーケットプレイスでの継続的な購入", price: "¥1,000", note: "購入商品1点ごと" },
+        ],
+        footnote: "",
+      },
+      {
+        title: "法人・大口注文",
+        desc: "Kizunaはすでに世界各国の企業と取引実績があります。",
+        lines: [
+          { label: "手数料", price: "10%", note: "購入する商品の金額に対して" },
+          { label: "購入＋発送", price: "込み", note: "商品の購入から世界各地への発送まで対応いたします" },
+        ],
+        footnote: "",
+      },
+    ],
+    shippingNote: "上記の料金には国際発送費用は含まれていません。料金は荷物の重量によって決まるため、事前に固定料金をお伝えすることはできません — お支払い前に必ずお知らせします。",
+    zonosNote: "アメリカ在住のお客様 — 関税はZonosを通じてお支払いいただきます。荷物の申告価格を下げることをご希望の場合、ご要望に応じてKizunaが対応することも可能ですが、その申告に関するいかなる問題についても責任を負いかねます。",
+    refundNote: "返金はすべてPayPal手数料を差し引いた金額となります。",
+    ctaTitle: "ご注文について質問がありますか？",
+    ctaDesc: "お気軽にお問い合わせください。お支払い前に必ず正確な料金をご確認いただけます。",
+    ctaContact: "お問い合わせ",
+    ctaRequest: "依頼する",
   },
 };
 
@@ -1573,6 +1732,59 @@ const es: Copy = {
     paymentReceived: "PAGO RECIBIDO", thankYouShip: "¡Gracias! Enviaremos en menos de 24 horas.",
     confirmingPayment: "Confirmando el pago…",
   },
+  grille: {
+    headTitle: "Tarifa",
+    headTitleEm: "de precios",
+    headDesc: "El detalle de nuestras tarifas por tipo de servicio. Siempre confirmamos un presupuesto exacto antes del pago.",
+    headBadge: "Tarifas actualizadas",
+    highlightTitle: "Asistencia incluida, sin cargos ocultos",
+    highlightDesc: "Estamos en Japón: llamadas a las tiendas, obtención de información, fotos en la tienda... todo está incluido en las tarifas indicadas a continuación. No pagas nada más hasta que el paquete llegue a tu domicilio.",
+    categories: [
+      {
+        title: "Compras en tienda",
+        desc: "Búsqueda y compra de artículos en tiendas físicas, en Tokio y en todo Japón.",
+        lines: [
+          { label: "Tarifa de reserva / desplazamiento", price: "¥5,000", note: "por tienda — a pagar lo antes posible, antes de la visita. Reserva tu turno, incluso si el artículo termina agotado." },
+          { label: "Tarifa de compra en tienda", price: "¥1,000", note: "por artículo comprado" },
+        ],
+        footnote: "A partir de 5 artículos comprados en un mismo pedido, se aplica un descuento en la tarifa por artículo — contáctanos para más detalles según la cantidad.",
+      },
+      {
+        title: "Eventos de alta demanda",
+        desc: "Sorteos, reservas, pop-up stores, lanzamientos exclusivos muy solicitados, y tiendas con largas colas o límites de compra en ciertos artículos.",
+        lines: [
+          { label: "Tarifa de acceso a la tienda", price: "¥8,000", note: "por evento" },
+          { label: "Tarifa de compra", price: "¥1,000", note: "por artículo comprado" },
+        ],
+        footnote: "Si un artículo termina no estando disponible durante el evento, la tarifa de reserva se reembolsa al 50% — de todas formas nos habremos desplazado hasta el lugar (reembolso neto de comisiones de PayPal).",
+      },
+      {
+        title: "Compras en línea",
+        desc: "Mercari, Yahoo! Flea Market, Yahoo! Auctions y otras tiendas japonesas en línea.",
+        lines: [
+          { label: "Pedido puntual (1 artículo)", price: "desde ¥3,000", note: "puede ser más alto según el valor o la complejidad del pedido" },
+          { label: "Compras activas / recurrentes en marketplaces", price: "¥1,000", note: "por artículo comprado" },
+        ],
+        footnote: "",
+      },
+      {
+        title: "Empresas y pedidos al por mayor",
+        desc: "Kizuna ya trabaja con varias empresas en todo el mundo.",
+        lines: [
+          { label: "Comisión", price: "10%", note: "sobre el valor de la mercancía comprada" },
+          { label: "Compra + envío", price: "incluido", note: "compramos la mercancía y la enviamos a cualquier parte del mundo" },
+        ],
+        footnote: "",
+      },
+    ],
+    shippingNote: "Estas tarifas no incluyen los gastos de envío internacional. El precio depende del peso del paquete, por lo que no podemos ofrecer una tarifa fija por adelantado — se comunica antes de cualquier pago.",
+    zonosNote: "Residentes en EE. UU. — los aranceles se pagan a través de Zonos. Si deseas declarar un valor más bajo en el paquete, Kizuna puede hacerlo a petición tuya, pero no asume ninguna responsabilidad por problemas relacionados con esa declaración.",
+    refundNote: "Todos los reembolsos se realizan netos de las comisiones de PayPal.",
+    ctaTitle: "¿Alguna pregunta sobre tu pedido?",
+    ctaDesc: "Contáctanos directamente, siempre confirmamos la tarifa exacta antes de cualquier pago.",
+    ctaContact: "Contáctanos",
+    ctaRequest: "Hacer una solicitud",
+  },
 };
 
 const it: Copy = {
@@ -1964,6 +2176,59 @@ const it: Copy = {
     payFallback: "Paga {amount} — contattaci per un link di pagamento.", emailUs: "SCRIVICI",
     paymentReceived: "PAGAMENTO RICEVUTO", thankYouShip: "Grazie! Spediremo entro 24 ore.",
     confirmingPayment: "Conferma del pagamento…",
+  },
+  grille: {
+    headTitle: "Listino",
+    headTitleEm: "prezzi",
+    headDesc: "Il dettaglio delle nostre tariffe per tipo di servizio. Un preventivo preciso viene sempre confermato prima del pagamento.",
+    headBadge: "Tariffe aggiornate",
+    highlightTitle: "Assistenza inclusa, nessun costo nascosto",
+    highlightDesc: "Siamo basati in Giappone: chiamate ai negozi, raccolta di informazioni, foto in negozio... tutto è incluso nelle tariffe indicate qui sotto. Non paghi nient'altro fino all'arrivo del pacco a casa tua.",
+    categories: [
+      {
+        title: "Acquisti in negozio",
+        desc: "Ricerca e acquisto di articoli nei negozi fisici, a Tokyo e in tutto il Giappone.",
+        lines: [
+          { label: "Tariffa di prenotazione / trasferta", price: "¥5,000", note: "per negozio — da pagare il prima possibile, prima della visita. Riserva il tuo posto anche se l'articolo risulta esaurito." },
+          { label: "Tariffa di acquisto in negozio", price: "¥1,000", note: "per articolo acquistato" },
+        ],
+        footnote: "A partire da 5 articoli acquistati in un unico ordine, viene applicato uno sconto sulla tariffa per articolo — contattaci per i dettagli in base alla quantità.",
+      },
+      {
+        title: "Eventi ad alta richiesta",
+        desc: "Lotterie, prenotazioni, pop-up store, uscite esclusive molto richieste, e negozi con lunghe code o limiti di acquisto su alcuni articoli.",
+        lines: [
+          { label: "Tariffa di accesso al negozio", price: "¥8,000", note: "per evento" },
+          { label: "Tariffa di acquisto", price: "¥1,000", note: "per articolo acquistato" },
+        ],
+        footnote: "Se un articolo risulta infine non disponibile durante l'evento, la tariffa di prenotazione viene rimborsata al 50% — ci saremo comunque recati sul posto (rimborso al netto delle commissioni PayPal).",
+      },
+      {
+        title: "Acquisti online",
+        desc: "Mercari, Yahoo! Flea Market, Yahoo! Auctions e altri negozi online giapponesi.",
+        lines: [
+          { label: "Ordine occasionale (1 articolo)", price: "da ¥3,000", note: "può essere più alto in base al valore o alla complessità dell'ordine" },
+          { label: "Acquisti attivi / ricorrenti sui marketplace", price: "¥1,000", note: "per articolo acquistato" },
+        ],
+        footnote: "",
+      },
+      {
+        title: "Aziende e grandi ordini",
+        desc: "Kizuna collabora già con diverse aziende in tutto il mondo.",
+        lines: [
+          { label: "Commissione", price: "10%", note: "sul valore della merce acquistata" },
+          { label: "Acquisto + spedizione", price: "incluso", note: "acquistiamo la merce e la spediamo in qualsiasi parte del mondo" },
+        ],
+        footnote: "",
+      },
+    ],
+    shippingNote: "Queste tariffe non includono le spese di spedizione internazionale. Il prezzo dipende dal peso del pacco, quindi non possiamo fornire una tariffa fissa in anticipo — viene comunicata prima di qualsiasi pagamento.",
+    zonosNote: "Residenti negli USA — i dazi doganali vengono pagati tramite Zonos. Se desideri dichiarare un valore inferiore sul pacco, Kizuna può farlo su tua richiesta, ma declina ogni responsabilità per eventuali problemi legati a tale dichiarazione.",
+    refundNote: "Tutti i rimborsi vengono effettuati al netto delle commissioni PayPal.",
+    ctaTitle: "Hai domande sul tuo ordine?",
+    ctaDesc: "Contattaci direttamente, confermiamo sempre la tariffa esatta prima di qualsiasi pagamento.",
+    ctaContact: "Contattaci",
+    ctaRequest: "Fai una richiesta",
   },
 };
 
@@ -2357,6 +2622,59 @@ const de: Copy = {
     paymentReceived: "ZAHLUNG ERHALTEN", thankYouShip: "Danke! Wir versenden innerhalb von 24 Stunden.",
     confirmingPayment: "Zahlung wird bestätigt…",
   },
+  grille: {
+    headTitle: "Preis",
+    headTitleEm: "übersicht",
+    headDesc: "Die detaillierte Aufstellung unserer Gebühren nach Servicetyp. Ein genaues Angebot wird immer vor der Zahlung bestätigt.",
+    headBadge: "Aktuelle Preise",
+    highlightTitle: "Unterstützung inklusive, keine versteckten Kosten",
+    highlightDesc: "Wir sind in Japan ansässig: Anrufe bei Geschäften, Informationsbeschaffung, Fotos vor Ort im Laden — all das ist bereits in den unten aufgeführten Gebühren enthalten. Du zahlst nichts weiter, bis das Paket bei dir ankommt.",
+    categories: [
+      {
+        title: "Käufe im Geschäft",
+        desc: "Recherche und Kauf von Artikeln in physischen Geschäften, in Tokio und in ganz Japan.",
+        lines: [
+          { label: "Reservierungs-/Anfahrtsgebühr", price: "¥5.000", note: "pro Geschäft — so schnell wie möglich vor dem Besuch zu zahlen. Sichert dir deinen Platz, selbst wenn der Artikel am Ende ausverkauft ist." },
+          { label: "Kaufgebühr im Geschäft", price: "¥1.000", note: "pro gekauftem Artikel" },
+        ],
+        footnote: "Ab 5 in einer Bestellung gekauften Artikeln wird ein Rabatt auf den Preis pro Artikel gewährt — kontaktiere uns für Details je nach Menge.",
+      },
+      {
+        title: "Stark nachgefragte Events",
+        desc: "Lotterien, Reservierungen, Pop-up-Stores, heiß begehrte exklusive Releases sowie Geschäfte mit langen Warteschlangen oder Kauflimits für bestimmte Artikel.",
+        lines: [
+          { label: "Zugangsgebühr zum Geschäft", price: "¥8.000", note: "pro Event" },
+          { label: "Kaufgebühr", price: "¥1.000", note: "pro gekauftem Artikel" },
+        ],
+        footnote: "Sollte ein Artikel während des Events letztlich nicht verfügbar sein, wird die Reservierungsgebühr zu 50% erstattet — wir werden trotzdem vor Ort gewesen sein (Erstattung abzüglich PayPal-Gebühren).",
+      },
+      {
+        title: "Online-Bestellungen",
+        desc: "Mercari, Yahoo! Flea Market, Yahoo! Auctions und andere japanische Online-Shops.",
+        lines: [
+          { label: "Einzelbestellung (1 Artikel)", price: "ab ¥3.000", note: "kann je nach Wert oder Komplexität der Bestellung höher ausfallen" },
+          { label: "Aktive / regelmäßige Käufe auf Marktplätzen", price: "¥1.000", note: "pro gekauftem Artikel" },
+        ],
+        footnote: "",
+      },
+      {
+        title: "Unternehmen & Großbestellungen",
+        desc: "Kizuna arbeitet bereits mit mehreren Unternehmen weltweit zusammen.",
+        lines: [
+          { label: "Provision", price: "10%", note: "auf den Warenwert der gekauften Ware" },
+          { label: "Kauf + Versand", price: "inklusive", note: "wir kaufen die Ware und versenden sie weltweit" },
+        ],
+        footnote: "",
+      },
+    ],
+    shippingNote: "Diese Preise beinhalten keine internationalen Versandkosten. Der Preis hängt vom Gewicht des Pakets ab, weshalb wir im Voraus keinen festen Preis nennen können — er wird vor jeder Zahlung mitgeteilt.",
+    zonosNote: "US-Einwohner — Zollgebühren werden über Zonos beglichen. Wenn du einen niedrigeren Wert für das Paket angeben möchtest, kann Kizuna dies auf deinen Wunsch hin tun, übernimmt jedoch keinerlei Verantwortung für Probleme im Zusammenhang mit dieser Angabe.",
+    refundNote: "Alle Rückerstattungen erfolgen abzüglich der PayPal-Gebühren.",
+    ctaTitle: "Fragen zu deiner Bestellung?",
+    ctaDesc: "Kontaktiere uns direkt — wir bestätigen immer den genauen Preis vor jeder Zahlung.",
+    ctaContact: "Kontaktiere uns",
+    ctaRequest: "Anfrage stellen",
+  },
 };
 
 const ko: Copy = {
@@ -2748,6 +3066,59 @@ const ko: Copy = {
     payFallback: "{amount} 결제 — 결제 링크는 문의해 주세요.", emailUs: "이메일 보내기",
     paymentReceived: "결제 완료", thankYouShip: "감사합니다! 24시간 이내에 발송해 드립니다.",
     confirmingPayment: "결제 확인 중…",
+  },
+  grille: {
+    headTitle: "요금",
+    headTitleEm: "안내표",
+    headDesc: "서비스 유형별 상세 요금 안내입니다. 결제 전에 항상 정확한 견적을 확인해 드립니다.",
+    headBadge: "최신 요금",
+    highlightTitle: "지원 서비스 포함, 추가 비용 없음",
+    highlightDesc: "저희는 일본에 거점을 두고 있습니다. 매장에 전화 문의, 정보 수집, 매장 내 사진 촬영까지 모두 아래 요금에 포함되어 있습니다. 소포가 도착할 때까지 추가로 지불하실 비용은 없습니다.",
+    categories: [
+      {
+        title: "매장 구매",
+        desc: "도쿄를 비롯한 일본 전역의 오프라인 매장에서 상품을 찾아 구매합니다.",
+        lines: [
+          { label: "예약 / 출장비", price: "¥5,000", note: "매장당 — 방문 전 최대한 빨리 결제해 주세요. 상품이 품절되더라도 자리는 확보됩니다." },
+          { label: "매장 구매 수수료", price: "¥1,000", note: "구매 상품 1개당" },
+        ],
+        footnote: "한 번의 주문으로 5개 이상 구매하시면 개당 요금에 할인이 적용됩니다 — 수량에 따른 자세한 내용은 문의해 주세요.",
+      },
+      {
+        title: "인기 이벤트",
+        desc: "추첨, 예약제, 팝업스토어, 경쟁이 치열한 한정 판매, 그리고 특정 상품에 대해 긴 대기줄이나 구매 제한이 있는 매장도 포함됩니다.",
+        lines: [
+          { label: "매장 입장 수수료", price: "¥8,000", note: "이벤트당" },
+          { label: "구매 수수료", price: "¥1,000", note: "구매 상품 1개당" },
+        ],
+        footnote: "이벤트 당일 상품을 결국 구하지 못한 경우, 예약비의 50%를 환불해 드립니다 — 현장까지는 실제로 방문하기 때문입니다 (환불 금액은 PayPal 수수료를 제외한 금액입니다).",
+      },
+      {
+        title: "온라인 구매",
+        desc: "메루카리, 야후 플리마켓, 야후 옥션 및 기타 일본 온라인 쇼핑몰.",
+        lines: [
+          { label: "단건 주문 (상품 1개)", price: "¥3,000부터", note: "주문 금액이나 복잡도에 따라 더 높아질 수 있습니다" },
+          { label: "마켓플레이스 활발한 / 정기 구매", price: "¥1,000", note: "구매 상품 1개당" },
+        ],
+        footnote: "",
+      },
+      {
+        title: "기업 및 대량 주문",
+        desc: "Kizuna는 이미 전 세계 여러 기업과 거래하고 있습니다.",
+        lines: [
+          { label: "수수료", price: "10%", note: "구매한 상품 금액 기준" },
+          { label: "구매 + 배송", price: "포함", note: "상품 구매부터 전 세계 배송까지 처리해 드립니다" },
+        ],
+        footnote: "",
+      },
+    ],
+    shippingNote: "위 요금에는 국제 배송비가 포함되어 있지 않습니다. 배송비는 소포의 무게에 따라 달라지므로 사전에 고정 요금을 안내해 드릴 수 없습니다 — 결제 전에 항상 안내해 드립니다.",
+    zonosNote: "미국 거주 고객님 — 관세는 Zonos를 통해 결제됩니다. 소포의 신고 금액을 낮추길 원하시는 경우, 고객님의 요청에 따라 Kizuna가 처리해 드릴 수 있으나, 해당 신고와 관련된 어떠한 문제에도 책임을 지지 않습니다.",
+    refundNote: "모든 환불은 PayPal 수수료를 제외한 금액으로 지급됩니다.",
+    ctaTitle: "주문에 대해 궁금한 점이 있으신가요?",
+    ctaDesc: "언제든지 직접 문의해 주세요. 결제 전에 항상 정확한 요금을 확인해 드립니다.",
+    ctaContact: "문의하기",
+    ctaRequest: "요청하기",
   },
 };
 
@@ -3141,6 +3512,59 @@ const zh: Copy = {
     paymentReceived: "已收到付款", thankYouShip: "谢谢！我们将在24小时内发货。",
     confirmingPayment: "正在确认付款…",
   },
+  grille: {
+    headTitle: "价格",
+    headTitleEm: "一览表",
+    headDesc: "按服务类型划分的详细收费明细。付款前我们始终会确认准确的报价。",
+    headBadge: "最新价格",
+    highlightTitle: "含协助服务，无隐藏费用",
+    highlightDesc: "我们常驻日本：致电店铺询问、收集信息、在店内拍照——这些都已包含在以下费用中。在包裹送达您手中之前，您无需支付任何其他费用。",
+    categories: [
+      {
+        title: "店铺购买",
+        desc: "在东京及日本全国的实体店铺寻找并购买商品。",
+        lines: [
+          { label: "预约/出行费", price: "¥5,000", note: "每家店铺 — 请在到店前尽快支付，即使商品最终售罄，也会为您保留名额。" },
+          { label: "店铺购买手续费", price: "¥1,000", note: "每件购买的商品" },
+        ],
+        footnote: "同一订单购买5件及以上商品时，将对单件价格给予折扣 — 具体折扣请与我们联系咨询。",
+      },
+      {
+        title: "热门活动",
+        desc: "抽签、预约制、快闪店、竞争激烈的限量发售，以及部分商品需要长时间排队或有购买数量限制的店铺。",
+        lines: [
+          { label: "店铺入场费", price: "¥8,000", note: "每场活动" },
+          { label: "购买手续费", price: "¥1,000", note: "每件购买的商品" },
+        ],
+        footnote: "若活动当天商品最终无法购得，预约费用将退还50% — 因为我们仍需实地前往（退款将扣除PayPal手续费）。",
+      },
+      {
+        title: "线上购买",
+        desc: "煤炉（Mercari）、雅虎跳蚤市场、雅虎拍卖及其他日本线上商店。",
+        lines: [
+          { label: "单次订单（1件商品）", price: "¥3,000起", note: "根据订单金额或复杂程度可能更高" },
+          { label: "长期/活跃的网购代购", price: "¥1,000", note: "每件购买的商品" },
+        ],
+        footnote: "",
+      },
+      {
+        title: "企业与大宗订单",
+        desc: "Kizuna 已与全球多家企业保持合作。",
+        lines: [
+          { label: "佣金", price: "10%", note: "按所购商品金额计算" },
+          { label: "购买＋运输", price: "已包含", note: "我们负责购买商品并运送至世界各地" },
+        ],
+        footnote: "",
+      },
+    ],
+    shippingNote: "以上价格不含国际运费。运费取决于包裹重量，因此我们无法提前提供固定价格 — 会在付款前告知您。",
+    zonosNote: "美国居民 — 关税通过 Zonos 支付。如果您希望降低包裹的申报价值，Kizuna 可应您的要求处理，但对因此产生的任何问题概不负责。",
+    refundNote: "所有退款均在扣除PayPal手续费后支付。",
+    ctaTitle: "对您的订单有疑问吗？",
+    ctaDesc: "请直接联系我们，我们会在付款前始终确认准确的价格。",
+    ctaContact: "联系我们",
+    ctaRequest: "提交需求",
+  },
 };
 
 const pt: Copy = {
@@ -3532,6 +3956,59 @@ const pt: Copy = {
     payFallback: "Pague {amount} — entre em contato para um link de pagamento.", emailUs: "ENVIAR E-MAIL",
     paymentReceived: "PAGAMENTO RECEBIDO", thankYouShip: "Obrigado! Enviaremos em até 24 horas.",
     confirmingPayment: "Confirmando pagamento…",
+  },
+  grille: {
+    headTitle: "Tabela",
+    headTitleEm: "de preços",
+    headDesc: "O detalhe das nossas tarifas por tipo de serviço. Um orçamento exato é sempre confirmado antes do pagamento.",
+    headBadge: "Tarifas atualizadas",
+    highlightTitle: "Assistência incluída, sem taxas ocultas",
+    highlightDesc: "Estamos baseados no Japão: ligações para as lojas, obtenção de informações, fotos na loja... tudo já está incluído nas taxas indicadas abaixo. Não paga mais nada até o pacote chegar à sua casa.",
+    categories: [
+      {
+        title: "Compras em loja",
+        desc: "Pesquisa e compra de artigos em lojas físicas, em Tóquio e em todo o Japão.",
+        lines: [
+          { label: "Taxa de reserva / deslocação", price: "¥5.000", note: "por loja — a pagar o mais rápido possível, antes da visita. Reserva o seu lugar, mesmo que o artigo acabe esgotado." },
+          { label: "Taxa de compra em loja", price: "¥1.000", note: "por artigo comprado" },
+        ],
+        footnote: "A partir de 5 artigos comprados numa única encomenda, é aplicado um desconto na tarifa por artigo — contacte-nos para mais detalhes conforme a quantidade.",
+      },
+      {
+        title: "Eventos de alta procura",
+        desc: "Sorteios, reservas, pop-up stores, lançamentos exclusivos muito disputados, e lojas com filas longas ou limites de compra em certos artigos.",
+        lines: [
+          { label: "Taxa de acesso à loja", price: "¥8.000", note: "por evento" },
+          { label: "Taxa de compra", price: "¥1.000", note: "por artigo comprado" },
+        ],
+        footnote: "Se um artigo acabar por não estar disponível durante o evento, a taxa de reserva é reembolsada em 50% — mesmo assim teremos ido até ao local (reembolso líquido das taxas do PayPal).",
+      },
+      {
+        title: "Compras online",
+        desc: "Mercari, Yahoo! Flea Market, Yahoo! Auctions e outras lojas online japonesas.",
+        lines: [
+          { label: "Encomenda pontual (1 artigo)", price: "a partir de ¥3.000", note: "pode ser mais elevado consoante o valor ou a complexidade da encomenda" },
+          { label: "Compras ativas / recorrentes em marketplaces", price: "¥1.000", note: "por artigo comprado" },
+        ],
+        footnote: "",
+      },
+      {
+        title: "Empresas e grandes encomendas",
+        desc: "A Kizuna já trabalha com várias empresas em todo o mundo.",
+        lines: [
+          { label: "Comissão", price: "10%", note: "sobre o valor da mercadoria comprada" },
+          { label: "Compra + envio", price: "incluído", note: "compramos a mercadoria e enviamo-la para qualquer parte do mundo" },
+        ],
+        footnote: "",
+      },
+    ],
+    shippingNote: "Estas tarifas não incluem as taxas de envio internacional. O preço depende do peso do pacote, por isso não podemos indicar uma tarifa fixa antecipadamente — é comunicada antes de qualquer pagamento.",
+    zonosNote: "Residentes nos EUA — os direitos aduaneiros são pagos através da Zonos. Se desejar declarar um valor mais baixo no pacote, a Kizuna pode fazê-lo a seu pedido, mas não assume qualquer responsabilidade por problemas relacionados com essa declaração.",
+    refundNote: "Todos os reembolsos são feitos líquidos das taxas do PayPal.",
+    ctaTitle: "Alguma dúvida sobre a sua encomenda?",
+    ctaDesc: "Contacte-nos diretamente — confirmamos sempre a tarifa exata antes de qualquer pagamento.",
+    ctaContact: "Contacte-nos",
+    ctaRequest: "Fazer um pedido",
   },
 };
 
@@ -3925,6 +4402,59 @@ const id: Copy = {
     paymentReceived: "PEMBAYARAN DITERIMA", thankYouShip: "Terima kasih! Kami akan kirim dalam 24 jam.",
     confirmingPayment: "Mengonfirmasi pembayaran…",
   },
+  grille: {
+    headTitle: "Daftar",
+    headTitleEm: "harga",
+    headDesc: "Rincian tarif kami berdasarkan jenis layanan. Penawaran yang tepat selalu dikonfirmasi sebelum pembayaran.",
+    headBadge: "Tarif terbaru",
+    highlightTitle: "Bantuan sudah termasuk, tanpa biaya tersembunyi",
+    highlightDesc: "Kami berbasis di Jepang: menelepon toko, mengumpulkan informasi, mengambil foto di toko — semuanya sudah termasuk dalam biaya di bawah ini. Anda tidak membayar apa pun lagi sampai paket tiba di rumah Anda.",
+    categories: [
+      {
+        title: "Pembelian di toko",
+        desc: "Pencarian dan pembelian barang di toko fisik, di Tokyo maupun di seluruh Jepang.",
+        lines: [
+          { label: "Biaya reservasi / perjalanan", price: "¥5.000", note: "per toko — dibayar sesegera mungkin, sebelum kunjungan. Menjamin slot Anda, bahkan jika barang ternyata habis terjual." },
+          { label: "Biaya pembelian di toko", price: "¥1.000", note: "per barang yang dibeli" },
+        ],
+        footnote: "Mulai dari 5 barang yang dibeli dalam satu pesanan, diskon berlaku untuk tarif per barang — hubungi kami untuk detail sesuai jumlah.",
+      },
+      {
+        title: "Acara dengan permintaan tinggi",
+        desc: "Undian, reservasi, pop-up store, rilis eksklusif yang sangat diminati, serta toko dengan antrean panjang atau batas pembelian untuk barang tertentu.",
+        lines: [
+          { label: "Biaya akses toko", price: "¥8.000", note: "per acara" },
+          { label: "Biaya pembelian", price: "¥1.000", note: "per barang yang dibeli" },
+        ],
+        footnote: "Jika barang ternyata tidak tersedia saat acara berlangsung, biaya reservasi akan dikembalikan 50% — karena kami tetap harus datang ke lokasi (pengembalian dana bersih setelah biaya PayPal).",
+      },
+      {
+        title: "Pesanan online",
+        desc: "Mercari, Yahoo! Flea Market, Yahoo! Auctions, dan toko online Jepang lainnya.",
+        lines: [
+          { label: "Pesanan sekali (1 barang)", price: "mulai ¥3.000", note: "bisa lebih tinggi tergantung nilai atau kompleksitas pesanan" },
+          { label: "Pembelian aktif / rutin di marketplace", price: "¥1.000", note: "per barang yang dibeli" },
+        ],
+        footnote: "",
+      },
+      {
+        title: "Bisnis & pesanan besar",
+        desc: "Kizuna sudah bekerja sama dengan beberapa perusahaan di seluruh dunia.",
+        lines: [
+          { label: "Komisi", price: "10%", note: "dari nilai barang yang dibeli" },
+          { label: "Pembelian + pengiriman", price: "termasuk", note: "kami membeli barang dan mengirimkannya ke mana saja di dunia" },
+        ],
+        footnote: "",
+      },
+    ],
+    shippingNote: "Tarif ini belum termasuk biaya pengiriman internasional. Harga tergantung pada berat paket, sehingga kami tidak dapat memberikan tarif tetap di muka — akan diinformasikan sebelum pembayaran.",
+    zonosNote: "Penduduk AS — bea cukai dibayarkan melalui Zonos. Jika Anda ingin mendeklarasikan nilai yang lebih rendah pada paket, Kizuna dapat melakukannya atas permintaan Anda, tetapi tidak bertanggung jawab atas masalah apa pun terkait deklarasi tersebut.",
+    refundNote: "Semua pengembalian dana dilakukan setelah dikurangi biaya PayPal.",
+    ctaTitle: "Ada pertanyaan tentang pesanan Anda?",
+    ctaDesc: "Hubungi kami langsung — kami selalu mengonfirmasi tarif yang tepat sebelum pembayaran.",
+    ctaContact: "Hubungi kami",
+    ctaRequest: "Ajukan permintaan",
+  },
 };
 
 const vi: Copy = {
@@ -4317,6 +4847,59 @@ const vi: Copy = {
     paymentReceived: "ĐÃ NHẬN THANH TOÁN", thankYouShip: "Cảm ơn bạn! Chúng tôi sẽ gửi hàng trong vòng 24 giờ.",
     confirmingPayment: "Đang xác nhận thanh toán…",
   },
+  grille: {
+    headTitle: "Bảng",
+    headTitleEm: "giá",
+    headDesc: "Chi tiết biểu phí của chúng tôi theo từng loại dịch vụ. Báo giá chính xác luôn được xác nhận trước khi thanh toán.",
+    headBadge: "Giá cập nhật",
+    highlightTitle: "Đã bao gồm hỗ trợ, không phụ phí ẩn",
+    highlightDesc: "Chúng tôi có trụ sở tại Nhật Bản: gọi điện đến cửa hàng, thu thập thông tin, chụp ảnh tại cửa hàng... tất cả đều đã bao gồm trong các mức phí bên dưới. Bạn không phải trả thêm bất kỳ khoản nào cho đến khi kiện hàng đến tay bạn.",
+    categories: [
+      {
+        title: "Mua hàng tại cửa hàng",
+        desc: "Tìm kiếm và mua sản phẩm tại các cửa hàng thực tế, ở Tokyo cũng như khắp Nhật Bản.",
+        lines: [
+          { label: "Phí đặt chỗ / di chuyển", price: "¥5.000", note: "mỗi cửa hàng — thanh toán càng sớm càng tốt, trước khi đến. Giữ chỗ cho bạn ngay cả khi sản phẩm cuối cùng đã hết hàng." },
+          { label: "Phí mua hàng tại cửa hàng", price: "¥1.000", note: "mỗi sản phẩm đã mua" },
+        ],
+        footnote: "Từ 5 sản phẩm trở lên mua trong cùng một đơn hàng, mức phí mỗi sản phẩm sẽ được giảm — liên hệ với chúng tôi để biết chi tiết theo số lượng.",
+      },
+      {
+        title: "Sự kiện có nhu cầu cao",
+        desc: "Bốc thăm, đặt chỗ trước, pop-up store, các đợt phát hành độc quyền được săn đón, và các cửa hàng có hàng dài xếp hàng hoặc giới hạn số lượng mua đối với một số sản phẩm.",
+        lines: [
+          { label: "Phí vào cửa hàng", price: "¥8.000", note: "mỗi sự kiện" },
+          { label: "Phí mua hàng", price: "¥1.000", note: "mỗi sản phẩm đã mua" },
+        ],
+        footnote: "Nếu sản phẩm cuối cùng không có sẵn trong sự kiện, phí đặt chỗ sẽ được hoàn lại 50% — vì chúng tôi vẫn phải trực tiếp đến địa điểm (hoàn tiền sau khi trừ phí PayPal).",
+      },
+      {
+        title: "Đặt hàng trực tuyến",
+        desc: "Mercari, Yahoo! Flea Market, Yahoo! Auctions và các cửa hàng trực tuyến khác của Nhật Bản.",
+        lines: [
+          { label: "Đơn hàng lẻ (1 sản phẩm)", price: "từ ¥3.000", note: "có thể cao hơn tùy theo giá trị hoặc độ phức tạp của đơn hàng" },
+          { label: "Mua hàng thường xuyên / liên tục trên các sàn thương mại điện tử", price: "¥1.000", note: "mỗi sản phẩm đã mua" },
+        ],
+        footnote: "",
+      },
+      {
+        title: "Doanh nghiệp & đơn hàng số lượng lớn",
+        desc: "Kizuna đã hợp tác với nhiều doanh nghiệp trên khắp thế giới.",
+        lines: [
+          { label: "Hoa hồng", price: "10%", note: "trên giá trị hàng hóa đã mua" },
+          { label: "Mua hàng + vận chuyển", price: "đã bao gồm", note: "chúng tôi mua hàng và vận chuyển đến bất kỳ đâu trên thế giới" },
+        ],
+        footnote: "",
+      },
+    ],
+    shippingNote: "Các mức phí này chưa bao gồm phí vận chuyển quốc tế. Giá phụ thuộc vào trọng lượng kiện hàng nên chúng tôi không thể đưa ra mức phí cố định trước — mức phí sẽ được thông báo trước khi thanh toán.",
+    zonosNote: "Cư dân Hoa Kỳ — thuế hải quan được thanh toán qua Zonos. Nếu bạn muốn khai giá trị thấp hơn cho kiện hàng, Kizuna có thể thực hiện theo yêu cầu của bạn, nhưng không chịu trách nhiệm về bất kỳ vấn đề nào liên quan đến việc khai báo đó.",
+    refundNote: "Tất cả các khoản hoàn tiền đều được thực hiện sau khi trừ phí PayPal.",
+    ctaTitle: "Bạn có câu hỏi gì về đơn hàng của mình không?",
+    ctaDesc: "Liên hệ trực tiếp với chúng tôi — chúng tôi luôn xác nhận mức phí chính xác trước khi thanh toán.",
+    ctaContact: "Liên hệ với chúng tôi",
+    ctaRequest: "Gửi yêu cầu",
+  },
 };
 
 const nl: Copy = {
@@ -4708,6 +5291,59 @@ const nl: Copy = {
     payFallback: "Betaal {amount} — neem contact met ons op voor een betaallink.", emailUs: "MAIL ONS",
     paymentReceived: "BETALING ONTVANGEN", thankYouShip: "Bedankt! We verzenden binnen 24 uur.",
     confirmingPayment: "Betaling wordt bevestigd…",
+  },
+  grille: {
+    headTitle: "Prijs",
+    headTitleEm: "overzicht",
+    headDesc: "Het gedetailleerde overzicht van onze tarieven per type dienst. Een exacte offerte wordt altijd bevestigd vóór betaling.",
+    headBadge: "Actuele tarieven",
+    highlightTitle: "Ondersteuning inbegrepen, geen verborgen kosten",
+    highlightDesc: "Wij zijn gevestigd in Japan: winkels bellen, informatie opvragen, foto's maken in de winkel... alles zit al inbegrepen in de onderstaande kosten. Je betaalt niets extra's totdat het pakket bij je thuis aankomt.",
+    categories: [
+      {
+        title: "Aankopen in de winkel",
+        desc: "Opzoeken en kopen van artikelen in fysieke winkels, in Tokio en in heel Japan.",
+        lines: [
+          { label: "Reserverings-/reiskosten", price: "¥5.000", note: "per winkel — zo snel mogelijk te betalen, vóór het bezoek. Reserveert je plek, zelfs als het artikel uiteindelijk uitverkocht blijkt." },
+          { label: "Aankoopkosten in de winkel", price: "¥1.000", note: "per gekocht artikel" },
+        ],
+        footnote: "Vanaf 5 artikelen gekocht in één bestelling geldt een korting op de prijs per artikel — neem contact met ons op voor details afhankelijk van de hoeveelheid.",
+      },
+      {
+        title: "Populaire evenementen",
+        desc: "Loterijen, reserveringen, pop-up stores, zeer gewilde exclusieve releases, en winkels met lange wachtrijen of aankooplimieten op bepaalde artikelen.",
+        lines: [
+          { label: "Toegangskosten winkel", price: "¥8.000", note: "per evenement" },
+          { label: "Aankoopkosten", price: "¥1.000", note: "per gekocht artikel" },
+        ],
+        footnote: "Als een artikel tijdens het evenement uiteindelijk niet beschikbaar blijkt, wordt de reserveringskosten voor 50% terugbetaald — we zijn immers toch ter plaatse geweest (terugbetaling na aftrek van PayPal-kosten).",
+      },
+      {
+        title: "Online bestellingen",
+        desc: "Mercari, Yahoo! Flea Market, Yahoo! Auctions en andere Japanse online winkels.",
+        lines: [
+          { label: "Eenmalige bestelling (1 artikel)", price: "vanaf ¥3.000", note: "kan hoger uitvallen afhankelijk van de waarde of complexiteit van de bestelling" },
+          { label: "Actieve / terugkerende aankopen op marketplaces", price: "¥1.000", note: "per gekocht artikel" },
+        ],
+        footnote: "",
+      },
+      {
+        title: "Bedrijven & grote bestellingen",
+        desc: "Kizuna werkt al samen met verschillende bedrijven over de hele wereld.",
+        lines: [
+          { label: "Commissie", price: "10%", note: "op de waarde van de gekochte goederen" },
+          { label: "Aankoop + verzending", price: "inbegrepen", note: "wij kopen de goederen en verzenden ze naar elke plek ter wereld" },
+        ],
+        footnote: "",
+      },
+    ],
+    shippingNote: "Deze tarieven zijn exclusief internationale verzendkosten. De prijs hangt af van het gewicht van het pakket, dus we kunnen vooraf geen vast tarief geven — dit wordt meegedeeld vóór elke betaling.",
+    zonosNote: "Inwoners van de VS — douanerechten worden betaald via Zonos. Als je een lagere waarde op het pakket wilt aangeven, kan Kizuna dit op jouw verzoek doen, maar aanvaardt geen enkele verantwoordelijkheid voor problemen die hiermee verband houden.",
+    refundNote: "Alle terugbetalingen worden gedaan na aftrek van PayPal-kosten.",
+    ctaTitle: "Nog een vraag over je bestelling?",
+    ctaDesc: "Neem rechtstreeks contact met ons op — we bevestigen altijd het exacte tarief vóór elke betaling.",
+    ctaContact: "Neem contact op",
+    ctaRequest: "Een aanvraag doen",
   },
 };
 
