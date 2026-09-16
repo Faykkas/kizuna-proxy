@@ -11,7 +11,6 @@ import ServicesSection from "./components/sections/ServicesSection";
 import WhyKizunaHomeSection from "./components/sections/WhyKizunaHomeSection";
 import ServiceRulesSection from "./components/sections/ServiceRulesSection";
 import NewsPreviewSection from "./components/sections/NewsPreviewSection";
-import GallerySection from "./components/sections/GallerySection";
 import EventCarousel from "./components/EventCarousel";
 import Carousel from "./components/Carousel";
 import { BackToTop, useScrollReveal } from "./components/ui";
@@ -95,8 +94,7 @@ export default function Home() {
 
       {/* REAL PHOTO CAROUSEL — real order photos make the "we're a real
           team, not a template" case right after the hero, before any promo
-          content. Full-size gallery section (with its own heading) also
-          still appears further down for deeper browsing. */}
+          content. This is the only photo carousel on the homepage. */}
       <section className="section-sm reveal">
         <div className="wrap">
           <Carousel slides={gallery.length > 0 ? gallery.map(g => ({ src: g.image_url, alt: g.title, title: g.title, sub: g.subtitle || "" })) : SLIDES} />
@@ -208,9 +206,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* GALLERY */}
-      <GallerySection t={t} gallery={gallery} />
 
       {/* CTA FINAL */}
       <section className="section reveal">
