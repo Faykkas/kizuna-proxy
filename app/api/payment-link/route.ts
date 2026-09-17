@@ -219,6 +219,14 @@ export async function POST(request) {
         return Response.json({ error: "Payment not completed" }, { status: 402 });
       }
 
+      // The actual fee PayPal kept for this transaction, straight from its
+      // own capture response — separate from paypal_fee_jpy, which is the
+      // flat 6% we charge the client. The gap between the two is tracked so
+      // the admin can see the real margin without changing what's billed.
+      const captureInfo = data.purchase_units?.[0]?.payments?.captures?.[0];
+      const realFeeValue = captureInfo?.seller_receivable_breakdown?.paypal_fee?.value;
+      const realPaypalFeeJpy = realFeeValue != null ? Math.round(Number(realFeeValue)) : null;
+
       // The payer's real PayPal email/name — this is the one place we can
       // actually get it, since guest card checkouts don't always surface
       // the payer's email in the PayPal merchant dashboard.
@@ -237,6 +245,7 @@ export async function POST(request) {
         .update({
           status: "paid",
           paid_at: new Date().toISOString(),
+          ...(realPaypalFeeJpy != null && { paypal_real_fee_jpy: realPaypalFeeJpy }),
           ...(payerEmail && { client_email: payerEmail }),
           ...(payerName && { client_name: payerName }),
         })

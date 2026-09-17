@@ -194,6 +194,37 @@ export default function PaymentLinksTab({ tokens }) {
         {msg && <p style={{ fontSize: ".78rem", color: msg.startsWith("Erreur") ? ALERT : MUTED, marginTop: ".7rem" }}>{msg}</p>}
       </div>
 
+      {/* Real PayPal fee vs. the flat 6% charged to clients — the gap is
+          the extra margin, tracked without changing what clients are billed. */}
+      {(() => {
+        const paidWithReal = links.filter(l => l.status === "paid" && l.paypal_real_fee_jpy != null);
+        if (paidWithReal.length === 0) return null;
+        const totalCharged = paidWithReal.reduce((s, l) => s + (l.paypal_fee_jpy || 0), 0);
+        const totalReal = paidWithReal.reduce((s, l) => s + (l.paypal_real_fee_jpy || 0), 0);
+        const extra = totalCharged - totalReal;
+        return (
+          <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderLeft: "3px solid #22c55e", borderRadius: "10px", padding: "1rem 1.2rem", marginBottom: "1.5rem" }}>
+            <p style={{ fontSize: ".68rem", fontWeight: 600, letterSpacing: ".02em", textTransform: "uppercase", color: MUTED, marginBottom: ".6rem" }}>
+              Marge sur les frais PayPal ({paidWithReal.length} paiement{paidWithReal.length > 1 ? "s" : ""} avec données PayPal)
+            </p>
+            <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
+              <div>
+                <div style={{ fontSize: ".68rem", color: MUTED }}>Facturé au client (6%)</div>
+                <div style={{ fontSize: "1rem", fontWeight: 600, color: INK }}>{formatJPY(totalCharged)}</div>
+              </div>
+              <div>
+                <div style={{ fontSize: ".68rem", color: MUTED }}>Réellement prélevé par PayPal</div>
+                <div style={{ fontSize: "1rem", fontWeight: 600, color: INK }}>{formatJPY(totalReal)}</div>
+              </div>
+              <div>
+                <div style={{ fontSize: ".68rem", color: MUTED }}>Bénéfice supplémentaire</div>
+                <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#22c55e" }}>{formatJPY(extra)}</div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* List */}
       {loading ? (
         <p style={{ color: MUTED, padding: "2rem", textAlign: "center" }}>Chargement…</p>
@@ -229,6 +260,11 @@ export default function PaymentLinksTab({ tokens }) {
                       {l.paypal_fee_jpy > 0 && ` + frais PayPal ${formatJPY(l.paypal_fee_jpy)}`}
                     </div>
                   ) : null}
+                  {l.status === "paid" && l.paypal_real_fee_jpy != null && (
+                    <div style={{ fontSize: ".72rem", color: "#22c55e", marginTop: ".2rem" }}>
+                      PayPal a réellement prélevé {formatJPY(l.paypal_real_fee_jpy)} — soit +{formatJPY((l.paypal_fee_jpy || 0) - l.paypal_real_fee_jpy)} de marge
+                    </div>
+                  )}
                   {l.client_phone && (
                     <div style={{ fontSize: ".72rem", color: MUTED, marginTop: ".2rem" }}>
                       Tél : {l.client_phone}
