@@ -119,6 +119,7 @@ export default function ChargesTab({ tokens }) {
   const { BG, SURFACE, BORDER, RED, VIOLET, ALERT, INK, MUTED, BODY } = tokens;
 
   const [orders, setOrders] = useState([]);
+  const [paypalMargins, setPaypalMargins] = useState([]);
   const [settings, setSettings] = useState(null);
   const [expenses, setExpenses] = useState([]);
   const [savings, setSavings] = useState(null);
@@ -136,13 +137,15 @@ export default function ChargesTab({ tokens }) {
 
   async function load() {
     setLoading(true);
-    const [{ data: o }, { data: s }, { data: e }, { data: sv }] = await Promise.all([
+    const [{ data: o }, { data: pl }, { data: s }, { data: e }, { data: sv }] = await Promise.all([
       supabase.from("orders").select("purchase_date, service_fee_jpy"),
+      supabase.from("payment_links").select("paid_at, paypal_fee_jpy, paypal_real_fee_jpy").eq("status", "paid").gt("paypal_fee_jpy", 0),
       supabase.from("business_tax_settings").select("*").limit(1).maybeSingle(),
       supabase.from("business_expenses").select("*").order("sort_order"),
       supabase.from("business_savings").select("*").limit(1).maybeSingle(),
     ]);
     setOrders(o || []);
+    setPaypalMargins(pl || []);
     setSettings(s || null);
     setSettingsForm(s || DEFAULT_SETTINGS);
     setExpenses(e || []);
@@ -176,12 +179,24 @@ export default function ChargesTab({ tokens }) {
 
   const years = useMemo(() => {
     const set = new Set(orders.map(o => o.purchase_date?.slice(0, 4)).filter(Boolean));
+    paypalMargins.forEach(l => l.paid_at && set.add(l.paid_at.slice(0, 4)));
     set.add(String(new Date().getFullYear()));
     return [...set].sort((a, b) => b - a);
-  }, [orders]);
+  }, [orders, paypalMargins]);
+
+  // The extra margin between the flat 6% PayPal G&S fee charged to clients
+  // and what PayPal actually keeps (see PaymentLinksTab) — real money kept
+  // in the business, so it counts as revenue here too. Grouped by paid_at
+  // (when the money actually came in), not the order's purchase date.
+  function paypalMarginForYear(y) {
+    return paypalMargins
+      .filter(l => l.paid_at?.slice(0, 4) === String(y) && l.paypal_real_fee_jpy != null)
+      .reduce((s, l) => s + (l.paypal_fee_jpy - l.paypal_real_fee_jpy), 0);
+  }
 
   function revenueForYear(y) {
-    return orders.filter(o => o.purchase_date?.slice(0, 4) === String(y)).reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
+    return orders.filter(o => o.purchase_date?.slice(0, 4) === String(y)).reduce((s, o) => s + (o.service_fee_jpy || 0), 0)
+      + paypalMarginForYear(y);
   }
 
   // Expenses are configured as an ongoing monthly/annual run-rate, not a
@@ -261,7 +276,7 @@ export default function ChargesTab({ tokens }) {
       juminzeiExempt, juminzeiTaxable, juminzeiProportional, juminzei, jigyozei, shohizei,
       totalTaxes, remainingIncome, safetyReserve,
     };
-  }, [orders, settings, annualExpenses, year]);
+  }, [orders, paypalMargins, settings, annualExpenses, year]);
 
   const monthly = useMemo(() => {
     const map = {};
@@ -269,6 +284,12 @@ export default function ChargesTab({ tokens }) {
       if (!o.purchase_date?.startsWith(String(year))) return;
       const key = o.purchase_date.slice(0, 7);
       map[key] = (map[key] || 0) + (o.service_fee_jpy || 0);
+    });
+    const marginMap = {};
+    paypalMargins.forEach(l => {
+      if (!l.paid_at?.startsWith(String(year)) || l.paypal_real_fee_jpy == null) return;
+      const key = l.paid_at.slice(0, 7);
+      marginMap[key] = (marginMap[key] || 0) + (l.paypal_fee_jpy - l.paypal_real_fee_jpy);
     });
     // Expenses and estimated tax charges are both configured/computed as an
     // ongoing annual figure, not tracked per actual month, so each month
@@ -281,15 +302,16 @@ export default function ChargesTab({ tokens }) {
     let cumulativeNet = 0;
     return Array.from({ length: 12 }, (_, i) => {
       const key = `${year}-${String(i + 1).padStart(2, "0")}`;
-      const rev = map[key] || 0;
+      const margin = marginMap[key] || 0;
+      const rev = (map[key] || 0) + margin;
       const profit = rev - monthlyExpenseShare;
       const net = profit - monthlyTaxShare;
       cumulative += rev;
       cumulativeProfit += profit;
       cumulativeNet += net;
-      return { key, label: new Date(key + "-01").toLocaleDateString("fr-FR", { month: "short" }), revenue: rev, cumulative, profit, cumulativeProfit, taxShare: monthlyTaxShare, net, cumulativeNet };
+      return { key, label: new Date(key + "-01").toLocaleDateString("fr-FR", { month: "short" }), revenue: rev, margin, cumulative, profit, cumulativeProfit, taxShare: monthlyTaxShare, net, cumulativeNet };
     });
-  }, [orders, year, annualExpenses, calc.totalTaxes]);
+  }, [orders, paypalMargins, year, annualExpenses, calc.totalTaxes]);
 
   const reserved = Number(savings?.reserved_jpy) || 0;
   const remainingToSave = Math.max(calc.totalTaxes - reserved, 0);
@@ -617,10 +639,10 @@ export default function ChargesTab({ tokens }) {
       {/* Monthly revenue context */}
       <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "12px", padding: "1.3rem", marginBottom: "1.5rem", overflowX: "auto" }}>
         <p style={{ fontSize: "1rem", fontWeight: 600, color: INK, marginBottom: ".3rem" }}>CA et bénéfice mois par mois — {year}</p>
-        <p style={{ fontSize: ".68rem", color: MUTED, marginBottom: "1rem" }}>Le bénéfice répartit les dépenses professionnelles annualisées à parts égales sur les 12 mois (¥{fmtYen(annualExpenses / 12).slice(1)}/mois), et le net répartit en plus les charges/impôts estimés de l'année (¥{fmtYen(calc.totalTaxes / 12).slice(1)}/mois) — ce n'est pas un suivi réel mois par mois, juste une moyenne pour te donner une idée de ce qu'il te reste vraiment.</p>
+        <p style={{ fontSize: ".68rem", color: MUTED, marginBottom: "1rem" }}>Le bénéfice répartit les dépenses professionnelles annualisées à parts égales sur les 12 mois (¥{fmtYen(annualExpenses / 12).slice(1)}/mois), et le net répartit en plus les charges/impôts estimés de l'année (¥{fmtYen(calc.totalTaxes / 12).slice(1)}/mois) — ce n'est pas un suivi réel mois par mois, juste une moyenne pour te donner une idée de ce qu'il te reste vraiment. Le CA du mois inclut la marge sur les frais PayPal (facturé − réellement prélevé par PayPal).</p>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: ".8rem" }}>
           <thead>
-            <tr>{["Mois", "CA du mois", "Bénéfice (avant charges)", "Charges/impôts estimés", "Net après charges", "Net cumulé"].map(h => (
+            <tr>{["Mois", "CA du mois", "dont marge PayPal", "Bénéfice (avant charges)", "Charges/impôts estimés", "Net après charges", "Net cumulé"].map(h => (
               <th key={h} style={{ padding: ".5rem .7rem", textAlign: "left", fontSize: ".64rem", letterSpacing: ".06em", textTransform: "uppercase", color: MUTED, borderBottom: `1px solid ${BORDER}` }}>{h}</th>
             ))}</tr>
           </thead>
@@ -629,6 +651,7 @@ export default function ChargesTab({ tokens }) {
               <tr key={m.key} style={{ borderBottom: `1px solid ${BORDER}` }}>
                 <td style={{ padding: ".5rem .7rem", color: INK, fontWeight: 500, textTransform: "capitalize" }}>{m.label}</td>
                 <td style={{ padding: ".5rem .7rem", color: MUTED }}>{fmtYen(m.revenue)}</td>
+                <td style={{ padding: ".5rem .7rem", color: m.margin > 0 ? "#22c55e" : MUTED }}>{m.margin > 0 ? fmtYen(m.margin) : "—"}</td>
                 <td style={{ padding: ".5rem .7rem", color: m.profit >= 0 ? INK : ALERT }}>{fmtYen(m.profit)}</td>
                 <td style={{ padding: ".5rem .7rem", color: MUTED }}>−{fmtYen(m.taxShare).slice(1)}</td>
                 <td style={{ padding: ".5rem .7rem", color: m.net >= 0 ? RED : ALERT, fontWeight: 600 }}>{fmtYen(m.net)}</td>
