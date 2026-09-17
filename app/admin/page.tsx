@@ -1262,6 +1262,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
 // ─── STATS TAB ────────────────────────────────────────────────────────────────
 function StatsTab({ supabase, al }) {
   const [orders, setOrders] = useState([]);
+  const [paypalMargins, setPaypalMargins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currency, setCurrency] = useState("JPY");
   const [rate, setRate] = useState(185);
@@ -1272,6 +1273,16 @@ function StatsTab({ supabase, al }) {
       if (!error) setOrders(data || []);
       setLoading(false);
     }).catch(() => setLoading(false));
+
+    // Extra margin between the flat 6% PayPal G&S fee charged to clients
+    // and what PayPal actually keeps — real income, counted into revenue
+    // here too. Only links where the fee was itemized separately (older
+    // links may have had a margin baked into their single total by hand,
+    // which isn't visible in the data).
+    supabase.from("payment_links").select("paid_at, paypal_fee_jpy, paypal_real_fee_jpy")
+      .eq("status", "paid").gt("paypal_fee_jpy", 0)
+      .then(({ data, error }) => { if (!error) setPaypalMargins(data || []); })
+      .catch(() => {});
 
     // Fetch live EUR/JPY rate
     fetch("https://api.frankfurter.dev/v1/latest?from=EUR&to=JPY")
@@ -1308,9 +1319,17 @@ function StatsTab({ supabase, al }) {
   earnedOrders.forEach(o => {
     if (!o.purchase_date) return;
     const key = o.purchase_date.slice(0, 7); // YYYY-MM
-    if (!monthlyMap[key]) monthlyMap[key] = { fee: 0, count: 0 };
+    if (!monthlyMap[key]) monthlyMap[key] = { fee: 0, count: 0, margin: 0 };
     monthlyMap[key].fee   += (o.service_fee_jpy || 0);
     monthlyMap[key].count += 1;
+  });
+  paypalMargins.forEach(l => {
+    if (!l.paid_at || l.paypal_real_fee_jpy == null) return;
+    const key = l.paid_at.slice(0, 7);
+    if (!monthlyMap[key]) monthlyMap[key] = { fee: 0, count: 0, margin: 0 };
+    const margin = l.paypal_fee_jpy - l.paypal_real_fee_jpy;
+    monthlyMap[key].fee    += margin;
+    monthlyMap[key].margin += margin;
   });
 
   const months = Object.entries(monthlyMap)
@@ -1319,11 +1338,13 @@ function StatsTab({ supabase, al }) {
       label: new Date(key + "-01").toLocaleDateString("fr-FR", { month: "short", year: "2-digit" }),
       fee: val.fee,
       count: val.count,
+      margin: val.margin,
       eur: Math.round(val.fee / rate),
     }));
 
   const maxFee = Math.max(...months.map(m => m.fee), 1);
-  const totalFee = earnedOrders.reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
+  const totalMargin = paypalMargins.reduce((s, l) => s + (l.paypal_real_fee_jpy != null ? l.paypal_fee_jpy - l.paypal_real_fee_jpy : 0), 0);
+  const totalFee = earnedOrders.reduce((s, o) => s + (o.service_fee_jpy || 0), 0) + totalMargin;
   const avgFee = earnedOrders.length ? Math.round(totalFee / earnedOrders.length) : 0;
   const bestMonth = months.reduce((best, m) => m.fee > (best?.fee || 0) ? m : best, null);
 
@@ -1417,11 +1438,11 @@ function StatsTab({ supabase, al }) {
       <div style={{ background:SURFACE, border:`1px solid ${BORDER}`, borderRadius:"12px", padding:"1.5rem" }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"1.5rem" }}>
           <p style={cardHeader}>Monthly revenue</p>
-          <span style={{ fontSize:".68rem", color:MUTED }}>Service fees only</span>
+          <span style={{ fontSize:".68rem", color:MUTED }}>Service fees + PayPal margin</span>
         </div>
         <div style={{ display:"flex", alignItems:"flex-end", gap:"10px", height:"220px", overflowX:"auto", paddingBottom:".5rem", borderBottom:`1px solid ${BORDER}` }}>
           {months.map((m, i) => (
-            <div key={i} title={`${m.label} — ${fmt(m.fee)} — ${m.count} order${m.count!==1?"s":""}`}
+            <div key={i} title={`${m.label} — ${fmt(m.fee)} — ${m.count} order${m.count!==1?"s":""}${m.margin > 0 ? ` — includes ${fmt(m.margin)} PayPal margin` : ""}`}
               style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:"6px", flex:"0 0 auto", minWidth:"44px", cursor:"default" }}>
               {/* Value */}
               <div style={{ fontSize:".64rem", color:MUTED, textAlign:"center", minHeight:"16px", whiteSpace:"nowrap", overflow:"visible" }}>
@@ -1508,7 +1529,7 @@ function StatsTab({ supabase, al }) {
         <table style={{ width:"100%", borderCollapse:"collapse", fontSize:".78rem" }}>
           <thead>
             <tr>
-              {["Month","Orders","Revenue (JPY)","Revenue (EUR)","Avg/order"].map(h => (
+              {["Month","Orders","Revenue (JPY)","of which PayPal margin","Revenue (EUR)","Avg/order"].map(h => (
                 <th key={h} style={{ padding:".5rem .8rem", textAlign:"left", fontSize:".67rem", letterSpacing:".08em", textTransform:"uppercase", color:MUTED, borderBottom:`1px solid ${BORDER}` }}>{h}</th>
               ))}
             </tr>
@@ -1519,6 +1540,7 @@ function StatsTab({ supabase, al }) {
                 <td style={{ padding:".6rem .8rem", color:INK, fontWeight:500 }}>{m.label}</td>
                 <td style={{ padding:".6rem .8rem", color:MUTED }}>{m.count}</td>
                 <td style={{ padding:".6rem .8rem", color:RED }}>¥{fmtNum(m.fee)}</td>
+                <td style={{ padding:".6rem .8rem", color: m.margin > 0 ? "#22c55e" : MUTED }}>{m.margin > 0 ? `¥${fmtNum(m.margin)}` : "—"}</td>
                 <td style={{ padding:".6rem .8rem", color:RED }}>{fmtNum(m.eur)}€</td>
                 <td style={{ padding:".6rem .8rem", color:MUTED }}>¥{fmtNum(Math.round(m.fee/m.count))}</td>
               </tr>
@@ -1528,6 +1550,7 @@ function StatsTab({ supabase, al }) {
               <td style={{ padding:".7rem .8rem", color:INK, fontWeight:600 }}>TOTAL</td>
               <td style={{ padding:".7rem .8rem", color:INK, fontWeight:600 }}>{earnedOrders.length}</td>
               <td style={{ padding:".7rem .8rem", color:RED, fontWeight:600 }}>¥{fmtNum(totalFee)}</td>
+              <td style={{ padding:".7rem .8rem", color:"#22c55e", fontWeight:600 }}>¥{fmtNum(totalMargin)}</td>
               <td style={{ padding:".7rem .8rem", color:RED, fontWeight:600 }}>{fmtNum(Math.round(totalFee/rate))}€</td>
               <td style={{ padding:".7rem .8rem", color:MUTED }}>¥{fmtNum(avgFee)}</td>
             </tr>
