@@ -195,9 +195,15 @@ export default function PaymentLinksTab({ tokens }) {
       </div>
 
       {/* Real PayPal fee vs. the flat 6% charged to clients — the gap is
-          the extra margin, tracked without changing what clients are billed. */}
+          the extra margin, tracked without changing what clients are billed.
+          Only counts links where paypal_fee_jpy was itemized as its own
+          line: older links (before that field existed) may have already
+          had a margin baked into their single total amount by hand, which
+          isn't visible anywhere in the data, so comparing them to 0 charged
+          would understate — or wrongly flag as a loss — money that was
+          actually already covered. */}
       {(() => {
-        const paidWithReal = links.filter(l => l.status === "paid" && l.paypal_real_fee_jpy != null);
+        const paidWithReal = links.filter(l => l.status === "paid" && l.paypal_real_fee_jpy != null && (l.paypal_fee_jpy || 0) > 0);
         if (paidWithReal.length === 0) return null;
         const totalCharged = paidWithReal.reduce((s, l) => s + (l.paypal_fee_jpy || 0), 0);
         const totalReal = paidWithReal.reduce((s, l) => s + (l.paypal_real_fee_jpy || 0), 0);
@@ -205,7 +211,7 @@ export default function PaymentLinksTab({ tokens }) {
         return (
           <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderLeft: "3px solid #22c55e", borderRadius: "10px", padding: "1rem 1.2rem", marginBottom: "1.5rem" }}>
             <p style={{ fontSize: ".68rem", fontWeight: 600, letterSpacing: ".02em", textTransform: "uppercase", color: MUTED, marginBottom: ".6rem" }}>
-              Marge sur les frais PayPal ({paidWithReal.length} paiement{paidWithReal.length > 1 ? "s" : ""} avec données PayPal)
+              Marge sur les frais PayPal ({paidWithReal.length} paiement{paidWithReal.length > 1 ? "s" : ""} avec frais PayPal facturé séparément)
             </p>
             <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
               <div>
@@ -260,7 +266,7 @@ export default function PaymentLinksTab({ tokens }) {
                       {l.paypal_fee_jpy > 0 && ` + frais PayPal ${formatJPY(l.paypal_fee_jpy)}`}
                     </div>
                   ) : null}
-                  {l.status === "paid" && l.paypal_real_fee_jpy != null && (
+                  {l.status === "paid" && l.paypal_real_fee_jpy != null && (l.paypal_fee_jpy || 0) > 0 && (
                     <div style={{ fontSize: ".72rem", color: "#22c55e", marginTop: ".2rem" }}>
                       PayPal a réellement prélevé {formatJPY(l.paypal_real_fee_jpy)} — soit +{formatJPY((l.paypal_fee_jpy || 0) - l.paypal_real_fee_jpy)} de marge
                     </div>
