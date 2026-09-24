@@ -49,6 +49,12 @@ const en = {
     note: "Print runs are small and everything is first come, first served — reach out a few weeks ahead.",
     cta: "See the COMITIA guide →",
   },
+  b2bPromo: {
+    badge: "For businesses & resellers",
+    title: "Professional sourcing for retailers and resellers",
+    desc: "K-pop, anime, cards, streetwear or group orders — a dedicated Tokyo sourcing partner with volume-friendly pricing for your business.",
+    cta: "Explore Business Sourcing →",
+  },
   nav: { request: "Request an item", pricing: "Pricing", faq: "FAQ", gallery: "Gallery", events: "Events", services: "Services", howItWorks: "How it works", reviews: "Reviews", signIn: "Sign in", myOrders: "My orders", shipping: "Shipping", shop: "Shop" },
   whatWeBuy: {
     label: "Services",
@@ -496,6 +502,12 @@ const fr: Copy = {
     note: "Les tirages sont réduits et tout se fait au premier arrivé — contactez-nous quelques semaines à l'avance.",
     cta: "Voir le guide COMITIA →",
   },
+  b2bPromo: {
+    badge: "Pour les entreprises et revendeurs",
+    title: "Sourcing professionnel pour détaillants et revendeurs",
+    desc: "K-pop, anime, cartes, streetwear ou commandes groupées — un partenaire de sourcing dédié à Tokyo avec des tarifs dégressifs pour votre entreprise.",
+    cta: "Découvrir Business Sourcing →",
+  },
   nav: { request: "Demander un article", pricing: "Tarifs", faq: "FAQ", gallery: "Galerie", events: "Événements", services: "Services", howItWorks: "Comment ça marche", reviews: "Avis", signIn: "Connexion", myOrders: "Mes commandes", shipping: "Livraison", shop: "Boutique" },
   whatWeBuy: {
     label: "Services",
@@ -940,6 +952,12 @@ const ja: Copy = {
     desc: "コミティア158は2026年12月13日、東京ビッグサイトでの開催が確定しています — 完全にオリジナルの自主制作作品のみを扱う即売会で、現金のみ・日本語のみです。言葉の壁、行列、購入はすべて私たちにお任せください。",
     note: "部数は少なく、すべて先着順です — 数週間前にはご連絡ください。",
     cta: "コミティアガイドを見る →",
+  },
+  b2bPromo: {
+    badge: "法人・卸売業者様向け",
+    title: "小売業者・卸売業者向けプロフェッショナルソーシング",
+    desc: "K-POP、アニメ、カード、ストリートウェア、まとめ買い — 東京専属のソーシングパートナーが、ビジネス向けのボリューム割引価格でサポートします。",
+    cta: "ビジネスソーシングを見る →",
   },
   nav: { request: "商品をリクエスト", pricing: "料金", faq: "よくある質問", gallery: "ギャラリー", events: "イベント", services: "サービス", howItWorks: "ご利用の流れ", reviews: "レビュー", signIn: "ログイン", myOrders: "マイ注文", shipping: "配送", shop: "ショップ" },
   whatWeBuy: {
@@ -1386,6 +1404,12 @@ const es: Copy = {
     note: "Las tiradas son pequeñas y todo es por orden de llegada — contáctanos con algunas semanas de antelación.",
     cta: "Ver la guía de COMITIA →",
   },
+  b2bPromo: {
+    badge: "Para empresas y revendedores",
+    title: "Abastecimiento profesional para minoristas y revendedores",
+    desc: "K-pop, anime, cartas, streetwear o pedidos grupales — un socio de sourcing dedicado en Tokio con precios por volumen para tu negocio.",
+    cta: "Explorar Business Sourcing →",
+  },
   nav: { request: "Solicitar un artículo", pricing: "Precios", faq: "Preguntas frecuentes", gallery: "Galería", events: "Eventos", services: "Servicios", howItWorks: "Cómo funciona", reviews: "Opiniones", signIn: "Iniciar sesión", myOrders: "Mis pedidos", shipping: "Envíos", shop: "Tienda" },
   whatWeBuy: {
     label: "Servicios",
@@ -1830,6 +1854,12 @@ const it: Copy = {
     desc: "COMITIA 158 è confermato per il 13 dicembre 2026 al Tokyo Big Sight — una fiera dedicata esclusivamente a opere autoprodotte originali, solo contanti e solo in giapponese. Ci occupiamo noi della lingua, della fila e dell'acquisto.",
     note: "Le tirature sono ridotte e vale il primo arrivato, primo servito — contattaci con qualche settimana di anticipo.",
     cta: "Vedi la guida COMITIA →",
+  },
+  b2bPromo: {
+    badge: "Per aziende e rivenditori",
+    title: "Sourcing professionale per rivenditori e dettaglianti",
+    desc: "K-pop, anime, carte, streetwear o ordini di gruppo — un partner di sourcing dedicato a Tokyo con prezzi vantaggiosi per grandi volumi per la tua attività.",
+    cta: "Scopri Business Sourcing →",
   },
   nav: { request: "Richiedi un articolo", pricing: "Prezzi", faq: "FAQ", gallery: "Galleria", events: "Eventi", services: "Servizi", howItWorks: "Come funziona", reviews: "Recensioni", signIn: "Accedi", myOrders: "I miei ordini", shipping: "Spedizioni", shop: "Negozio" },
   whatWeBuy: {
@@ -2276,6 +2306,12 @@ const de: Copy = {
     note: "Die Auflagen sind klein, und es gilt first come, first served — kontaktieren Sie uns einige Wochen im Voraus.",
     cta: "COMITIA-Guide ansehen →",
   },
+  b2bPromo: {
+    badge: "Für Unternehmen & Wiederverkäufer",
+    title: "Professionelles Sourcing für Händler und Wiederverkäufer",
+    desc: "K-Pop, Anime, Karten, Streetwear oder Sammelbestellungen — ein spezialisierter Sourcing-Partner in Tokio mit mengenfreundlichen Preisen für dein Business.",
+    cta: "Business Sourcing entdecken →",
+  },
   nav: { request: "Artikel anfragen", pricing: "Preise", faq: "FAQ", gallery: "Galerie", events: "Events", services: "Leistungen", howItWorks: "So funktioniert's", reviews: "Bewertungen", signIn: "Anmelden", myOrders: "Meine Bestellungen", shipping: "Versand", shop: "Shop" },
   whatWeBuy: {
     label: "Leistungen",
@@ -2720,6 +2756,12 @@ const ko: Copy = {
     desc: "코미티아 158은 2026년 12월 13일 도쿄 빅사이트에서 개최가 확정되었습니다 — 완전한 오리지널 자체제작 작품만을 다루는 행사로, 현금 결제와 일본어만 통용됩니다. 언어, 줄서기, 구매까지 저희가 모두 처리합니다.",
     note: "발행 부수가 적고 모든 것이 선착순입니다 — 몇 주 전에 미리 연락해주세요.",
     cta: "코미티아 가이드 보기 →",
+  },
+  b2bPromo: {
+    badge: "기업 및 리셀러를 위한",
+    title: "소매업체 및 리셀러를 위한 전문 소싱",
+    desc: "K-pop, 애니메이션, 카드, 스트리트웨어, 단체 주문까지 — 도쿄 전담 소싱 파트너가 비즈니스에 맞는 대량 구매 가격을 제공합니다.",
+    cta: "비즈니스 소싱 보러가기 →",
   },
   nav: { request: "상품 요청하기", pricing: "요금", faq: "자주 묻는 질문", gallery: "갤러리", events: "이벤트", services: "서비스", howItWorks: "이용 방법", reviews: "리뷰", signIn: "로그인", myOrders: "내 주문", shipping: "배송", shop: "샵" },
   whatWeBuy: {
@@ -3166,6 +3208,12 @@ const zh: Copy = {
     note: "印刷数量少，且一切先到先得——请提前几周联系我们。",
     cta: "查看 COMITIA 指南 →",
   },
+  b2bPromo: {
+    badge: "面向企业与经销商",
+    title: "为零售商与经销商提供专业代购",
+    desc: "K-pop、动漫、卡牌、街头潮牌或团购订单 —— 东京专属采购伙伴，为您的业务提供批量优惠价格。",
+    cta: "了解商务采购 →",
+  },
   nav: { request: "提交求购", pricing: "价格", faq: "常见问题", gallery: "画廊", events: "活动", services: "服务", howItWorks: "运作方式", reviews: "评价", signIn: "登录", myOrders: "我的订单", shipping: "配送", shop: "商店" },
   whatWeBuy: {
     label: "服务",
@@ -3610,6 +3658,12 @@ const pt: Copy = {
     desc: "O COMITIA 158 está confirmado para 13 de dezembro de 2026 no Tokyo Big Sight — um evento dedicado exclusivamente a obras autopublicadas originais, só em dinheiro e só em japonês. Cuidamos do idioma, da fila e da compra.",
     note: "As tiragens são pequenas e tudo é por ordem de chegada — entre em contato algumas semanas antes.",
     cta: "Ver o guia do COMITIA →",
+  },
+  b2bPromo: {
+    badge: "Para empresas e revendedores",
+    title: "Sourcing profissional para retalhistas e revendedores",
+    desc: "K-pop, anime, cartas, streetwear ou encomendas em grupo — um parceiro de sourcing dedicado em Tóquio com preços vantajosos por volume para o seu negócio.",
+    cta: "Explorar Business Sourcing →",
   },
   nav: { request: "Solicitar um artigo", pricing: "Preços", faq: "Perguntas frequentes", gallery: "Galeria", events: "Eventos", services: "Serviços", howItWorks: "Como funciona", reviews: "Avaliações", signIn: "Entrar", myOrders: "Minhas encomendas", shipping: "Envio", shop: "Loja" },
   whatWeBuy: {
@@ -4056,6 +4110,12 @@ const id: Copy = {
     note: "Cetakannya sedikit dan semuanya siapa cepat dia dapat — hubungi kami beberapa minggu sebelumnya.",
     cta: "Lihat panduan COMITIA →",
   },
+  b2bPromo: {
+    badge: "Untuk bisnis & reseller",
+    title: "Sourcing profesional untuk retailer dan reseller",
+    desc: "K-pop, anime, kartu, streetwear, atau pesanan grup — mitra sourcing khusus di Tokyo dengan harga ramah volume untuk bisnis Anda.",
+    cta: "Jelajahi Business Sourcing →",
+  },
   nav: { request: "Ajukan permintaan", pricing: "Harga", faq: "FAQ", gallery: "Galeri", events: "Acara", services: "Layanan", howItWorks: "Cara kerja", reviews: "Ulasan", signIn: "Masuk", myOrders: "Pesanan saya", shipping: "Pengiriman", shop: "Toko" },
   whatWeBuy: {
     label: "Layanan",
@@ -4501,6 +4561,12 @@ const vi: Copy = {
     note: "Số lượng in ấn ít và mọi thứ đều theo nguyên tắc ai đến trước — hãy liên hệ trước vài tuần.",
     cta: "Xem hướng dẫn COMITIA →",
   },
+  b2bPromo: {
+    badge: "Dành cho doanh nghiệp & nhà bán lại",
+    title: "Dịch vụ tìm nguồn hàng chuyên nghiệp cho nhà bán lẻ và bán lại",
+    desc: "K-pop, anime, thẻ bài, thời trang đường phố hay đơn hàng theo nhóm — đối tác tìm nguồn hàng chuyên biệt tại Tokyo với mức giá ưu đãi theo số lượng cho doanh nghiệp của bạn.",
+    cta: "Khám phá Business Sourcing →",
+  },
   nav: { request: "Yêu cầu mua hàng", pricing: "Bảng giá", faq: "Câu hỏi thường gặp", gallery: "Thư viện ảnh", events: "Sự kiện", services: "Dịch vụ", howItWorks: "Cách hoạt động", reviews: "Đánh giá", signIn: "Đăng nhập", myOrders: "Đơn hàng của tôi", shipping: "Vận chuyển", shop: "Cửa hàng" },
   whatWeBuy: {
     label: "Dịch vụ",
@@ -4945,6 +5011,12 @@ const nl: Copy = {
     desc: "COMITIA 158 is bevestigd voor 13 december 2026 in Tokyo Big Sight — een markt uitsluitend voor originele, zelf uitgegeven werken, alleen contant en alleen in het Japans. Wij regelen de taal, de rij en de aankoop.",
     note: "Oplages zijn klein en alles gaat op basis van wie het eerst komt — neem een paar weken van tevoren contact op.",
     cta: "Bekijk de COMITIA-gids →",
+  },
+  b2bPromo: {
+    badge: "Voor bedrijven & doorverkopers",
+    title: "Professionele sourcing voor retailers en doorverkopers",
+    desc: "K-pop, anime, kaarten, streetwear of groepsbestellingen — een toegewijde sourcingpartner in Tokio met volumevriendelijke prijzen voor jouw bedrijf.",
+    cta: "Ontdek Business Sourcing →",
   },
   nav: { request: "Artikel aanvragen", pricing: "Prijzen", faq: "Veelgestelde vragen", gallery: "Galerij", events: "Evenementen", services: "Diensten", howItWorks: "Hoe het werkt", reviews: "Beoordelingen", signIn: "Inloggen", myOrders: "Mijn bestellingen", shipping: "Verzending", shop: "Shop" },
   whatWeBuy: {

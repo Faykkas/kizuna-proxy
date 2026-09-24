@@ -74,6 +74,15 @@ export default function Home() {
                 cta: t.comitiaPromo?.cta,
                 ctaHref: "/blog/comitia-japan-guide",
               },
+              {
+                illustration: "moonMic",
+                accent: "var(--red)",
+                badge: t.b2bPromo?.badge,
+                title: t.b2bPromo?.title,
+                desc: t.b2bPromo?.desc,
+                cta: t.b2bPromo?.cta,
+                ctaHref: "/business-sourcing",
+              },
             ]}
           />
         </div>
@@ -87,63 +96,6 @@ export default function Home() {
       <section className="section-sm reveal">
         <div className="wrap">
           <Carousel slides={gallery.length > 0 ? gallery.map(g => ({ src: g.image_url, alt: g.title, title: g.title, sub: g.subtitle || "" })) : SLIDES} />
-        </div>
-      </section>
-
-      {/* B2B PROMO — points business/reseller visitors to /business-sourcing,
-          placed right under the hero for maximum visibility. Kept in English
-          like the other landing-page pointers (Guides dropdown, "Kizuna Box")
-          rather than wired into the 12-language translations dictionary. */}
-      <section className="section-sm reveal">
-        <div className="wrap">
-          <div className="p-event-card" style={{ borderLeftColor: "var(--red)" }}>
-            <div className="p-event-body">
-              <div className="highlight-pill" style={{ marginBottom: ".8rem" }}>
-                <span className="highlight-pill-dot" />
-                <span className="highlight-pill-text">For businesses &amp; resellers</span>
-              </div>
-              <strong style={{ fontSize: "1.05rem" }}>Professional sourcing for retailers and resellers</strong>
-              <p>K-pop, anime, cards, streetwear or group orders — a dedicated Tokyo sourcing partner with volume-friendly pricing for your business.</p>
-            </div>
-            <a href="/business-sourcing" className="btn btn-gold">Explore Business Sourcing →</a>
-          </div>
-        </div>
-      </section>
-
-      {/* FORWARDING & STORAGE PROMO — points to the package forwarding guide.
-          Kept in English like the other landing-page pointers (Guides
-          dropdown, B2B card above) rather than wired into translations.ts. */}
-      <section className="section-sm reveal">
-        <div className="wrap">
-          <div className="p-event-card" style={{ borderLeftColor: "var(--gold)" }}>
-            <div className="p-event-body">
-              <div className="highlight-pill" style={{ marginBottom: ".8rem" }}>
-                <span className="highlight-pill-dot" />
-                <span className="highlight-pill-text">Package forwarding &amp; storage</span>
-              </div>
-              <strong style={{ fontSize: "1.05rem" }}>Buying from several Japanese sellers? We'll hold it for you</strong>
-              <p>Ship your purchases to our Tokyo address — we receive, store, and consolidate them on a flexible monthly plan, then ship everything worldwide when you're ready. Pricing worked out with you directly.</p>
-            </div>
-            <a href="/blog/japan-package-forwarding-guide" className="btn btn-gold">See how it works →</a>
-          </div>
-        </div>
-      </section>
-
-      {/* SHOP PROMO — points to /shop, items already secured and ready to
-          ship. Kept in English like the other landing-page pointers above. */}
-      <section className="section-sm reveal">
-        <div className="wrap">
-          <div className="p-event-card" style={{ borderLeftColor: "var(--red)" }}>
-            <div className="p-event-body">
-              <div className="highlight-pill" style={{ marginBottom: ".8rem" }}>
-                <span className="highlight-pill-dot" />
-                <span className="highlight-pill-text">Ready to ship</span>
-              </div>
-              <strong style={{ fontSize: "1.05rem" }}>Browse items we've already secured</strong>
-              <p>No waiting on a store visit or a lottery — these are already bought or reserved in Japan. Just the item price plus our flat fee, first come first served.</p>
-            </div>
-            <a href="/shop" className="btn btn-gold">Visit the shop →</a>
-          </div>
         </div>
       </section>
 
