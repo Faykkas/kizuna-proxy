@@ -74,6 +74,7 @@ export default function SiteNav() {
 
         {/* ── Desktop links ── */}
         <ul className="nav-links">
+          <li><a href="/shop" className="nav-shop-link">{t.nav?.shop || "Shop"}<span className="nav-shop-badge">NEW</span></a></li>
           <li><a href="/services">{t.nav?.services || "Services"}</a></li>
           <li><a href="/pricing">{t.nav.pricing}</a></li>
           <li><a href="/shipping">{t.nav?.shipping || "Shipping"}</a></li>
@@ -151,6 +152,7 @@ export default function SiteNav() {
         <div className="mobile-menu">
 
           {/* Nav links */}
+          <a href="/shop" className="nav-shop-link" onClick={() => setMobileOpen(false)}>{t.nav?.shop || "Shop"}<span className="nav-shop-badge">NEW</span></a>
           <a href="/services" onClick={() => setMobileOpen(false)}>{t.nav?.services || "Services"}</a>
           <a href="/pricing" onClick={() => setMobileOpen(false)}>{t.nav.pricing}</a>
           <a href="/shipping" onClick={() => setMobileOpen(false)}>{t.nav?.shipping || "Shipping"}</a>

@@ -62,6 +62,23 @@ export default function RequestForm({ t }) {
     }));
   }, [user, profile]);
 
+  // Coming from a shop item's "Order this item" button — prefill the
+  // message instead of sending a bare link with no context. Read straight
+  // off window.location instead of next/navigation's useSearchParams so
+  // this client component doesn't force the page out of static rendering.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const shopImage = params.get("shop_item");
+    const shopPrice = params.get("shop_price");
+    if (!shopImage && !shopPrice) return;
+    setForm(p => ({
+      ...p,
+      message: p.message || `I'd like to order this item from the shop${shopPrice ? ` — total ${shopPrice}` : ""}.`,
+      itemLink: p.itemLink || shopImage || "",
+    }));
+  }, []);
+
   function update(k, v) {
     setForm(p => ({ ...p, [k]: v }));
     if (errors[k]) setErrors(p => ({ ...p, [k]: "" }));

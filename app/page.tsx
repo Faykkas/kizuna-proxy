@@ -36,11 +36,10 @@ export default function Home() {
           page (like FromJapan's own explainer boxes), before the hero. */}
       <ExplainerSection t={t} />
 
-      {/* TOKYO EVENTS CAROUSEL — Hobonichi Techo Store lottery status,
-          The Weeknd's Harajuku pop-up, and the next Comiket/COMITIA dates.
-          Sits right under the explainer strip, ahead of the hero, so
-          current happenings are visible immediately. Update/remove slides
-          as each event's status changes. */}
+      {/* TOKYO EVENTS CAROUSEL — Hobonichi Techo items now in the shop, and
+          the next Comiket/COMITIA dates. Sits right under the explainer
+          strip, ahead of the hero, so current happenings are visible
+          immediately. Update/remove slides as each event's status changes. */}
       <section className="section-sm reveal">
         <div className="wrap">
           <EventCarousel
@@ -53,17 +52,7 @@ export default function Home() {
                 desc: t.eventPromo?.desc,
                 note: t.eventPromo?.note,
                 cta: t.eventPromo?.cta,
-                ctaHref: "mailto:kizunaproxy@gmail.com?subject=Hobonichi%20Techo%20Store%20%E2%80%94%20reservation%20request",
-              },
-              {
-                illustration: "moonMic",
-                accent: "var(--red)",
-                badge: t.weekndPromo?.badge,
-                title: t.weekndPromo?.title,
-                desc: t.weekndPromo?.desc,
-                note: t.weekndPromo?.note,
-                cta: t.weekndPromo?.cta,
-                ctaHref: "/request",
+                ctaHref: "/shop",
               },
               {
                 illustration: "bookStack",

@@ -30,18 +30,13 @@ export default function ShopClient() {
       .catch(() => setLoading(false));
   }, []);
 
-  function orderMailto(item) {
+  // Sends the client to the same request form as every other order,
+  // pre-filled with the item so we know exactly what they mean — instead of
+  // a mailto, which skips the tracked requests table entirely.
+  function orderHref(item) {
     const total = item.price_jpy + SHOP_FEE_JPY;
-    const subject = `Shop order — ${formatJPY(total)}`;
-    const body = [
-      "I'd like to order this item from the Kizuna shop:",
-      item.image_url,
-      "",
-      `Item price: ${formatJPY(item.price_jpy)}`,
-      `Kizuna fee: ${formatJPY(SHOP_FEE_JPY)}`,
-      `Total: ${formatJPY(total)}`,
-    ].join("\n");
-    return `mailto:kizunaproxy@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const params = new URLSearchParams({ shop_item: item.image_url, shop_price: formatJPY(total) });
+    return `/request?${params.toString()}`;
   }
 
   return (
@@ -99,7 +94,7 @@ export default function ShopClient() {
                       <strong style={{ fontSize: ".8rem", color: "var(--ink)" }}>Total</strong>
                       <strong style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.3rem", color: "var(--red)" }}>{formatJPY(item.price_jpy + SHOP_FEE_JPY)}</strong>
                     </div>
-                    <a href={orderMailto(item)} className="btn btn-gold" style={{ width: "100%", justifyContent: "center" }}>Order this item</a>
+                    <a href={orderHref(item)} className="btn btn-gold" style={{ width: "100%", justifyContent: "center" }}>Order this item</a>
                   </div>
                 ))}
               </div>
