@@ -20,6 +20,7 @@ import IchibanKujiClient from "./ichiban-kuji-japan-guide/IchibanKujiClient";
 import AnimeEventsClient from "./tokyo-anime-events-guide/AnimeEventsClient";
 import KpopClient from "./kpop-photocards-japan-guide/KpopClient";
 import ForwardingClient from "./japan-package-forwarding-guide/ForwardingClient";
+import DiscreetPickupClient from "./tokyo-discreet-pickup-service/DiscreetPickupClient";
 
 export const GUIDE_ROUTES = {
   "best-pokemon-cards-japan-2026": { Component: PokemonCardsClient, key: "pokemonCards" },
@@ -37,6 +38,7 @@ export const GUIDE_ROUTES = {
   "tokyo-anime-events-guide": { Component: AnimeEventsClient, key: "animeEvents" },
   "kpop-photocards-japan-guide": { Component: KpopClient, key: "kpop" },
   "japan-package-forwarding-guide": { Component: ForwardingClient, key: "forwarding" },
+  "tokyo-discreet-pickup-service": { Component: DiscreetPickupClient, key: "discreetPickup" },
 };
 
 export const BLOG_SLUGS = Object.keys(GUIDE_ROUTES);

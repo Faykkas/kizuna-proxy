@@ -25,6 +25,7 @@ const GUIDES = [
   { slug: "tokyo-anime-events-guide",          key: "animeEvents",   Icon: IconEvent },
   { slug: "kpop-photocards-japan-guide",       key: "kpop",          Icon: IconMusicNote },
   { slug: "japan-package-forwarding-guide",    key: "forwarding",   Icon: IconTruck },
+  { slug: "tokyo-discreet-pickup-service",     key: "discreetPickup", Icon: IconShoppingBag },
 ];
 
 export default function BlogIndexClient() {

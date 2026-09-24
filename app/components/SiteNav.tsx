@@ -33,6 +33,7 @@ const BLOG_ITEMS = [
   { href:"/blog/tokyo-anime-events-guide",          Icon:IconEvent,       label:"Tokyo Anime Events" },
   { href:"/blog/kpop-photocards-japan-guide",       Icon:IconMusicNote,   label:"K-pop Photocards" },
   { href:"/blog/japan-package-forwarding-guide",    Icon:IconTruck,       label:"Package Forwarding" },
+  { href:"/blog/tokyo-discreet-pickup-service",     Icon:IconShoppingBag, label:"Discreet Pickup" },
 ];
 
 export default function SiteNav() {
