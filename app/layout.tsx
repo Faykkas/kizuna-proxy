@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "./lib/auth";
 import { LanguageProvider } from "./lib/language";
 import ContactWidget from "./components/ContactWidget";
+import CookieConsent from "./components/CookieConsent";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -144,36 +145,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <LanguageProvider>
             {children}
             <ContactWidget />
+            <CookieConsent />
           </LanguageProvider>
         </AuthProvider>
         <Analytics />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(w,d,s,r,n){w.TrustpilotObject=n;w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)};
-              a=d.createElement(s);a.async=1;a.src=r;a.type='text/java'+s;f=d.getElementsByTagName(s)[0];
-              f.parentNode.insertBefore(a,f)})(window,document,'script','https://invitejs.trustpilot.com/tp.min.js','tp');
-              tp('register', '08lU7DhAN84FqIu4');
-            `
-          }}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-              Tawk_API.onLoad = function() { Tawk_API.hideWidget(); };
-              Tawk_API.onStatusChange = function() { Tawk_API.hideWidget(); };
-              (function(){
-                var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-                s1.async=true;
-                s1.src='https://embed.tawk.to/69d4bd230846fc1c371afcfe/1jljg5kpl';
-                s1.charset='UTF-8';
-                s1.setAttribute('crossorigin','*');
-                s0.parentNode.insertBefore(s1,s0);
-              })();
-            `
-          }}
-        />
       </body>
     </html>
   );

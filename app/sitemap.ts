@@ -51,6 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/pokemon-one-piece-card-proxy-japan`, priority: 0.8, changeFrequency: "monthly" as const },
     { url: `${BASE}/business-sourcing`, priority: 0.8, changeFrequency: "monthly" as const },
     { url: `${BASE}/shop`, priority: 0.7, changeFrequency: "daily" as const },
+    { url: `${BASE}/privacy-policy`, priority: 0.3, changeFrequency: "yearly" as const },
   ];
 
   const blog = BLOG_SLUGS.map(slug => ({

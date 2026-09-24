@@ -4,6 +4,7 @@
 import Image from "next/image";
 import { IconInstagram, IconTiktok } from "./ui";
 import { IconEvent } from "./pixel/PixelIcons";
+import { reopenCookiePreferences } from "./CookieConsent";
 
 export default function SiteFooter({ t }: { t: any }) {
   return (
@@ -66,6 +67,17 @@ export default function SiteFooter({ t }: { t: any }) {
         </div>
         <div className="footer-bottom">
           <p>{t.footer?.rights}</p>
+          <p style={{ display: "flex", gap: ".8rem", alignItems: "center", flexWrap: "wrap" }}>
+            <a href="/privacy-policy" className="footer-link" style={{ fontSize: "inherit" }}>Privacy &amp; Cookies</a>
+            <button
+              type="button"
+              onClick={() => reopenCookiePreferences()}
+              className="footer-link"
+              style={{ fontSize: "inherit", background: "none", border: "none", cursor: "pointer", font: "inherit", padding: 0 }}
+            >
+              Cookie preferences
+            </button>
+          </p>
           <p>kizunaproxy.com</p>
         </div>
       </footer>
