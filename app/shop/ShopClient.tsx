@@ -35,7 +35,11 @@ export default function ShopClient() {
   // a mailto, which skips the tracked requests table entirely.
   function orderHref(item) {
     const total = item.price_jpy + SHOP_FEE_JPY;
-    const params = new URLSearchParams({ shop_item: item.image_url, shop_price: formatJPY(total) });
+    const params = new URLSearchParams({
+      shop_item: item.image_url,
+      shop_price: formatJPY(total),
+      ...(item.name ? { shop_name: item.name } : {}),
+    });
     return `/request?${params.toString()}`;
   }
 
@@ -73,9 +77,10 @@ export default function ShopClient() {
                   <div className="tarif-card" key={item.id} style={{ gap: ".9rem" }}>
                     <img
                       src={item.image_url}
-                      alt=""
+                      alt={item.name || ""}
                       style={{ width: "100%", aspectRatio: "1 / 1", objectFit: "contain", background: "var(--surface)", borderRadius: "8px", border: "1px solid var(--border)" }}
                     />
+                    {item.name && <strong style={{ fontSize: ".88rem", color: "var(--ink)", lineHeight: 1.4 }}>{item.name}</strong>}
                     <div className="tarif-lines" style={{ gap: ".4rem" }}>
                       <div className="tarif-line" style={{ borderTop: "none", paddingTop: 0 }}>
                         <div className="tarif-line-top">

@@ -71,10 +71,11 @@ export default function RequestForm({ t }) {
     const params = new URLSearchParams(window.location.search);
     const shopImage = params.get("shop_item");
     const shopPrice = params.get("shop_price");
+    const shopName = params.get("shop_name");
     if (!shopImage && !shopPrice) return;
     setForm(p => ({
       ...p,
-      message: p.message || `I'd like to order this item from the shop${shopPrice ? ` — total ${shopPrice}` : ""}.`,
+      message: p.message || `I'd like to order this item from the shop${shopName ? `: ${shopName}` : ""}${shopPrice ? ` — total ${shopPrice}` : ""}.`,
       itemLink: p.itemLink || shopImage || "",
     }));
   }, []);

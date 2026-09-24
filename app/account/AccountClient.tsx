@@ -162,7 +162,7 @@ export default function AccountClient() {
   useEffect(() => {
     if (authLoading) return;
     if (!user) { router.replace("/account/login"); return; }
-    if (user.user_metadata?.role === "admin") router.replace("/admin");
+    if (user.app_metadata?.role === "admin") router.replace("/admin");
   }, [authLoading, user, router]);
 
   if (authLoading || !user) {

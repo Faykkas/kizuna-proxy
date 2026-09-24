@@ -163,7 +163,7 @@ const NEWS_CATS = [
 
 const emptyNews    = { title: "", content: "", category: "general" };
 const emptyGallery = { title: "", subtitle: "", image_url: "", sort_order: 0 };
-const emptyShopItem = { image_url: "", price_jpy: "" };
+const emptyShopItem = { name: "", image_url: "", price_jpy: "" };
 
 // ─── DESIGN TOKENS ───────────────────────────────────────────────────────────
 // Deliberately NOT the public site's "--px-*" neon phosphor/violet arcade
@@ -288,7 +288,7 @@ export default function AdminPage() {
   // Badge on the Requests tab. Live, so a request arriving while the admin
   // is open shows up without a refresh.
   useEffect(() => {
-    if (!session || session.user?.user_metadata?.role !== "admin") return;
+    if (!session || session.user?.app_metadata?.role !== "admin") return;
     async function count() {
       const { count: n } = await supabase
         .from("requests")
@@ -309,7 +309,14 @@ export default function AdminPage() {
   // Being signed in is not the same as being an admin. Without this check a
   // customer could open /admin and see the whole interface — the RLS would
   // stop them reading any data, but the screen itself should never appear.
-  const isAdmin = session?.user?.user_metadata?.role === "admin";
+  //
+  // Reads app_metadata, never user_metadata: user_metadata is editable by
+  // the signed-in user themselves via supabase.auth.updateUser({ data }),
+  // so checking it here would let anyone grant themselves this flag from
+  // their own browser console. app_metadata can only be set server-side
+  // with the service-role key (see the SQL migration — this used to read
+  // user_metadata, which was a real self-escalation hole).
+  const isAdmin = session?.user?.app_metadata?.role === "admin";
 
   async function handleLogin() {
     if (locked) return;
@@ -786,10 +793,10 @@ function ShopTab({ al }) {
 
   async function save() {
     const price = Number(form.price_jpy);
-    if (!form.image_url || !price || price <= 0) { setMsg("Ajoute une photo et un prix valide."); return; }
+    if (!form.name.trim() || !form.image_url || !price || price <= 0) { setMsg("Ajoute un nom, une photo et un prix valide."); return; }
     setSaving(true);
     const nextOrder = editing ? Number(form.sort_order) : (items.length > 0 ? Math.max(...items.map(i => i.sort_order)) + 1 : 0);
-    const p = { image_url: form.image_url, price_jpy: price, sort_order: nextOrder };
+    const p = { name: form.name.trim(), image_url: form.image_url, price_jpy: price, sort_order: nextOrder };
     if (editing) await supabase.from("shop_items").update(p).eq("id", editing);
     else await supabase.from("shop_items").insert({ ...p, available: true });
     setSaving(false); setForm(emptyShopItem); setEditing(null);
@@ -824,6 +831,10 @@ function ShopTab({ al }) {
     <>
       <div style={card}>
         <p style={cardHeader}>{editing ? "Modifier l'article" : "Ajouter un article"}</p>
+        <div style={{ marginBottom: "1rem" }}>
+          <label style={lbl}>Nom de l'article</label>
+          <input style={inp} value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Ex : Hobonichi stappo mini — Suica Penguin" />
+        </div>
         <div style={{ marginBottom: "1rem" }}>
           <label style={lbl}>Photo</label>
           <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={async e => {
@@ -867,14 +878,14 @@ function ShopTab({ al }) {
               <div key={item.id} style={{ background: SURFACE, padding: "1rem", display: "flex", flexDirection: "column", gap: ".6rem", opacity: item.available ? 1 : .5 }}>
                 <img src={item.image_url} alt="" style={{ width: "100%", height: "120px", objectFit: "cover", borderRadius: "8px" }} />
                 <div>
-                  <strong style={{ fontSize: ".82rem", color: INK, display: "block" }}>¥{fmtNum(item.price_jpy)} + ¥{fmtNum(SHOP_FEE_JPY)}</strong>
-                  <span style={{ fontSize: ".7rem", color: MUTED }}>Total ¥{fmtNum(item.price_jpy + SHOP_FEE_JPY)} — {item.available ? "Disponible" : "Vendu / masqué"}</span>
+                  <strong style={{ fontSize: ".82rem", color: INK, display: "block" }}>{item.name}</strong>
+                  <span style={{ fontSize: ".7rem", color: MUTED }}>¥{fmtNum(item.price_jpy)} + ¥{fmtNum(SHOP_FEE_JPY)} = ¥{fmtNum(item.price_jpy + SHOP_FEE_JPY)} — {item.available ? "Disponible" : "Vendu / masqué"}</span>
                 </div>
                 <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap" }}>
                   <button onClick={() => moveOrder(item.id, -1)} disabled={idx === 0} style={{ ...btnSmall, padding: ".25rem .5rem" }}>↑</button>
                   <button onClick={() => moveOrder(item.id, 1)} disabled={idx === items.length - 1} style={{ ...btnSmall, padding: ".25rem .5rem" }}>↓</button>
                   <button onClick={() => toggleAvailable(item)} style={btnSmall}>{item.available ? "Marquer vendu" : "Remettre en vente"}</button>
-                  <button onClick={() => { setEditing(item.id); setForm({ image_url: item.image_url, price_jpy: item.price_jpy, sort_order: item.sort_order }); window.scrollTo({ top: 0, behavior: "smooth" }); }} style={btnSmall}>Modifier</button>
+                  <button onClick={() => { setEditing(item.id); setForm({ name: item.name || "", image_url: item.image_url, price_jpy: item.price_jpy, sort_order: item.sort_order }); window.scrollTo({ top: 0, behavior: "smooth" }); }} style={btnSmall}>Modifier</button>
                   <button onClick={() => del(item.id, item.image_url)} style={btnDanger}>Supprimer</button>
                 </div>
               </div>
