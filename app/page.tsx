@@ -140,6 +140,24 @@ export default function Home() {
         </div>
       </section>
 
+      {/* SHOP PROMO — points to /shop, items already secured and ready to
+          ship. Kept in English like the other landing-page pointers above. */}
+      <section className="section-sm reveal">
+        <div className="wrap">
+          <div className="p-event-card" style={{ borderLeftColor: "var(--red)" }}>
+            <div className="p-event-body">
+              <div className="highlight-pill" style={{ marginBottom: ".8rem" }}>
+                <span className="highlight-pill-dot" />
+                <span className="highlight-pill-text">Ready to ship</span>
+              </div>
+              <strong style={{ fontSize: "1.05rem" }}>Browse items we've already secured</strong>
+              <p>No waiting on a store visit or a lottery — these are already bought or reserved in Japan. Just the item price plus our flat fee, first come first served.</p>
+            </div>
+            <a href="/shop" className="btn btn-gold">Visit the shop →</a>
+          </div>
+        </div>
+      </section>
+
       {/* SEARCH WIDGET */}
       <section className="search-widget-section">
         <div className="wrap">

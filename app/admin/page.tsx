@@ -8,12 +8,14 @@ import ShipmentManager from "../components/admin/ShipmentManager";
 import RequestsTab from "../components/admin/RequestsTab";
 import CustomersTab from "../components/admin/CustomersTab";
 import PaymentLinksTab from "../components/admin/PaymentLinksTab";
+import ChargesTab from "../components/admin/ChargesTab";
 import QuickSearch from "../components/admin/QuickSearch";
 import { ALL_STATUSES, statusColor, orderTitle } from "../lib/orderStatus";
 import {
   IconRequests, IconCustomers, IconEvent, IconBox,
   IconPaymentLink, IconStats, IconGallery, IconNews, IconBanner,
   IconCards, IconGaming, IconApparel, IconFigure, IconMarketplace,
+  IconCharges, IconStore,
 } from "../components/pixel/PixelIcons";
 import {
   IconWarning, IconMail, IconSettings, IconTrash, IconClock, IconPin, IconRefresh,
@@ -161,6 +163,7 @@ const NEWS_CATS = [
 
 const emptyNews    = { title: "", content: "", category: "general" };
 const emptyGallery = { title: "", subtitle: "", image_url: "", sort_order: 0 };
+const emptyShopItem = { image_url: "", price_jpy: "" };
 
 // ─── DESIGN TOKENS ───────────────────────────────────────────────────────────
 // Deliberately NOT the public site's "--px-*" neon phosphor/violet arcade
@@ -399,6 +402,8 @@ export default function AdminPage() {
     { id:"customers",label:"Customers", icon: IconCustomers },
     { id:"stats",    label:al.tabs.stats, icon: IconStats },
     { id:"paylinks", label:"Liens de paiement", icon: IconPaymentLink },
+    { id:"shop",     label:"Boutique", icon: IconStore },
+    { id:"charges",  label:"Charges", icon: IconCharges },
   ];
 
   return (
@@ -465,6 +470,8 @@ export default function AdminPage() {
         {tab==="customers"&& <CustomersTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
         {tab==="stats"    && <StatsTab supabase={supabase} al={al} />}
         {tab==="paylinks" && <PaymentLinksTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
+        {tab==="shop"     && <ShopTab al={al} />}
+        {tab==="charges"  && <ChargesTab tokens={{ BG, SURFACE, SURFACE2, BORDER, RED, RED_D, VIOLET, ALERT, INK, MUTED, PIXEL, BODY }} />}
       </div>
     </div>
   );
@@ -735,6 +742,140 @@ function GalleryTab({ al }) {
                   <button onClick={()=>moveOrder(item.id,1)} disabled={idx===items.length-1} style={{...btnSmall,padding:".25rem .5rem"}}>↓</button>
                   <button onClick={()=>{setEditing(item.id);setForm({title:item.title,subtitle:item.subtitle||"",image_url:item.image_url,sort_order:item.sort_order});window.scrollTo({top:0,behavior:"smooth"});}} style={btnSmall}>Edit</button>
                   <button onClick={()=>del(item.id,item.image_url)} style={btnDanger}>Delete</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+// Items already secured (reserved/bought) that customers can order directly
+// off the public /shop page — just a photo and the item's own price. Kizuna's
+// fee is a flat rate per article, not typed in per item, so it's a single
+// constant here and on the public page rather than a stored/editable field.
+const SHOP_FEE_JPY = 6000;
+
+function ShopTab({ al }) {
+  const [items,     setItems]     = useState([]);
+  const [form,      setForm]      = useState(emptyShopItem);
+  const [editing,   setEditing]   = useState(null);
+  const [saving,    setSaving]    = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [msg,       setMsg]       = useState("");
+  const fileRef = useRef(null);
+
+  useEffect(() => { load(); }, []);
+  async function load() {
+    const { data } = await supabase.from("shop_items").select("*").order("sort_order");
+    setItems(data || []);
+  }
+
+  async function uploadImage(file) {
+    setUploading(true);
+    const ext  = file.name.split(".").pop();
+    const name = `shop-${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from("gallery").upload(name, file, { upsert: true });
+    if (error) { setMsg("Upload failed: " + error.message); setUploading(false); return null; }
+    const { data: { publicUrl } } = supabase.storage.from("gallery").getPublicUrl(name);
+    setUploading(false);
+    return publicUrl;
+  }
+
+  async function save() {
+    const price = Number(form.price_jpy);
+    if (!form.image_url || !price || price <= 0) { setMsg("Ajoute une photo et un prix valide."); return; }
+    setSaving(true);
+    const nextOrder = editing ? Number(form.sort_order) : (items.length > 0 ? Math.max(...items.map(i => i.sort_order)) + 1 : 0);
+    const p = { image_url: form.image_url, price_jpy: price, sort_order: nextOrder };
+    if (editing) await supabase.from("shop_items").update(p).eq("id", editing);
+    else await supabase.from("shop_items").insert({ ...p, available: true });
+    setSaving(false); setForm(emptyShopItem); setEditing(null);
+    setMsg(editing ? "✓ Article mis à jour." : "✓ Article ajouté."); setTimeout(() => setMsg(""), 3000); load();
+  }
+
+  async function toggleAvailable(item) {
+    await supabase.from("shop_items").update({ available: !item.available }).eq("id", item.id);
+    load();
+  }
+
+  async function del(id, image_url) {
+    if (!confirm("Supprimer cet article ?")) return;
+    const filename = image_url.split("/").pop();
+    await supabase.storage.from("gallery").remove([filename]);
+    await supabase.from("shop_items").delete().eq("id", id);
+    load();
+  }
+
+  async function moveOrder(id, dir) {
+    const idx = items.findIndex(i => i.id === id);
+    const target = items[idx + dir];
+    if (!target) return;
+    await supabase.from("shop_items").update({ sort_order: target.sort_order }).eq("id", id);
+    await supabase.from("shop_items").update({ sort_order: items[idx].sort_order }).eq("id", target.id);
+    load();
+  }
+
+  const previewPrice = Number(form.price_jpy) || 0;
+
+  return (
+    <>
+      <div style={card}>
+        <p style={cardHeader}>{editing ? "Modifier l'article" : "Ajouter un article"}</p>
+        <div style={{ marginBottom: "1rem" }}>
+          <label style={lbl}>Photo</label>
+          <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={async e => {
+            const file = e.target.files?.[0]; if (!file) return;
+            const url = await uploadImage(file);
+            if (url) setForm(f => ({ ...f, image_url: url }));
+          }} />
+          <button onClick={() => fileRef.current?.click()} style={{ ...btnGhost, fontSize: ".65rem" }} disabled={uploading}>
+            {uploading ? "Téléchargement…" : "Télécharger une photo"}
+          </button>
+        </div>
+        {form.image_url && (
+          <div style={{ marginBottom: "1rem" }}>
+            <img src={form.image_url} alt="preview" style={{ height: "120px", objectFit: "cover", borderRadius: "8px", border: `1px solid ${BORDER}` }} />
+          </div>
+        )}
+        <div className="adm-row2">
+          <div><label style={lbl}>Prix de l'article (¥)</label><input style={inp} type="number" min="0" value={form.price_jpy} onChange={e => setForm(f => ({ ...f, price_jpy: e.target.value }))} placeholder="2900" /></div>
+          <div><label style={lbl}>Frais Kizuna (fixe)</label><div style={{ ...inp, color: MUTED, display: "flex", alignItems: "center" }}>¥{fmtNum(SHOP_FEE_JPY)}</div></div>
+        </div>
+        {previewPrice > 0 && (
+          <p style={{ fontSize: ".78rem", color: MUTED, marginBottom: "1rem" }}>
+            Total facturé au client : <strong style={{ color: INK }}>¥{fmtNum(previewPrice + SHOP_FEE_JPY)}</strong>
+          </p>
+        )}
+        {msg && <p style={msg.startsWith("✓") ? msgOk : msgErr}>{msg}</p>}
+        <div style={{ display: "flex", gap: ".75rem" }}>
+          <button onClick={save} disabled={saving || uploading} style={btnPrimary}>{saving ? "…" : editing ? "Mettre à jour" : "Ajouter l'article"}</button>
+          {editing && <button onClick={() => { setEditing(null); setForm(emptyShopItem); }} style={btnGhost}>Annuler</button>}
+        </div>
+      </div>
+
+      {/* Shop items grid */}
+      <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "12px", overflow: "hidden" }}>
+        <p style={{ ...cardHeader, padding: "1rem 1.4rem", borderBottom: `1px solid ${BORDER}`, margin: 0 }}>Boutique — {items.length} article{items.length !== 1 ? "s" : ""}</p>
+        {items.length === 0 ? (
+          <p style={{ padding: "2rem", fontSize: ".85rem", color: MUTED, textAlign: "center" }}>Aucun article pour l'instant. Ajoute-en un ci-dessus.</p>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(180px,1fr))", gap: "1px", background: BORDER }}>
+            {items.map((item, idx) => (
+              <div key={item.id} style={{ background: SURFACE, padding: "1rem", display: "flex", flexDirection: "column", gap: ".6rem", opacity: item.available ? 1 : .5 }}>
+                <img src={item.image_url} alt="" style={{ width: "100%", height: "120px", objectFit: "cover", borderRadius: "8px" }} />
+                <div>
+                  <strong style={{ fontSize: ".82rem", color: INK, display: "block" }}>¥{fmtNum(item.price_jpy)} + ¥{fmtNum(SHOP_FEE_JPY)}</strong>
+                  <span style={{ fontSize: ".7rem", color: MUTED }}>Total ¥{fmtNum(item.price_jpy + SHOP_FEE_JPY)} — {item.available ? "Disponible" : "Vendu / masqué"}</span>
+                </div>
+                <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap" }}>
+                  <button onClick={() => moveOrder(item.id, -1)} disabled={idx === 0} style={{ ...btnSmall, padding: ".25rem .5rem" }}>↑</button>
+                  <button onClick={() => moveOrder(item.id, 1)} disabled={idx === items.length - 1} style={{ ...btnSmall, padding: ".25rem .5rem" }}>↓</button>
+                  <button onClick={() => toggleAvailable(item)} style={btnSmall}>{item.available ? "Marquer vendu" : "Remettre en vente"}</button>
+                  <button onClick={() => { setEditing(item.id); setForm({ image_url: item.image_url, price_jpy: item.price_jpy, sort_order: item.sort_order }); window.scrollTo({ top: 0, behavior: "smooth" }); }} style={btnSmall}>Modifier</button>
+                  <button onClick={() => del(item.id, item.image_url)} style={btnDanger}>Supprimer</button>
                 </div>
               </div>
             ))}
