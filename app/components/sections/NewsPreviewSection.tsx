@@ -83,7 +83,7 @@ export default function NewsPreviewSection({ t }: { t: any }) {
                     </span>
                     <span style={{ fontSize: ".66rem", color: "var(--mist)" }}>{timeAgo(item.published_at)}</span>
                   </div>
-                  <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1rem", fontWeight: 600, color: "var(--ink)", lineHeight: 1.3 }}>
+                  <h3 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "1rem", fontWeight: 600, color: "var(--ink)", lineHeight: 1.3 }}>
                     {item.title}
                   </h3>
                 </a>

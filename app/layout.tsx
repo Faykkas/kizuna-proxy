@@ -4,6 +4,7 @@ import { AuthProvider } from "./lib/auth";
 import { LanguageProvider } from "./lib/language";
 import ContactWidget from "./components/ContactWidget";
 import CookieConsent from "./components/CookieConsent";
+import { pressStart2P, outfit, cormorantGaramond } from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -58,11 +59,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${pressStart2P.variable} ${outfit.variable} ${cormorantGaramond.variable}`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
         {/* LocalBusiness + Reviews */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({

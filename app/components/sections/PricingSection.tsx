@@ -18,7 +18,7 @@ export default function PricingSection({ t }: { t: any }) {
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
               </div>
               <h3>{t.pricing?.onlineTitle || "Online purchases"}</h3>
-              <div style={{fontFamily:"'Cormorant Garamond', serif", fontSize:"1.7rem", fontWeight:600, color:"var(--red)"}}>{t.pricing?.onlinePrice || "Custom quote"}</div>
+              <div style={{fontFamily:"var(--font-cormorant), serif", fontSize:"1.7rem", fontWeight:600, color:"var(--red)"}}>{t.pricing?.onlinePrice || "Custom quote"}</div>
               <p>{t.pricing?.onlineDesc || "Calculated individually based on the item and its price — no flat rate. Domestic Japan shipping, packing, final international shipping and PayPal fees are billed separately when they apply."}</p>
             </div>
             <div className="pcg-card">
@@ -26,7 +26,7 @@ export default function PricingSection({ t }: { t: any }) {
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
               </div>
               <h3>{t.pricing?.visitTitle || "Physical store visits"}</h3>
-              <div style={{fontFamily:"'Cormorant Garamond', serif", fontSize:"1.7rem", fontWeight:600, color:"var(--red)"}}>{t.pricing?.visitPrice || "Custom quote"}</div>
+              <div style={{fontFamily:"var(--font-cormorant), serif", fontSize:"1.7rem", fontWeight:600, color:"var(--red)"}}>{t.pricing?.visitPrice || "Custom quote"}</div>
               <p>{t.pricing?.visitDesc || "Priced individually based on the store, location, number of stops and time required — there's no flat rate. The visit fee is paid upfront to reserve your spot, even if the item turns out to be sold out."}</p>
             </div>
           </div>

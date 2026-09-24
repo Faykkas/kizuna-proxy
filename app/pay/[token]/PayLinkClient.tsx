@@ -30,7 +30,7 @@ export default function PayLinkClient({ token }) {
   return (
     <div style={{ minHeight: "100vh", background: "var(--beige)", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
       <div style={{ width: "100%", maxWidth: "420px", background: "var(--surface)", border: "1px solid var(--border-gold)", borderRadius: "14px", padding: "2.5rem 2rem", textAlign: "center" }}>
-        <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.3rem", fontWeight: 600, color: "var(--ink)", marginBottom: "1.75rem" }}>
+        <div style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "1.3rem", fontWeight: 600, color: "var(--ink)", marginBottom: "1.75rem" }}>
           <span style={{ color: "var(--red)" }}>Kizuna</span> Proxy
         </div>
 
@@ -63,7 +63,7 @@ export default function PayLinkClient({ token }) {
         {link && link.status === "pending" && !paidJustNow && (
           <>
             <p style={{ fontSize: ".78rem", letterSpacing: ".08em", textTransform: "uppercase", color: "var(--warm)", marginBottom: ".5rem" }}>{link.label}</p>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.3rem", fontWeight: 600, color: "var(--red)", marginBottom: (link.feeAmountJpy > 0 || link.paypalFeeAmountJpy > 0) ? ".5rem" : "1.75rem" }}>
+            <p style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "2.3rem", fontWeight: 600, color: "var(--red)", marginBottom: (link.feeAmountJpy > 0 || link.paypalFeeAmountJpy > 0) ? ".5rem" : "1.75rem" }}>
               {formatJPY(link.amountJpy)}
             </p>
             {(link.feeAmountJpy > 0 || link.paypalFeeAmountJpy > 0) && (

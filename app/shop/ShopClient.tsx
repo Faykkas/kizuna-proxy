@@ -97,7 +97,7 @@ export default function ShopClient() {
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderTop: "1px dashed var(--border-gold)", paddingTop: ".6rem" }}>
                       <strong style={{ fontSize: ".8rem", color: "var(--ink)" }}>Total</strong>
-                      <strong style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.3rem", color: "var(--red)" }}>{formatJPY(item.price_jpy + SHOP_FEE_JPY)}</strong>
+                      <strong style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "1.3rem", color: "var(--red)" }}>{formatJPY(item.price_jpy + SHOP_FEE_JPY)}</strong>
                     </div>
                     <a href={orderHref(item)} className="btn btn-gold" style={{ width: "100%", justifyContent: "center" }}>Order this item</a>
                   </div>

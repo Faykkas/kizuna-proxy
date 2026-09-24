@@ -59,7 +59,7 @@ export default function NewsClient() {
             <span style={{ display: "block", width: "20px", height: "1px", background: "var(--red)" }} />
             Announcements archive
           </p>
-          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(2rem,4vw,2.8rem)", fontWeight: 300, color: "var(--ink)", marginBottom: ".5rem" }}>
+          <h1 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "clamp(2rem,4vw,2.8rem)", fontWeight: 300, color: "var(--ink)", marginBottom: ".5rem" }}>
             All <em style={{ color: "var(--red)", fontStyle: "italic" }}>announcements</em>
           </h1>
           <p style={{ fontSize: ".85rem", color: "var(--warm)", fontWeight: 300 }}>
@@ -128,7 +128,7 @@ export default function NewsClient() {
                   <span style={{ fontSize: ".68rem", color: "var(--mist)" }}>{timeAgo(item.published_at)}</span>
                 </div>
                 <div>
-                  <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.05rem", fontWeight: 600, color: "var(--ink)", marginBottom: ".5rem", lineHeight: 1.3 }}>
+                  <h3 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "1.05rem", fontWeight: 600, color: "var(--ink)", marginBottom: ".5rem", lineHeight: 1.3 }}>
                     {item.title}
                   </h3>
                   <NewsContent

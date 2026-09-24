@@ -205,8 +205,8 @@ const fmtNum = (n) => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, 
 // but pointed at the normal typeface — a business tool showing real orders
 // and real money reads as more trustworthy in a plain, readable font than
 // an 8-bit arcade one.
-const PIXEL   = "'Outfit', system-ui, sans-serif";
-const BODY    = "'Outfit', system-ui, sans-serif";
+const PIXEL   = "var(--font-outfit), system-ui, sans-serif";
+const BODY    = "var(--font-outfit), system-ui, sans-serif";
 
 const lbl = {
   fontSize: ".76rem", fontWeight: 600, letterSpacing: ".02em", textTransform: "uppercase" as const,

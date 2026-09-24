@@ -156,13 +156,13 @@ export default function BusinessSourcingClient({ locale } = {}) {
               <div className="pcg-card">
                 <div className="pcg-icon"><Icon d={ICONS.online} /></div>
                 <h3>{g.priceOnlineTitle}</h3>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.5rem", fontWeight: 600, color: "var(--red)" }}>{g.priceOnlineValue}</div>
+                <div style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "1.5rem", fontWeight: 600, color: "var(--red)" }}>{g.priceOnlineValue}</div>
                 <p>{g.priceOnlineDesc}</p>
               </div>
               <div className="pcg-card">
                 <div className="pcg-icon"><Icon d={ICONS.pin} /></div>
                 <h3>{g.priceVisitTitle}</h3>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.5rem", fontWeight: 600, color: "var(--red)" }}>{g.priceVisitValue}</div>
+                <div style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "1.5rem", fontWeight: 600, color: "var(--red)" }}>{g.priceVisitValue}</div>
                 <p>{g.priceVisitDesc}</p>
               </div>
             </div>
