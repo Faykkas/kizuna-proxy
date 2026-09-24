@@ -2,11 +2,11 @@
 "use client";
 // app/components/CookieConsent.tsx
 //
-// Trustpilot's invite script and the Tawk.to chat widget both set
-// third-party cookies and can identify a visitor across sessions, so they
-// only load after explicit consent. Vercel Analytics stays unconditional —
-// it's first-party, cookie-free and doesn't fingerprint visitors, which is
-// why it's treated as "necessary" here rather than gated behind this banner.
+// Trustpilot's invite script sets third-party cookies and can identify a
+// visitor across sessions, so it only loads after explicit consent. Vercel
+// Analytics stays unconditional — it's first-party, cookie-free and doesn't
+// fingerprint visitors, which is why it's treated as "necessary" here rather
+// than gated behind this banner.
 //
 // Choice is stored in localStorage so it survives reloads; the footer's
 // "Cookie preferences" link dispatches a window event to reopen this banner
@@ -30,33 +30,17 @@ function loadOptionalScripts() {
     tp('register', '08lU7DhAN84FqIu4');
   `;
   document.body.appendChild(tp);
-
-  const tawk = document.createElement("script");
-  tawk.innerHTML = `
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    Tawk_API.onLoad = function() { Tawk_API.hideWidget(); };
-    Tawk_API.onStatusChange = function() { Tawk_API.hideWidget(); };
-    (function(){
-      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-      s1.async=true;
-      s1.src='https://embed.tawk.to/69d4bd230846fc1c371afcfe/1jljg5kpl';
-      s1.charset='UTF-8';
-      s1.setAttribute('crossorigin','*');
-      s0.parentNode.insertBefore(s1,s0);
-    })();
-  `;
-  document.body.appendChild(tawk);
 }
 
 const COPY = {
   en: {
-    text: "We use a few optional cookies (live chat, Trustpilot) to improve your experience. Necessary cookies for sign-in and language always apply.",
+    text: "We use an optional Trustpilot cookie to improve your experience. Necessary cookies for sign-in and language always apply.",
     learnMore: "Learn more",
     necessary: "Necessary only",
     accept: "Accept all",
   },
   fr: {
-    text: "Nous utilisons quelques cookies optionnels (chat en direct, Trustpilot) pour améliorer votre expérience. Les cookies nécessaires à la connexion et à la langue restent toujours actifs.",
+    text: "Nous utilisons un cookie optionnel Trustpilot pour améliorer votre expérience. Les cookies nécessaires à la connexion et à la langue restent toujours actifs.",
     learnMore: "En savoir plus",
     necessary: "Nécessaires uniquement",
     accept: "Tout accepter",

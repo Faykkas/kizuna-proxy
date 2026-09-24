@@ -602,13 +602,6 @@ footer { background: #050506; }
 /* ══════════════════════════════════════════════════════════
    FLOATS
    ══════════════════════════════════════════════════════════ */
-/* ── CUSTOM CHAT BUTTON ── */
-iframe[src*="tawk"], #tawk-bubble-container, .tawk-min-container { display: none !important; opacity: 0 !important; pointer-events: none !important; }
-.chat-btn { position: fixed; bottom: 2rem; right: 2rem; z-index: 200; display: flex; align-items: center; gap: .55rem; background: var(--ink); color: var(--gold); border: 2px solid var(--red-d); padding: .7rem 1.2rem .7rem .9rem; border-radius: 2px; box-shadow: 0 4px 24px rgba(0,0,0,.2); transition: background .2s, transform .2s, border-radius .2s; cursor: pointer; font-family: var(--font-body); }
-.chat-btn:hover { background: var(--gold-d); color: var(--white); transform: translateY(-2px); }
-.chat-btn.open { background: var(--gold-d); color: var(--white); padding: .85rem; border-radius: 50%; }
-.chat-btn-label { font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; }
-.chat-badge { position: absolute; top: -.35rem; right: -.35rem; background: var(--red); color: #fff; font-size: .58rem; font-weight: 700; min-width: 17px; height: 17px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
 .events-float { position: fixed; bottom: 5.5rem; left: 1.5rem; z-index: 200; width: 248px; background: var(--surface); border-radius: 10px; border: 1px solid var(--border); border-left: 3px solid var(--red); padding: 1.1rem 1.2rem 1.1rem 1rem; display: flex; align-items: flex-start; gap: .8rem; box-shadow: 0 12px 40px rgba(0,0,0,.4); opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .45s, transform .45s; }
 .events-float.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .events-float-close { position: absolute; top: .5rem; right: .5rem; width: 18px; height: 18px; border-radius: 50%; background: transparent; border: none; color: var(--mist); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: color .2s; }
@@ -1895,14 +1888,6 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   border-radius: 6px;
 }
 
-.chat-btn {
-  background: var(--red);
-  color: var(--px-bg);
-  border-radius: 8px;
-  box-shadow: 0 4px 0 var(--red-d);
-}
-.chat-btn-label { font-family: var(--font-pixel); font-size: .45rem; }
-.chat-btn:active { transform: translateY(4px); box-shadow: none; }
 
 .shipping-notice, .pcg-cta {
   background: var(--surface);

@@ -34,7 +34,7 @@ const EN = (
     <ul className="blog-list">
       <li><strong>Contact details</strong> — name, email address, phone number, and delivery address, given when you submit a request, create an account, or pay through a payment link.</li>
       <li><strong>Order details</strong> — what you want us to buy, item links, budget, quantity, platform, and any notes you add.</li>
-      <li><strong>Communication</strong> — messages you send us by email, WhatsApp, Discord, or live chat, so we can answer and keep a record of what was agreed.</li>
+      <li><strong>Communication</strong> — messages you send us by email, WhatsApp, or Discord, so we can answer and keep a record of what was agreed.</li>
       <li><strong>Account data</strong> — if you create a customer account, your email and a securely hashed password (we never see or store the password itself).</li>
       <li><strong>Payment information</strong> — we never see or store your card number. Payments are processed entirely by PayPal, which shares with us only the payer's name, email, and the shipping address you confirm at checkout.</li>
       <li><strong>Basic technical data</strong> — anonymised, cookie-free visit statistics from Vercel Analytics, and your saved language preference.</li>
@@ -54,7 +54,7 @@ const EN = (
       <li><strong>Supabase</strong> — our database and account-login provider, which stores your order and account data securely.</li>
       <li><strong>Vercel</strong> — our hosting provider, which also provides the anonymised visit statistics mentioned above.</li>
       <li><strong>Resend</strong> — sends us an email notification when you submit a request. It only ever sends to our own inbox, never to a third party.</li>
-      <li><strong>Tawk.to and Trustpilot</strong> — only if you accept optional cookies (see below), to offer live chat and let you leave a review.</li>
+      <li><strong>Trustpilot</strong> — only if you accept optional cookies (see below), to let you leave a review.</li>
     </ul>
     <p>
       Some of these providers process data on servers outside Japan or the EU/EEA (for example, in the
@@ -66,7 +66,7 @@ const EN = (
     <p>We use a small number of cookies and local-storage entries:</p>
     <ul className="blog-list">
       <li><strong>Necessary</strong> — your sign-in session (Supabase Auth) and your saved language, so the site works and remembers your preferences. These always apply and can't be turned off without breaking the site.</li>
-      <li><strong>Optional</strong> — Trustpilot's invite widget and the Tawk.to live-chat widget, both of which can set their own cookies. These only load after you accept them in the cookie banner.</li>
+      <li><strong>Optional</strong> — Trustpilot's invite widget, which can set its own cookies. It only loads after you accept it in the cookie banner.</li>
       <li><strong>Analytics</strong> — Vercel Analytics, which is cookie-free and doesn't identify you individually.</li>
     </ul>
     <p>
@@ -132,7 +132,7 @@ const FR = (
     <ul className="blog-list">
       <li><strong>Coordonnées</strong> — nom, email, numéro de téléphone et adresse de livraison, fournis lors d'une demande, de la création d'un compte, ou d'un paiement via un lien de paiement.</li>
       <li><strong>Détails de commande</strong> — ce que vous souhaitez acheter, liens d'articles, budget, quantité, plateforme, et toute note que vous ajoutez.</li>
-      <li><strong>Communication</strong> — les messages que vous nous envoyez par email, WhatsApp, Discord ou chat en direct, pour pouvoir vous répondre et garder une trace de ce qui a été convenu.</li>
+      <li><strong>Communication</strong> — les messages que vous nous envoyez par email, WhatsApp ou Discord, pour pouvoir vous répondre et garder une trace de ce qui a été convenu.</li>
       <li><strong>Données de compte</strong> — si vous créez un compte client, votre email et un mot de passe stocké de façon sécurisée et chiffrée (nous ne voyons ni ne stockons jamais le mot de passe lui-même).</li>
       <li><strong>Informations de paiement</strong> — nous ne voyons ni ne stockons jamais votre numéro de carte. Les paiements sont entièrement traités par PayPal, qui nous transmet uniquement le nom, l'email et l'adresse de livraison confirmés par le payeur.</li>
       <li><strong>Données techniques basiques</strong> — statistiques de visite anonymisées et sans cookie via Vercel Analytics, et votre préférence de langue enregistrée.</li>
@@ -152,7 +152,7 @@ const FR = (
       <li><strong>Supabase</strong> — notre fournisseur de base de données et de connexion, qui stocke vos données de commande et de compte de façon sécurisée.</li>
       <li><strong>Vercel</strong> — notre hébergeur, qui fournit également les statistiques de visite anonymisées mentionnées ci-dessus.</li>
       <li><strong>Resend</strong> — nous envoie une notification email lorsque vous soumettez une demande. Cet envoi va uniquement vers notre propre boîte mail, jamais vers un tiers.</li>
-      <li><strong>Tawk.to et Trustpilot</strong> — uniquement si vous acceptez les cookies optionnels (voir ci-dessous), pour proposer le chat en direct et vous permettre de laisser un avis.</li>
+      <li><strong>Trustpilot</strong> — uniquement si vous acceptez les cookies optionnels (voir ci-dessous), pour vous permettre de laisser un avis.</li>
     </ul>
     <p>
       Certains de ces prestataires traitent les données sur des serveurs situés hors du Japon ou de l'UE/EEE
@@ -165,7 +165,7 @@ const FR = (
     <p>Nous utilisons un petit nombre de cookies et d'entrées de stockage local :</p>
     <ul className="blog-list">
       <li><strong>Nécessaires</strong> — votre session de connexion (Supabase Auth) et votre langue enregistrée, pour que le site fonctionne et retienne vos préférences. Ils s'appliquent toujours et ne peuvent pas être désactivés sans casser le site.</li>
-      <li><strong>Optionnels</strong> — le widget d'invitation Trustpilot et le widget de chat en direct Tawk.to, qui peuvent tous deux poser leurs propres cookies. Ils ne se chargent qu'après votre acceptation dans le bandeau cookies.</li>
+      <li><strong>Optionnels</strong> — le widget d'invitation Trustpilot, qui peut poser ses propres cookies. Il ne se charge qu'après votre acceptation dans le bandeau cookies.</li>
       <li><strong>Analytique</strong> — Vercel Analytics, qui ne pose pas de cookie et ne vous identifie pas individuellement.</li>
     </ul>
     <p>
