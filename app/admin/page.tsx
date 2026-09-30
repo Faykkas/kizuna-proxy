@@ -990,6 +990,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
   // one shipping payment). `shipments` mirrors `orders` — loaded once, kept
   // in sync by re-fetching after any change.
   const [shipments, setShipments] = useState([]);
+  const [paypalMargins, setPaypalMargins] = useState([]);
   const [selected, setSelected] = useState(() => new Set());
   // { mode: "new", orderIds } to bundle a fresh selection, or
   // { mode: "edit", shipment } to open an existing package
@@ -1031,12 +1032,18 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
 
   async function load() {
     setLoading(true);
-    const [{ data }, { data: shipData }] = await Promise.all([
+    const [{ data }, { data: shipData }, { data: linkData }] = await Promise.all([
       supabase.from("orders").select("*").order("purchase_date", { ascending: false }),
       supabase.from("shipments").select("*").order("created_at", { ascending: false }),
+      // Same PayPal margin as the Stats tab (see totalFee below) — without
+      // this, the two tabs show two different revenue totals for the same
+      // orders, which is exactly the kind of mismatch this file has had
+      // before (see the eurRate comment above).
+      supabase.from("payment_links").select("paid_at, paypal_fee_jpy, paypal_real_fee_jpy").eq("status", "paid").gt("paypal_fee_jpy", 0),
     ]);
     setOrders(data || []);
     setShipments(shipData || []);
+    setPaypalMargins(linkData || []);
     setLoading(false);
   }
 
@@ -1128,7 +1135,8 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
   // is still under review — and excludes "Cancelled". Same rule as the
   // Stats tab, so the two tabs never disagree on what "earned" means.
   const earnedOrders = orders.filter(o => o.status !== "Pending" && o.status !== "Cancelled");
-  const totalFee   = earnedOrders.reduce((s, o) => s + (o.service_fee_jpy || 0), 0);
+  const totalMargin = paypalMargins.reduce((s, l) => s + (l.paypal_real_fee_jpy != null ? l.paypal_fee_jpy - l.paypal_real_fee_jpy : 0), 0);
+  const totalFee   = earnedOrders.reduce((s, o) => s + (o.service_fee_jpy || 0), 0) + totalMargin;
   const delivered  = orders.filter(o => o.status === "Delivered").length;
   const active     = orders.filter(o => !["Delivered","Cancelled"].includes(o.status)).length;
   const actionReq  = orders.filter(o => o.status === "Action Required").length;
