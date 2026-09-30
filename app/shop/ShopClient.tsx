@@ -11,11 +11,6 @@ import { useLang, useAnnounce } from "../components/useSiteState";
 import { supabase } from "../lib/supabase";
 import { formatJPY } from "../lib/orderStatus";
 
-// Flat fee per article — same constant as the admin's Boutique tab. Items
-// themselves are already secured (bought/reserved), so there's no travel or
-// reservation fee here, just the standard per-article handling fee.
-const SHOP_FEE_JPY = 6000;
-
 export default function ShopClient() {
   const { t } = useLang();
   const announce = useAnnounce();
@@ -26,7 +21,8 @@ export default function ShopClient() {
 
   useEffect(() => {
     supabase.from("shop_items").select("*").eq("available", true).order("sort_order")
-      .then(({ data }) => { setItems(data || []); setLoading(false); })
+      // Fallback covers items saved before fee_jpy existed as a column.
+      .then(({ data }) => { setItems((data || []).map(i => ({ ...i, fee_jpy: i.fee_jpy ?? 6000 }))); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
 
@@ -34,7 +30,7 @@ export default function ShopClient() {
   // pre-filled with the item so we know exactly what they mean — instead of
   // a mailto, which skips the tracked requests table entirely.
   function orderHref(item) {
-    const total = item.price_jpy + SHOP_FEE_JPY;
+    const total = item.price_jpy + item.fee_jpy;
     const params = new URLSearchParams({
       shop_item: item.image_url,
       shop_price: formatJPY(total),
@@ -91,13 +87,13 @@ export default function ShopClient() {
                       <div className="tarif-line">
                         <div className="tarif-line-top">
                           <span className="tarif-line-label">Kizuna fee</span>
-                          <span className="tarif-line-price" style={{ fontSize: "1rem" }}>{formatJPY(SHOP_FEE_JPY)}</span>
+                          <span className="tarif-line-price" style={{ fontSize: "1rem" }}>{formatJPY(item.fee_jpy)}</span>
                         </div>
                       </div>
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderTop: "1px dashed var(--border-gold)", paddingTop: ".6rem" }}>
                       <strong style={{ fontSize: ".8rem", color: "var(--ink)" }}>Total</strong>
-                      <strong style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "1.3rem", color: "var(--red)" }}>{formatJPY(item.price_jpy + SHOP_FEE_JPY)}</strong>
+                      <strong style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "1.3rem", color: "var(--red)" }}>{formatJPY(item.price_jpy + item.fee_jpy)}</strong>
                     </div>
                     <a href={orderHref(item)} className="btn btn-gold" style={{ width: "100%", justifyContent: "center" }}>Order this item</a>
                   </div>

@@ -163,7 +163,9 @@ const NEWS_CATS = [
 
 const emptyNews    = { title: "", content: "", category: "general" };
 const emptyGallery = { title: "", subtitle: "", image_url: "", sort_order: 0 };
-const emptyShopItem = { name: "", image_url: "", price_jpy: "" };
+// 6000 is just the starting suggestion for a new item's fee field — Kizuna
+// fee is per-item and fully editable, not a fixed sitewide rate.
+const emptyShopItem = { name: "", image_url: "", price_jpy: "", fee_jpy: "6000" };
 
 // ─── DESIGN TOKENS ───────────────────────────────────────────────────────────
 // Deliberately NOT the public site's "--px-*" neon phosphor/violet arcade
@@ -760,11 +762,9 @@ function GalleryTab({ al }) {
 }
 
 // Items already secured (reserved/bought) that customers can order directly
-// off the public /shop page — just a photo and the item's own price. Kizuna's
-// fee is a flat rate per article, not typed in per item, so it's a single
-// constant here and on the public page rather than a stored/editable field.
-const SHOP_FEE_JPY = 6000;
-
+// off the public /shop page — a photo, the item's own price, and Kizuna's
+// fee, which is set per item (not a fixed sitewide rate) so it can vary by
+// how much work a given item was to secure.
 function ShopTab({ al }) {
   const [items,     setItems]     = useState([]);
   const [form,      setForm]      = useState(emptyShopItem);
@@ -777,7 +777,8 @@ function ShopTab({ al }) {
   useEffect(() => { load(); }, []);
   async function load() {
     const { data } = await supabase.from("shop_items").select("*").order("sort_order");
-    setItems(data || []);
+    // Fallback covers items saved before fee_jpy existed as a column.
+    setItems((data || []).map(i => ({ ...i, fee_jpy: i.fee_jpy ?? 6000 })));
   }
 
   async function uploadImage(file) {
@@ -793,10 +794,11 @@ function ShopTab({ al }) {
 
   async function save() {
     const price = Number(form.price_jpy);
-    if (!form.name.trim() || !form.image_url || !price || price <= 0) { setMsg("Ajoute un nom, une photo et un prix valide."); return; }
+    const fee = Number(form.fee_jpy);
+    if (!form.name.trim() || !form.image_url || !price || price <= 0 || fee < 0) { setMsg("Ajoute un nom, une photo, un prix et des frais valides."); return; }
     setSaving(true);
     const nextOrder = editing ? Number(form.sort_order) : (items.length > 0 ? Math.max(...items.map(i => i.sort_order)) + 1 : 0);
-    const p = { name: form.name.trim(), image_url: form.image_url, price_jpy: price, sort_order: nextOrder };
+    const p = { name: form.name.trim(), image_url: form.image_url, price_jpy: price, fee_jpy: fee, sort_order: nextOrder };
     if (editing) await supabase.from("shop_items").update(p).eq("id", editing);
     else await supabase.from("shop_items").insert({ ...p, available: true });
     setSaving(false); setForm(emptyShopItem); setEditing(null);
@@ -826,6 +828,7 @@ function ShopTab({ al }) {
   }
 
   const previewPrice = Number(form.price_jpy) || 0;
+  const previewFee = Number(form.fee_jpy) || 0;
 
   return (
     <>
@@ -853,11 +856,11 @@ function ShopTab({ al }) {
         )}
         <div className="adm-row2">
           <div><label style={lbl}>Prix de l'article (¥)</label><input style={inp} type="number" min="0" value={form.price_jpy} onChange={e => setForm(f => ({ ...f, price_jpy: e.target.value }))} placeholder="2900" /></div>
-          <div><label style={lbl}>Frais Kizuna (fixe)</label><div style={{ ...inp, color: MUTED, display: "flex", alignItems: "center" }}>¥{fmtNum(SHOP_FEE_JPY)}</div></div>
+          <div><label style={lbl}>Frais Kizuna (¥)</label><input style={inp} type="number" min="0" value={form.fee_jpy} onChange={e => setForm(f => ({ ...f, fee_jpy: e.target.value }))} placeholder="6000" /></div>
         </div>
         {previewPrice > 0 && (
           <p style={{ fontSize: ".78rem", color: MUTED, marginBottom: "1rem" }}>
-            Total facturé au client : <strong style={{ color: INK }}>¥{fmtNum(previewPrice + SHOP_FEE_JPY)}</strong>
+            Total facturé au client : <strong style={{ color: INK }}>¥{fmtNum(previewPrice + previewFee)}</strong>
           </p>
         )}
         {msg && <p style={msg.startsWith("✓") ? msgOk : msgErr}>{msg}</p>}
@@ -879,13 +882,13 @@ function ShopTab({ al }) {
                 <img src={item.image_url} alt="" style={{ width: "100%", height: "120px", objectFit: "cover", borderRadius: "8px" }} />
                 <div>
                   <strong style={{ fontSize: ".82rem", color: INK, display: "block" }}>{item.name}</strong>
-                  <span style={{ fontSize: ".7rem", color: MUTED }}>¥{fmtNum(item.price_jpy)} + ¥{fmtNum(SHOP_FEE_JPY)} = ¥{fmtNum(item.price_jpy + SHOP_FEE_JPY)} — {item.available ? "Disponible" : "Vendu / masqué"}</span>
+                  <span style={{ fontSize: ".7rem", color: MUTED }}>¥{fmtNum(item.price_jpy)} + ¥{fmtNum(item.fee_jpy)} = ¥{fmtNum(item.price_jpy + item.fee_jpy)} — {item.available ? "Disponible" : "Vendu / masqué"}</span>
                 </div>
                 <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap" }}>
                   <button onClick={() => moveOrder(item.id, -1)} disabled={idx === 0} style={{ ...btnSmall, padding: ".25rem .5rem" }}>↑</button>
                   <button onClick={() => moveOrder(item.id, 1)} disabled={idx === items.length - 1} style={{ ...btnSmall, padding: ".25rem .5rem" }}>↓</button>
                   <button onClick={() => toggleAvailable(item)} style={btnSmall}>{item.available ? "Marquer vendu" : "Remettre en vente"}</button>
-                  <button onClick={() => { setEditing(item.id); setForm({ name: item.name || "", image_url: item.image_url, price_jpy: item.price_jpy, sort_order: item.sort_order }); window.scrollTo({ top: 0, behavior: "smooth" }); }} style={btnSmall}>Modifier</button>
+                  <button onClick={() => { setEditing(item.id); setForm({ name: item.name || "", image_url: item.image_url, price_jpy: item.price_jpy, fee_jpy: item.fee_jpy, sort_order: item.sort_order }); window.scrollTo({ top: 0, behavior: "smooth" }); }} style={btnSmall}>Modifier</button>
                   <button onClick={() => del(item.id, item.image_url)} style={btnDanger}>Supprimer</button>
                 </div>
               </div>
