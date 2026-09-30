@@ -781,6 +781,11 @@ function ShopTab({ al }) {
     setItems((data || []).map(i => ({ ...i, fee_jpy: i.fee_jpy ?? 6000 })));
   }
 
+  async function saveSale(id, buyer_name, ship_by) {
+    await supabase.from("shop_items").update({ buyer_name: buyer_name || null, ship_by: ship_by || null }).eq("id", id);
+    load();
+  }
+
   async function uploadImage(file) {
     setUploading(true);
     const ext  = file.name.split(".").pop();
@@ -896,7 +901,52 @@ function ShopTab({ al }) {
           </div>
         )}
       </div>
+
+      {/* Sales tracking — who bought a sold item and when it's due to be
+          sent, so a marked-sold item never just sits there untracked. */}
+      {items.some(i => !i.available) && (
+        <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "12px", overflow: "hidden", marginTop: "1.5rem" }}>
+          <p style={{ ...cardHeader, padding: "1rem 1.4rem", borderBottom: `1px solid ${BORDER}`, margin: 0 }}>Suivi des ventes</p>
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: ".8rem" }}>
+              <thead>
+                <tr>
+                  {["Article", "Client", "Date d'envoi", ""].map(h => (
+                    <th key={h} style={{ padding: ".6rem .8rem", textAlign: "left", fontSize: ".64rem", letterSpacing: ".06em", textTransform: "uppercase", color: MUTED, borderBottom: `1px solid ${BORDER}` }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {items.filter(i => !i.available).map(item => (
+                  <SaleRow key={item.id} item={item} onSave={saveSale} inp={inp} btnSmall={btnSmall} INK={INK} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </>
+  );
+}
+
+function SaleRow({ item, onSave, inp, btnSmall, INK }) {
+  const [buyer, setBuyer] = useState(item.buyer_name || "");
+  const [shipBy, setShipBy] = useState(item.ship_by || "");
+  const dirty = buyer !== (item.buyer_name || "") || shipBy !== (item.ship_by || "");
+
+  return (
+    <tr style={{ borderBottom: `1px solid ${BORDER}` }}>
+      <td style={{ padding: ".5rem .8rem", color: INK, fontWeight: 500, maxWidth: "220px" }}>{item.name}</td>
+      <td style={{ padding: ".5rem .8rem" }}>
+        <input style={{ ...inp, padding: ".4rem .6rem" }} value={buyer} onChange={e => setBuyer(e.target.value)} placeholder="Nom du client" />
+      </td>
+      <td style={{ padding: ".5rem .8rem" }}>
+        <input style={{ ...inp, padding: ".4rem .6rem" }} type="date" value={shipBy} onChange={e => setShipBy(e.target.value)} />
+      </td>
+      <td style={{ padding: ".5rem .8rem" }}>
+        <button onClick={() => onSave(item.id, buyer, shipBy)} disabled={!dirty} style={{ ...btnSmall, opacity: dirty ? 1 : .4 }}>Enregistrer</button>
+      </td>
+    </tr>
   );
 }
 
