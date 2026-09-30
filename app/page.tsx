@@ -46,6 +46,15 @@ export default function Home() {
             slides={[
               {
                 illustration: "penguin",
+                accent: "var(--red-d)",
+                badge: t.pokemonStarbucksPromo?.badge,
+                title: t.pokemonStarbucksPromo?.title,
+                desc: t.pokemonStarbucksPromo?.desc,
+                cta: t.pokemonStarbucksPromo?.cta,
+                ctaHref: "/shop",
+              },
+              {
+                illustration: "penguin",
                 accent: "var(--gold-d)",
                 badge: t.eventPromo?.badge,
                 title: t.eventPromo?.title,

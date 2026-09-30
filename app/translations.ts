@@ -55,6 +55,12 @@ const en = {
     desc: "K-pop, anime, cards, streetwear or group orders — a dedicated Tokyo sourcing partner with volume-friendly pricing for your business.",
     cta: "Explore Business Sourcing →",
   },
+  pokemonStarbucksPromo: {
+    badge: "New in the shop — first come, first served",
+    title: "Pokémon × Starbucks limited items",
+    desc: "Just added: exclusive Pokémon × Starbucks collab pieces, already secured and ready to ship. Once they're gone, they're gone.",
+    cta: "Shop now →",
+  },
   nav: { request: "Request an item", pricing: "Pricing", faq: "FAQ", gallery: "Gallery", events: "Events", services: "Services", howItWorks: "How it works", reviews: "Reviews", signIn: "Sign in", myOrders: "My orders", shipping: "Shipping", shop: "Shop" },
   whatWeBuy: {
     label: "Services",
@@ -508,6 +514,12 @@ const fr: Copy = {
     desc: "K-pop, anime, cartes, streetwear ou commandes groupées — un partenaire de sourcing dédié à Tokyo avec des tarifs dégressifs pour votre entreprise.",
     cta: "Découvrir Business Sourcing →",
   },
+  pokemonStarbucksPromo: {
+    badge: "Nouveau dans la boutique — premier arrivé, premier servi",
+    title: "Articles limités Pokémon × Starbucks",
+    desc: "Tout juste ajoutés : des pièces exclusives de la collab Pokémon × Starbucks, déjà sécurisées et prêtes à expédier. Une fois épuisées, elles ne reviendront pas.",
+    cta: "Voir la boutique →",
+  },
   nav: { request: "Demander un article", pricing: "Tarifs", faq: "FAQ", gallery: "Galerie", events: "Événements", services: "Services", howItWorks: "Comment ça marche", reviews: "Avis", signIn: "Connexion", myOrders: "Mes commandes", shipping: "Livraison", shop: "Boutique" },
   whatWeBuy: {
     label: "Services",
@@ -958,6 +970,12 @@ const ja: Copy = {
     title: "小売業者・卸売業者向けプロフェッショナルソーシング",
     desc: "K-POP、アニメ、カード、ストリートウェア、まとめ買い — 東京専属のソーシングパートナーが、ビジネス向けのボリューム割引価格でサポートします。",
     cta: "ビジネスソーシングを見る →",
+  },
+  pokemonStarbucksPromo: {
+    badge: "ショップに新着 — 先着順",
+    title: "ポケモン×スターバックス限定アイテム",
+    desc: "ポケモン×スターバックスのコラボ限定アイテムを追加しました。すでに確保済みですぐに発送可能です。なくなり次第終了です。",
+    cta: "ショップを見る →",
   },
   nav: { request: "商品をリクエスト", pricing: "料金", faq: "よくある質問", gallery: "ギャラリー", events: "イベント", services: "サービス", howItWorks: "ご利用の流れ", reviews: "レビュー", signIn: "ログイン", myOrders: "マイ注文", shipping: "配送", shop: "ショップ" },
   whatWeBuy: {
@@ -1410,6 +1428,12 @@ const es: Copy = {
     desc: "K-pop, anime, cartas, streetwear o pedidos grupales — un socio de sourcing dedicado en Tokio con precios por volumen para tu negocio.",
     cta: "Explorar Business Sourcing →",
   },
+  pokemonStarbucksPromo: {
+    badge: "Nuevo en la tienda — por orden de llegada",
+    title: "Artículos limitados Pokémon × Starbucks",
+    desc: "Recién añadidos: piezas exclusivas de la colaboración Pokémon × Starbucks, ya aseguradas y listas para enviar. Una vez agotadas, no vuelven.",
+    cta: "Ver la tienda →",
+  },
   nav: { request: "Solicitar un artículo", pricing: "Precios", faq: "Preguntas frecuentes", gallery: "Galería", events: "Eventos", services: "Servicios", howItWorks: "Cómo funciona", reviews: "Opiniones", signIn: "Iniciar sesión", myOrders: "Mis pedidos", shipping: "Envíos", shop: "Tienda" },
   whatWeBuy: {
     label: "Servicios",
@@ -1860,6 +1884,12 @@ const it: Copy = {
     title: "Sourcing professionale per rivenditori e dettaglianti",
     desc: "K-pop, anime, carte, streetwear o ordini di gruppo — un partner di sourcing dedicato a Tokyo con prezzi vantaggiosi per grandi volumi per la tua attività.",
     cta: "Scopri Business Sourcing →",
+  },
+  pokemonStarbucksPromo: {
+    badge: "Novità nel negozio — primo arrivato, primo servito",
+    title: "Articoli limitati Pokémon × Starbucks",
+    desc: "Appena aggiunti: pezzi esclusivi della collab Pokémon × Starbucks, già assicurati e pronti per la spedizione. Una volta esauriti, non torneranno.",
+    cta: "Vai al negozio →",
   },
   nav: { request: "Richiedi un articolo", pricing: "Prezzi", faq: "FAQ", gallery: "Galleria", events: "Eventi", services: "Servizi", howItWorks: "Come funziona", reviews: "Recensioni", signIn: "Accedi", myOrders: "I miei ordini", shipping: "Spedizioni", shop: "Negozio" },
   whatWeBuy: {
@@ -2312,6 +2342,12 @@ const de: Copy = {
     desc: "K-Pop, Anime, Karten, Streetwear oder Sammelbestellungen — ein spezialisierter Sourcing-Partner in Tokio mit mengenfreundlichen Preisen für dein Business.",
     cta: "Business Sourcing entdecken →",
   },
+  pokemonStarbucksPromo: {
+    badge: "Neu im Shop — first come, first served",
+    title: "Limitierte Pokémon × Starbucks Artikel",
+    desc: "Gerade hinzugefügt: exklusive Pokémon × Starbucks Collab-Teile, bereits gesichert und versandbereit. Einmal ausverkauft, kommen sie nicht zurück.",
+    cta: "Zum Shop →",
+  },
   nav: { request: "Artikel anfragen", pricing: "Preise", faq: "FAQ", gallery: "Galerie", events: "Events", services: "Leistungen", howItWorks: "So funktioniert's", reviews: "Bewertungen", signIn: "Anmelden", myOrders: "Meine Bestellungen", shipping: "Versand", shop: "Shop" },
   whatWeBuy: {
     label: "Leistungen",
@@ -2762,6 +2798,12 @@ const ko: Copy = {
     title: "소매업체 및 리셀러를 위한 전문 소싱",
     desc: "K-pop, 애니메이션, 카드, 스트리트웨어, 단체 주문까지 — 도쿄 전담 소싱 파트너가 비즈니스에 맞는 대량 구매 가격을 제공합니다.",
     cta: "비즈니스 소싱 보러가기 →",
+  },
+  pokemonStarbucksPromo: {
+    badge: "샵에 새로 입고 — 선착순",
+    title: "포켓몬 × 스타벅스 한정 아이템",
+    desc: "포켓몬 × 스타벅스 콜라보 한정 아이템이 방금 추가되었습니다. 이미 확보되어 바로 발송 가능합니다. 품절되면 재입고되지 않습니다.",
+    cta: "샵 보러가기 →",
   },
   nav: { request: "상품 요청하기", pricing: "요금", faq: "자주 묻는 질문", gallery: "갤러리", events: "이벤트", services: "서비스", howItWorks: "이용 방법", reviews: "리뷰", signIn: "로그인", myOrders: "내 주문", shipping: "배송", shop: "샵" },
   whatWeBuy: {
@@ -3214,6 +3256,12 @@ const zh: Copy = {
     desc: "K-pop、动漫、卡牌、街头潮牌或团购订单 —— 东京专属采购伙伴，为您的业务提供批量优惠价格。",
     cta: "了解商务采购 →",
   },
+  pokemonStarbucksPromo: {
+    badge: "商店新品 — 先到先得",
+    title: "宝可梦 × 星巴克限定商品",
+    desc: "刚刚上架：宝可梦 × 星巴克联名限定商品，已确保库存，随时可发货。售完即止，不会补货。",
+    cta: "前往商店 →",
+  },
   nav: { request: "提交求购", pricing: "价格", faq: "常见问题", gallery: "画廊", events: "活动", services: "服务", howItWorks: "运作方式", reviews: "评价", signIn: "登录", myOrders: "我的订单", shipping: "配送", shop: "商店" },
   whatWeBuy: {
     label: "服务",
@@ -3664,6 +3712,12 @@ const pt: Copy = {
     title: "Sourcing profissional para retalhistas e revendedores",
     desc: "K-pop, anime, cartas, streetwear ou encomendas em grupo — um parceiro de sourcing dedicado em Tóquio com preços vantajosos por volume para o seu negócio.",
     cta: "Explorar Business Sourcing →",
+  },
+  pokemonStarbucksPromo: {
+    badge: "Novidade na loja — por ordem de chegada",
+    title: "Artigos limitados Pokémon × Starbucks",
+    desc: "Acabados de adicionar: peças exclusivas da colaboração Pokémon × Starbucks, já garantidas e prontas a enviar. Depois de esgotados, não voltam.",
+    cta: "Ver a loja →",
   },
   nav: { request: "Solicitar um artigo", pricing: "Preços", faq: "Perguntas frequentes", gallery: "Galeria", events: "Eventos", services: "Serviços", howItWorks: "Como funciona", reviews: "Avaliações", signIn: "Entrar", myOrders: "Minhas encomendas", shipping: "Envio", shop: "Loja" },
   whatWeBuy: {
@@ -4116,6 +4170,12 @@ const id: Copy = {
     desc: "K-pop, anime, kartu, streetwear, atau pesanan grup — mitra sourcing khusus di Tokyo dengan harga ramah volume untuk bisnis Anda.",
     cta: "Jelajahi Business Sourcing →",
   },
+  pokemonStarbucksPromo: {
+    badge: "Baru di toko — siapa cepat dia dapat",
+    title: "Barang edisi terbatas Pokémon × Starbucks",
+    desc: "Baru ditambahkan: barang eksklusif kolaborasi Pokémon × Starbucks, sudah diamankan dan siap dikirim. Begitu habis, tidak akan ada lagi.",
+    cta: "Lihat toko →",
+  },
   nav: { request: "Ajukan permintaan", pricing: "Harga", faq: "FAQ", gallery: "Galeri", events: "Acara", services: "Layanan", howItWorks: "Cara kerja", reviews: "Ulasan", signIn: "Masuk", myOrders: "Pesanan saya", shipping: "Pengiriman", shop: "Toko" },
   whatWeBuy: {
     label: "Layanan",
@@ -4567,6 +4627,12 @@ const vi: Copy = {
     desc: "K-pop, anime, thẻ bài, thời trang đường phố hay đơn hàng theo nhóm — đối tác tìm nguồn hàng chuyên biệt tại Tokyo với mức giá ưu đãi theo số lượng cho doanh nghiệp của bạn.",
     cta: "Khám phá Business Sourcing →",
   },
+  pokemonStarbucksPromo: {
+    badge: "Mới có trong shop — ai đến trước được trước",
+    title: "Sản phẩm giới hạn Pokémon × Starbucks",
+    desc: "Vừa thêm mới: các sản phẩm độc quyền hợp tác Pokémon × Starbucks, đã được đảm bảo và sẵn sàng giao. Hết là hết, không có thêm.",
+    cta: "Xem shop →",
+  },
   nav: { request: "Yêu cầu mua hàng", pricing: "Bảng giá", faq: "Câu hỏi thường gặp", gallery: "Thư viện ảnh", events: "Sự kiện", services: "Dịch vụ", howItWorks: "Cách hoạt động", reviews: "Đánh giá", signIn: "Đăng nhập", myOrders: "Đơn hàng của tôi", shipping: "Vận chuyển", shop: "Cửa hàng" },
   whatWeBuy: {
     label: "Dịch vụ",
@@ -5017,6 +5083,12 @@ const nl: Copy = {
     title: "Professionele sourcing voor retailers en doorverkopers",
     desc: "K-pop, anime, kaarten, streetwear of groepsbestellingen — een toegewijde sourcingpartner in Tokio met volumevriendelijke prijzen voor jouw bedrijf.",
     cta: "Ontdek Business Sourcing →",
+  },
+  pokemonStarbucksPromo: {
+    badge: "Nieuw in de shop — wie het eerst komt",
+    title: "Gelimiteerde Pokémon × Starbucks items",
+    desc: "Net toegevoegd: exclusieve Pokémon × Starbucks-samenwerkingsstukken, al veiliggesteld en klaar om te verzenden. Eenmaal uitverkocht, komen ze niet terug.",
+    cta: "Bekijk de shop →",
   },
   nav: { request: "Artikel aanvragen", pricing: "Prijzen", faq: "Veelgestelde vragen", gallery: "Galerij", events: "Evenementen", services: "Diensten", howItWorks: "Hoe het werkt", reviews: "Beoordelingen", signIn: "Inloggen", myOrders: "Mijn bestellingen", shipping: "Verzending", shop: "Shop" },
   whatWeBuy: {
