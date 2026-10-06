@@ -271,15 +271,23 @@ export async function POST(request) {
       // purchase folded into it instead of starting a second one — but only
       // while that order hasn't shipped yet. Once it's Shipped, Delivered,
       // or Cancelled, that shipment is done and a new payment starts a
-      // fresh order instead of reopening a closed one.
+      // fresh order instead of reopening a closed one. Item payments from a
+      // different month than the open order also start a fresh order.
       let openOrder = null;
       if (email) {
         const { data: existingOrders } = await admin
           .from("orders")
-          .select("id, items, item_price_jpy, service_fee_jpy, shipping_cost_jpy, admin_notes, status, client_name, client_phone, delivery_country, shipping_address")
+          .select("id, items, item_price_jpy, service_fee_jpy, shipping_cost_jpy, admin_notes, status, client_name, client_phone, delivery_country, shipping_address, purchase_date, created_at")
           .ilike("client_email", email)
           .order("created_at", { ascending: false });
-        openOrder = (existingOrders || []).find(o => !["Shipped", "Delivered", "Cancelled"].includes(o.status)) || null;
+        // An item payment only folds into an order from the same calendar
+        // month, so revenue lands in the month it was actually paid. A
+        // shipping payment isn't revenue, so it always joins the open order.
+        const thisMonth = new Date().toISOString().slice(0, 7);
+        openOrder = (existingOrders || []).find(o =>
+          !["Shipped", "Delivered", "Cancelled"].includes(o.status) &&
+          (isShippingPayment || (o.purchase_date || o.created_at || "").slice(0, 7) === thisMonth)
+        ) || null;
       }
 
       // A shipping payment never touches item/service-fee totals — it's
