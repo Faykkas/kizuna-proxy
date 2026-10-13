@@ -8,6 +8,7 @@ import { formatJPY, toYen } from "../../lib/money";
 import { formatDateTimeFr, monthLabelFr } from "../../lib/status";
 import { shippingKind } from "../../lib/shipping";
 import { Banner, DataError, PageHead, ReadOnlyTag, StaffNotice, StatCard, Tag } from "../../components/ui";
+import LinkActions from "./LinkActions";
 
 export const metadata = { title: "Liens de paiement — Administration Kizuna" };
 
@@ -82,7 +83,7 @@ export default async function PaymentLinksPage({ searchParams }: { searchParams:
     <>
       <PageHead
         title="Liens de paiement"
-        subtitle="Créez un lien ici ; pour en annuler un, utilisez encore l'ancienne admin."
+        subtitle="Créez, copiez ou annulez un lien de paiement."
         tags={<ReadOnlyTag />}
       />
 
@@ -111,7 +112,7 @@ export default async function PaymentLinksPage({ searchParams }: { searchParams:
 
       <Banner kind="info">
         <strong>« Livraison ? »</strong> : lien dont le libellé parle d'envoi mais qui a été saisi comme des articles — son montant est donc compté dans le prix des articles de la commande. Les nouveaux liens ont un type explicite.<br />
-        L'adresse d'un lien (<code>/pay/…</code>) sert d'unique « clé » au client : elle n'est volontairement pas affichée ici.
+        L'adresse d'un lien (<code>/pay/…</code>) sert d'unique « clé » au client : elle n'est pas affichée, seulement copiable pour un lien en attente.
       </Banner>
 
       <form method="get" action={`${BASE}/liens-de-paiement`} className="av2-filters" role="search">
@@ -144,12 +145,13 @@ export default async function PaymentLinksPage({ searchParams }: { searchParams:
               <th className="r">Commission</th>
               <th className="r">Total</th>
               <th className="r">Marge PayPal</th>
+              {access.role === "admin" ? <th>Actions</th> : null}
             </tr>
           </thead>
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td colSpan={10} style={{ textAlign: "center", color: "var(--av2-muted)", padding: "1.6rem" }}>Aucun lien ne correspond.</td>
+                <td colSpan={11} style={{ textAlign: "center", color: "var(--av2-muted)", padding: "1.6rem" }}>Aucun lien ne correspond.</td>
               </tr>
             ) : (
               rows.map((l) => {
@@ -174,6 +176,7 @@ export default async function PaymentLinksPage({ searchParams }: { searchParams:
                     <td className="r">{formatJPY(toYen(l.fee_amount_jpy).yen)}</td>
                     <td className="r"><strong>{formatJPY(totalOf(l))}</strong></td>
                     <td className="r">{margin == null ? "—" : formatJPY(margin)}</td>
+                    {access.role === "admin" ? <td><LinkActions id={l.id} status={l.status} label={l.label} /></td> : null}
                   </tr>
                 );
               })

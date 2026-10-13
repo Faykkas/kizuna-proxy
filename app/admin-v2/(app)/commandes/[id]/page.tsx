@@ -67,7 +67,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
       <PageHead
         title={`Commande ${o.public_ref ?? `#${o.id}`}`}
         subtitle={<StatusBadge status={o.status} />}
-        tags={<ReadOnlyTag />}
+        tags={access.role === "admin" ? <Link className="av2-btn" href={`${BASE}/commandes/${o.id}/modifier`}>Modifier</Link> : <ReadOnlyTag />}
       />
 
       <div className="av2-grid cols-2">

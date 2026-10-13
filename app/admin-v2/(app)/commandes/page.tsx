@@ -60,8 +60,8 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
     <>
       <PageHead
         title="Commandes"
-        subtitle="Commandes existantes, lues depuis la base actuelle. Aucune modification possible depuis cette page."
-        tags={<ReadOnlyTag />}
+        subtitle="Toutes les commandes. Cliquez sur une commande pour la consulter ou la modifier."
+        tags={access.role === "admin" ? <Link className="av2-btn" href={`${BASE}/commandes/nouveau`}>+ Nouvelle commande</Link> : <ReadOnlyTag />}
       />
 
       <form method="get" action={`${BASE}/commandes`} className="av2-filters" role="search">

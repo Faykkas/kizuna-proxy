@@ -32,9 +32,9 @@ const ITEMS = [
   { href: `${BASE}/liens-de-paiement`, label: "Liens de paiement", icon: "links" },
   { href: `${BASE}/boutique`, label: "Boutique", icon: "shop" },
   { href: `${BASE}/comptabilite`, label: "Comptabilité", icon: "accounting", tag: "Phase 1" },
-  { label: "Galerie", icon: "content", soon: true },
-  { label: "Actualités", icon: "content", soon: true },
-  { label: "Bandeau d'annonce", icon: "content", soon: true },
+  { href: `${BASE}/galerie`, label: "Galerie", icon: "content" },
+  { href: `${BASE}/actualites`, label: "Actualités", icon: "content" },
+  { href: `${BASE}/bandeau`, label: "Bandeau d'annonce", icon: "content" },
   { href: `${BASE}/parametres`, label: "Paramètres", icon: "settings" },
 ];
 
