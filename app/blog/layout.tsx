@@ -1,12 +1,14 @@
 // app/blog/layout.tsx
 import "../globals.css";
 import SiteNav from "../components/SiteNav";
+import GuideExtras from "./GuideExtras";
 
 export default function BlogLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <SiteNav />
       {children}
+      <GuideExtras />
       <footer style={{
         background: "#080809", padding: "2rem", textAlign: "center",
         color: "rgba(244,244,245,.2)", fontSize: ".75rem", letterSpacing: ".08em",
