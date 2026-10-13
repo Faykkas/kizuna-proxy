@@ -20,6 +20,7 @@ const BLOG_SLUGS = [
   "kpop-photocards-japan-guide",
   "japan-package-forwarding-guide",
   "tokyo-discreet-pickup-service",
+  "buy-coach-bags-japan",
 ];
 
 const LANDING_SLUGS = [
