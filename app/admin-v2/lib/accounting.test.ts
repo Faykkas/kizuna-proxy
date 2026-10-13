@@ -1,7 +1,7 @@
 // Lancer : node --test app/admin-v2/lib/accounting.test.ts
 import test from "node:test";
 import assert from "node:assert/strict";
-import { annualExpenseTotal, buildReceipts, csvCell, entityOn, monthlyExpenseAverage, receiptsToCsv, summarizeByMonth, toJst } from "./accounting.ts";
+import { annualExpenseTotal, buildReceipts, csvCell, entityOn, missingPackageWeeks, monthlyExpenseAverage, receiptsToCsv, summarizeByMonth, toJst } from "./accounting.ts";
 
 const link = (o: Partial<Parameters<typeof buildReceipts>[0][number]> = {}) => ({
   id: "l1", label: "Mercari items", client_name: "Anna", paid_at: "2026-10-06T01:04:59.633+00:00",
@@ -67,6 +67,13 @@ test("synthèse mensuelle : somme des seuls frais connus, compte des inconnus", 
   assert.equal(oct.paypalReal, 685);
   assert.equal(oct.unknownFees, 1);
   assert.equal(oct.net, 15725 - 685);
+});
+
+test("semaines de colis manquantes : seulement entre la première et la dernière entrée", () => {
+  const dates = ["2026-07-12", "2026-07-19", "2026-07-26", "2026-08-02", "2026-08-30", "2026-09-06", "2026-09-13", "2026-09-16", "2026-09-27", "2026-10-04", "2026-10-12"];
+  assert.deepEqual(missingPackageWeeks(dates), ["2026-08-03", "2026-08-10", "2026-08-17", "2026-10-05"]);
+  assert.deepEqual(missingPackageWeeks(["2026-07-12"]), []);
+  assert.deepEqual(missingPackageWeeks([]), []);
 });
 
 test("dépenses : mensuelles x12, annuelles x1, moyenne mensuelle arrondie", () => {

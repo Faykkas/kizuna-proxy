@@ -52,7 +52,9 @@ export function isActiveStatus(status: string | null): boolean {
 
 export function formatDateFr(value: string | null | undefined): string {
   if (!value) return "—";
-  const d = new Date(value.length === 10 ? `${value}T00:00:00` : value);
+  // Une date seule (AAAA-MM-JJ) est lue en UTC puis affichée en UTC : sinon, sur un ordinateur à
+  // l'heure de Tokyo, minuit local tombe la veille en UTC et la date s'affiche un jour trop tôt.
+  const d = new Date(value.length === 10 ? `${value}T00:00:00Z` : value);
   if (Number.isNaN(d.getTime())) return value;
   return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric", timeZone: value.length === 10 ? "UTC" : "Asia/Tokyo" });
 }

@@ -154,6 +154,32 @@ export function monthlyExpenseAverage(expenses: Expense[]): number {
   return Math.round(annualExpenseTotal(expenses) / 12);
 }
 
+// ── Commissions colis : semaines sans entrée ─────────────────────────────
+
+/** Lundi (AAAA-MM-JJ) de la semaine d'une date. */
+function mondayOf(date: string): string {
+  const t = new Date(date + "T00:00:00Z");
+  t.setUTCDate(t.getUTCDate() - ((t.getUTCDay() + 6) % 7));
+  return t.toISOString().slice(0, 10);
+}
+
+/**
+ * Semaines (lundis) sans aucune commission colis enregistrée, ENTRE la première et la dernière entrée.
+ * Information seulement : on ne sait pas s'il n'y a rien eu ou si la saisie manque. Rien n'est ajouté.
+ */
+export function missingPackageWeeks(dates: string[]): string[] {
+  const valid = dates.filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d)).sort();
+  if (valid.length < 2) return [];
+  const have = new Set(valid.map(mondayOf));
+  const missing: string[] = [];
+  const end = Date.parse(mondayOf(valid[valid.length - 1]) + "T00:00:00Z");
+  for (let t = Date.parse(mondayOf(valid[0]) + "T00:00:00Z"); t <= end; t += 7 * 24 * 3600 * 1000) {
+    const d = new Date(t).toISOString().slice(0, 10);
+    if (!have.has(d)) missing.push(d);
+  }
+  return missing;
+}
+
 // ── Export CSV ───────────────────────────────────────────────────────────
 
 /** Protège contre l'injection de formules dans Excel (=, +, -, @ en début de cellule). */

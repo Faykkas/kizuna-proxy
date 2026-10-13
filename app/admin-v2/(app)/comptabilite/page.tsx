@@ -3,7 +3,8 @@ import { requireAccess } from "../../lib/access";
 import { createServerSupabase } from "../../lib/supabase-server";
 import { loadOrdersForStats, loadPaidLinks, type EntityRow } from "../../lib/queries";
 import { loadEntitiesSafe, loadExpenses, loadPaidLinksForJournal } from "../../lib/queriesAccounting";
-import { annualExpenseTotal, buildReceipts, entityOn, monthlyExpenseAverage, summarizeByMonth } from "../../lib/accounting";
+import { annualExpenseTotal, buildReceipts, entityOn, missingPackageWeeks, monthlyExpenseAverage, summarizeByMonth } from "../../lib/accounting";
+import { isCommissionPackage } from "../../../lib/commissionPackage";
 import { computeCommissions, currentMonthJst } from "../../lib/commissions";
 import { BASE } from "../../lib/config";
 import { formatJPY } from "../../lib/money";
@@ -63,6 +64,11 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
   const sum = (f: (m: (typeof yearReceipts)[number]) => number) => yearReceipts.reduce((s, m) => s + f(m), 0);
   const unknownFees = sum((m) => m.unknownFees);
 
+  // Premier mois avec des encaissements PayPal enregistrés : avant, il n'y avait pas de lien de paiement.
+  const firstReceiptMonth = receiptMonths[0]?.month ?? null;
+  const packages = orders.filter((o) => isCommissionPackage(o) && o.purchase_date && o.status !== "Cancelled").sort((a, b) => (a.purchase_date ?? "").localeCompare(b.purchase_date ?? ""));
+  const missingWeeks = missingPackageWeeks(packages.map((o) => o.purchase_date as string));
+
   return (
     <>
       <PageHead
@@ -121,7 +127,7 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
                   const r = receiptMonths.find((x) => x.month === m);
                   return (
                     <tr key={m}>
-                      <td style={{ textTransform: "capitalize" }}><Link className="av2-link" href={`${BASE}/comptabilite?annee=${year}&mois=${m}#journal`}>{monthLabelFr(m)}</Link></td>
+                      <td style={{ textTransform: "capitalize" }}><Link className="av2-link" href={`${BASE}/comptabilite?annee=${year}&mois=${m}#journal`}>{monthLabelFr(m)}</Link>{firstReceiptMonth && m < firstReceiptMonth ? <small><Tag kind="muted">avant le suivi PayPal</Tag></small> : null}</td>
                       <td className="r"><strong>{formatJPY(g?.total ?? 0)}</strong></td>
                       <td className="r">{g?.packageCommission ? formatJPY(g.packageCommission) : "—"}</td>
                       <td className="r">{formatJPY(expenseMonthly)}</td>
@@ -195,6 +201,44 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
         </div>
       </div>
 
+      <div className="av2-card">
+        <h2>Commissions colis</h2>
+        <p className="av2-sub" style={{ marginBottom: "0.6rem" }}>
+          Ce que Kizuna gagne chaque semaine sur les colis. Elles comptent dans les gains, pas dans le nombre de commandes.
+        </p>
+        {packages.length === 0 ? (
+          <p style={{ color: "var(--av2-muted)" }}>Aucune commission colis enregistrée.</p>
+        ) : (
+          <div className="av2-tablewrap">
+            <table className="av2-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Libellé</th>
+                  <th className="r">Gain</th>
+                </tr>
+              </thead>
+              <tbody>
+                {packages.filter((o) => (o.purchase_date ?? "").startsWith(year)).map((o) => (
+                  <tr key={o.id}>
+                    <td>{formatDateFr(o.purchase_date)}</td>
+                    <td>{o.client_name}</td>
+                    <td className="r">{formatJPY(o.service_fee_jpy ?? 0)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {missingWeeks.filter((w) => w.startsWith(year)).length > 0 ? (
+          <p className="av2-sub" style={{ marginTop: "0.6rem" }}>
+            <strong>Semaines sans commission colis enregistrée :</strong>{" "}
+            {missingWeeks.filter((w) => w.startsWith(year)).map((w) => `semaine du ${formatDateFr(w)}`).join(", ")}.
+            Rien n'a été ajouté : s'il y a eu des colis ces semaines-là, il manque la saisie.
+          </p>
+        ) : null}
+      </div>
+
       <ExpensesManager expenses={expenses} />
 
       <div className="av2-card">
@@ -219,7 +263,7 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
       </div>
 
       <Banner kind="info">
-        <strong>Ce que ce journal ne contient pas encore :</strong> les ventes d'avant septembre 2026 et les paiements faits directement sur PayPal (sans lien), les remboursements, les transferts vers la banque et les justificatifs. Ils arriveront avec la saisie manuelle du registre financier. Aucune déclaration fiscale n'est produite automatiquement, et les règles (avances clients, taxe de consommation, PayPal de Mayuko) restent à valider avec un comptable japonais. L'ancien calculateur de charges japonaises (Kokuho, impôts…) reste dans l'ancienne admin en attendant son remplaçant.
+        <strong>Ce que ce journal ne contient pas encore :</strong> les ventes d'avant septembre 2026 et les paiements faits directement sur PayPal (sans lien), les remboursements, les transferts vers la banque et les justificatifs. Pour les mois d'avant septembre, l'historique réel est chez PayPal et la banque : il pourra être importé (relevé CSV) puis rapproché des commandes, sans rien inventer. Aucune déclaration fiscale n'est produite automatiquement, et les règles (avances clients, taxe de consommation, PayPal de Mayuko) restent à valider avec un comptable japonais. L'ancien calculateur de charges japonaises (Kokuho, impôts…) reste dans l'ancienne admin en attendant son remplaçant.
       </Banner>
 
       <p style={{ color: "var(--av2-muted)", fontSize: "0.82rem" }}>
