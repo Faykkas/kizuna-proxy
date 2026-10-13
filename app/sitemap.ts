@@ -21,6 +21,9 @@ const BLOG_SLUGS = [
   "japan-package-forwarding-guide",
   "tokyo-discreet-pickup-service",
   "buy-coach-bags-japan",
+  "buy-sanrio-japan",
+  "buy-onitsuka-tiger-japan",
+  "buy-porter-yoshida-bags-japan",
 ];
 
 const LANDING_SLUGS = [

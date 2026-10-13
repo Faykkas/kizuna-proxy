@@ -4,6 +4,8 @@
 // stays easy to find. Keyed by guide slug, then by language code. Components
 // fall back to `.en` if a language is missing for a given guide.
 
+import { brandGuides } from "./brandGuides";
+
 export const guideTranslations = {
   pokemonCards: {
     en: {
@@ -4367,4 +4369,5 @@ export const guideTranslations = {
       ctaText: "Op zoek naar een Coach-tas in Japan?", ctaBtn: "Stuur ons je verzoek →",
     },
   },
+  ...brandGuides,
 };

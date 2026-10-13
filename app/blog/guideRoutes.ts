@@ -22,6 +22,9 @@ import KpopClient from "./kpop-photocards-japan-guide/KpopClient";
 import ForwardingClient from "./japan-package-forwarding-guide/ForwardingClient";
 import DiscreetPickupClient from "./tokyo-discreet-pickup-service/DiscreetPickupClient";
 import CoachOfficialClient from "./buy-coach-bags-japan/CoachOfficialClient";
+import SanrioClient from "./buy-sanrio-japan/SanrioClient";
+import OnitsukaClient from "./buy-onitsuka-tiger-japan/OnitsukaClient";
+import PorterClient from "./buy-porter-yoshida-bags-japan/PorterClient";
 
 export const GUIDE_ROUTES = {
   "best-pokemon-cards-japan-2026": { Component: PokemonCardsClient, key: "pokemonCards" },
@@ -41,6 +44,9 @@ export const GUIDE_ROUTES = {
   "japan-package-forwarding-guide": { Component: ForwardingClient, key: "forwarding" },
   "tokyo-discreet-pickup-service": { Component: DiscreetPickupClient, key: "discreetPickup" },
   "buy-coach-bags-japan": { Component: CoachOfficialClient, key: "coachOfficial" },
+  "buy-sanrio-japan": { Component: SanrioClient, key: "sanrio" },
+  "buy-onitsuka-tiger-japan": { Component: OnitsukaClient, key: "onitsukaTiger" },
+  "buy-porter-yoshida-bags-japan": { Component: PorterClient, key: "porterYoshida" },
 };
 
 export const BLOG_SLUGS = Object.keys(GUIDE_ROUTES);

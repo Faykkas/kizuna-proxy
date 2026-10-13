@@ -27,6 +27,9 @@ const GUIDES = [
   { slug: "japan-package-forwarding-guide",    key: "forwarding",   Icon: IconTruck },
   { slug: "tokyo-discreet-pickup-service",     key: "discreetPickup", Icon: IconShoppingBag },
   { slug: "buy-coach-bags-japan",              key: "coachOfficial", Icon: IconShoppingBag },
+  { slug: "buy-sanrio-japan", key: "sanrio", Icon: IconShoppingBag },
+  { slug: "buy-onitsuka-tiger-japan", key: "onitsukaTiger", Icon: IconShoppingBag },
+  { slug: "buy-porter-yoshida-bags-japan", key: "porterYoshida", Icon: IconShoppingBag },
 ];
 
 export default function BlogIndexClient() {
