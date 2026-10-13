@@ -1,6 +1,7 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { isEarnedStatus } from "./commissions";
+import type { LinkLite, OrderLiteForLinks } from "./shipping";
 
 // COUCHE DE LECTURE SEULE. Aucune fonction de ce fichier n'écrit en base :
 // seulement .select(). La phase 0 conserve les données actuelles intactes.
@@ -56,12 +57,6 @@ export function loadPaidLinks(sb: Sb) {
       .order("paid_at")
       .range(from, to),
   );
-}
-
-export async function countNewRequests(sb: Sb): Promise<number> {
-  const { count, error } = await sb.from("requests").select("id", { count: "exact", head: true }).eq("status", "new");
-  if (error) throw new Error(error.message);
-  return count ?? 0;
 }
 
 // ── Commandes ───────────────────────────────────────────────────────────
@@ -236,4 +231,85 @@ export async function loadEntities(sb: Sb): Promise<{ available: boolean; rows: 
     throw new Error(error.message);
   }
   return { available: true, rows: (data ?? []) as EntityRow[] };
+}
+
+// ── Liens de paiement ───────────────────────────────────────────────────
+// Le « jeton » d'un lien de paiement (/pay/<jeton>) est l'identifiant de la
+// ligne et sert de seul identifiant d'accès pour le client : on ne l'affiche
+// donc jamais ici.
+
+export type PaymentLinkRow = {
+  id: string;
+  label: string | null;
+  client_name: string | null;
+  client_email: string | null;
+  status: string | null;
+  created_at: string | null;
+  paid_at: string | null;
+  amount_jpy: number | null;
+  item_amount_jpy: number | null;
+  fee_amount_jpy: number | null;
+  paypal_fee_jpy: number | null;
+  paypal_real_fee_jpy: number | null;
+  is_shipping: boolean | null;
+};
+
+export function loadPaymentLinks(sb: Sb) {
+  return fetchAll<PaymentLinkRow>((from, to) =>
+    sb
+      .from("payment_links")
+      .select("id,label,client_name,client_email,status,created_at,paid_at,amount_jpy,item_amount_jpy,fee_amount_jpy,paypal_fee_jpy,paypal_real_fee_jpy,is_shipping")
+      .order("created_at", { ascending: false })
+      .range(from, to),
+  );
+}
+
+export async function countPendingLinks(sb: Sb): Promise<number> {
+  const { count, error } = await sb.from("payment_links").select("id", { count: "exact", head: true }).eq("status", "pending");
+  if (error) throw new Error(error.message);
+  return count ?? 0;
+}
+
+// ── Boutique ────────────────────────────────────────────────────────────
+
+export type ShopItemRow = {
+  id: string;
+  name: string | null;
+  image_url: string | null;
+  price_jpy: number | null;
+  fee_jpy: number | null;
+  available: boolean | null;
+  sort_order: number | null;
+  buyer_name: string | null;
+  ship_by: string | null;
+  created_at: string | null;
+};
+
+export async function loadShopItems(sb: Sb): Promise<ShopItemRow[]> {
+  const { data, error } = await sb
+    .from("shop_items")
+    .select("id,name,image_url,price_jpy,fee_jpy,available,sort_order,buyer_name,ship_by,created_at")
+    .order("sort_order")
+    .order("created_at", { ascending: false });
+  if (error) throw new Error(error.message);
+  return (data ?? []) as ShopItemRow[];
+}
+
+// ── Paiements d'un client (pour retrouver la livraison payée par commande) ──
+
+export async function loadClientPayments(sb: Sb, email: string): Promise<{ links: LinkLite[]; orders: OrderLiteForLinks[] }> {
+  // Échappe % _ \ pour que l'email soit comparé tel quel (insensible à la casse).
+  const pattern = email.trim().replace(/[\\%_]/g, (m) => "\\" + m);
+  const [links, orders] = await Promise.all([
+    sb
+      .from("payment_links")
+      .select("id,label,client_email,paid_at,amount_jpy,item_amount_jpy,fee_amount_jpy,paypal_fee_jpy,is_shipping")
+      .eq("status", "paid")
+      .ilike("client_email", pattern)
+      .order("paid_at"),
+    sb.from("orders").select("id,client_email,created_at").ilike("client_email", pattern),
+  ]);
+  if (links.error) throw new Error(links.error.message);
+  if (orders.error) throw new Error(orders.error.message);
+  return { links: (links.data ?? []) as LinkLite[], orders: (orders.data ?? []) as OrderLiteForLinks[] };
 }

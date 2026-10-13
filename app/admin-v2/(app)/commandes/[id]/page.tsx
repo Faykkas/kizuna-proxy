@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAccess } from "../../../lib/access";
 import { createServerSupabase } from "../../../lib/supabase-server";
-import { getOrder } from "../../../lib/queries";
+import { getOrder, loadClientPayments } from "../../../lib/queries";
+import { assignLinksToOrders, shippingAmount, shippingKind } from "../../../lib/shipping";
 import { BASE } from "../../../lib/config";
 import { formatJPY } from "../../../lib/money";
 import { formatDateFr, formatDateTimeFr } from "../../../lib/status";
@@ -44,6 +45,20 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
   }
   if (!found) notFound();
   const { order: o, events } = found;
+  // Paiements reçus sur cette commande, rattachés par email et date (estimation).
+  let payments: Awaited<ReturnType<typeof loadClientPayments>>["links"] = [];
+  if (o.client_email) {
+    try {
+      const all = await loadClientPayments(sb, o.client_email);
+      const owner = assignLinksToOrders(all.orders, all.links);
+      payments = all.links.filter((l) => owner.get(l.id) === o.id);
+    } catch {
+      /* section facultative : on n'empêche pas l'affichage de la commande */
+    }
+  }
+  const shippingLinks = payments.filter((l) => shippingKind(l) !== null);
+  const shippingPaid = shippingLinks.reduce((s, l) => s + shippingAmount(l).amount, 0);
+  const shippingMixed = shippingLinks.some((l) => shippingAmount(l).mixed);
   const track = o.tracking_number ? trackingUrl(o.tracking_number, o.shipping_method ?? "") : null;
 
   return (
@@ -75,6 +90,9 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
             <Row label="Commission">{formatJPY(o.service_fee_jpy)}</Row>
             <Row label="Livraison">
               {(o.shipping_cost_jpy ?? 0) > 0 ? `${formatJPY(o.shipping_cost_jpy)} — ${o.shipping_paid ? "payée" : "à payer"}` : "Non facturée"}
+            </Row>
+            <Row label="Livraison payée (estimée)">
+              {shippingLinks.length > 0 ? `${formatJPY(shippingPaid)}${shippingMixed ? " — au moins un lien mélange livraison et frais Kizuna" : ""}` : "Aucun paiement de livraison trouvé"}
             </Row>
             <Row label="Paiement reçu">{o.payment_received ? "Oui" : "Non"}</Row>
             <Row label="Moyen de paiement">{o.payment_method}</Row>
@@ -122,6 +140,43 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
             ) : null}
           </dl>
         </div>
+      </div>
+
+      <div className="av2-card">
+        <h2>Paiements reçus (liens de paiement)</h2>
+        {payments.length === 0 ? (
+          <p style={{ color: "var(--av2-muted)" }}>Aucun lien payé retrouvé pour cet email sur cette commande.</p>
+        ) : (
+          <div className="av2-tablewrap">
+            <table className="av2-table">
+              <thead>
+                <tr>
+                  <th>Payé le</th>
+                  <th>Libellé</th>
+                  <th>Type</th>
+                  <th className="r">Montant payé</th>
+                </tr>
+              </thead>
+              <tbody>
+                {payments.map((l) => {
+                  const k = shippingKind(l);
+                  return (
+                    <tr key={l.id}>
+                      <td>{formatDateTimeFr(l.paid_at)}</td>
+                      <td>{l.label}</td>
+                      <td>{k === "explicit" ? "Livraison" : k === "guessed" ? "Livraison ? (d'après le libellé)" : "Articles"}</td>
+                      <td className="r">{formatJPY(l.amount_jpy)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+        <p style={{ color: "var(--av2-muted)", fontSize: "0.82rem", marginTop: "0.6rem" }}>
+          Rattachement estimé : les paiements du même email sont attribués à la commande la plus récente au moment du paiement. Les paiements
+          de livraison saisis avant ce changement sont reconnus à leur libellé (« Shipping… », « Delivery… »).
+        </p>
       </div>
 
       <div className="av2-grid cols-2">

@@ -250,3 +250,6 @@
 body:has(.av2-root) .cookie-banner,
 body:has(.av2-root) .cw-fab,
 body:has(.av2-root) .cw-panel { display: none !important; }
+
+.av2-nav-soon { display: flex; align-items: center; gap: 0.65rem; padding: 0.55rem 0.7rem; font-size: 0.93rem; opacity: 0.5; cursor: default; }
+.av2-nav-soon .av2-tag { margin-left: auto; }

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:calc": "node --test app/admin-v2/lib/commissions.test.ts",
+    "test:calc": "node --test app/admin-v2/lib/commissions.test.ts app/admin-v2/lib/shipping.test.ts",
     "test:sql": "node supabase/tests/migrations.test.mjs",
     "test:admin-v2": "npm run test:calc && npm run test:sql"
   },

@@ -11,6 +11,9 @@ const ICONS: Record<string, ReactNode> = {
   orders: <path d="M20 7l-8-4-8 4v10l8 4 8-4V7zM4 7l8 4m0 0l8-4m-8 4v10" />,
   clients: <path d="M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 21a8 8 0 0116 0" />,
   accounting: <path d="M4 19V5m0 14h16M8 15V9m4 6V6m4 9v-4" />,
+  links: <path d="M10 14a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1m1 9a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1" />,
+  shop: <path d="M4 7h16l-1 12H5L4 7zm4 0a4 4 0 018 0" />,
+  content: <path d="M5 4h14v16H5V4zm3 4h8M8 12h8M8 16h5" />,
   settings: <path d="M12 15a3 3 0 100-6 3 3 0 000 6zm7.4-3a7.4 7.4 0 00-.1-1.2l2-1.5-2-3.4-2.3.9a7.6 7.6 0 00-2-1.2L14.6 3h-4l-.4 2.6a7.6 7.6 0 00-2 1.2l-2.3-.9-2 3.4 2 1.5a7.4 7.4 0 000 2.4l-2 1.5 2 3.4 2.3-.9a7.6 7.6 0 002 1.2l.4 2.6h4l.4-2.6a7.6 7.6 0 002-1.2l2.3.9 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z" />,
 };
 
@@ -26,7 +29,12 @@ const ITEMS = [
   { href: BASE, label: "Tableau de bord", icon: "dashboard", exact: true },
   { href: `${BASE}/commandes`, label: "Commandes", icon: "orders" },
   { href: `${BASE}/clients`, label: "Clients", icon: "clients" },
+  { href: `${BASE}/liens-de-paiement`, label: "Liens de paiement", icon: "links" },
+  { href: `${BASE}/boutique`, label: "Boutique", icon: "shop" },
   { href: `${BASE}/comptabilite`, label: "Comptabilité", icon: "accounting", tag: "Phase 1" },
+  { label: "Galerie", icon: "content", soon: true },
+  { label: "Actualités", icon: "content", soon: true },
+  { label: "Bandeau d'annonce", icon: "content", soon: true },
   { href: `${BASE}/parametres`, label: "Paramètres", icon: "settings" },
 ];
 
@@ -35,6 +43,15 @@ export function NavLinks() {
   return (
     <nav className="av2-nav" aria-label="Navigation principale">
       {ITEMS.map((it) => {
+        if (!it.href) {
+          return (
+            <span key={it.label} className="av2-nav-soon" aria-disabled="true">
+              <Icon name={it.icon} />
+              <span>{it.label}</span>
+              <span className="av2-tag muted">À venir</span>
+            </span>
+          );
+        }
         const active = it.exact ? pathname === it.href : pathname === it.href || pathname.startsWith(`${it.href}/`);
         return (
           <Link key={it.href} href={it.href} aria-current={active ? "page" : undefined}>

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { requireAccess } from "../lib/access";
 import { createServerSupabase } from "../lib/supabase-server";
 import { computeCommissions, currentMonthJst, lastMonths } from "../lib/commissions";
-import { countNewRequests, loadOrdersForStats, loadPaidLinks } from "../lib/queries";
+import { countPendingLinks, loadOrdersForStats, loadPaidLinks } from "../lib/queries";
 import { MONTHLY_GOAL_JPY, NEXT_GOAL_JPY, BASE } from "../lib/config";
 import { formatJPY, percentOf } from "../lib/money";
 import { isActiveStatus, monthLabelFr, statusInfo } from "../lib/status";
@@ -27,8 +27,8 @@ export default async function DashboardPage() {
   const sb = await createServerSupabase();
   let data;
   try {
-    const [orders, links, newRequests] = await Promise.all([loadOrdersForStats(sb), loadPaidLinks(sb), countNewRequests(sb)]);
-    data = { orders, links, newRequests };
+    const [orders, links, pendingLinks] = await Promise.all([loadOrdersForStats(sb), loadPaidLinks(sb), countPendingLinks(sb)]);
+    data = { orders, links, pendingLinks };
   } catch (e) {
     return (
       <>
@@ -38,7 +38,7 @@ export default async function DashboardPage() {
     );
   }
 
-  const { orders, links, newRequests } = data;
+  const { orders, links, pendingLinks } = data;
   const report = computeCommissions(orders, links);
   const byMonth = new Map(report.months.map((m) => [m.month, m]));
   const now = byMonth.get(month);
@@ -171,10 +171,8 @@ export default async function DashboardPage() {
           <h2>À traiter</h2>
           <ul className="av2-list">
             <li>
-              <span>Nouvelles demandes</span>
-              <span className="av2-num">
-                {newRequests} <Link href="/admin" prefetch={false} style={{ color: "var(--av2-info)", fontWeight: 500 }}>ancienne admin →</Link>
-              </span>
+              <Link href={`${BASE}/liens-de-paiement?statut=pending`}>Liens de paiement en attente</Link>
+              <span className="av2-num">{pendingLinks}</span>
             </li>
             <li>
               <Link href={`${BASE}/commandes?statut=Pending`}>Commandes « demande reçue »</Link>

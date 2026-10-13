@@ -105,7 +105,21 @@ automatique de l'historique ; export CSV.
 3. Date de bascule et traitement de l'année de transition.
 4. Valeur comptable des remboursements partiels et des frais PayPal (déduits au moment du paiement ou du virement ?).
 
-## 5. Feuille de route (inchangée)
+## 5. Périmètre des modules (décidé le 13 oct. 2026)
+
+- **Repris dans la v2** : tableau de bord, commandes, clients, liens de paiement (création incluse, à l'identique), boutique, galerie, actualités, bandeau d'annonce, paramètres.
+- **Abandonné** : « Demandes » (reçues par email). L'onglet « Charges » de l'ancienne admin sera remplacé par la comptabilité (phase 1) ; ses tables (`business_*`) restent intactes.
+- État : liens de paiement (liste + création) et boutique (lecture) faits ; galerie, actualités et bandeau marqués « À venir ».
+
+### Livraison : constat et correction
+
+Au 13 oct., **aucun des 180 liens payés** n'avait été créé en mode « livraison » et **aucune commande** n'a de `shipping_cost_jpy`. Les paiements « Shipping… » ont été saisis comme des articles et se sont fusionnés dans `item_price_jpy`. Conséquences : prix de livraison introuvable par commande, et prix « articles » surévalué.
+
+- **Pour l'avenir** : le formulaire de création impose le type (Articles / Livraison) et bloque un libellé « shipping » saisi comme articles.
+- **Pour le passé** : la fiche commande retrouve les paiements de livraison d'après leur libellé, rattachés à la commande par email et date (estimation, signalée comme telle). Aucune donnée n'a été corrigée.
+- **Reste à décider** : un rattrapage de l'historique (déplacer ces montants de `item_price_jpy` vers `shipping_cost_jpy`) après validation ligne par ligne.
+
+## 6. Feuille de route (inchangée)
 
 0. Fondations + squelette ✅ (local)
 1. Registre financier, dépenses, justificatifs, export CSV, reprise d'historique
