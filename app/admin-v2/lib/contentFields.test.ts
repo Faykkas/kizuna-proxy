@@ -39,3 +39,11 @@ test("chemin de stockage retrouvé depuis l'adresse publique, sans sortie du buc
   assert.equal(storagePathFromPublicUrl("https://autre.com/photo.jpg", "gallery"), null);
   assert.equal(storagePathFromPublicUrl("https://x/gallery/../secret", "gallery"), null);
 });
+
+test("lien d'article : facultatif, http(s) seulement", async () => {
+  const { parseHttpUrl } = await import("./contentFields.ts");
+  assert.deepEqual(parseHttpUrl(""), { ok: true, value: null });
+  assert.equal(parseHttpUrl("https://jp.mercari.com/item/m1").ok, true);
+  assert.equal(parseHttpUrl("http://example.com/a").ok, true);
+  for (const bad of ["javascript:alert(1)", "data:text/html,x", "ftp://x.com/a", "pas une adresse", "mercari.com/item/1"]) assert.equal(parseHttpUrl(bad).ok, false, bad);
+});

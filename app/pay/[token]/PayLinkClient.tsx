@@ -34,7 +34,9 @@ function buildRows(link, c) {
   if (items.length > 0) {
     for (const it of items) {
       const d = describeItem(it.name);
-      rows.push({ key: `i${rows.length}`, name: d.title, href: d.href, price: Number(it.price_jpy) || 0 });
+      // Le lien saisi à la création (it.url) passe avant celui qu'on déduit d'un nom qui serait une adresse.
+      const own = typeof it.url === "string" && /^https?:\/\//i.test(it.url) ? it.url : null;
+      rows.push({ key: `i${rows.length}`, name: d.title, href: own || d.href, price: Number(it.price_jpy) || 0 });
     }
   } else if (!link.isShipping && link.itemAmountJpy > 0) {
     const d = describeItem(link.label);

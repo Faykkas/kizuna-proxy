@@ -61,3 +61,23 @@ export function describeItem(name: string | null | undefined): DescribedItem {
   }
   return { title: raw, href: null };
 }
+
+/**
+ * Range le nom et le lien d'un article saisis dans le formulaire de création :
+ *  - une adresse collée dans « nom » devient le lien, et le nom est tiré de l'adresse (« Mercari · m123 ») ;
+ *  - un lien sans nom donne un nom lisible.
+ * Le lien doit être en http(s) : tout autre schéma est ignoré.
+ */
+export function splitNameAndUrl(name: string, url: string | null): { name: string; url: string | null } {
+  const n = (name ?? "").trim();
+  if (!url && /^https?:\/\//i.test(n)) {
+    try {
+      const u = new URL(n);
+      if (u.protocol === "https:" || u.protocol === "http:") return { name: describeItem(u.toString()).title, url: u.toString() };
+    } catch {
+      /* pas une adresse valide : on garde le texte tel quel */
+    }
+  }
+  if (!n && url) return { name: describeItem(url).title, url };
+  return { name: n, url };
+}

@@ -45,6 +45,21 @@ export function parseImageUrl(raw: unknown, label = "Image"): Ok<string> | Err {
   return { ok: true, value: u.toString() };
 }
 
+/** Adresse d'un article chez un vendeur : http(s) seulement, facultative (vide = pas de lien). */
+export function parseHttpUrl(raw: unknown, label = "Le lien"): Ok<string | null> | Err {
+  const s = String(raw ?? "").trim();
+  if (s === "") return { ok: true, value: null };
+  if (s.length > 2000) return { ok: false, error: `${label} : adresse trop longue.` };
+  let u: URL;
+  try {
+    u = new URL(s);
+  } catch {
+    return { ok: false, error: `${label} : adresse invalide (elle doit commencer par https://).` };
+  }
+  if (u.protocol !== "https:" && u.protocol !== "http:") return { ok: false, error: `${label} : l'adresse doit commencer par https://.` };
+  return { ok: true, value: u.toString() };
+}
+
 export function parseCategory(raw: unknown): Ok<NewsCategory> | Err {
   const s = String(raw ?? "");
   return (NEWS_CATEGORIES as readonly string[]).includes(s) ? { ok: true, value: s as NewsCategory } : { ok: false, error: "Catégorie inconnue." };

@@ -3,6 +3,8 @@
 import { requireAccess } from "../../../lib/access";
 import { createServerSupabase } from "../../../lib/supabase-server";
 import { paypalFee } from "../../../lib/shipping";
+import { parseHttpUrl } from "../../../lib/contentFields";
+import { splitNameAndUrl } from "../../../../pay/describeItem";
 
 // Création d'un lien de paiement — mêmes champs et mêmes règles que l'ancienne admin
 // (PaymentLinksTab). Le lien est une simple ligne « pending » ; PayPal n'est appelé
@@ -14,7 +16,7 @@ import { paypalFee } from "../../../lib/shipping";
 export type NewLinkInput = {
   kind: "articles" | "shipping";
   label: string;
-  items: { name: string; price: string }[];
+  items: { name: string; price: string; url?: string }[];
   feeAmount: string; // frais Kizuna (articles) ou montant de la livraison (shipping)
   clientName: string;
   clientEmail: string;
@@ -78,15 +80,20 @@ export async function createPaymentLink(input: NewLinkInput): Promise<CreateResu
   const feeAmount = toAmount(input.feeAmount);
   if (feeAmount == null) return { ok: false, error: "Le montant des frais / de la livraison doit être un nombre entier de yens." };
 
-  const items: { name: string; price_jpy: number }[] = [];
+  const items: { name: string; price_jpy: number; url?: string }[] = [];
   if (!isShipping) {
     for (const it of input.items ?? []) {
-      const name = (it.name ?? "").trim().slice(0, 127);
       const raw = (it.price ?? "").toString().trim();
+      const link = parseHttpUrl(it.url, `Le lien de « ${(it.name ?? "").trim() || "l'article"} »`);
+      if (!link.ok) return link;
+      // Une adresse collée dans « nom » (ancienne habitude) devient le lien ; un lien sans nom donne un nom lisible.
+      const { name, url } = splitNameAndUrl((it.name ?? "").trim().slice(0, 500), link.value);
       if (!name && !raw) continue; // ligne vide ignorée
       const price = toAmount(raw);
       if (price == null) return { ok: false, error: `Prix invalide pour « ${name || "article"} » : entier de yens uniquement.` };
-      if (name && price > 0) items.push({ name, price_jpy: price });
+      // Jamais d'article ignoré en silence : sans prix, le client serait sous-facturé.
+      if (name && price === 0) return { ok: false, error: `Indiquez le prix de « ${name} ».` };
+      if (name && price > 0) items.push({ name: name.slice(0, 127), price_jpy: price, ...(url ? { url } : {}) });
     }
   }
   const itemAmount = items.reduce((s, it) => s + it.price_jpy, 0);

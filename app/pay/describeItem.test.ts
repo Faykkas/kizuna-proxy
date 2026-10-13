@@ -1,7 +1,7 @@
 // Lancer : node --test app/pay/describeItem.test.ts
 import test from "node:test";
 import assert from "node:assert/strict";
-import { describeItem } from "./describeItem.ts";
+import { describeItem, splitNameAndUrl } from "./describeItem.ts";
 import { PAY_COPY, fill } from "./payTranslations.ts";
 
 test("adresses d'articles : titre lisible + lien conservé", () => {
@@ -47,4 +47,13 @@ test("{name} est présent là où il faut et remplacé", () => {
 
 test("le point de l'extension est littéral : un identifiant comme « xhtml » reste intact", () => {
   assert.equal(describeItem("https://example.com/item/xhtml").title, "Example · xhtml");
+});
+
+test("nom + lien : l'adresse collée dans le nom devient le lien, le nom devient lisible", () => {
+  assert.deepEqual(splitNameAndUrl("https://jp.mercari.com/item/m123", null), { name: "Mercari · m123", url: "https://jp.mercari.com/item/m123" });
+  assert.deepEqual(splitNameAndUrl("Sac Coach", "https://x.com/a"), { name: "Sac Coach", url: "https://x.com/a" });
+  assert.deepEqual(splitNameAndUrl("", "https://jp.mercari.com/item/m9"), { name: "Mercari · m9", url: "https://jp.mercari.com/item/m9" });
+  assert.deepEqual(splitNameAndUrl("Figurine", null), { name: "Figurine", url: null });
+  // un lien déjà fourni n'est pas écrasé par une adresse dans le nom
+  assert.deepEqual(splitNameAndUrl("https://a.com/x", "https://b.com/y"), { name: "https://a.com/x", url: "https://b.com/y" });
 });

@@ -19,7 +19,7 @@ const num = (s: string) => (/^\d+$/.test(s.trim()) ? Number(s.trim()) : 0);
 export default function NewLinkForm() {
   const [kind, setKind] = useState<Kind>("articles");
   const [label, setLabel] = useState("");
-  const [items, setItems] = useState([{ name: "", price: "" }]);
+  const [items, setItems] = useState([{ name: "", price: "", url: "" }]);
   const [fee, setFee] = useState("");
   const [clientName, setClientName] = useState("");
   const [clientEmail, setClientEmail] = useState("");
@@ -77,7 +77,7 @@ export default function NewLinkForm() {
   function reset() {
     setResult(null);
     setLabel("");
-    setItems([{ name: "", price: "" }]);
+    setItems([{ name: "", price: "", url: "" }]);
     setFee("");
     setClientName("");
     setClientEmail("");
@@ -155,16 +155,22 @@ export default function NewLinkForm() {
         <div className="av2-field">
           <label>Articles (facultatif si vous ne facturez que des frais Kizuna)</label>
           {items.map((it, i) => (
-            <div key={i} style={{ display: "flex", gap: "0.5rem" }}>
-              <input className="av2-input" style={{ flex: 3, maxWidth: "none" }} placeholder="Nom ou lien de l'article" value={it.name} maxLength={127} onChange={(e) => setItems((arr) => arr.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)))} aria-label={`Article ${i + 1}`} />
+            <div key={i} className="av2-card" style={{ display: "flex", flexDirection: "column", gap: "0.45rem", padding: "0.7rem" }}>
+              <div style={{ display: "flex", gap: "0.5rem" }}>
+              <input className="av2-input" style={{ flex: 3, maxWidth: "none" }} placeholder="Nom de l'article (ex. Sac Coach)" value={it.name} maxLength={127} onChange={(e) => setItems((arr) => arr.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)))} aria-label={`Nom de l'article ${i + 1}`} />
               <input className="av2-input" style={{ flex: 1, maxWidth: "none" }} placeholder="Prix ¥" inputMode="numeric" value={it.price} onChange={(e) => setItems((arr) => arr.map((x, j) => (j === i ? { ...x, price: e.target.value.replace(/\D/g, "") } : x)))} aria-label={`Prix de l'article ${i + 1}`} />
               {items.length > 1 ? (
                 <button type="button" className="av2-btn ghost" onClick={() => setItems((arr) => arr.filter((_, j) => j !== i))} aria-label={`Retirer l'article ${i + 1}`}>×</button>
               ) : null}
+              </div>
+              <input className="av2-input" style={{ maxWidth: "none" }} placeholder="Lien de l'article (https://…) — pour que le client puisse le voir" value={it.url} onChange={(e) => setItems((arr) => arr.map((x, j) => (j === i ? { ...x, url: e.target.value } : x)))} aria-label={`Lien de l'article ${i + 1}`} inputMode="url" />
+              {(it.name.trim() || it.price) && !it.url.trim() && !/^https?:\/\//i.test(it.name.trim()) ? (
+                <span className="av2-sub">Sans lien, le client verra le nom de l'article mais ne pourra pas l'ouvrir.</span>
+              ) : null}
             </div>
           ))}
           <div>
-            <button type="button" className="av2-btn ghost" onClick={() => setItems((arr) => [...arr, { name: "", price: "" }])}>+ Ajouter un article</button>
+            <button type="button" className="av2-btn ghost" onClick={() => setItems((arr) => [...arr, { name: "", price: "", url: "" }])}>+ Ajouter un article</button>
           </div>
         </div>
       ) : null}
@@ -238,7 +244,7 @@ export default function NewLinkForm() {
             <strong>Ce libellé ressemble à une livraison.</strong> Si c'est le prix d'envoi, choisissez le type « Livraison » : sinon le
             montant est compté comme des articles et vous ne retrouverez pas le prix de livraison de la commande.
             <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginTop: "0.6rem" }}>
-              <button type="button" className="av2-btn" onClick={() => { setKind("shipping"); setFee(String(itemAmount || feeAmount || "")); setItems([{ name: "", price: "" }]); }}>
+              <button type="button" className="av2-btn" onClick={() => { setKind("shipping"); setFee(String(itemAmount || feeAmount || "")); setItems([{ name: "", price: "", url: "" }]); }}>
                 Passer en « Livraison »
               </button>
               <button type="button" className="av2-btn ghost" onClick={() => setConfirmArticles(true)}>Non, ce sont bien des articles</button>
