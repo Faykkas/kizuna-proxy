@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:calc": "node --test app/admin-v2/lib/commissions.test.ts app/admin-v2/lib/shipping.test.ts app/admin-v2/lib/commissionPackage.test.ts app/admin-v2/lib/paymentOrderTarget.test.ts app/admin-v2/lib/orderFields.test.ts app/admin-v2/lib/contentFields.test.ts app/pay/describeItem.test.ts app/admin-v2/lib/accounting.test.ts app/admin-v2/lib/accountingShipping.test.ts app/admin-v2/lib/status.test.ts",
+    "test:calc": "node --test app/admin-v2/lib/commissions.test.ts app/admin-v2/lib/shipping.test.ts app/admin-v2/lib/commissionPackage.test.ts app/admin-v2/lib/paymentOrderTarget.test.ts app/admin-v2/lib/orderFields.test.ts app/admin-v2/lib/contentFields.test.ts app/pay/describeItem.test.ts app/admin-v2/lib/accounting.test.ts app/admin-v2/lib/accountingShipping.test.ts app/admin-v2/lib/status.test.ts app/admin-v2/lib/i18n.test.ts",
     "test:sql": "node supabase/tests/migrations.test.mjs && node supabase/tests/payment-link-target.test.mjs",
     "test:admin-v2": "npm run test:calc && npm run test:sql"
   },

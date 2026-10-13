@@ -3,12 +3,15 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { createBrowserSupabase } from "../../lib/supabase-browser";
 import { BASE } from "../../lib/config";
+import { useL } from "../../components/LangProvider";
+import LanguageSwitch from "../../components/LanguageSwitch";
 
 type Mode = "loading" | "challenge" | "enroll";
 
 // Deux cas : le compte a déjà un second facteur vérifié → on demande le code ;
 // sinon → on l'enrôle (QR code à scanner), puis on vérifie un premier code.
 export default function MfaForm({ email }: { email: string }) {
+  const { t } = useL();
   const [mode, setMode] = useState<Mode>("loading");
   const [factorId, setFactorId] = useState("");
   const [qr, setQr] = useState("");
@@ -76,32 +79,33 @@ export default function MfaForm({ email }: { email: string }) {
   return (
     <div className="av2-auth">
       <form className="av2-card av2-auth-card" onSubmit={onSubmit}>
+        <LanguageSwitch />
         <div>
-          <h1>{mode === "enroll" ? "Activer la vérification en deux étapes" : "Vérification en deux étapes"}</h1>
-          <p style={{ color: "var(--av2-muted)", marginTop: "0.3rem" }}>Connecté en tant que {email}.</p>
+          <h1>{mode === "enroll" ? t("Activer la vérification en deux étapes") : t("Vérification en deux étapes")}</h1>
+          <p style={{ color: "var(--av2-muted)", marginTop: "0.3rem" }}>{t("Connecté en tant que {email}.", { email })}</p>
         </div>
 
-        {mode === "loading" && !error ? <p style={{ color: "var(--av2-muted)" }}>Chargement…</p> : null}
+        {mode === "loading" && !error ? <p style={{ color: "var(--av2-muted)" }}>{t("Chargement…")}</p> : null}
 
         {mode === "enroll" ? (
           <>
             <p style={{ fontSize: "0.9rem" }}>
-              1. Scannez ce QR code avec une application d'authentification (Google Authenticator, 1Password, Authy…).
+              {t("1. Scannez ce QR code avec une application d'authentification (Google Authenticator, 1Password, Authy…).")}
             </p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="av2-qr" src={qr} alt="QR code à scanner avec votre application d'authentification" />
+            <img className="av2-qr" src={qr} alt={t("QR code à scanner avec votre application d'authentification")} />
             <details>
-              <summary style={{ cursor: "pointer", fontSize: "0.85rem", color: "var(--av2-muted)" }}>Impossible de scanner ? Saisir la clé à la main</summary>
+              <summary style={{ cursor: "pointer", fontSize: "0.85rem", color: "var(--av2-muted)" }}>{t("Impossible de scanner ? Saisir la clé à la main")}</summary>
               <div className="av2-secret" style={{ marginTop: "0.5rem" }}>{secret}</div>
             </details>
-            <p style={{ fontSize: "0.9rem" }}>2. Saisissez le code à 6 chiffres affiché pour confirmer.</p>
+            <p style={{ fontSize: "0.9rem" }}>{t("2. Saisissez le code à 6 chiffres affiché pour confirmer.")}</p>
           </>
         ) : null}
 
         {mode !== "loading" ? (
           <>
             <div className="av2-field">
-              <label htmlFor="code">Code à 6 chiffres</label>
+              <label htmlFor="code">{t("Code à 6 chiffres")}</label>
               <input
                 id="code"
                 className="av2-input"
@@ -114,15 +118,15 @@ export default function MfaForm({ email }: { email: string }) {
                 autoFocus
               />
             </div>
-            {error ? <p className="av2-error" role="alert">{error}</p> : null}
+            {error ? <p className="av2-error" role="alert">{t(error)}</p> : null}
             <button className="av2-btn" type="submit" disabled={busy || code.length !== 6}>
-              {busy ? "Vérification…" : mode === "enroll" ? "Activer et continuer" : "Vérifier"}
+              {busy ? t("Vérification…") : mode === "enroll" ? t("Activer et continuer") : t("Vérifier")}
             </button>
           </>
         ) : null}
-        {mode === "loading" && error ? <p className="av2-error" role="alert">{error}</p> : null}
+        {mode === "loading" && error ? <p className="av2-error" role="alert">{t(error)}</p> : null}
 
-        <button type="button" className="av2-btn ghost" onClick={signOut}>Se déconnecter</button>
+        <button type="button" className="av2-btn ghost" onClick={signOut}>{t("Se déconnecter")}</button>
       </form>
     </div>
   );

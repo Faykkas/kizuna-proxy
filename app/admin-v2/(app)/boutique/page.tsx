@@ -1,14 +1,19 @@
 import { requireAccess } from "../../lib/access";
 import { createServerSupabase } from "../../lib/supabase-server";
+import { getL } from "../../lib/lang-server";
 import { loadShopItems } from "../../lib/queries";
 import { formatJPY, toYen } from "../../lib/money";
 import { DataError, PageHead, ReadOnlyTag, StatCard } from "../../components/ui";
 import ShopManager from "./ShopManager";
 
-export const metadata = { title: "Boutique — Administration Kizuna" };
+export async function generateMetadata() {
+  const { t } = await getL();
+  return { title: `${t("Boutique")} — ${t("Administration Kizuna")}` };
+}
 
 export default async function ShopPage() {
   const access = await requireAccess();
+  const { t } = await getL();
 
   let items;
   try {
@@ -16,7 +21,7 @@ export default async function ShopPage() {
   } catch (e) {
     return (
       <>
-        <PageHead title="Boutique" />
+        <PageHead title={t("Boutique")} />
         <DataError message={(e as Error).message} />
       </>
     );
@@ -28,19 +33,19 @@ export default async function ShopPage() {
   return (
     <>
       <PageHead
-        title="Boutique"
-        subtitle="Articles déjà achetés, proposés sur la page /shop du site."
+        title={t("Boutique")}
+        subtitle={t("Articles déjà achetés, proposés sur la page /shop du site.")}
         tags={access.role === "admin" ? undefined : <ReadOnlyTag />}
       />
       <div className="av2-grid cols-3">
-        <StatCard label="En vente" value={onSale.length} sub={`${formatJPY(value)} de valeur affichée`} />
-        <StatCard label="Vendus" value={items.length - onSale.length} />
-        <StatCard label="Total d'articles" value={items.length} />
+        <StatCard label={t("En vente")} value={onSale.length} sub={t("{x} de valeur affichée", { x: formatJPY(value) })} />
+        <StatCard label={t("Vendus")} value={items.length - onSale.length} />
+        <StatCard label={t("Total d'articles")} value={items.length} />
       </div>
       {access.role === "admin" ? (
         <ShopManager items={items} />
       ) : (
-        <p style={{ color: "var(--av2-muted)" }}>Seuls les administrateurs peuvent modifier la boutique.</p>
+        <p style={{ color: "var(--av2-muted)" }}>{t("Seuls les administrateurs peuvent modifier la boutique.")}</p>
       )}
     </>
   );

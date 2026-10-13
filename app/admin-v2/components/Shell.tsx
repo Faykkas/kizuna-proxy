@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { createBrowserSupabase } from "../lib/supabase-browser";
 import { BASE } from "../lib/config";
+import { useL } from "./LangProvider";
 
 const ICONS: Record<string, ReactNode> = {
   dashboard: <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />,
@@ -31,7 +32,7 @@ const ITEMS = [
   { href: `${BASE}/clients`, label: "Clients", icon: "clients" },
   { href: `${BASE}/liens-de-paiement`, label: "Liens de paiement", icon: "links" },
   { href: `${BASE}/boutique`, label: "Boutique", icon: "shop" },
-  { href: `${BASE}/comptabilite`, label: "Comptabilité", icon: "accounting", tag: "Phase 1" },
+  { href: `${BASE}/comptabilite`, label: "Comptabilité", icon: "accounting" },
   { href: `${BASE}/galerie`, label: "Galerie", icon: "content" },
   { href: `${BASE}/actualites`, label: "Actualités", icon: "content" },
   { href: `${BASE}/bandeau`, label: "Bandeau d'annonce", icon: "content" },
@@ -40,15 +41,16 @@ const ITEMS = [
 
 export function NavLinks() {
   const pathname = usePathname();
+  const { t } = useL();
   return (
-    <nav className="av2-nav" aria-label="Navigation principale">
+    <nav className="av2-nav" aria-label={t("Navigation principale")}>
       {ITEMS.map((it) => {
         if (!it.href) {
           return (
             <span key={it.label} className="av2-nav-soon" aria-disabled="true">
               <Icon name={it.icon} />
-              <span>{it.label}</span>
-              <span className="av2-tag muted">À venir</span>
+              <span>{t(it.label)}</span>
+              <span className="av2-tag muted">{t("À venir")}</span>
             </span>
           );
         }
@@ -56,8 +58,7 @@ export function NavLinks() {
         return (
           <Link key={it.href} href={it.href} aria-current={active ? "page" : undefined}>
             <Icon name={it.icon} />
-            <span>{it.label}</span>
-            {it.tag ? <span className="av2-tag soon">{it.tag}</span> : null}
+            <span>{t(it.label)}</span>
           </Link>
         );
       })}
@@ -81,6 +82,7 @@ function readTheme(): Theme {
 }
 
 export function ThemeToggle() {
+  const { t } = useL();
   const theme = useSyncExternalStore(
     (cb) => {
       themeListeners.add(cb);
@@ -109,9 +111,9 @@ export function ThemeToggle() {
     themeListeners.forEach((l) => l());
   }
 
-  const label = theme === "auto" ? "Thème : auto" : theme === "dark" ? "Thème : sombre" : "Thème : clair";
+  const label = theme === "auto" ? t("Thème : auto") : theme === "dark" ? t("Thème : sombre") : t("Thème : clair");
   return (
-    <button type="button" onClick={cycle} title="Changer le thème (auto / sombre / clair)">
+    <button type="button" onClick={cycle} title={t("Changer le thème (auto / sombre / clair)")}>
       {label}
     </button>
   );
@@ -119,6 +121,7 @@ export function ThemeToggle() {
 
 export function SignOutButton({ className }: { className?: string }) {
   const router = useRouter();
+  const { t } = useL();
   const [busy, setBusy] = useState(false);
   return (
     <button
@@ -135,7 +138,7 @@ export function SignOutButton({ className }: { className?: string }) {
         }
       }}
     >
-      {busy ? "Déconnexion…" : "Se déconnecter"}
+      {busy ? t("Déconnexion…") : t("Se déconnecter")}
     </button>
   );
 }

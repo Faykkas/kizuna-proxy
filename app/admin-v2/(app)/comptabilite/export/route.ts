@@ -1,5 +1,6 @@
 import { requireAccess } from "../../../lib/access";
 import { createServerSupabase } from "../../../lib/supabase-server";
+import { getL } from "../../../lib/lang-server";
 import { buildReceipts, entityOn, receiptsToCsv } from "../../../lib/accounting";
 import { loadEntitiesSafe, loadPaidLinksForJournal } from "../../../lib/queriesAccounting";
 
@@ -24,7 +25,8 @@ export async function GET(request: Request) {
   const sb = await createServerSupabase();
   const [links, entities] = await Promise.all([loadPaidLinksForJournal(sb), loadEntitiesSafe(sb)]);
   const receipts = buildReceipts(links).filter((r) => r.dateJst.startsWith(prefix));
-  const csv = receiptsToCsv(receipts, (d) => entityOn(d, entities));
+  const { t } = await getL(); // en-têtes et libellés dans la langue choisie (japonais pour le comptable)
+  const csv = receiptsToCsv(receipts, (d) => entityOn(d, entities), t);
 
   return new Response(csv, {
     headers: {

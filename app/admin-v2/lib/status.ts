@@ -50,38 +50,38 @@ export function isActiveStatus(status: string | null): boolean {
   return status !== "Delivered" && status !== "Cancelled";
 }
 
-export function formatDateFr(value: string | null | undefined): string {
+export function formatDateFr(value: string | null | undefined, locale = "fr-FR"): string {
   if (!value) return "—";
   // Une date seule (AAAA-MM-JJ) est lue en UTC puis affichée en UTC : sinon, sur un ordinateur à
   // l'heure de Tokyo, minuit local tombe la veille en UTC et la date s'affiche un jour trop tôt.
   const d = new Date(value.length === 10 ? `${value}T00:00:00Z` : value);
   if (Number.isNaN(d.getTime())) return value;
-  return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric", timeZone: value.length === 10 ? "UTC" : "Asia/Tokyo" });
+  return d.toLocaleDateString(locale, { day: "2-digit", month: "short", year: "numeric", timeZone: value.length === 10 ? "UTC" : "Asia/Tokyo" });
 }
 
-export function formatDateTimeFr(value: string | null | undefined): string {
+export function formatDateTimeFr(value: string | null | undefined, locale = "fr-FR"): string {
   if (!value) return "—";
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return value;
-  return d.toLocaleString("fr-FR", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tokyo" }) + " (JST)";
+  return d.toLocaleString(locale, { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tokyo" }) + " (JST)";
 }
 
 /** Date et heure courtes à Tokyo, sur une seule ligne : « 13 oct. 13:43 ». */
-export function formatShortDateTimeFr(value: string | null | undefined): string {
+export function formatShortDateTimeFr(value: string | null | undefined, locale = "fr-FR"): string {
   if (!value) return "—";
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return value;
-  const date = d.toLocaleDateString("fr-FR", { day: "numeric", month: "short", timeZone: "Asia/Tokyo" });
-  const time = d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tokyo" });
+  const date = d.toLocaleDateString(locale, { day: "numeric", month: "short", timeZone: "Asia/Tokyo" });
+  const time = d.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tokyo" });
   return `${date} ${time}`;
 }
 
-export function monthLabelFr(month: string): string {
+export function monthLabelFr(month: string, locale = "fr-FR"): string {
   const [y, m] = month.split("-").map(Number);
-  return new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString("fr-FR", { month: "long", year: "numeric", timeZone: "UTC" });
+  return new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString(locale, { month: "long", year: "numeric", timeZone: "UTC" });
 }
 
-export function monthShortFr(month: string): string {
+export function monthShortFr(month: string, locale = "fr-FR"): string {
   const [y, m] = month.split("-").map(Number);
-  return new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString("fr-FR", { month: "short", timeZone: "UTC" }).replace(".", "");
+  return new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString(locale, { month: "short", timeZone: "UTC" }).replace(".", "");
 }

@@ -1,24 +1,29 @@
 import Link from "next/link";
 import { requireAccess } from "../../lib/access";
 import { createServerSupabase } from "../../lib/supabase-server";
+import { getL } from "../../lib/lang-server";
 import { listCustomers } from "../../lib/queries";
 import { BASE } from "../../lib/config";
 import { formatJPY } from "../../lib/money";
-import { formatDateFr } from "../../lib/status";
 import { Banner, DataError, PageHead, ReadOnlyTag, StaffNotice, Tag } from "../../components/ui";
 
-export const metadata = { title: "Clients — Administration Kizuna" };
+export async function generateMetadata() {
+  const { t } = await getL();
+  return { title: `${t("Clients")} — ${t("Administration Kizuna")}` };
+}
 
 const SHOWN_MAX = 300;
 
 export default async function CustomersPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const access = await requireAccess();
+  const L = await getL();
+  const { t } = L;
   const q = ((await searchParams).q ?? "").trim().slice(0, 80);
 
   if (access.role === "staff") {
     return (
       <>
-        <PageHead title="Clients" tags={<ReadOnlyTag />} />
+        <PageHead title={t("Clients")} tags={<ReadOnlyTag />} />
         <StaffNotice />
       </>
     );
@@ -31,7 +36,7 @@ export default async function CustomersPage({ searchParams }: { searchParams: Pr
   } catch (e) {
     return (
       <>
-        <PageHead title="Clients" tags={<ReadOnlyTag />} />
+        <PageHead title={t("Clients")} tags={<ReadOnlyTag />} />
         <DataError message={(e as Error).message} />
       </>
     );
@@ -44,39 +49,39 @@ export default async function CustomersPage({ searchParams }: { searchParams: Pr
   return (
     <>
       <PageHead
-        title="Clients"
-        subtitle="Regroupés à partir des commandes existantes (par email, sinon par nom). Il n'existe pas encore de vraie table clients."
+        title={t("Clients")}
+        subtitle={t("Regroupés à partir des commandes existantes (par email, sinon par nom). Il n'existe pas encore de vraie table clients.")}
         tags={<ReadOnlyTag />}
       />
 
       <Banner kind="info">
-        <strong>Statut « récurrent » provisoire :</strong> 2 commandes comptabilisées ou plus. La règle définitive sera fixée avec vous.
-        Les informations de livraison ne sont pas affichées ici : elles se consultent dans le détail d'une commande.
+        <strong>{t("Statut « récurrent » provisoire :")}</strong>{" "}
+        {t("2 commandes comptabilisées ou plus. La règle définitive sera fixée avec vous. Les informations de livraison ne sont pas affichées ici : elles se consultent dans le détail d'une commande.")}
       </Banner>
 
       <form method="get" action={`${BASE}/clients`} className="av2-filters" role="search">
-        <input className="av2-input" type="search" name="q" defaultValue={q} placeholder="Rechercher : nom ou email" aria-label="Rechercher un client" />
-        <button className="av2-btn" type="submit">Rechercher</button>
-        {q ? <Link className="av2-btn ghost" href={`${BASE}/clients`}>Réinitialiser</Link> : null}
+        <input className="av2-input" type="search" name="q" defaultValue={q} placeholder={t("Rechercher : nom ou email")} aria-label={t("Rechercher un client")} />
+        <button className="av2-btn" type="submit">{t("Rechercher")}</button>
+        {q ? <Link className="av2-btn ghost" href={`${BASE}/clients`}>{t("Réinitialiser")}</Link> : null}
       </form>
 
       <div className="av2-tablewrap">
         <table className="av2-table">
           <thead>
             <tr>
-              <th>Client</th>
-              <th>Statut</th>
-              <th className="r">Commandes</th>
-              <th className="r">Commissions cumulées</th>
-              <th>Dernière commande</th>
-              <th>Compte</th>
+              <th>{t("Client")}</th>
+              <th>{t("Statut")}</th>
+              <th className="r">{t("Commandes")}</th>
+              <th className="r">{t("Commissions cumulées")}</th>
+              <th>{t("Dernière commande")}</th>
+              <th>{t("Compte")}</th>
             </tr>
           </thead>
           <tbody>
             {shown.length === 0 ? (
               <tr>
                 <td colSpan={6} style={{ textAlign: "center", color: "var(--av2-muted)", padding: "1.6rem" }}>
-                  Aucun client ne correspond.
+                  {t("Aucun client ne correspond.")}
                 </td>
               </tr>
             ) : (
@@ -90,11 +95,11 @@ export default async function CustomersPage({ searchParams }: { searchParams: Pr
                     )}
                     <small>{c.name ? c.email : ""}</small>
                   </td>
-                  <td>{c.earnedOrderCount >= 2 ? <Tag kind="ok">Récurrent</Tag> : <Tag kind="muted">{c.earnedOrderCount === 1 ? "1 commande" : "Nouveau"}</Tag>}</td>
+                  <td>{c.earnedOrderCount >= 2 ? <Tag kind="ok">{t("Récurrent")}</Tag> : <Tag kind="muted">{c.earnedOrderCount === 1 ? t("1 commande") : t("Nouveau")}</Tag>}</td>
                   <td className="r">{c.orderCount}</td>
                   <td className="r">{formatJPY(c.commissionsJpy)}</td>
-                  <td>{formatDateFr(c.lastOrderDate)}</td>
-                  <td>{c.hasAccount ? "Oui" : "—"}</td>
+                  <td>{L.date(c.lastOrderDate)}</td>
+                  <td>{c.hasAccount ? t("Oui") : "—"}</td>
                 </tr>
               ))
             )}
@@ -103,8 +108,8 @@ export default async function CustomersPage({ searchParams }: { searchParams: Pr
       </div>
       <div className="av2-pager">
         <span>
-          {filtered.length} client{filtered.length > 1 ? "s" : ""}
-          {filtered.length > SHOWN_MAX ? ` — ${SHOWN_MAX} premiers affichés, affinez la recherche` : ""} · triés par commissions cumulées
+          {filtered.length > 1 ? t("{n} clients", { n: filtered.length }) : t("{n} client", { n: filtered.length })}
+          {filtered.length > SHOWN_MAX ? ` — ${t("{n} premiers affichés, affinez la recherche", { n: SHOWN_MAX })}` : ""} · {t("triés par commissions cumulées")}
         </span>
       </div>
     </>

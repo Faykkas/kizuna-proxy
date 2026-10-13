@@ -221,8 +221,9 @@ export const CSV_HEADERS = [
   "Remarque",
 ];
 
-export function receiptsToCsv(receipts: Receipt[], entityFor: (dateJst: string) => string): string {
-  const lines = [CSV_HEADERS.map(csvCell).join(";")];
+export function receiptsToCsv(receipts: Receipt[], entityFor: (dateJst: string) => string, tr: (text: string) => string = (s) => s): string {
+  // `tr` traduit les en-têtes et les libellés (français → japonais pour le comptable de Mayuko) ; sans lui, le français.
+  const lines = [CSV_HEADERS.map((h) => csvCell(tr(h))).join(";")];
   for (const r of receipts) {
     lines.push(
       [
@@ -230,7 +231,7 @@ export function receiptsToCsv(receipts: Receipt[], entityFor: (dateJst: string) 
         r.timeJst,
         r.client,
         r.label,
-        r.kind,
+        tr(r.kind),
         r.gross,
         r.items,
         r.commission,
@@ -242,7 +243,7 @@ export function receiptsToCsv(receipts: Receipt[], entityFor: (dateJst: string) 
         r.reference,
         r.id,
         entityFor(r.dateJst),
-        r.warning ?? r.note ?? (r.paypalReal == null ? "Frais PayPal réels inconnus" : ""),
+        tr(r.warning ?? r.note ?? (r.paypalReal == null ? "Frais PayPal réels inconnus" : "")),
       ]
         .map((v) => csvCell(v as string | number))
         .join(";"),

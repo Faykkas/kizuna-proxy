@@ -2,11 +2,10 @@
 // Aucune arithmétique en flottants : les valeurs non entières sont signalées,
 // jamais silencieusement arrondies.
 
-const fmt = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 });
-
+// Format « ¥1,234 » : le même en français et en japonais (c'est aussi celui du site public et de l'ancienne admin).
 export function formatJPY(n: number | null | undefined): string {
   if (n == null) return "—";
-  return `${fmt.format(n).replace(/ | /g, " ")} ¥`;
+  return `${n < 0 ? "-" : ""}¥${Math.abs(n).toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
 }
 
 /** Convertit une valeur de la base en entier de yens (null → 0). */

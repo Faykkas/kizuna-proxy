@@ -258,3 +258,15 @@ body:has(.av2-root) .cw-panel { display: none !important; }
 
 .av2-money { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .av2-money span { color: var(--av2-muted); font-size: 0.74rem; margin-right: 0.35rem; }
+
+/* ── Japonais : polices japonaises en repli (Outfit n'a pas de kanji) ─────────── */
+.av2-root[lang="ja"] { font-family: var(--font-outfit), "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", system-ui, sans-serif; }
+.av2-root[lang="ja"] .av2-table th, .av2-root[lang="ja"] .av2-h2 { letter-spacing: 0; text-transform: none; }
+
+/* ── Bascule de langue ───────────────────────────────────────────────────────── */
+.av2-langswitch { display: inline-flex; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 8px; overflow: hidden; margin: 0 0.3rem; align-self: flex-start; }
+.av2-langswitch button { background: transparent; color: var(--av2-side-text); border: 0; padding: 0.3rem 0.65rem; font-size: 0.78rem; cursor: pointer; }
+.av2-langswitch button.is-on { background: rgba(255, 255, 255, 0.16); color: #fff; font-weight: 600; }
+.av2-auth .av2-langswitch { border-color: var(--av2-border); align-self: flex-end; margin: 0; }
+.av2-auth .av2-langswitch button { color: var(--av2-muted); }
+.av2-auth .av2-langswitch button.is-on { background: var(--av2-surface-2); color: var(--av2-text); }

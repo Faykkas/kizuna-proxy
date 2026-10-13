@@ -1,11 +1,12 @@
 import { formatJPY } from "../lib/money";
-import { monthShortFr } from "../lib/status";
+import { getL } from "../lib/lang-server";
 
 export type ChartPoint = { month: string; total: number };
 
 // Histogramme en SVG pur (rendu serveur, aucun JavaScript côté navigateur).
 // La ligne pointillée verte est l'objectif mensuel.
-export default function CommissionChart({ points, goal, currentMonth }: { points: ChartPoint[]; goal: number; currentMonth: string }) {
+export default async function CommissionChart({ points, goal, currentMonth }: { points: ChartPoint[]; goal: number; currentMonth: string }) {
+  const { t, monthShort } = await getL();
   const W = 760;
   const H = 260;
   const padL = 12;
@@ -19,16 +20,16 @@ export default function CommissionChart({ points, goal, currentMonth }: { points
   const slot = innerW / points.length;
   const barW = Math.min(38, slot * 0.62);
   const y = (v: number) => padT + innerH - (Math.max(v, 0) / top) * innerH;
-  const summary = points.map((p) => `${monthShortFr(p.month)} ${p.month.slice(0, 4)} : ${formatJPY(p.total)}`).join(" ; ");
+  const summary = points.map((p) => `${monthShort(p.month)} ${p.month.slice(0, 4)} : ${formatJPY(p.total)}`).join(" ; ");
 
   return (
     <svg className="av2-chart" viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="av2-chart-title av2-chart-desc">
-      <title id="av2-chart-title">Commissions mensuelles (provisoire)</title>
-      <desc id="av2-chart-desc">{summary}. Objectif mensuel : {formatJPY(goal)}.</desc>
+      <title id="av2-chart-title">{t("Commissions mensuelles (provisoire)")}</title>
+      <desc id="av2-chart-desc">{summary}. {t("Objectif mensuel")} : {formatJPY(goal)}.</desc>
       <line className="axis" x1={padL} x2={W - padR} y1={padT + innerH} y2={padT + innerH} />
       <line className="goal" x1={padL} x2={W - padR} y1={y(goal)} y2={y(goal)} />
       <text x={W - padR} y={y(goal) - 5} textAnchor="end">
-        Objectif {Math.round(goal / 1000)}k ¥
+        {t("Objectif {n}k ¥", { n: Math.round(goal / 1000) })}
       </text>
       {points.map((p, i) => {
         const cx = padL + slot * i + slot / 2;
@@ -43,7 +44,7 @@ export default function CommissionChart({ points, goal, currentMonth }: { points
               </text>
             ) : null}
             <text x={cx} y={H - 12} textAnchor="middle">
-              {monthShortFr(p.month)}
+              {monthShort(p.month)}
             </text>
             {p.month.endsWith("-01") || i === 0 ? (
               <text x={cx} y={H - 1} textAnchor="middle">

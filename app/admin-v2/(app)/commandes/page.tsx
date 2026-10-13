@@ -1,14 +1,18 @@
 import Link from "next/link";
 import { requireAccess } from "../../lib/access";
 import { createServerSupabase } from "../../lib/supabase-server";
+import { getL } from "../../lib/lang-server";
 import { listOrders, ORDERS_PAGE_SIZE, summarizePackages, type OrderKind } from "../../lib/queries";
 import { BASE } from "../../lib/config";
 import { formatJPY } from "../../lib/money";
-import { FILTER_STATUSES, formatDateFr, statusInfo } from "../../lib/status";
+import { FILTER_STATUSES } from "../../lib/status";
 import { DataError, PageHead, ReadOnlyTag, StaffNotice, StatusBadge } from "../../components/ui";
 import { orderTitle } from "../../../lib/orderStatus";
 
-export const metadata = { title: "Commandes — Administration Kizuna" };
+export async function generateMetadata() {
+  const { t } = await getL();
+  return { title: `${t("Commandes")} — ${t("Administration Kizuna")}` };
+}
 
 type SearchParams = Promise<{ q?: string; statut?: string; type?: string; page?: string }>;
 
@@ -24,6 +28,8 @@ function href(params: { q?: string; statut?: string; type?: string; page?: numbe
 
 export default async function OrdersPage({ searchParams }: { searchParams: SearchParams }) {
   const access = await requireAccess();
+  const L = await getL();
+  const { t } = L;
   const sp = await searchParams;
   const q = (sp.q ?? "").slice(0, 80);
   const statut = FILTER_STATUSES.includes(sp.statut ?? "") ? sp.statut! : "";
@@ -33,7 +39,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
   if (access.role === "staff") {
     return (
       <>
-        <PageHead title="Commandes" tags={<ReadOnlyTag />} />
+        <PageHead title={t("Commandes")} tags={<ReadOnlyTag />} />
         <StaffNotice />
       </>
     );
@@ -46,7 +52,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
   } catch (e) {
     return (
       <>
-        <PageHead title="Commandes" tags={<ReadOnlyTag />} />
+        <PageHead title={t("Commandes")} tags={<ReadOnlyTag />} />
         <DataError message={(e as Error).message} />
       </>
     );
@@ -59,36 +65,36 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
   return (
     <>
       <PageHead
-        title="Commandes"
-        subtitle="Toutes les commandes. Cliquez sur une commande pour la consulter ou la modifier."
-        tags={access.role === "admin" ? <Link className="av2-btn" href={`${BASE}/commandes/nouveau`}>+ Nouvelle commande</Link> : <ReadOnlyTag />}
+        title={t("Commandes")}
+        subtitle={t("Toutes les commandes. Cliquez sur une commande pour la consulter ou la modifier.")}
+        tags={access.role === "admin" ? <Link className="av2-btn" href={`${BASE}/commandes/nouveau`}>{t("+ Nouvelle commande")}</Link> : <ReadOnlyTag />}
       />
 
       <form method="get" action={`${BASE}/commandes`} className="av2-filters" role="search">
-        <input className="av2-input" type="search" name="q" defaultValue={q} placeholder="Rechercher : client, email, référence, article…" aria-label="Rechercher une commande" />
-        <select className="av2-select" name="statut" defaultValue={statut} aria-label="Filtrer par statut">
-          <option value="">Tous les statuts</option>
+        <input className="av2-input" type="search" name="q" defaultValue={q} placeholder={t("Rechercher : client, email, référence, article…")} aria-label={t("Rechercher une commande")} />
+        <select className="av2-select" name="statut" defaultValue={statut} aria-label={t("Filtrer par statut")}>
+          <option value="">{t("Tous les statuts")}</option>
           {FILTER_STATUSES.map((s) => (
             <option key={s} value={s}>
-              {statusInfo(s).label}
+              {L.statusLabel(s)}
             </option>
           ))}
         </select>
-        <button className="av2-btn" type="submit">Filtrer</button>
-        <select className="av2-select" name="type" defaultValue={sp.type ?? ""} aria-label="Type de lignes">
-          <option value="">Commandes de clients</option>
-          <option value="colis">Commissions colis seulement</option>
-          <option value="tout">Tout (commandes + commissions colis)</option>
+        <button className="av2-btn" type="submit">{t("Filtrer")}</button>
+        <select className="av2-select" name="type" defaultValue={sp.type ?? ""} aria-label={t("Type de lignes")}>
+          <option value="">{t("Commandes de clients")}</option>
+          <option value="colis">{t("Commissions colis seulement")}</option>
+          <option value="tout">{t("Tout (commandes + commissions colis)")}</option>
         </select>
         {q || statut || sp.type ? (
-          <Link className="av2-btn ghost" href={`${BASE}/commandes`}>Réinitialiser</Link>
+          <Link className="av2-btn ghost" href={`${BASE}/commandes`}>{t("Réinitialiser")}</Link>
         ) : null}
       </form>
 
       {packages.count > 0 ? (
         <p style={{ color: "var(--av2-muted)", fontSize: "0.88rem" }}>
-          {packages.count} « commission package » ({formatJPY(packages.totalJpy)}) sont gardées et comptées dans vos gains, mais ne sont pas des commandes.{" "}
-          {type !== "packages" ? <Link href={`${BASE}/commandes?type=colis`} style={{ color: "var(--av2-info)" }}>Les voir</Link> : null}
+          {t("{n} « commission package » ({x}) sont gardées et comptées dans vos gains, mais ne sont pas des commandes.", { n: packages.count, x: formatJPY(packages.totalJpy) })}{" "}
+          {type !== "packages" ? <Link href={`${BASE}/commandes?type=colis`} style={{ color: "var(--av2-info)" }}>{t("Les voir")}</Link> : null}
         </p>
       ) : null}
 
@@ -96,11 +102,11 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
         <table className="av2-table">
           <thead>
             <tr>
-              <th>Commande</th>
-              <th>Client</th>
-              <th>Articles</th>
-              <th>Statut</th>
-              <th className="r">Montants</th>
+              <th>{t("Commande")}</th>
+              <th>{t("Client")}</th>
+              <th>{t("Articles")}</th>
+              <th>{t("Statut")}</th>
+              <th className="r">{t("Montants")}</th>
               {access.role === "admin" ? <th /> : null}
             </tr>
           </thead>
@@ -108,7 +114,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
             {rows.length === 0 ? (
               <tr>
                 <td colSpan={6} style={{ textAlign: "center", color: "var(--av2-muted)", padding: "1.6rem" }}>
-                  Aucune commande ne correspond.
+                  {t("Aucune commande ne correspond.")}
                 </td>
               </tr>
             ) : (
@@ -118,7 +124,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
                     <Link className="av2-link" href={`${BASE}/commandes/${o.id}`}>
                       {o.public_ref ?? `#${o.id}`}
                     </Link>
-                    <small>{formatDateFr(o.purchase_date)} · {o.platform ?? "—"}</small>
+                    <small>{L.date(o.purchase_date)} · {o.platform ?? "—"}</small>
                   </td>
                   <td style={{ maxWidth: 190, overflowWrap: "anywhere" }}>
                     {o.client_name ?? "—"}
@@ -129,15 +135,15 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
                   </td>
                   <td className="av2-nowrap"><StatusBadge status={o.status} /></td>
                   <td className="r">
-                    <div className="av2-money"><span>Articles</span> {formatJPY(o.item_price_jpy)}</div>
-                    <div className="av2-money"><span>Commission</span> {formatJPY(o.service_fee_jpy)}</div>
+                    <div className="av2-money"><span>{t("Articles")}</span> {formatJPY(o.item_price_jpy)}</div>
+                    <div className="av2-money"><span>{t("Commission")}</span> {formatJPY(o.service_fee_jpy)}</div>
                     {(o.shipping_cost_jpy ?? 0) > 0 ? (
-                      <div className="av2-money"><span>Livraison {o.shipping_paid ? "payée" : "à payer"}</span> {formatJPY(o.shipping_cost_jpy)}</div>
+                      <div className="av2-money"><span>{o.shipping_paid ? t("Livraison payée") : t("Livraison à payer")}</span> {formatJPY(o.shipping_cost_jpy)}</div>
                     ) : null}
                   </td>
                   {access.role === "admin" ? (
                     <td className="av2-nowrap">
-                      <Link className="av2-btn ghost sm" href={`${BASE}/commandes/${o.id}/modifier`}>Modifier</Link>
+                      <Link className="av2-btn ghost sm" href={`${BASE}/commandes/${o.id}/modifier`}>{t("Modifier")}</Link>
                     </td>
                   ) : null}
                 </tr>
@@ -149,11 +155,11 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
 
       <div className="av2-pager">
         <span>
-          {total} commande{total > 1 ? "s" : ""} · page {Math.min(page, pages)} / {pages}
+          {total > 1 ? t("{n} commandes", { n: total }) : t("{n} commande", { n: total })} · {t("page {p} / {pages}", { p: Math.min(page, pages), pages })}
         </span>
         <div>
-          {page > 1 ? <Link className="av2-btn ghost" href={href({ q, statut, type: sp.type, page: page - 1 })}>← Précédente</Link> : null}
-          {page < pages ? <Link className="av2-btn ghost" href={href({ q, statut, type: sp.type, page: page + 1 })}>Suivante →</Link> : null}
+          {page > 1 ? <Link className="av2-btn ghost" href={href({ q, statut, type: sp.type, page: page - 1 })}>{t("← Précédente")}</Link> : null}
+          {page < pages ? <Link className="av2-btn ghost" href={href({ q, statut, type: sp.type, page: page + 1 })}>{t("Suivante →")}</Link> : null}
         </div>
       </div>
     </>

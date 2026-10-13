@@ -1,6 +1,10 @@
 import { SignOutButton } from "../../components/Shell";
+import { getL } from "../../lib/lang-server";
 
-export const metadata = { title: "Accès refusé — Administration Kizuna" };
+export async function generateMetadata() {
+  const { t } = await getL();
+  return { title: `${t("Accès refusé")} — ${t("Administration Kizuna")}` };
+}
 
 const MESSAGES: Record<string, string> = {
   no_role: "Ce compte n'a pas de rôle d'administration (admin ou staff).",
@@ -12,11 +16,12 @@ const MESSAGES: Record<string, string> = {
 
 export default async function DeniedPage({ searchParams }: { searchParams: Promise<{ raison?: string }> }) {
   const { raison } = await searchParams;
-  const message = MESSAGES[raison ?? ""] ?? "Accès refusé.";
+  const { t } = await getL();
+  const message = t(MESSAGES[raison ?? ""] ?? "Accès refusé.");
   return (
     <div className="av2-auth">
       <div className="av2-card av2-auth-card">
-        <h1>Accès refusé</h1>
+        <h1>{t("Accès refusé")}</h1>
         <p role="alert">{message}</p>
         <SignOutButton className="av2-btn ghost" />
       </div>
