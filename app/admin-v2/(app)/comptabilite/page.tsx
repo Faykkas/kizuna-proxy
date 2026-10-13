@@ -127,7 +127,7 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
                   const r = receiptMonths.find((x) => x.month === m);
                   return (
                     <tr key={m}>
-                      <td style={{ textTransform: "capitalize" }}><Link className="av2-link" href={`${BASE}/comptabilite?annee=${year}&mois=${m}#journal`}>{monthLabelFr(m)}</Link>{firstReceiptMonth && m < firstReceiptMonth ? <small><Tag kind="muted">avant le suivi PayPal</Tag></small> : null}</td>
+                      <td style={{ textTransform: "capitalize" }}><Link className="av2-link" href={`${BASE}/comptabilite?annee=${year}&mois=${m}#journal`}>{monthLabelFr(m)}</Link>{firstReceiptMonth && m < firstReceiptMonth ? <small><Tag kind="muted">Consulter sur PayPal pour plus de détails</Tag></small> : null}</td>
                       <td className="r"><strong>{formatJPY(g?.total ?? 0)}</strong></td>
                       <td className="r">{g?.packageCommission ? formatJPY(g.packageCommission) : "—"}</td>
                       <td className="r">{formatJPY(expenseMonthly)}</td>
@@ -234,7 +234,7 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
           <p className="av2-sub" style={{ marginTop: "0.6rem" }}>
             <strong>Semaines sans commission colis enregistrée :</strong>{" "}
             {missingWeeks.filter((w) => w.startsWith(year)).map((w) => `semaine du ${formatDateFr(w)}`).join(", ")}.
-            Rien n'a été ajouté : s'il y a eu des colis ces semaines-là, il manque la saisie.
+            Rien n'a été ajouté : consultez PayPal pour plus de détails.
           </p>
         ) : null}
       </div>
@@ -263,7 +263,7 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
       </div>
 
       <Banner kind="info">
-        <strong>Ce que ce journal ne contient pas encore :</strong> les ventes d'avant septembre 2026 et les paiements faits directement sur PayPal (sans lien), les remboursements, les transferts vers la banque et les justificatifs. Pour les mois d'avant septembre, l'historique réel est chez PayPal et la banque : il pourra être importé (relevé CSV) puis rapproché des commandes, sans rien inventer. Aucune déclaration fiscale n'est produite automatiquement, et les règles (avances clients, taxe de consommation, PayPal de Mayuko) restent à valider avec un comptable japonais. L'ancien calculateur de charges japonaises (Kokuho, impôts…) reste dans l'ancienne admin en attendant son remplaçant.
+        <strong>Ce que ce journal ne contient pas encore :</strong> les ventes d'avant septembre 2026 et les paiements faits directement sur PayPal (sans lien), les remboursements, les transferts vers la banque et les justificatifs. Pour les mois d'avant septembre, consultez PayPal (compte de Mayuko) et la banque pour le détail des paiements. Aucune déclaration fiscale n'est produite automatiquement, et les règles (avances clients, taxe de consommation, PayPal de Mayuko) restent à valider avec un comptable japonais. L'ancien calculateur de charges japonaises (Kokuho, impôts…) reste dans l'ancienne admin en attendant son remplaçant.
       </Banner>
 
       <p style={{ color: "var(--av2-muted)", fontSize: "0.82rem" }}>
