@@ -66,6 +66,16 @@ export function formatDateTimeFr(value: string | null | undefined): string {
   return d.toLocaleString("fr-FR", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tokyo" }) + " (JST)";
 }
 
+/** Date et heure courtes à Tokyo, sur une seule ligne : « 13 oct. 13:43 ». */
+export function formatShortDateTimeFr(value: string | null | undefined): string {
+  if (!value) return "—";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return value;
+  const date = d.toLocaleDateString("fr-FR", { day: "numeric", month: "short", timeZone: "Asia/Tokyo" });
+  const time = d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tokyo" });
+  return `${date} ${time}`;
+}
+
 export function monthLabelFr(month: string): string {
   const [y, m] = month.split("-").map(Number);
   return new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString("fr-FR", { month: "long", year: "numeric", timeZone: "UTC" });

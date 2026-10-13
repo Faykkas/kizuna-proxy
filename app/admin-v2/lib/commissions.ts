@@ -20,6 +20,7 @@ export type OrderLite = {
   status: string | null;
   purchase_date: string | null;
   service_fee_jpy: number | null;
+  item_price_jpy?: number | null;
 };
 
 export type PaidLinkLite = {
@@ -38,6 +39,8 @@ export type MonthCommission = {
   /** Part des frais de service venant des « commission package » (déjà incluse dans serviceFees). */
   packageCommission: number;
   packageCount: number;
+  /** Prix des articles achetés pour les clients (hors commission et hors livraison), commandes réelles. */
+  clientPurchases: number;
 };
 
 export type CommissionReport = {
@@ -69,7 +72,7 @@ export function computeCommissions(orders: OrderLite[], links: PaidLinkLite[]): 
   const get = (month: string) => {
     let m = byMonth.get(month);
     if (!m) {
-      m = { month, serviceFees: 0, paypalMargin: 0, total: 0, orderCount: 0, packageCommission: 0, packageCount: 0 };
+      m = { month, serviceFees: 0, paypalMargin: 0, total: 0, orderCount: 0, packageCommission: 0, packageCount: 0, clientPurchases: 0 };
       byMonth.set(month, m);
     }
     return m;
@@ -85,6 +88,7 @@ export function computeCommissions(orders: OrderLite[], links: PaidLinkLite[]): 
       m.packageCount += 1; // mais pas dans le nombre de commandes
     } else {
       m.orderCount += 1;
+      m.clientPurchases += yen(o.item_price_jpy, "item_price_jpy", anomalies);
     }
   }
 

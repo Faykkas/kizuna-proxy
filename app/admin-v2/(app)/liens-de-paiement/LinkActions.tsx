@@ -14,9 +14,9 @@ export default function LinkActions({ id, status, label }: { id: string; status:
   if (status !== "pending") return <span style={{ color: "var(--av2-muted)" }}>—</span>;
 
   return (
-    <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
+    <div style={{ display: "flex", gap: "0.35rem", flexWrap: "nowrap" }}>
       <button
-        className="av2-btn ghost"
+        className="av2-btn ghost sm"
         onClick={async () => {
           try {
             await navigator.clipboard.writeText(`${SITE_URL}/pay/${id}`);
@@ -27,10 +27,10 @@ export default function LinkActions({ id, status, label }: { id: string; status:
           }
         }}
       >
-        {copied ? "Copié ✓" : "Copier le lien"}
+        {copied ? "Copié ✓" : "Copier"}
       </button>
       <button
-        className="av2-btn ghost"
+        className="av2-btn ghost sm"
         disabled={pending}
         onClick={() => {
           if (confirm(`Annuler le lien « ${label ?? ""} » ? Il ne sera plus payable.`)) run(() => cancelPaymentLink(id), "Lien annulé.");

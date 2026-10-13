@@ -55,6 +55,7 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
   // Mois du journal affiché : celui demandé, sinon le plus récent de l'année avec des encaissements.
   const journalMonth = /^\d{4}-\d{2}$/.test(sp.mois ?? "") ? sp.mois! : [...receiptMonths.map((m) => m.month)].filter((m) => m.startsWith(year)).pop() ?? `${year}-01`;
   const journal = receipts.filter((r) => r.month === journalMonth);
+  const hasEntity = journal.some((r) => entityOn(r.dateJst, entities as EntityRow[]) !== "");
 
   const expenseMonthly = monthlyExpenseAverage(expenses);
   const yearGains = yearMonths.reduce((s, m) => s + (gainByMonth.get(m)?.total ?? 0), 0);
@@ -102,40 +103,37 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
       ) : null}
 
       <div className="av2-card">
-        <h2>Synthèse par mois</h2>
+        <h2>Gains et résultat par mois</h2>
         <div className="av2-tablewrap">
           <table className="av2-table">
             <thead>
               <tr>
                 <th>Mois</th>
                 <th className="r">Gains</th>
-                <th className="r">dont colis</th>
                 <th className="r">Dépenses (moy.)</th>
                 <th className="r">Résultat</th>
-                <th className="r">Encaissements</th>
-                <th className="r">Total payé</th>
-                <th className="r">Frais PayPal réels</th>
-                <th className="r">Net reçu</th>
+                <th className="r">Achats pour les clients</th>
               </tr>
             </thead>
             <tbody>
               {yearMonths.length === 0 ? (
-                <tr><td colSpan={9} style={{ textAlign: "center", color: "var(--av2-muted)", padding: "1.4rem" }}>Aucune donnée pour {year}.</td></tr>
+                <tr><td colSpan={5} style={{ textAlign: "center", color: "var(--av2-muted)", padding: "1.4rem" }}>Aucune donnée pour {year}.</td></tr>
               ) : (
                 yearMonths.map((m) => {
                   const g = gainByMonth.get(m);
-                  const r = receiptMonths.find((x) => x.month === m);
                   return (
                     <tr key={m}>
-                      <td style={{ textTransform: "capitalize" }}><Link className="av2-link" href={`${BASE}/comptabilite?annee=${year}&mois=${m}#journal`}>{monthLabelFr(m)}</Link>{firstReceiptMonth && m < firstReceiptMonth ? <small><Tag kind="muted">Consulter sur PayPal pour plus de détails</Tag></small> : null}</td>
-                      <td className="r"><strong>{formatJPY(g?.total ?? 0)}</strong></td>
-                      <td className="r">{g?.packageCommission ? formatJPY(g.packageCommission) : "—"}</td>
-                      <td className="r">{formatJPY(expenseMonthly)}</td>
-                      <td className="r">{formatJPY((g?.total ?? 0) - expenseMonthly)}</td>
-                      <td className="r">{r?.count ?? "—"}</td>
-                      <td className="r">{r ? formatJPY(r.gross) : "—"}</td>
-                      <td className="r">{r ? formatJPY(r.paypalReal) : "—"}</td>
-                      <td className="r">{r ? formatJPY(r.net) : "—"}</td>
+                      <td style={{ textTransform: "capitalize" }}>
+                        <Link className="av2-link" href={`${BASE}/comptabilite?annee=${year}&mois=${m}#journal`}>{monthLabelFr(m)}</Link>
+                        {firstReceiptMonth && m < firstReceiptMonth ? <small><Tag kind="muted">Consulter sur PayPal pour plus de détails</Tag></small> : null}
+                      </td>
+                      <td className="r av2-nowrap">
+                        <strong>{formatJPY(g?.total ?? 0)}</strong>
+                        {g?.packageCommission ? <small>dont colis {formatJPY(g.packageCommission)}</small> : null}
+                      </td>
+                      <td className="r av2-nowrap">{formatJPY(expenseMonthly)}</td>
+                      <td className="r av2-nowrap">{formatJPY((g?.total ?? 0) - expenseMonthly)}</td>
+                      <td className="r av2-nowrap">{g?.clientPurchases ? formatJPY(g.clientPurchases) : "—"}</td>
                     </tr>
                   );
                 })
@@ -143,7 +141,37 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
             </tbody>
           </table>
         </div>
+
+        <h2 style={{ margin: "1.2rem 0 0.6rem" }}>Paiements PayPal reçus par mois</h2>
+        <div className="av2-tablewrap">
+          <table className="av2-table">
+            <thead>
+              <tr>
+                <th>Mois</th>
+                <th className="r">Paiements</th>
+                <th className="r">Total payé</th>
+                <th className="r">Frais PayPal réels</th>
+                <th className="r">Net reçu</th>
+              </tr>
+            </thead>
+            <tbody>
+              {yearMonths.map((m) => {
+                const r = receiptMonths.find((x) => x.month === m);
+                return (
+                  <tr key={m}>
+                    <td style={{ textTransform: "capitalize" }}>{monthLabelFr(m)}</td>
+                    <td className="r">{r?.count ?? "—"}</td>
+                    <td className="r av2-nowrap">{r ? formatJPY(r.gross) : "—"}</td>
+                    <td className="r av2-nowrap">{r ? formatJPY(r.paypalReal) : "—"}</td>
+                    <td className="r av2-nowrap">{r ? formatJPY(r.net) : "—"}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
         <p className="av2-sub" style={{ marginTop: "0.6rem" }}>
+          « dont colis » : part des gains qui vient du petit supplément pris chaque semaine sur les colis — elle est <strong>déjà comprise</strong> dans « Gains », ne l'ajoutez pas. « Achats pour les clients » : prix des articles achetés pour eux (ce n'est pas un gain).{" "}
           Gains : même formule que le tableau de bord (mois d'achat des commandes + marge PayPal). Encaissements : mois de paiement, heure de Tokyo.
         </p>
       </div>
@@ -169,12 +197,12 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
                 <th className="r">Livraison</th>
                 <th className="r">Frais PayPal réels</th>
                 <th className="r">Net reçu</th>
-                <th>Entité</th>
+                {hasEntity ? <th>Entité</th> : null}
               </tr>
             </thead>
             <tbody>
               {journal.length === 0 ? (
-                <tr><td colSpan={10} style={{ textAlign: "center", color: "var(--av2-muted)", padding: "1.4rem" }}>Aucun encaissement ce mois-ci.</td></tr>
+                <tr><td colSpan={9} style={{ textAlign: "center", color: "var(--av2-muted)", padding: "1.4rem" }}>Aucun encaissement ce mois-ci.</td></tr>
               ) : (
                 journal.map((r) => (
                   <tr key={r.id}>
@@ -192,7 +220,7 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
                     <td className="r">{r.shipping ? formatJPY(r.shipping) : "—"}</td>
                     <td className="r">{r.paypalReal == null ? <Tag kind="soon">inconnus</Tag> : formatJPY(r.paypalReal)}</td>
                     <td className="r">{r.net == null ? "—" : formatJPY(r.net)}</td>
-                    <td>{entityOn(r.dateJst, entities as EntityRow[]) || <span style={{ color: "var(--av2-muted)" }}>—</span>}</td>
+                    {hasEntity ? <td>{entityOn(r.dateJst, entities as EntityRow[]) || <span style={{ color: "var(--av2-muted)" }}>—</span>}</td> : null}
                   </tr>
                 ))
               )}

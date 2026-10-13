@@ -100,49 +100,46 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
               <th>Client</th>
               <th>Articles</th>
               <th>Statut</th>
-              <th>Date d'achat</th>
-              <th className="r">Prix articles</th>
-              <th className="r">Commission</th>
-              <th className="r">Livraison</th>
+              <th className="r">Montants</th>
+              {access.role === "admin" ? <th /> : null}
             </tr>
           </thead>
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td colSpan={8} style={{ textAlign: "center", color: "var(--av2-muted)", padding: "1.6rem" }}>
+                <td colSpan={6} style={{ textAlign: "center", color: "var(--av2-muted)", padding: "1.6rem" }}>
                   Aucune commande ne correspond.
                 </td>
               </tr>
             ) : (
               rows.map((o) => (
                 <tr key={o.id}>
-                  <td>
+                  <td className="av2-nowrap">
                     <Link className="av2-link" href={`${BASE}/commandes/${o.id}`}>
                       {o.public_ref ?? `#${o.id}`}
                     </Link>
-                    <small>{o.platform ?? "—"}</small>
+                    <small>{formatDateFr(o.purchase_date)} · {o.platform ?? "—"}</small>
                   </td>
-                  <td>
+                  <td style={{ maxWidth: 190, overflowWrap: "anywhere" }}>
                     {o.client_name ?? "—"}
                     <small>{o.client_email ?? ""}</small>
                   </td>
                   <td>
-                    <div className="av2-clip" title={o.items ?? ""}>{orderTitle(o.items, "—")}</div>
+                    <div className="av2-clip" style={{ maxWidth: 150 }} title={o.items ?? ""}>{orderTitle(o.items, "—")}</div>
                   </td>
-                  <td><StatusBadge status={o.status} /></td>
-                  <td>{formatDateFr(o.purchase_date)}</td>
-                  <td className="r">{formatJPY(o.item_price_jpy)}</td>
-                  <td className="r">{formatJPY(o.service_fee_jpy)}</td>
+                  <td className="av2-nowrap"><StatusBadge status={o.status} /></td>
                   <td className="r">
+                    <div className="av2-money"><span>Articles</span> {formatJPY(o.item_price_jpy)}</div>
+                    <div className="av2-money"><span>Commission</span> {formatJPY(o.service_fee_jpy)}</div>
                     {(o.shipping_cost_jpy ?? 0) > 0 ? (
-                      <>
-                        {formatJPY(o.shipping_cost_jpy)}
-                        <small>{o.shipping_paid ? "payée" : "à payer"}</small>
-                      </>
-                    ) : (
-                      "—"
-                    )}
+                      <div className="av2-money"><span>Livraison {o.shipping_paid ? "payée" : "à payer"}</span> {formatJPY(o.shipping_cost_jpy)}</div>
+                    ) : null}
                   </td>
+                  {access.role === "admin" ? (
+                    <td className="av2-nowrap">
+                      <Link className="av2-btn ghost sm" href={`${BASE}/commandes/${o.id}/modifier`}>Modifier</Link>
+                    </td>
+                  ) : null}
                 </tr>
               ))
             )}

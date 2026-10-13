@@ -22,7 +22,9 @@ export type ReceiptLink = {
   paypal_order_id?: string | null;
 };
 
-export type ReceiptKind = "Articles" | "Frais Kizuna" | "Articles + frais" | "Livraison" | "Ancien lien (total seul)";
+import { looksLikeShipping } from "./shipping.ts";
+
+export type ReceiptKind = "Articles" | "Frais Kizuna" | "Articles + frais" | "Livraison" | "Livraison (d'après le libellé)" | "Ancien lien (total seul)";
 
 export type Receipt = {
   id: string;
@@ -72,7 +74,11 @@ export function buildReceipts(links: ReceiptLink[]): Receipt[] {
     const real = l.paypal_real_fee_jpy == null ? null : yen(l.paypal_real_fee_jpy);
     // Anciens liens (août 2026) : un total seul, sans articles, commission ni frais PayPal séparés.
     const legacy = !isShip && item === 0 && fee === 0 && charged === 0 && gross > 0;
-    const kind: ReceiptKind = legacy ? "Ancien lien (total seul)" : isShip ? "Livraison" : item > 0 && fee > 0 ? "Articles + frais" : item > 0 ? "Articles" : "Frais Kizuna";
+    // Livraison saisie comme des articles au début : le libellé (« Shipping to… », « Delivery ») le trahit.
+    // On la sépare dans la compta, sans modifier le lien. Si des frais Kizuna sont mélangés, on ne tranche pas.
+    const guessedShip = !isShip && !legacy && looksLikeShipping(l.label) && fee === 0 && item > 0;
+    const mixedShip = !isShip && !legacy && looksLikeShipping(l.label) && fee > 0 && item > 0;
+    const kind: ReceiptKind = legacy ? "Ancien lien (total seul)" : isShip ? "Livraison" : guessedShip ? "Livraison (d'après le libellé)" : item > 0 && fee > 0 ? "Articles + frais" : item > 0 ? "Articles" : "Frais Kizuna";
     const expected = (isShip ? 0 : yen(l.item_amount_jpy)) + fee + charged;
     out.push({
       id: l.id,
@@ -84,9 +90,9 @@ export function buildReceipts(links: ReceiptLink[]): Receipt[] {
       label: l.label ?? "",
       kind,
       gross,
-      items: item,
+      items: guessedShip ? 0 : item,
       commission: isShip ? 0 : fee,
-      shipping: isShip ? fee : 0,
+      shipping: isShip ? fee : guessedShip ? item : 0,
       paypalCharged: charged,
       paypalReal: real,
       // Marge seulement si des frais PayPal ont été facturés au client (sinon ils étaient inclus dans le prix).
@@ -94,7 +100,13 @@ export function buildReceipts(links: ReceiptLink[]): Receipt[] {
       net: real == null ? null : gross - real,
       reference: l.paypal_order_id ?? "",
       warning: !legacy && gross !== expected ? `Total payé (${gross}) ≠ articles + frais + frais PayPal (${expected})` : null,
-      note: legacy ? "Ancien lien : total seul, sans ventilation" : null,
+      note: legacy
+        ? "Ancien lien : total seul, sans ventilation"
+        : guessedShip
+          ? "Livraison reconnue d'après le libellé (le lien a été saisi comme des articles)"
+          : mixedShip
+            ? "Libellé de livraison mélangé à des frais Kizuna : à vérifier, non séparé"
+            : null,
     });
   }
   return out.sort((a, b) => a.paidAt.localeCompare(b.paidAt));

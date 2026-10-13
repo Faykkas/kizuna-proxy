@@ -92,7 +92,7 @@ export default async function DashboardPage() {
           sub={
             <>
               Frais de service {formatJPY(now?.serviceFees ?? 0)} + marge PayPal {formatJPY(now?.paypalMargin ?? 0)}
-              {(now?.packageCommission ?? 0) > 0 ? <><br />dont commissions colis {formatJPY(now?.packageCommission ?? 0)}</> : null}
+              {(now?.packageCommission ?? 0) > 0 ? <><br />dont commissions colis {formatJPY(now?.packageCommission ?? 0)} (déjà incluses)</> : null}
               <br />
               Hors prix d'achat des articles.
             </>

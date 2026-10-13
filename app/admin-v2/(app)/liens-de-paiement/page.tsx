@@ -5,7 +5,7 @@ import { loadPaymentLinks, type PaymentLinkRow } from "../../lib/queries";
 import { currentMonthJst } from "../../lib/commissions";
 import { BASE } from "../../lib/config";
 import { formatJPY, toYen } from "../../lib/money";
-import { formatDateTimeFr, monthLabelFr } from "../../lib/status";
+import { formatShortDateTimeFr, monthLabelFr } from "../../lib/status";
 import { shippingKind } from "../../lib/shipping";
 import { Banner, DataError, PageHead, ReadOnlyTag, StaffNotice, StatCard, Tag } from "../../components/ui";
 import LinkActions from "./LinkActions";
@@ -138,11 +138,8 @@ export default async function PaymentLinksPage({ searchParams }: { searchParams:
               <th>Libellé</th>
               <th>Client</th>
               <th>Statut</th>
-              <th>Type</th>
-              <th>Créé</th>
-              <th>Payé</th>
-              <th className="r">Articles</th>
-              <th className="r">Commission</th>
+              <th>Dates (Tokyo)</th>
+              <th className="r">Détail</th>
               <th className="r">Total</th>
               <th className="r">Marge PayPal</th>
               {access.role === "admin" ? <th>Actions</th> : null}
@@ -151,7 +148,7 @@ export default async function PaymentLinksPage({ searchParams }: { searchParams:
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td colSpan={11} style={{ textAlign: "center", color: "var(--av2-muted)", padding: "1.6rem" }}>Aucun lien ne correspond.</td>
+                <td colSpan={8} style={{ textAlign: "center", color: "var(--av2-muted)", padding: "1.6rem" }}>Aucun lien ne correspond.</td>
               </tr>
             ) : (
               rows.map((l) => {
@@ -161,22 +158,32 @@ export default async function PaymentLinksPage({ searchParams }: { searchParams:
                 return (
                   <tr key={l.id}>
                     <td>
-                      <div className="av2-clip" title={l.label ?? ""}>{l.label ?? "—"}</div>
+                      <div className="av2-clip" style={{ maxWidth: 170 }} title={l.label ?? ""}>{l.label ?? "—"}</div>
+                      <small>{(() => { const k = shippingKind(l); return k === "explicit" ? "Livraison" : k === "guessed" ? "Livraison ? (d'après le libellé)" : "Articles"; })()}</small>
                       
                     </td>
-                    <td>
+                    <td style={{ maxWidth: 190, overflowWrap: "anywhere" }}>
                       {l.client_name ?? "—"}
                       <small>{l.client_email ?? ""}</small>
                     </td>
-                    <td><Tag kind={st.kind}>{st.label}</Tag></td>
-                    <td>{(() => { const k = shippingKind(l); return k === "explicit" ? <Tag kind="ok">Livraison</Tag> : k === "guessed" ? <span title="Déduit du libellé : ce lien a été saisi comme des articles"><Tag kind="soon">Livraison ?</Tag></span> : <span style={{ color: "var(--av2-muted)" }}>Articles</span>; })()}</td>
-                    <td>{formatDateTimeFr(l.created_at)}</td>
-                    <td>{l.paid_at ? formatDateTimeFr(l.paid_at) : "—"}</td>
-                    <td className="r">{l.is_shipping ? "—" : formatJPY(toYen(l.item_amount_jpy).yen)}</td>
-                    <td className="r">{formatJPY(toYen(l.fee_amount_jpy).yen)}</td>
+                    <td className="av2-nowrap"><Tag kind={st.kind}>{st.label}</Tag></td>
+                    <td className="av2-nowrap">
+                      {formatShortDateTimeFr(l.created_at)}
+                      <small style={{ whiteSpace: "normal" }}>{l.paid_at ? `payé ${formatShortDateTimeFr(l.paid_at)}` : "pas encore payé"}</small>
+                    </td>
+                    <td className="r">
+                      {l.is_shipping ? (
+                        <div className="av2-money"><span>Livraison</span> {formatJPY(toYen(l.fee_amount_jpy).yen)}</div>
+                      ) : (
+                        <>
+                          {toYen(l.item_amount_jpy).yen > 0 ? <div className="av2-money"><span>Articles</span> {formatJPY(toYen(l.item_amount_jpy).yen)}</div> : null}
+                          {toYen(l.fee_amount_jpy).yen > 0 ? <div className="av2-money"><span>Commission</span> {formatJPY(toYen(l.fee_amount_jpy).yen)}</div> : null}
+                        </>
+                      )}
+                    </td>
                     <td className="r"><strong>{formatJPY(totalOf(l))}</strong></td>
                     <td className="r">{margin == null ? "—" : formatJPY(margin)}</td>
-                    {access.role === "admin" ? <td><LinkActions id={l.id} status={l.status} label={l.label} /></td> : null}
+                    {access.role === "admin" ? <td className="av2-nowrap"><LinkActions id={l.id} status={l.status} label={l.label} /></td> : null}
                   </tr>
                 );
               })
