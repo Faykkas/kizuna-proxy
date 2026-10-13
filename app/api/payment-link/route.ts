@@ -108,11 +108,14 @@ export async function POST(request) {
     if (action === "get") {
       const { data: link } = await admin
         .from("payment_links")
-        .select("label, amount_jpy, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, items_breakdown, is_shipping, status")
+        .select("label, client_name, amount_jpy, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, items_breakdown, is_shipping, status")
         .eq("id", token)
         .single();
       if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
+      // Prénom seulement (pour « Demande de paiement pour Anna ») : jamais le nom complet ni l'email.
+      const clientFirstName = String(link.client_name || "").trim().split(/\s+/)[0].slice(0, 40) || null;
       return Response.json({
+        clientFirstName,
         label: link.label,
         amountJpy: link.amount_jpy,
         itemAmountJpy: link.item_amount_jpy,

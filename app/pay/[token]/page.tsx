@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PayLinkClient from "./PayLinkClient";
+import "../pay.css";
 
 export const metadata: Metadata = {
   title: "Payment — Kizuna Proxy",

@@ -1,0 +1,97 @@
+/* Page de paiement client (/pay/<lien>) — aux couleurs du site (fond nuit, accent vert).
+   Tout est préfixé « pp- » pour ne jamais toucher au reste du site. */
+
+.pp-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 420px at 85% -10%, rgba(199, 125, 255, 0.16), transparent 60%),
+    radial-gradient(700px 380px at 5% 0%, rgba(var(--red-rgb), 0.1), transparent 55%),
+    var(--beige);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+  padding: 1.1rem 1rem 3rem;
+}
+.pp-wrap { max-width: 1020px; margin: 0 auto; }
+
+.pp-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin: 0.4rem 0 1.4rem; }
+.pp-logo { font-family: var(--font-cormorant), serif; font-size: 1.55rem; font-weight: 600; color: var(--ink); letter-spacing: 0.01em; }
+.pp-logo span { color: var(--red); }
+.pp-top-right { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; }
+.pp-secure { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: var(--warm); }
+.pp-lang {
+  background: rgba(255, 255, 255, 0.05); color: var(--ink); border: 1px solid var(--border);
+  border-radius: 999px; padding: 0.35rem 0.8rem; font: inherit; font-size: 0.8rem; cursor: pointer;
+}
+.pp-lang option { color: #111; }
+
+.pp-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr); gap: 1.2rem; align-items: start; }
+@media (max-width: 860px) { .pp-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.pp-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+  padding: 1.6rem; box-shadow: var(--shadow-md); min-width: 0;
+}
+@media (max-width: 480px) { .pp-card { padding: 1.2rem; border-radius: 14px; } }
+.pp-sticky { position: sticky; top: 1rem; }
+@media (max-width: 860px) { .pp-sticky { position: static; } }
+
+.pp-badge {
+  display: inline-block; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
+  padding: 0.28rem 0.7rem; border-radius: 999px;
+  background: rgba(var(--red-rgb), 0.12); color: var(--red); border: 1px solid rgba(var(--red-rgb), 0.3);
+}
+.pp-title { font-family: var(--font-cormorant), serif; font-size: clamp(1.55rem, 3.4vw, 2.05rem); line-height: 1.2; font-weight: 600; margin: 0.8rem 0 0.25rem; color: var(--ink); overflow-wrap: anywhere; }
+.pp-for { color: var(--warm); font-size: 0.92rem; margin: 0; }
+
+.pp-h2 { font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--warm); font-weight: 600; margin: 1.4rem 0 0; }
+.pp-lines { margin: 0.6rem 0 0; padding: 0; list-style: none; border-top: 1px solid var(--border-soft); }
+.pp-line { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; padding: 0.85rem 0; border-bottom: 1px solid var(--border-soft); }
+.pp-line-name { min-width: 0; overflow-wrap: anywhere; font-size: 0.95rem; }
+.pp-line-sub { display: block; font-size: 0.76rem; color: var(--mist); margin-top: 0.15rem; }
+.pp-line-sub a { color: var(--gold-l); text-decoration: none; }
+.pp-line-sub a:hover { text-decoration: underline; }
+.pp-line-price { font-variant-numeric: tabular-nums; white-space: nowrap; font-weight: 600; font-size: 0.95rem; }
+.pp-line.is-fee .pp-line-name, .pp-line.is-fee .pp-line-price { color: var(--warm); font-weight: 500; }
+
+.pp-total { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 1.2rem 0 0.2rem; flex-wrap: wrap; }
+.pp-total-label { font-size: 1rem; font-weight: 600; }
+.pp-total-amt { font-family: var(--font-cormorant), serif; font-size: clamp(2.1rem, 6vw, 2.8rem); font-weight: 600; color: var(--red); font-variant-numeric: tabular-nums; line-height: 1; }
+.pp-note { font-size: 0.76rem; color: var(--mist); margin: 0.7rem 0 0; }
+
+.pp-field { margin-top: 1rem; }
+.pp-field label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--warm); margin-bottom: 0.4rem; }
+.pp-input, .pp-textarea {
+  width: 100%; padding: 0.75rem 0.9rem; border-radius: 10px; font: inherit; font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.04); color: var(--ink); border: 1px solid var(--border); outline: none; box-sizing: border-box;
+}
+.pp-input:focus, .pp-textarea:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(var(--red-rgb), 0.15); }
+.pp-textarea { resize: vertical; margin-top: 0.5rem; }
+.pp-check { display: flex; align-items: center; gap: 0.5rem; font-size: 0.84rem; color: var(--warm); margin-top: 1rem; cursor: pointer; }
+.pp-hint { margin-top: 1.1rem; padding: 0.85rem 1rem; border: 1px dashed var(--border-gold); border-radius: 10px; font-size: 0.82rem; color: var(--warm); }
+.pp-paybox { margin-top: 1.1rem; }
+
+.pp-trust { list-style: none; margin: 1.2rem 0 0; padding: 0; display: grid; gap: 0.55rem; font-size: 0.82rem; color: var(--warm); }
+.pp-trust li { display: flex; align-items: center; gap: 0.55rem; }
+.pp-trust svg { flex: none; color: var(--red); }
+.pp-noaccount { font-size: 0.78rem; color: var(--mist); margin: 1rem 0 0; line-height: 1.55; }
+
+.pp-steps { list-style: none; margin: 0.9rem 0 0; padding: 0; display: grid; gap: 0.8rem; counter-reset: pp; }
+.pp-steps li { position: relative; padding-left: 2.1rem; font-size: 0.88rem; color: var(--warm); line-height: 1.5; counter-increment: pp; }
+.pp-steps li::before {
+  content: counter(pp); position: absolute; left: 0; top: 0.05rem; width: 1.45rem; height: 1.45rem; border-radius: 50%;
+  display: grid; place-items: center; font-size: 0.74rem; font-weight: 700; color: var(--beige); background: var(--red);
+}
+
+.pp-help { text-align: center; margin: 1.6rem 0 0; font-size: 0.84rem; color: var(--warm); }
+.pp-help a { color: var(--gold-l); }
+
+.pp-center { text-align: center; }
+.pp-status-icon { width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 1rem; display: grid; place-items: center; background: rgba(var(--red-rgb), 0.14); border: 1px solid rgba(var(--red-rgb), 0.4); color: var(--red); }
+.pp-status-icon.warn { background: rgba(var(--alert-rgb), 0.12); border-color: rgba(var(--alert-rgb), 0.4); color: var(--alert); }
+.pp-status-title { font-family: var(--font-cormorant), serif; font-size: 1.7rem; font-weight: 600; margin: 0 0 0.4rem; }
+.pp-status-text { color: var(--warm); font-size: 0.95rem; line-height: 1.6; margin: 0 0 0.3rem; }
+.pp-status-text a { color: var(--gold-l); }
+
+.pp-skel { border-radius: 8px; background: linear-gradient(90deg, rgba(255,255,255,.04), rgba(255,255,255,.1), rgba(255,255,255,.04)); background-size: 200% 100%; animation: pp-shimmer 1.3s linear infinite; }
+@keyframes pp-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .pp-skel { animation: none; } }
