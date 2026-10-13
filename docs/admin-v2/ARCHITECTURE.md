@@ -107,9 +107,14 @@ automatique de l'historique ; export CSV.
 
 ## 5. Périmètre des modules (décidé le 13 oct. 2026)
 
-- **Repris dans la v2** : tableau de bord, commandes, clients, liens de paiement (création incluse, à l'identique), boutique, galerie, actualités, bandeau d'annonce, paramètres.
-- **Abandonné** : « Demandes » (reçues par email). L'onglet « Charges » de l'ancienne admin sera remplacé par la comptabilité (phase 1) ; ses tables (`business_*`) restent intactes.
-- État : liens de paiement (liste + création) et boutique (lecture) faits ; galerie, actualités et bandeau marqués « À venir ».
+- **Repris dans la v2** : tableau de bord, commandes (création, modification, photos, demande de paiement de livraison), clients, liens de paiement (création, copie, annulation), boutique, galerie, actualités, bandeau d'annonce, paramètres, **comptabilité**.
+- **Volontairement différent de la v1** : pas de suppression de commande (on l'annule, l'historique reste) ; une modification de commande n'écrit que les champs changés et refuse d'écraser un champ modifié entre-temps (un paiement peut se fusionner pendant l'édition) ; modifier une actualité ne change plus sa date de publication.
+- **Abandonné** : « Demandes » (reçues par email).
+- **Pas encore repris** : colis groupés (table `shipments`, vide), calculateur de charges japonaises de l'ancien onglet « Charges » (Kokuho, impôts… : à remplacer par quelque chose de plus pro), conversion EUR des statistiques, recherche rapide de l'en-tête, onglets masqués de la v1 (Événements, liste d'attente).
+
+### Comptabilité (étape 1, sans migration)
+
+Calculée à partir des données existantes, en entiers, mois à l'heure de Tokyo : journal des encaissements PayPal (un lien payé = une ligne : total payé, articles/avance client, commission, livraison, frais PayPal facturés et réels, marge, net), synthèse mensuelle (gains = formule du tableau de bord, dépenses lissées, résultat provisoire), dépenses (table `business_expenses`), export CSV pour le comptable (`/admin-v2/comptabilite/export`, protection contre l'injection de formules Excel). Ne contient pas : ventes d'avant septembre 2026 et paiements directs PayPal sans lien, remboursements, transferts, justificatifs (étape 2 : registre complet et saisie manuelle). La colonne « Entité » reste vide tant qu'aucune date de bascule n'est confirmée.
 
 ### Livraison : constat et correction
 

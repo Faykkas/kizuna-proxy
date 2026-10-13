@@ -13,7 +13,7 @@ type Sb = SupabaseClient;
 
 const PAGE = 1000; // PostgREST limite les réponses ; on pagine pour tout lire.
 
-async function fetchAll<T>(build: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: { message: string } | null }>): Promise<T[]> {
+export async function fetchAll<T>(build: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: { message: string } | null }>): Promise<T[]> {
   const rows: T[] = [];
   for (let from = 0; ; from += PAGE) {
     const { data, error } = await build(from, from + PAGE - 1);
