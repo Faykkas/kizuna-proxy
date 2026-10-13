@@ -47,3 +47,4 @@ debug-orders.js
 
 # Sauvegardes de données (contiennent des données clients)
 backup-*.json
+backup-*/
