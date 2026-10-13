@@ -62,6 +62,10 @@ Un test automatique équivalent tourne en local : `npm run test:sql` (PostgreSQL
 
 **Production** : seulement après validation complète du staging, et dans cet ordre : sauvegarde (étape 1) → migration → comptes (étape 5) → déploiement. Rien de tout cela n'est demandé maintenant.
 
+## 4 bis. SQL « choix de la commande » (production, quand vous voulez l'utiliser)
+
+Fichier : `supabase/migrations/20261013180000_payment_link_order_target.sql` (retour : `supabase/rollback/20261013180000_payment_link_order_target.down.sql`). Il ajoute deux colonnes **optionnelles** à `payment_links` ; aucun lien existant n'est modifié. Tant qu'il n'est pas exécuté, le formulaire fonctionne avec « Automatique » et refuse proprement un autre choix en expliquant pourquoi. À coller dans le *SQL Editor* (faites une sauvegarde avant, voir étape 1).
+
 ## 5. Comptes individuels (un par personne, plus de compte partagé)
 
 Sur le **staging** d'abord. Pour chaque personne (Mayuko, Samuel, éventuel staff) :

@@ -1,14 +1,18 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { createPaymentLink, type CreateResult } from "./actions";
+import { useEffect, useState, useTransition } from "react";
+import { createPaymentLink, listClientOrders, type ClientOrder, type CreateResult } from "./actions";
 import { looksLikeShipping, paypalFee } from "../../../lib/shipping";
 import { formatJPY } from "../../../lib/money";
+import { currentMonthJst } from "../../../lib/commissions";
+import { monthLabelFr, statusInfo } from "../../../lib/status";
 
 // Domaine public où le client ouvre le lien (identique à l'ancienne admin).
 const SITE_URL = "https://kizunaproxy.com";
 
 type Kind = "articles" | "shipping";
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const num = (s: string) => (/^\d+$/.test(s.trim()) ? Number(s.trim()) : 0);
 
@@ -20,9 +24,32 @@ export default function NewLinkForm() {
   const [clientName, setClientName] = useState("");
   const [clientEmail, setClientEmail] = useState("");
   const [confirmArticles, setConfirmArticles] = useState(false);
+  const [orders, setOrders] = useState<ClientOrder[]>([]);
+  const [orderTarget, setOrderTarget] = useState("auto"); // "auto" | "new" | id de commande
   const [result, setResult] = useState<CreateResult | null>(null);
   const [copied, setCopied] = useState(false);
   const [pending, startTransition] = useTransition();
+
+  // Charge les commandes du client dès que l'email est complet (pour choisir où va le paiement).
+  useEffect(() => {
+    if (!EMAIL_RE.test(clientEmail.trim())) return;
+    let cancelled = false;
+    const t = setTimeout(() => {
+      listClientOrders(clientEmail)
+        .then((list) => {
+          if (cancelled) return;
+          setOrders(list);
+          setOrderTarget((cur) => (cur === "auto" || cur === "new" || list.some((o) => String(o.id) === cur) ? cur : "auto"));
+        })
+        .catch(() => {
+          if (!cancelled) setOrders([]);
+        });
+    }, 400);
+    return () => {
+      cancelled = true;
+      clearTimeout(t);
+    };
+  }, [clientEmail]);
 
   const itemAmount = kind === "shipping" ? 0 : items.reduce((s, it) => s + num(it.price), 0);
   const feeAmount = num(fee);
@@ -31,13 +58,19 @@ export default function NewLinkForm() {
 
   // Le piège d'origine : un paiement « Shipping… » saisi comme des articles n'est jamais
   // enregistré comme livraison sur la commande. On bloque tant que ce n'est pas confirmé.
+  // Tant que l'email est incomplet, aucune commande n'est proposée (et le choix revient à « automatique »).
+  const emailOk = EMAIL_RE.test(clientEmail.trim());
+  const shownOrders = emailOk ? orders : [];
+  const chosenOrder = shownOrders.find((o) => String(o.id) === orderTarget) ?? null;
   const suspicious = kind === "articles" && looksLikeShipping(label) && !confirmArticles;
   const canSubmit = !pending && label.trim() !== "" && total > 0 && !suspicious;
 
   function submit() {
     setResult(null);
     startTransition(async () => {
-      setResult(await createPaymentLink({ kind, label, items, feeAmount: fee, clientName, clientEmail }));
+      // Une commande précise n'est envoyée que si l'email est complet (sinon elle n'était pas affichée).
+      const target = orderTarget === "new" || (emailOk && shownOrders.some((o) => String(o.id) === orderTarget)) ? orderTarget : "auto";
+      setResult(await createPaymentLink({ kind, label, items, feeAmount: fee, clientName, clientEmail, orderTarget: target }));
     });
   }
 
@@ -49,6 +82,8 @@ export default function NewLinkForm() {
     setClientName("");
     setClientEmail("");
     setConfirmArticles(false);
+    setOrders([]);
+    setOrderTarget("auto");
     setCopied(false);
   }
 
@@ -150,6 +185,35 @@ export default function NewLinkForm() {
           <span className="av2-sub">C'est l'email qui rattache le paiement à la bonne commande.</span>
         </div>
       </div>
+
+      <div className="av2-field">
+        <label htmlFor="order">Commande qui reçoit ce paiement</label>
+        <select id="order" className="av2-select" value={orderTarget} onChange={(e) => setOrderTarget(e.target.value)}>
+          <option value="auto">Automatique — commande ouverte du mois, sinon nouvelle commande</option>
+          <option value="new">Nouvelle commande</option>
+          {shownOrders.map((o) => (
+            <option key={o.id} value={String(o.id)}>
+              {o.ref} · {o.purchaseDate ?? "sans date"} · {statusInfo(o.status).label} · {formatJPY(o.itemPrice)}
+              {o.itemsSummary ? ` · ${o.itemsSummary}` : ""}
+            </option>
+          ))}
+        </select>
+        <span className="av2-sub">
+          {emailOk && shownOrders.length === 0
+            ? "Aucune commande trouvée pour cet email."
+            : "Renseignez l'email du client pour choisir une de ses commandes. Choisir une commande y ajoute le paiement même si elle date d'un autre mois."}
+        </span>
+      </div>
+
+      {chosenOrder && kind === "articles" && (chosenOrder.purchaseDate ?? "").slice(0, 7) !== currentMonthJst() ? (
+        <div className="av2-banner warn" role="note">
+          <div>
+            <strong>Commande d'un autre mois.</strong> La commission de ce paiement sera comptée dans les statistiques de{" "}
+            <span style={{ textTransform: "capitalize" }}>{chosenOrder.purchaseDate ? monthLabelFr(chosenOrder.purchaseDate.slice(0, 7)) : "sa date"}</span>{" "}
+            (le mois de la commande), pas dans le mois du paiement. Seule la marge PayPal suit la date du paiement.
+          </div>
+        </div>
+      ) : null}
 
       <div className="av2-card" style={{ background: "var(--av2-surface-2)" }}>
         <dl className="av2-dl" style={{ gridTemplateColumns: "1fr auto" }}>

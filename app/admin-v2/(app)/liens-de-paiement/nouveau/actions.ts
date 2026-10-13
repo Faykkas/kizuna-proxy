@@ -18,9 +18,45 @@ export type NewLinkInput = {
   feeAmount: string; // frais Kizuna (articles) ou montant de la livraison (shipping)
   clientName: string;
   clientEmail: string;
+  /** "auto" = règle automatique, "new" = nouvelle commande, sinon l'identifiant de la commande choisie. */
+  orderTarget: string;
 };
 
 export type CreateResult = { ok: true; id: string; total: number } | { ok: false; error: string };
+
+export type ClientOrder = {
+  id: number;
+  ref: string;
+  status: string | null;
+  purchaseDate: string | null;
+  itemsSummary: string;
+  itemPrice: number;
+  serviceFee: number;
+};
+
+/** Commandes d'un client (par email), pour choisir celle qui recevra le paiement. Réservé aux administrateurs. */
+export async function listClientOrders(email: string): Promise<ClientOrder[]> {
+  await requireAccess({ adminOnly: true });
+  const clean = (email ?? "").trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean)) return [];
+  const pattern = clean.replace(/[\\%_]/g, (m) => "\\" + m);
+  const sb = await createServerSupabase();
+  const { data } = await sb
+    .from("orders")
+    .select("id,public_ref,status,purchase_date,items,item_price_jpy,service_fee_jpy")
+    .ilike("client_email", pattern)
+    .order("created_at", { ascending: false })
+    .limit(30);
+  return (data ?? []).map((o) => ({
+    id: o.id as number,
+    ref: (o.public_ref as string | null) ?? `#${o.id}`,
+    status: o.status as string | null,
+    purchaseDate: o.purchase_date as string | null,
+    itemsSummary: ((o.items as string | null) ?? "").replace(/\s+/g, " ").slice(0, 48),
+    itemPrice: Math.round((o.item_price_jpy as number | null) ?? 0),
+    serviceFee: Math.round((o.service_fee_jpy as number | null) ?? 0),
+  }));
+}
 
 const MAX_YEN = 10_000_000;
 
@@ -65,6 +101,18 @@ export async function createPaymentLink(input: NewLinkInput): Promise<CreateResu
   const email = (input.clientEmail ?? "").trim();
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { ok: false, error: "Adresse email invalide." };
 
+  // Commande de destination : validée côté serveur (existence), jamais prise telle quelle du navigateur.
+  const orderFields: { target_order_id?: number; new_order?: boolean } = {};
+  const sbForOrder = await createServerSupabase();
+  if (input.orderTarget === "new") {
+    orderFields.new_order = true;
+  } else if (input.orderTarget && input.orderTarget !== "auto") {
+    if (!/^\d{1,9}$/.test(input.orderTarget)) return { ok: false, error: "Commande choisie invalide." };
+    const { data: target } = await sbForOrder.from("orders").select("id").eq("id", Number(input.orderTarget)).maybeSingle();
+    if (!target) return { ok: false, error: "La commande choisie n'existe plus. Rechargez la liste." };
+    orderFields.target_order_id = Number(input.orderTarget);
+  }
+
   const paypal = paypalFee(itemAmount, feeAmount);
   const total = itemAmount + feeAmount + paypal;
 
@@ -82,10 +130,17 @@ export async function createPaymentLink(input: NewLinkInput): Promise<CreateResu
       client_name: (input.clientName ?? "").trim().slice(0, 120) || null,
       client_email: email || null,
       status: "pending",
+      ...orderFields, // colonnes optionnelles : absentes tant que le choix reste « automatique »
     })
     .select("id")
     .single();
 
+  if (error && /target_order_id|new_order/.test(error.message)) {
+    return {
+      ok: false,
+      error: "Le choix de la commande n'est pas encore activé dans Supabase : exécutez d'abord le SQL 20261013180000_payment_link_order_target.sql, ou choisissez « Automatique ».",
+    };
+  }
   if (error || !data) return { ok: false, error: `Création impossible : ${error?.message ?? "erreur inconnue"}` };
   return { ok: true, id: data.id as string, total };
 }

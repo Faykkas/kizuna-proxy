@@ -13,7 +13,10 @@
 // Fichier volontairement sans dépendance, pour être testable seul
 // (node --test app/admin-v2/lib/commissions.test.ts).
 
+import { isCommissionPackage } from "../../lib/commissionPackage.ts";
+
 export type OrderLite = {
+  client_name?: string | null;
   status: string | null;
   purchase_date: string | null;
   service_fee_jpy: number | null;
@@ -30,7 +33,11 @@ export type MonthCommission = {
   serviceFees: number;
   paypalMargin: number;
   total: number;
+  /** Vraies commandes de clients (hors « commission package »). */
   orderCount: number;
+  /** Part des frais de service venant des « commission package » (déjà incluse dans serviceFees). */
+  packageCommission: number;
+  packageCount: number;
 };
 
 export type CommissionReport = {
@@ -62,7 +69,7 @@ export function computeCommissions(orders: OrderLite[], links: PaidLinkLite[]): 
   const get = (month: string) => {
     let m = byMonth.get(month);
     if (!m) {
-      m = { month, serviceFees: 0, paypalMargin: 0, total: 0, orderCount: 0 };
+      m = { month, serviceFees: 0, paypalMargin: 0, total: 0, orderCount: 0, packageCommission: 0, packageCount: 0 };
       byMonth.set(month, m);
     }
     return m;
@@ -71,8 +78,14 @@ export function computeCommissions(orders: OrderLite[], links: PaidLinkLite[]): 
   for (const o of orders) {
     if (!isEarnedStatus(o.status) || !o.purchase_date) continue;
     const m = get(o.purchase_date.slice(0, 7));
-    m.serviceFees += yen(o.service_fee_jpy, "service_fee_jpy", anomalies);
-    m.orderCount += 1;
+    const fee = yen(o.service_fee_jpy, "service_fee_jpy", anomalies);
+    m.serviceFees += fee; // toujours compté dans les gains
+    if (isCommissionPackage(o)) {
+      m.packageCommission += fee;
+      m.packageCount += 1; // mais pas dans le nombre de commandes
+    } else {
+      m.orderCount += 1;
+    }
   }
 
   for (const l of links) {

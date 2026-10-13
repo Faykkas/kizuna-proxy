@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireAccess } from "../../lib/access";
 import { createServerSupabase } from "../../lib/supabase-server";
-import { listOrders, ORDERS_PAGE_SIZE } from "../../lib/queries";
+import { listOrders, ORDERS_PAGE_SIZE, summarizePackages, type OrderKind } from "../../lib/queries";
 import { BASE } from "../../lib/config";
 import { formatJPY } from "../../lib/money";
 import { FILTER_STATUSES, formatDateFr, statusInfo } from "../../lib/status";
@@ -10,12 +10,13 @@ import { orderTitle } from "../../../lib/orderStatus";
 
 export const metadata = { title: "Commandes — Administration Kizuna" };
 
-type SearchParams = Promise<{ q?: string; statut?: string; page?: string }>;
+type SearchParams = Promise<{ q?: string; statut?: string; type?: string; page?: string }>;
 
-function href(params: { q?: string; statut?: string; page?: number }) {
+function href(params: { q?: string; statut?: string; type?: string; page?: number }) {
   const sp = new URLSearchParams();
   if (params.q) sp.set("q", params.q);
   if (params.statut) sp.set("statut", params.statut);
+  if (params.type) sp.set("type", params.type);
   if (params.page && params.page > 1) sp.set("page", String(params.page));
   const qs = sp.toString();
   return `${BASE}/commandes${qs ? `?${qs}` : ""}`;
@@ -26,6 +27,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
   const sp = await searchParams;
   const q = (sp.q ?? "").slice(0, 80);
   const statut = FILTER_STATUSES.includes(sp.statut ?? "") ? sp.statut! : "";
+  const type: OrderKind = sp.type === "colis" ? "packages" : sp.type === "tout" ? "all" : "orders";
   const page = Math.max(1, Math.min(10_000, Number.parseInt(sp.page ?? "1", 10) || 1));
 
   if (access.role === "staff") {
@@ -40,7 +42,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
   const sb = await createServerSupabase();
   let result;
   try {
-    result = await listOrders(sb, { q, status: statut || undefined, page });
+    result = await listOrders(sb, { q, status: statut || undefined, kind: type, page });
   } catch (e) {
     return (
       <>
@@ -51,6 +53,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
   }
 
   const { rows, total } = result;
+  const packages = await summarizePackages(sb).catch(() => ({ count: 0, totalJpy: 0 }));
   const pages = Math.max(1, Math.ceil(total / ORDERS_PAGE_SIZE));
 
   return (
@@ -72,10 +75,22 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
           ))}
         </select>
         <button className="av2-btn" type="submit">Filtrer</button>
-        {q || statut ? (
+        <select className="av2-select" name="type" defaultValue={sp.type ?? ""} aria-label="Type de lignes">
+          <option value="">Commandes de clients</option>
+          <option value="colis">Commissions colis seulement</option>
+          <option value="tout">Tout (commandes + commissions colis)</option>
+        </select>
+        {q || statut || sp.type ? (
           <Link className="av2-btn ghost" href={`${BASE}/commandes`}>Réinitialiser</Link>
         ) : null}
       </form>
+
+      {packages.count > 0 ? (
+        <p style={{ color: "var(--av2-muted)", fontSize: "0.88rem" }}>
+          {packages.count} « commission package » ({formatJPY(packages.totalJpy)}) sont gardées et comptées dans vos gains, mais ne sont pas des commandes.{" "}
+          {type !== "packages" ? <Link href={`${BASE}/commandes?type=colis`} style={{ color: "var(--av2-info)" }}>Les voir</Link> : null}
+        </p>
+      ) : null}
 
       <div className="av2-tablewrap">
         <table className="av2-table">
@@ -140,8 +155,8 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
           {total} commande{total > 1 ? "s" : ""} · page {Math.min(page, pages)} / {pages}
         </span>
         <div>
-          {page > 1 ? <Link className="av2-btn ghost" href={href({ q, statut, page: page - 1 })}>← Précédente</Link> : null}
-          {page < pages ? <Link className="av2-btn ghost" href={href({ q, statut, page: page + 1 })}>Suivante →</Link> : null}
+          {page > 1 ? <Link className="av2-btn ghost" href={href({ q, statut, type: sp.type, page: page - 1 })}>← Précédente</Link> : null}
+          {page < pages ? <Link className="av2-btn ghost" href={href({ q, statut, type: sp.type, page: page + 1 })}>Suivante →</Link> : null}
         </div>
       </div>
     </>

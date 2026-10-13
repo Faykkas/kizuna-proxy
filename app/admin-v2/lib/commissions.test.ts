@@ -53,3 +53,19 @@ test("mois courant à Tokyo : 20h UTC le 30 sept = 1er octobre à Tokyo", () => 
 test("lastMonths enjambe l'année", () => {
   assert.deepEqual(lastMonths("2026-02", 4), ["2025-11", "2025-12", "2026-01", "2026-02"]);
 });
+
+test("commission package : gagnée mais pas comptée comme commande", () => {
+  const r = computeCommissions(
+    [
+      { client_name: "Jeffrey", status: "Purchased", purchase_date: "2026-10-03", service_fee_jpy: 10000 },
+      { client_name: "COMISSION PACKING 04/1", status: "Delivered", purchase_date: "2026-10-04", service_fee_jpy: 2950 },
+      { client_name: "Comission PACKAGE WEEK", status: "Delivered", purchase_date: "2026-10-12", service_fee_jpy: 3250 },
+    ],
+    [],
+  );
+  const m = r.months[0];
+  assert.equal(m.total, 16200); // les gains incluent les commissions colis
+  assert.equal(m.orderCount, 1); // une seule vraie commande
+  assert.equal(m.packageCount, 2);
+  assert.equal(m.packageCommission, 6200);
+});

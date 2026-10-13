@@ -119,6 +119,18 @@ Au 13 oct., **aucun des 180 liens payés** n'avait été créé en mode « livra
 - **Pour le passé** : la fiche commande retrouve les paiements de livraison d'après leur libellé, rattachés à la commande par email et date (estimation, signalée comme telle). Aucune donnée n'a été corrigée.
 - **Reste à décider** : un rattrapage de l'historique (déplacer ces montants de `item_price_jpy` vers `shipping_cost_jpy`) après validation ligne par ligne.
 
+### « Commission package » (gains hebdomadaires sur les colis)
+
+Chaque semaine, Kizuna encaisse un peu plus que le coût réel des colis. Ces gains sont enregistrés comme des lignes de commande (client « COMISSION PACKING 12/1 », « Comission PACKAGE WEEK »…, sans email, articles à 0 ¥) : **11 lignes, 46 005 ¥**, de juillet à octobre. Elles sont **conservées** et **comptées dans les commissions**, mais ne sont plus comptées comme des commandes ni comme des clients (`app/lib/commissionPackage.ts`). Dans l'admin-v2 : nombre de commandes, commandes actives, moyennes et liste des clients les excluent ; le tableau de bord affiche leur part (« dont commissions colis ») ; la page Commandes a un filtre (commandes / commissions colis / tout). L'**ancienne admin** compte encore ces lignes comme des commandes dans Stats et Clients tant qu'elle n'est pas corrigée.
+
+### Choisir la commande qui reçoit un paiement
+
+À la création d'un lien (v2), on peut choisir : **Automatique** (règle actuelle : commande ouverte du mois, sinon nouvelle), **Nouvelle commande**, ou **une commande précise** du client (même d'un autre mois, même déjà livrée). Utile pour un client qui achète tous les jours : le numéro de commande ne change plus au changement de mois.
+
+- Stockage : deux colonnes optionnelles sur `payment_links` (`target_order_id`, `new_order`) — SQL `20261013180000_payment_link_order_target.sql`, à exécuter dans Supabase **avant** de choisir autre chose qu'« Automatique ».
+- Application : `app/api/payment-link/route.ts` (étape de capture, seulement la sélection de la commande) via `app/lib/paymentOrderTarget.ts`. Les appels PayPal ne sont pas modifiés. Les liens existants gardent la règle automatique ; si la commande choisie a disparu, repli automatique (le paiement n'est jamais perdu).
+- Attention comptable : la commission d'un paiement ajouté à une commande d'un autre mois est comptée dans le **mois de cette commande** (`purchase_date`) ; le formulaire le signale. La marge PayPal suit la date de paiement.
+
 ## 6. Feuille de route (inchangée)
 
 0. Fondations + squelette ✅ (local)

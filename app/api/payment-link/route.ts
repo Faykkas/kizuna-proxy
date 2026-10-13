@@ -18,6 +18,7 @@
 //   PAYPAL_CLIENT_ID, PAYPAL_SECRET, PAYPAL_ENV, SUPABASE_SECRET_KEY
 
 import { createClient } from "@supabase/supabase-js";
+import { resolveOpenOrder } from "../../lib/paymentOrderTarget";
 
 const PAYPAL_BASE =
   process.env.PAYPAL_ENV === "live"
@@ -201,7 +202,9 @@ export async function POST(request) {
     if (action === "capture") {
       const { data: link } = await admin
         .from("payment_links")
-        .select("id, status, label, client_name, client_email, client_phone, shipping_address, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, is_shipping")
+        // "*" on purpose: target_order_id / new_order are optional columns, and an explicit
+        // column list would make every payment fail if they don't exist yet.
+        .select("*")
         .eq("id", token)
         .single();
       if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
@@ -273,22 +276,35 @@ export async function POST(request) {
       // or Cancelled, that shipment is done and a new payment starts a
       // fresh order instead of reopening a closed one. Item payments from a
       // different month than the open order also start a fresh order.
-      let openOrder = null;
-      if (email) {
-        const { data: existingOrders } = await admin
+      //
+      // The admin can override all of that when creating the link: pick a specific
+      // order (link.target_order_id — even from another month or already shipped)
+      // or force a brand-new one (link.new_order). See lib/paymentOrderTarget.ts.
+      const ORDER_COLUMNS = "id, items, item_price_jpy, service_fee_jpy, shipping_cost_jpy, admin_notes, status, client_name, client_phone, delivery_country, shipping_address, purchase_date, created_at";
+      let existingOrders = [];
+      if (email && !link.new_order) {
+        const { data } = await admin
           .from("orders")
-          .select("id, items, item_price_jpy, service_fee_jpy, shipping_cost_jpy, admin_notes, status, client_name, client_phone, delivery_country, shipping_address, purchase_date, created_at")
+          .select(ORDER_COLUMNS)
           .ilike("client_email", email)
           .order("created_at", { ascending: false });
-        // An item payment only folds into an order from the same calendar
-        // month, so revenue lands in the month it was actually paid. A
-        // shipping payment isn't revenue, so it always joins the open order.
-        const thisMonth = new Date().toISOString().slice(0, 7);
-        openOrder = (existingOrders || []).find(o =>
-          !["Shipped", "Delivered", "Cancelled"].includes(o.status) &&
-          (isShippingPayment || (o.purchase_date || o.created_at || "").slice(0, 7) === thisMonth)
-        ) || null;
+        existingOrders = data || [];
       }
+      let targetOrder = null;
+      if (link.target_order_id != null && !link.new_order) {
+        const { data } = await admin.from("orders").select(ORDER_COLUMNS).eq("id", link.target_order_id).maybeSingle();
+        targetOrder = data || null;
+      }
+      // An item payment only folds into an order from the same calendar
+      // month, so revenue lands in the month it was actually paid. A
+      // shipping payment isn't revenue, so it always joins the open order.
+      const openOrder = resolveOpenOrder({
+        link,
+        existingOrders,
+        targetOrder,
+        isShippingPayment,
+        thisMonth: new Date().toISOString().slice(0, 7),
+      });
 
       // A shipping payment never touches item/service-fee totals — it's
       // its own tracked field on the order (same one OrderManager's

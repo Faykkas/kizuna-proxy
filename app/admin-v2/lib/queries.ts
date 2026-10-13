@@ -1,6 +1,7 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { isEarnedStatus } from "./commissions";
+import { isCommissionPackage } from "../../lib/commissionPackage.ts";
 import type { LinkLite, OrderLiteForLinks } from "./shipping";
 
 // COUCHE DE LECTURE SEULE. Aucune fonction de ce fichier n'écrit en base :
@@ -27,6 +28,7 @@ async function fetchAll<T>(build: (from: number, to: number) => PromiseLike<{ da
 
 export type OrderForStats = {
   id: number;
+  client_name: string | null;
   status: string | null;
   purchase_date: string | null;
   service_fee_jpy: number | null;
@@ -39,7 +41,7 @@ export function loadOrdersForStats(sb: Sb) {
   return fetchAll<OrderForStats>((from, to) =>
     sb
       .from("orders")
-      .select("id,status,purchase_date,service_fee_jpy,item_price_jpy,shipping_cost_jpy,shipping_paid")
+      .select("id,client_name,status,purchase_date,service_fee_jpy,item_price_jpy,shipping_cost_jpy,shipping_paid")
       .order("id")
       .range(from, to),
   );
@@ -86,7 +88,13 @@ function safeSearch(raw: string): string {
   return raw.replace(/[,()%*\\"'`;:<>]/g, " ").replace(/\s+/g, " ").trim().slice(0, 80);
 }
 
-export async function listOrders(sb: Sb, opts: { q?: string; status?: string; page: number }) {
+// « Commission package » : gains hebdomadaires sur les colis, enregistrés comme des lignes de commande
+// mais qui ne sont pas des commandes de clients (voir app/lib/commissionPackage.ts).
+const PACKAGE_NAME_PATTERN = "com%ion pack%";
+
+export type OrderKind = "orders" | "packages" | "all";
+
+export async function listOrders(sb: Sb, opts: { q?: string; status?: string; kind?: OrderKind; page: number }) {
   const from = (opts.page - 1) * ORDERS_PAGE_SIZE;
   let query = sb
     .from("orders")
@@ -99,6 +107,9 @@ export async function listOrders(sb: Sb, opts: { q?: string; status?: string; pa
     .range(from, from + ORDERS_PAGE_SIZE - 1);
 
   if (opts.status) query = query.eq("status", opts.status);
+  const kind = opts.kind ?? "orders";
+  if (kind === "orders") query = query.not("client_name", "ilike", PACKAGE_NAME_PATTERN);
+  if (kind === "packages") query = query.ilike("client_name", PACKAGE_NAME_PATTERN);
 
   const q = safeSearch(opts.q ?? "");
   if (q) {
@@ -189,6 +200,7 @@ export async function listCustomers(sb: Sb): Promise<CustomerRow[]> {
 
   const map = new Map<string, CustomerRow>();
   for (const o of orders) {
+    if (isCommissionPackage(o)) continue; // une commission colis n'est pas un client
     const key = customerKey(o);
     let c = map.get(key);
     if (!c) {
@@ -312,4 +324,12 @@ export async function loadClientPayments(sb: Sb, email: string): Promise<{ links
   if (links.error) throw new Error(links.error.message);
   if (orders.error) throw new Error(orders.error.message);
   return { links: (links.data ?? []) as LinkLite[], orders: (orders.data ?? []) as OrderLiteForLinks[] };
+}
+
+/** Résumé des « commission package » (nombre et total des gains), pour le lien de la page Commandes. */
+export async function summarizePackages(sb: Sb): Promise<{ count: number; totalJpy: number }> {
+  const { data, error } = await sb.from("orders").select("client_name,service_fee_jpy").ilike("client_name", PACKAGE_NAME_PATTERN);
+  if (error) throw new Error(error.message);
+  const rows = (data ?? []).filter((o) => isCommissionPackage(o));
+  return { count: rows.length, totalJpy: rows.reduce((s, o) => s + (o.service_fee_jpy ?? 0), 0) };
 }

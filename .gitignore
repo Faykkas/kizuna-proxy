@@ -44,3 +44,6 @@ next-env.d.ts
 import-orders.js
 debug-orders.js
 *.xlsx
+
+# Sauvegardes de données (contiennent des données clients)
+backup-*.json

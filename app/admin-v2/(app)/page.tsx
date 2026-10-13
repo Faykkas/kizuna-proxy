@@ -6,6 +6,7 @@ import { countPendingLinks, loadOrdersForStats, loadPaidLinks } from "../lib/que
 import { MONTHLY_GOAL_JPY, NEXT_GOAL_JPY, BASE } from "../lib/config";
 import { formatJPY, percentOf } from "../lib/money";
 import { isActiveStatus, monthLabelFr, statusInfo } from "../lib/status";
+import { isCommissionPackage } from "../../lib/commissionPackage.ts";
 import { DataError, PageHead, ReadOnlyTag, SoonCard, StaffNotice, StatCard, Tag } from "../components/ui";
 import CommissionChart from "../components/CommissionChart";
 
@@ -54,14 +55,16 @@ export default async function DashboardPage() {
   }));
 
   // Commandes actives = ni livrées ni annulées, avec le détail par statut.
-  const active = orders.filter((o) => isActiveStatus(o.status));
+  // Les « commission package » sont des gains, pas des commandes : jamais comptées ici.
+  const realOrders = orders.filter((o) => !isCommissionPackage(o));
+  const active = realOrders.filter((o) => isActiveStatus(o.status));
   const byStatus = new Map<string, number>();
   active.forEach((o) => byStatus.set(o.status ?? "—", (byStatus.get(o.status ?? "—") ?? 0) + 1));
   const statusRows = [...byStatus.entries()].sort((a, b) => b[1] - a[1]);
 
-  const pending = orders.filter((o) => o.status === "Pending").length;
-  const actionRequired = orders.filter((o) => o.status === "Action Required").length;
-  const shippingDue = orders.filter((o) => o.status !== "Cancelled" && (o.shipping_cost_jpy ?? 0) > 0 && !o.shipping_paid);
+  const pending = realOrders.filter((o) => o.status === "Pending").length;
+  const actionRequired = realOrders.filter((o) => o.status === "Action Required").length;
+  const shippingDue = realOrders.filter((o) => o.status !== "Cancelled" && (o.shipping_cost_jpy ?? 0) > 0 && !o.shipping_paid);
   const shippingDueTotal = shippingDue.reduce((s, o) => s + (o.shipping_cost_jpy ?? 0), 0);
 
   const goalPct = percentOf(monthTotal, MONTHLY_GOAL_JPY);
@@ -89,6 +92,7 @@ export default async function DashboardPage() {
           sub={
             <>
               Frais de service {formatJPY(now?.serviceFees ?? 0)} + marge PayPal {formatJPY(now?.paypalMargin ?? 0)}
+              {(now?.packageCommission ?? 0) > 0 ? <><br />dont commissions colis {formatJPY(now?.packageCommission ?? 0)}</> : null}
               <br />
               Hors prix d'achat des articles.
             </>
@@ -147,6 +151,7 @@ export default async function DashboardPage() {
                     <th className="r">Marge PayPal</th>
                     <th className="r">Total</th>
                     <th className="r">Commandes</th>
+                    <th className="r">Commissions colis</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -159,6 +164,7 @@ export default async function DashboardPage() {
                         <strong>{formatJPY(m.total)}</strong>
                       </td>
                       <td className="r">{m.orderCount}</td>
+                      <td className="r">{m.packageCommission > 0 ? `${formatJPY(m.packageCommission)} (${m.packageCount})` : "—"}</td>
                     </tr>
                   ))}
                 </tbody>
