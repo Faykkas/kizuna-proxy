@@ -5,6 +5,8 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  // Admin-v2 : textes français (apostrophes typographiques droites) — règle sans intérêt ici.
+  { files: ["app/admin-v2/**"], rules: { "react/no-unescaped-entities": "off" } },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

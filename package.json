@@ -6,9 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:calc": "node --test app/admin-v2/lib/commissions.test.ts",
+    "test:sql": "node supabase/tests/migrations.test.mjs",
+    "test:admin-v2": "npm run test:calc && npm run test:sql"
   },
   "dependencies": {
+    "@supabase/ssr": "0.10.0",
     "@supabase/supabase-js": "^2.101.1",
     "@vercel/analytics": "^2.0.1",
     "next": "16.2.0",
@@ -18,6 +22,7 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.9",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

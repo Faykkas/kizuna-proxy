@@ -1,0 +1,252 @@
+/* Admin-v2 — tout est préfixé « av2- » et scopé à .av2-root pour ne jamais
+   toucher au site public (globals.css définit des styles sur h1/h2/p/a…). */
+
+.av2-root {
+  --av2-bg: #f5f6f8;
+  --av2-surface: #ffffff;
+  --av2-surface-2: #f0f2f5;
+  --av2-border: #e3e6eb;
+  --av2-text: #1b2333;
+  --av2-muted: #667085;
+  --av2-accent: #c8243a;
+  --av2-accent-soft: #fbe9ec;
+  --av2-side: #14203a;
+  --av2-side-text: #c9d1e4;
+  --av2-side-active: #ffffff;
+  --av2-ok: #1a7f4b;
+  --av2-ok-soft: #e2f4ea;
+  --av2-warn: #a15c07;
+  --av2-warn-soft: #fdf1dc;
+  --av2-info: #1f5fbf;
+  --av2-info-soft: #e5eefb;
+  --av2-bar: #c8243a;
+  --av2-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+
+  min-height: 100vh;
+  background: var(--av2-bg);
+  color: var(--av2-text);
+  font-family: var(--font-outfit), system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+@media (prefers-color-scheme: dark) {
+  .av2-root:not([data-theme="light"]) {
+    --av2-bg: #0e1422;
+    --av2-surface: #172036;
+    --av2-surface-2: #1d2842;
+    --av2-border: #2a3654;
+    --av2-text: #e8ecf5;
+    --av2-muted: #98a2b8;
+    --av2-accent: #ef5468;
+    --av2-accent-soft: #3a1f2a;
+    --av2-side: #0a101d;
+    --av2-ok: #4cc58a;
+    --av2-ok-soft: #14301f;
+    --av2-warn: #f0b255;
+    --av2-warn-soft: #36280f;
+    --av2-info: #6fa4f2;
+    --av2-info-soft: #14233f;
+    --av2-bar: #ef5468;
+    --av2-shadow: none;
+  }
+}
+.av2-root[data-theme="dark"] {
+  --av2-bg: #0e1422;
+  --av2-surface: #172036;
+  --av2-surface-2: #1d2842;
+  --av2-border: #2a3654;
+  --av2-text: #e8ecf5;
+  --av2-muted: #98a2b8;
+  --av2-accent: #ef5468;
+  --av2-accent-soft: #3a1f2a;
+  --av2-side: #0a101d;
+  --av2-ok: #4cc58a;
+  --av2-ok-soft: #14301f;
+  --av2-warn: #f0b255;
+  --av2-warn-soft: #36280f;
+  --av2-info: #6fa4f2;
+  --av2-info-soft: #14233f;
+  --av2-bar: #ef5468;
+  --av2-shadow: none;
+}
+
+.av2-root *, .av2-root *::before, .av2-root *::after { box-sizing: border-box; }
+.av2-root h1, .av2-root h2, .av2-root h3, .av2-root h4 {
+  font-family: inherit; font-weight: 600; letter-spacing: -0.01em; color: var(--av2-text); margin: 0; line-height: 1.25;
+}
+.av2-root h1 { font-size: 1.6rem; }
+.av2-root h2 { font-size: 1.1rem; }
+.av2-root h3 { font-size: 0.98rem; }
+.av2-root p { margin: 0; line-height: 1.55; }
+.av2-root a { color: inherit; text-decoration: none; }
+.av2-root button, .av2-root input, .av2-root select { font: inherit; color: inherit; }
+.av2-root :focus-visible { outline: 2px solid var(--av2-info); outline-offset: 2px; }
+
+/* ── Coque ─────────────────────────────────────────────────────────── */
+.av2-shell { display: grid; grid-template-columns: 248px minmax(0, 1fr); min-height: 100vh; }
+.av2-side {
+  background: var(--av2-side); color: var(--av2-side-text);
+  display: flex; flex-direction: column; padding: 1.1rem 0.8rem; gap: 1rem;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+}
+.av2-brand { display: flex; align-items: center; gap: 0.6rem; padding: 0.3rem 0.6rem 0.9rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.av2-brand-mark { width: 32px; height: 32px; border-radius: 9px; background: var(--av2-accent); color: #fff; display: grid; place-items: center; font-weight: 700; }
+.av2-brand-name { color: #fff; font-weight: 600; line-height: 1.1; }
+.av2-brand-sub { font-size: 0.72rem; color: var(--av2-side-text); opacity: 0.8; }
+.av2-nav { display: flex; flex-direction: column; gap: 2px; }
+.av2-nav a {
+  display: flex; align-items: center; gap: 0.65rem; padding: 0.55rem 0.7rem; border-radius: 8px;
+  color: var(--av2-side-text); font-size: 0.93rem;
+}
+.av2-nav a:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.av2-nav a[aria-current="page"] { background: rgba(255,255,255,0.12); color: var(--av2-side-active); font-weight: 600; }
+.av2-nav svg { flex: none; opacity: 0.9; }
+.av2-nav .av2-tag { margin-left: auto; }
+.av2-side-foot { margin-top: auto; display: flex; flex-direction: column; gap: 0.7rem; padding-top: 0.9rem; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.85rem; }
+.av2-user { padding: 0 0.6rem; }
+.av2-user strong { display: block; color: #fff; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.av2-user span { opacity: 0.75; font-size: 0.78rem; }
+.av2-side-actions { display: flex; gap: 0.4rem; padding: 0 0.3rem; flex-wrap: wrap; }
+.av2-side-actions a, .av2-side-actions button {
+  background: rgba(255,255,255,0.08); border: 0; color: var(--av2-side-text); border-radius: 7px;
+  padding: 0.4rem 0.65rem; font-size: 0.8rem; cursor: pointer;
+}
+.av2-side-actions a:hover, .av2-side-actions button:hover { background: rgba(255,255,255,0.16); color: #fff; }
+
+.av2-main { padding: 1.6rem clamp(1rem, 3vw, 2.2rem) 3rem; min-width: 0; }
+.av2-content { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.2rem; }
+
+@media (max-width: 900px) {
+  .av2-shell { grid-template-columns: 1fr; }
+  .av2-side { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; padding: 0.7rem; gap: 0.6rem; }
+  .av2-brand { border: 0; padding: 0; }
+  .av2-nav { flex-direction: row; flex-wrap: wrap; width: 100%; order: 3; }
+  .av2-nav a { padding: 0.45rem 0.65rem; }
+  .av2-side-foot { margin: 0 0 0 auto; border: 0; padding: 0; flex-direction: row; align-items: center; }
+  .av2-user { display: none; }
+}
+
+/* ── En-têtes, cartes, bandeaux ───────────────────────────────────── */
+.av2-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 0.7rem; }
+.av2-head p { color: var(--av2-muted); margin-top: 0.25rem; }
+.av2-grid { display: grid; gap: 1rem; }
+.av2-grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.av2-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.av2-grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .av2-grid.cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .av2-grid.cols-4, .av2-grid.cols-3, .av2-grid.cols-2 { grid-template-columns: minmax(0, 1fr); } }
+
+.av2-card {
+  background: var(--av2-surface); border: 1px solid var(--av2-border); border-radius: 12px;
+  padding: 1.05rem 1.15rem; box-shadow: var(--av2-shadow); min-width: 0;
+}
+.av2-card > h2, .av2-card > h3 { margin-bottom: 0.7rem; }
+.av2-label { color: var(--av2-muted); font-size: 0.8rem; font-weight: 500; display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+.av2-value { font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em; margin-top: 0.25rem; font-variant-numeric: tabular-nums; }
+.av2-sub { color: var(--av2-muted); font-size: 0.82rem; margin-top: 0.3rem; }
+
+.av2-banner { border-radius: 10px; padding: 0.7rem 0.95rem; font-size: 0.88rem; border: 1px solid; display: flex; gap: 0.6rem; align-items: flex-start; }
+.av2-banner.info { background: var(--av2-info-soft); border-color: transparent; color: var(--av2-info); }
+.av2-banner.warn { background: var(--av2-warn-soft); border-color: transparent; color: var(--av2-warn); }
+.av2-banner.alert { background: var(--av2-accent-soft); border-color: transparent; color: var(--av2-accent); }
+.av2-banner strong { font-weight: 600; }
+
+.av2-tag { display: inline-flex; align-items: center; border-radius: 999px; padding: 0.08rem 0.55rem; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
+.av2-tag.soon { background: var(--av2-warn-soft); color: var(--av2-warn); }
+.av2-tag.ro { background: var(--av2-info-soft); color: var(--av2-info); }
+.av2-tag.prov { background: var(--av2-surface-2); color: var(--av2-muted); }
+.av2-tag.ok { background: var(--av2-ok-soft); color: var(--av2-ok); }
+.av2-tag.alert { background: var(--av2-accent-soft); color: var(--av2-accent); }
+.av2-tag.muted { background: var(--av2-surface-2); color: var(--av2-muted); }
+
+/* Zone « non fonctionnelle » : hachures, pour qu'on ne la confonde jamais avec une vraie donnée */
+.av2-soon-card {
+  border: 1.5px dashed var(--av2-border); border-radius: 12px; padding: 1rem 1.15rem; color: var(--av2-muted);
+  background: repeating-linear-gradient(135deg, transparent 0 10px, var(--av2-surface-2) 10px 11px);
+}
+.av2-soon-card h3 { color: var(--av2-text); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.35rem; }
+.av2-soon-card .av2-soon-value { font-size: 1.4rem; font-weight: 600; color: var(--av2-muted); opacity: 0.55; margin-top: 0.3rem; }
+
+/* ── Progression ──────────────────────────────────────────────────── */
+.av2-progress { height: 10px; border-radius: 999px; background: var(--av2-surface-2); overflow: hidden; margin-top: 0.6rem; }
+.av2-progress > span { display: block; height: 100%; background: var(--av2-accent); border-radius: 999px; }
+.av2-progress.done > span { background: var(--av2-ok); }
+
+/* ── Listes d'actions ─────────────────────────────────────────────── */
+.av2-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.av2-list li { display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; padding: 0.5rem 0; border-top: 1px solid var(--av2-border); font-size: 0.92rem; }
+.av2-list li:first-child { border-top: 0; }
+.av2-list a:hover { text-decoration: underline; }
+.av2-num { font-variant-numeric: tabular-nums; font-weight: 600; }
+
+/* ── Tableaux ─────────────────────────────────────────────────────── */
+.av2-tablewrap { overflow-x: auto; border: 1px solid var(--av2-border); border-radius: 12px; background: var(--av2-surface); }
+.av2-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.av2-table th { text-align: left; font-weight: 600; font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--av2-muted); padding: 0.7rem 0.85rem; background: var(--av2-surface-2); white-space: nowrap; }
+.av2-table td { padding: 0.65rem 0.85rem; border-top: 1px solid var(--av2-border); vertical-align: top; }
+.av2-table tbody tr:hover { background: var(--av2-surface-2); }
+.av2-table .r { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.av2-table small { display: block; color: var(--av2-muted); font-size: 0.78rem; }
+.av2-table a.av2-link { color: var(--av2-info); font-weight: 600; }
+.av2-table a.av2-link:hover { text-decoration: underline; }
+.av2-clip { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── Filtres, formulaires, boutons ────────────────────────────────── */
+.av2-filters { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
+.av2-input, .av2-select {
+  background: var(--av2-surface); border: 1px solid var(--av2-border); border-radius: 9px; padding: 0.55rem 0.75rem; min-width: 0;
+}
+.av2-input { flex: 1 1 220px; max-width: 360px; }
+.av2-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+  background: var(--av2-accent); color: #fff; border: 0; border-radius: 9px; padding: 0.55rem 1rem; font-weight: 600; cursor: pointer;
+}
+.av2-btn:hover { filter: brightness(1.06); }
+.av2-btn.ghost { background: var(--av2-surface); color: var(--av2-text); border: 1px solid var(--av2-border); }
+.av2-btn[disabled], .av2-btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; filter: none; }
+.av2-pager { display: flex; gap: 0.5rem; align-items: center; justify-content: space-between; flex-wrap: wrap; color: var(--av2-muted); font-size: 0.88rem; }
+.av2-pager div { display: flex; gap: 0.4rem; }
+
+/* ── Détail commande ──────────────────────────────────────────────── */
+.av2-dl { display: grid; grid-template-columns: minmax(110px, 38%) minmax(0, 1fr); gap: 0.4rem 0.9rem; font-size: 0.92rem; margin: 0; }
+.av2-dl dt { color: var(--av2-muted); }
+.av2-dl dd { margin: 0; overflow-wrap: anywhere; }
+.av2-pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 0.9rem; margin: 0; }
+.av2-timeline { list-style: none; margin: 0; padding: 0 0 0 0.9rem; border-left: 2px solid var(--av2-border); display: flex; flex-direction: column; gap: 0.8rem; }
+.av2-timeline li { position: relative; }
+.av2-timeline li::before { content: ""; position: absolute; left: -1.28rem; top: 0.35rem; width: 9px; height: 9px; border-radius: 50%; background: var(--av2-accent); }
+.av2-timeline small { color: var(--av2-muted); display: block; }
+.av2-back { color: var(--av2-muted); font-size: 0.88rem; }
+.av2-back:hover { color: var(--av2-text); }
+
+/* ── Graphique ────────────────────────────────────────────────────── */
+.av2-chart { width: 100%; height: auto; display: block; }
+.av2-chart .bar { fill: var(--av2-bar); }
+.av2-chart .bar.now { fill: var(--av2-accent); }
+.av2-chart .bar.prev { fill: var(--av2-bar); opacity: 0.55; }
+.av2-chart text { fill: var(--av2-muted); font-size: 11px; font-family: inherit; }
+.av2-chart .goal { stroke: var(--av2-ok); stroke-dasharray: 5 4; stroke-width: 1.5; }
+.av2-chart .axis { stroke: var(--av2-border); }
+
+/* ── Étapes (cycle de vie des commissions) ────────────────────────── */
+.av2-steps { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: stretch; }
+.av2-step { flex: 1 1 140px; border: 1px dashed var(--av2-border); border-radius: 10px; padding: 0.65rem 0.75rem; background: var(--av2-surface); }
+.av2-step b { display: block; color: var(--av2-text); }
+.av2-step span { font-size: 0.82rem; color: var(--av2-muted); }
+
+/* ── Pages d'authentification ─────────────────────────────────────── */
+.av2-auth { min-height: 100vh; display: grid; place-items: center; padding: 1.2rem; }
+.av2-auth-card { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 1rem; }
+.av2-field { display: flex; flex-direction: column; gap: 0.3rem; }
+.av2-field label { font-size: 0.85rem; font-weight: 500; }
+.av2-field .av2-input { max-width: none; flex: none; }
+.av2-qr { background: #fff; padding: 0.6rem; border-radius: 10px; width: 200px; height: 200px; margin: 0 auto; display: block; }
+.av2-secret { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; background: var(--av2-surface-2); border-radius: 8px; padding: 0.45rem 0.6rem; overflow-wrap: anywhere; }
+.av2-error { color: var(--av2-accent); font-size: 0.88rem; }
+
+/* ── Neutraliser les éléments du site public injectés par le layout racine ── */
+.av2-root nav { position: static; z-index: auto; background: transparent; backdrop-filter: none; border: 0; }
+body:has(.av2-root) .cookie-banner,
+body:has(.av2-root) .cw-fab,
+body:has(.av2-root) .cw-panel { display: none !important; }
