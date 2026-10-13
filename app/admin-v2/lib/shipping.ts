@@ -28,7 +28,7 @@ export type LinkLite = {
   is_shipping: boolean | null;
 };
 
-export type OrderLiteForLinks = { id: number; client_email: string | null; created_at: string | null };
+export type OrderLiteForLinks = { id: number; client_email: string | null; created_at: string | null; purchase_date?: string | null };
 
 /** Livraison explicite (is_shipping) ou, à défaut, déduite du libellé. */
 export function shippingKind(l: Pick<LinkLite, "is_shipping" | "label">): "explicit" | "guessed" | null {
@@ -54,9 +54,13 @@ const TOLERANCE_MS = 5 * 60 * 1000;
 
 /**
  * Rattache chaque lien payé à une commande du même client : la commande la plus récente
- * créée AVANT le paiement (à 5 minutes près, car la commande est créée juste après la
- * capture). C'est une estimation : le site fusionnait les paiements dans la commande
- * ouverte du moment, sans garder le lien exact.
+ * ayant COMMENCÉ avant le paiement (à 5 minutes près, car la commande est créée juste après
+ * la capture). Une commande commence à sa date de création ou, si elle est antérieure, à sa
+ * date d'achat (début de journée à Tokyo) : c'est ce qui rattache correctement les commandes
+ * recréées à la main après coup (séparation d'un mois, etc.).
+ *
+ * C'est une estimation : le site fusionnait les paiements dans la commande ouverte du moment,
+ * sans garder le lien exact.
  */
 export function assignLinksToOrders(orders: OrderLiteForLinks[], links: LinkLite[]): Map<string, number> {
   const out = new Map<string, number>();
@@ -65,7 +69,12 @@ export function assignLinksToOrders(orders: OrderLiteForLinks[], links: LinkLite
     const email = (o.client_email ?? "").trim().toLowerCase();
     if (!email || !o.created_at) continue;
     const arr = byEmail.get(email) ?? [];
-    arr.push({ id: o.id, t: Date.parse(o.created_at) });
+    let t = Date.parse(o.created_at);
+    if (o.purchase_date && /^\d{4}-\d{2}-\d{2}$/.test(o.purchase_date)) {
+      const day = Date.parse(o.purchase_date + "T00:00:00+09:00");
+      if (!Number.isNaN(day) && day < t) t = day;
+    }
+    arr.push({ id: o.id, t });
     byEmail.set(email, arr);
   }
   for (const arr of byEmail.values()) arr.sort((a, b) => a.t - b.t);

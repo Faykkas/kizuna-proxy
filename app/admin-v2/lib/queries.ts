@@ -307,7 +307,7 @@ export async function loadClientPayments(sb: Sb, email: string): Promise<{ links
       .eq("status", "paid")
       .ilike("client_email", pattern)
       .order("paid_at"),
-    sb.from("orders").select("id,client_email,created_at").ilike("client_email", pattern),
+    sb.from("orders").select("id,client_email,created_at,purchase_date").ilike("client_email", pattern),
   ]);
   if (links.error) throw new Error(links.error.message);
   if (orders.error) throw new Error(orders.error.message);

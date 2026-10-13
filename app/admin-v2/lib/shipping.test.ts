@@ -44,6 +44,17 @@ test("rattachement : commande la plus récente avant le paiement, tolérance 5 m
   assert.equal(m.has("l5"), false);
 });
 
+test("commande recréée à la main : sa date d'achat antérieure la fait commencer plus tôt", () => {
+  const orders = [
+    { id: 10, client_email: "c@x.com", created_at: "2026-09-01T10:00:00Z", purchase_date: "2026-09-01" },
+    { id: 11, client_email: "c@x.com", created_at: "2026-10-13T08:00:00Z", purchase_date: "2026-10-01" }, // créée après coup
+  ];
+  const l = { id: "l", label: "", client_email: "c@x.com", paid_at: "2026-10-05T00:00:00Z", amount_jpy: 0, item_amount_jpy: 0, fee_amount_jpy: 0, paypal_fee_jpy: 0, is_shipping: false };
+  assert.equal(assignLinksToOrders(orders, [l]).get("l"), 11);
+  // sans purchase_date, on retombait à tort sur la commande précédente
+  assert.equal(assignLinksToOrders(orders.map((o) => ({ ...o, purchase_date: null })), [l]).get("l"), 10);
+});
+
 test("frais PayPal 6 % en entiers, moitié vers le haut", () => {
   assert.equal(paypalFee(7865, 8000), 952); // valeur réelle d'un lien existant
   assert.equal(paypalFee(14835, 0), 890);
