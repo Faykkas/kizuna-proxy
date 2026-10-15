@@ -270,3 +270,11 @@ body:has(.av2-root) .cw-panel { display: none !important; }
 .av2-auth .av2-langswitch { border-color: var(--av2-border); align-self: flex-end; margin: 0; }
 .av2-auth .av2-langswitch button { color: var(--av2-muted); }
 .av2-auth .av2-langswitch button.is-on { background: var(--av2-surface-2); color: var(--av2-text); }
+
+/* Écran de chargement (squelette) */
+.av2-skel-page { max-width: 1320px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; }
+.av2-skel-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.av2-skel { border-radius: 10px; background: linear-gradient(90deg, var(--av2-surface-2) 25%, var(--av2-border) 50%, var(--av2-surface-2) 75%); background-size: 200% 100%; animation: av2-shimmer 1.2s ease-in-out infinite; }
+@keyframes av2-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .av2-skel { animation: none; } }
+@media (max-width: 720px) { .av2-skel-row { grid-template-columns: 1fr; } }

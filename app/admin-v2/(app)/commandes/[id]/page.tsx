@@ -7,6 +7,7 @@ import { getOrder, loadClientPayments } from "../../../lib/queries";
 import { assignLinksToOrders, shippingAmount, shippingKind } from "../../../lib/shipping";
 import { BASE } from "../../../lib/config";
 import { formatJPY } from "../../../lib/money";
+import { BackLink } from "../../../components/ListMemory";
 import { DataError, PageHead, ReadOnlyTag, StaffNotice, StatusBadge } from "../../../components/ui";
 import { trackingUrl } from "../../../../lib/orderStatus";
 
@@ -69,7 +70,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
 
   return (
     <>
-      <Link className="av2-back" href={`${BASE}/commandes`}>{t("← Retour aux commandes")}</Link>
+      <BackLink className="av2-back" name="commandes" fallback={`${BASE}/commandes`}>{t("← Retour aux commandes")}</BackLink>
       <PageHead
         title={t("Commande {ref}", { ref })}
         subtitle={<StatusBadge status={o.status} />}

@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { requireAccess } from "../../../lib/access";
 import { getL } from "../../../lib/lang-server";
 import { BASE } from "../../../lib/config";
+import { BackLink } from "../../../components/ListMemory";
 import { PageHead } from "../../../components/ui";
 import OrderForm from "../OrderForm";
 
@@ -15,7 +15,7 @@ export default async function NewOrderPage() {
   const { t } = await getL();
   return (
     <>
-      <Link className="av2-back" href={`${BASE}/commandes`}>{t("← Retour aux commandes")}</Link>
+      <BackLink className="av2-back" name="commandes" fallback={`${BASE}/commandes`}>{t("← Retour aux commandes")}</BackLink>
       <PageHead title={t("Nouvelle commande")} subtitle={t("Les photos s'ajoutent une fois la commande créée.")} />
       <OrderForm mode="create" />
     </>

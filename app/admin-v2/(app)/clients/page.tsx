@@ -5,6 +5,8 @@ import { getL } from "../../lib/lang-server";
 import { listCustomers } from "../../lib/queries";
 import { BASE } from "../../lib/config";
 import { formatJPY } from "../../lib/money";
+import FilterForm from "../../components/FilterForm";
+import { RememberList } from "../../components/ListMemory";
 import { Banner, DataError, PageHead, ReadOnlyTag, StaffNotice, Tag } from "../../components/ui";
 
 export async function generateMetadata() {
@@ -59,11 +61,12 @@ export default async function CustomersPage({ searchParams }: { searchParams: Pr
         {t("2 commandes comptabilisées ou plus. La règle définitive sera fixée avec vous. Les informations de livraison ne sont pas affichées ici : elles se consultent dans le détail d'une commande.")}
       </Banner>
 
-      <form method="get" action={`${BASE}/clients`} className="av2-filters" role="search">
+      <RememberList name="clients" />
+      <FilterForm key={q} action={`${BASE}/clients`} className="av2-filters">
         <input className="av2-input" type="search" name="q" defaultValue={q} placeholder={t("Rechercher : nom ou email")} aria-label={t("Rechercher un client")} />
         <button className="av2-btn" type="submit">{t("Rechercher")}</button>
         {q ? <Link className="av2-btn ghost" href={`${BASE}/clients`}>{t("Réinitialiser")}</Link> : null}
-      </form>
+      </FilterForm>
 
       <div className="av2-tablewrap">
         <table className="av2-table">

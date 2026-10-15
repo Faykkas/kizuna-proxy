@@ -143,14 +143,12 @@ export type OrderFull = OrderRow & {
 };
 
 export async function getOrder(sb: Sb, id: number) {
-  const { data, error } = await sb.from("orders").select("*").eq("id", id).maybeSingle();
+  const [{ data, error }, { data: events, error: e2 }] = await Promise.all([
+    sb.from("orders").select("*").eq("id", id).maybeSingle(),
+    sb.from("order_events").select("id,status,note,created_at").eq("order_id", id).order("created_at", { ascending: true }),
+  ]);
   if (error) throw new Error(error.message);
   if (!data) return null;
-  const { data: events, error: e2 } = await sb
-    .from("order_events")
-    .select("id,status,note,created_at")
-    .eq("order_id", id)
-    .order("created_at", { ascending: true });
   if (e2) throw new Error(e2.message);
   return { order: data as OrderFull, events: (events ?? []) as { id: string; status: string; note: string | null; created_at: string }[] };
 }

@@ -6,6 +6,8 @@ import { listOrders, ORDERS_PAGE_SIZE, summarizePackages, type OrderKind } from 
 import { BASE } from "../../lib/config";
 import { formatJPY } from "../../lib/money";
 import { FILTER_STATUSES } from "../../lib/status";
+import FilterForm from "../../components/FilterForm";
+import { RememberList } from "../../components/ListMemory";
 import { DataError, PageHead, ReadOnlyTag, StaffNotice, StatusBadge } from "../../components/ui";
 import { orderTitle } from "../../../lib/orderStatus";
 
@@ -47,8 +49,13 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
 
   const sb = await createServerSupabase();
   let result;
+  let packages = { count: 0, totalJpy: 0 };
   try {
-    result = await listOrders(sb, { q, status: statut || undefined, kind: type, page });
+    // Les deux lectures sont indépendantes : on les lance ensemble.
+    [result, packages] = await Promise.all([
+      listOrders(sb, { q, status: statut || undefined, kind: type, page }),
+      summarizePackages(sb).catch(() => ({ count: 0, totalJpy: 0 })),
+    ]);
   } catch (e) {
     return (
       <>
@@ -59,7 +66,6 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
   }
 
   const { rows, total } = result;
-  const packages = await summarizePackages(sb).catch(() => ({ count: 0, totalJpy: 0 }));
   const pages = Math.max(1, Math.ceil(total / ORDERS_PAGE_SIZE));
 
   return (
@@ -70,7 +76,8 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
         tags={access.role === "admin" ? <Link className="av2-btn" href={`${BASE}/commandes/nouveau`}>{t("+ Nouvelle commande")}</Link> : <ReadOnlyTag />}
       />
 
-      <form method="get" action={`${BASE}/commandes`} className="av2-filters" role="search">
+      <RememberList name="commandes" />
+      <FilterForm key={`${q}|${statut}|${sp.type ?? ""}`} action={`${BASE}/commandes`} className="av2-filters">
         <input className="av2-input" type="search" name="q" defaultValue={q} placeholder={t("Rechercher : client, email, référence, article…")} aria-label={t("Rechercher une commande")} />
         <select className="av2-select" name="statut" defaultValue={statut} aria-label={t("Filtrer par statut")}>
           <option value="">{t("Tous les statuts")}</option>
@@ -89,7 +96,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
         {q || statut || sp.type ? (
           <Link className="av2-btn ghost" href={`${BASE}/commandes`}>{t("Réinitialiser")}</Link>
         ) : null}
-      </form>
+      </FilterForm>
 
       {packages.count > 0 ? (
         <p style={{ color: "var(--av2-muted)", fontSize: "0.88rem" }}>

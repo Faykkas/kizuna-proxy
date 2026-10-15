@@ -9,6 +9,8 @@ import { formatJPY, toYen } from "../../lib/money";
 import { shippingKind } from "../../lib/shipping";
 import { Banner, DataError, PageHead, ReadOnlyTag, StaffNotice, StatCard, Tag } from "../../components/ui";
 import LinkActions from "./LinkActions";
+import FilterForm from "../../components/FilterForm";
+import { RememberList } from "../../components/ListMemory";
 
 export async function generateMetadata() {
   const { t } = await getL();
@@ -121,7 +123,8 @@ export default async function PaymentLinksPage({ searchParams }: { searchParams:
         {t("L'adresse d'un lien (/pay/…) sert d'unique « clé » au client : elle n'est pas affichée, seulement copiable pour un lien en attente.")}
       </Banner>
 
-      <form method="get" action={`${BASE}/liens-de-paiement`} className="av2-filters" role="search">
+      <RememberList name="liens" />
+      <FilterForm key={`${q}|${statut}|${type}`} action={`${BASE}/liens-de-paiement`} className="av2-filters">
         <input className="av2-input" type="search" name="q" defaultValue={q} placeholder={t("Rechercher : libellé, client, email…")} aria-label={t("Rechercher un lien")} />
         <select className="av2-select" name="statut" defaultValue={statut} aria-label={t("Filtrer par statut")}>
           <option value="">{t("Tous les statuts")}</option>
@@ -135,7 +138,7 @@ export default async function PaymentLinksPage({ searchParams }: { searchParams:
         </select>
         <button className="av2-btn" type="submit">{t("Filtrer")}</button>
         {q || statut || type ? <Link className="av2-btn ghost" href={`${BASE}/liens-de-paiement`}>{t("Réinitialiser")}</Link> : null}
-      </form>
+      </FilterForm>
 
       <div className="av2-tablewrap">
         <table className="av2-table">
