@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAccess } from "../../../lib/access";
@@ -167,13 +168,47 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
               <tbody>
                 {payments.map((l) => {
                   const k = shippingKind(l);
+                  const items = Array.isArray(l.items_breakdown) ? l.items_breakdown : [];
+                  const fee = Math.round(l.fee_amount_jpy ?? 0);
+                  const paypal = Math.round(l.paypal_fee_jpy ?? 0);
+                  const itemsTotal = Math.round(l.item_amount_jpy ?? 0);
                   return (
-                    <tr key={l.id}>
-                      <td>{L.dateTime(l.paid_at)}</td>
-                      <td>{l.label}</td>
-                      <td>{k === "explicit" ? t("Livraison") : k === "guessed" ? t("Livraison ? (d'après le libellé)") : t("Articles")}</td>
-                      <td className="r">{formatJPY(l.amount_jpy)}</td>
-                    </tr>
+                    <Fragment key={l.id}>
+                      <tr>
+                        <td>{L.dateTime(l.paid_at)}</td>
+                        <td>{l.label}</td>
+                        <td>{k === "explicit" ? t("Livraison") : k === "guessed" ? t("Livraison ? (d'après le libellé)") : t("Articles")}</td>
+                        <td className="r"><strong>{formatJPY(l.amount_jpy)}</strong></td>
+                      </tr>
+                      <tr>
+                        <td colSpan={4} style={{ paddingTop: 0, borderTop: 0 }}>
+                          <div className="av2-invoice">
+                            <small>{t("Détail du paiement")}</small>
+                            {k === "explicit" ? (
+                              <div><span>{t("Livraison")}</span><b>{formatJPY(fee)}</b></div>
+                            ) : items.length > 0 ? (
+                              items.map((it, i) => (
+                                <div key={i}>
+                                  <span>
+                                    {/^https?:\/\//i.test(it.url ?? "") ? (
+                                      <a className="av2-link" href={it.url!} target="_blank" rel="noopener noreferrer">{it.name || t("Article sans nom")}</a>
+                                    ) : (
+                                      it.name || t("Article sans nom")
+                                    )}
+                                  </span>
+                                  <b>{formatJPY(it.price_jpy)}</b>
+                                </div>
+                              ))
+                            ) : itemsTotal > 0 ? (
+                              <div><span>{t("Articles (total seul, sans détail)")}</span><b>{formatJPY(itemsTotal)}</b></div>
+                            ) : null}
+                            {k !== "explicit" && fee > 0 ? <div><span>{t("Frais Kizuna")}</span><b>{formatJPY(fee)}</b></div> : null}
+                            {paypal > 0 ? <div><span>{t("Frais PayPal")}</span><b>{formatJPY(paypal)}</b></div> : null}
+                            <div className="total"><span>{t("Total payé")}</span><b>{formatJPY(l.amount_jpy)}</b></div>
+                          </div>
+                        </td>
+                      </tr>
+                    </Fragment>
                   );
                 })}
               </tbody>

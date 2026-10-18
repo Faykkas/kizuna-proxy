@@ -313,7 +313,7 @@ export async function loadClientPayments(sb: Sb, email: string): Promise<{ links
   const [links, orders] = await Promise.all([
     sb
       .from("payment_links")
-      .select("id,label,client_email,paid_at,amount_jpy,item_amount_jpy,fee_amount_jpy,paypal_fee_jpy,is_shipping")
+      .select("id,label,client_email,paid_at,amount_jpy,item_amount_jpy,fee_amount_jpy,paypal_fee_jpy,is_shipping,items_breakdown")
       .eq("status", "paid")
       .ilike("client_email", pattern)
       .order("paid_at"),

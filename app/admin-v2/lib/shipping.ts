@@ -26,6 +26,8 @@ export type LinkLite = {
   fee_amount_jpy: number | null;
   paypal_fee_jpy: number | null;
   is_shipping: boolean | null;
+  /** Détail saisi à la création du lien (absent des anciens liens). */
+  items_breakdown?: { name?: string | null; price_jpy?: number | null; url?: string | null }[] | null;
 };
 
 export type OrderLiteForLinks = { id: number; client_email: string | null; created_at: string | null; purchase_date?: string | null };

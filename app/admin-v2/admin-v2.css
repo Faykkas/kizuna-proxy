@@ -278,3 +278,12 @@ body:has(.av2-root) .cw-panel { display: none !important; }
 @keyframes av2-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 @media (prefers-reduced-motion: reduce) { .av2-skel { animation: none; } }
 @media (max-width: 720px) { .av2-skel-row { grid-template-columns: 1fr; } }
+
+/* Détail d'un paiement (façon facture PayPal) */
+.av2-invoice { margin: 0.1rem 0 0.5rem 0.9rem; padding: 0.55rem 0.8rem; background: var(--av2-surface-2); border-radius: 8px; display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.86rem; }
+.av2-invoice small { color: var(--av2-muted); text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.7rem; }
+.av2-invoice > div { display: flex; justify-content: space-between; gap: 1rem; }
+.av2-invoice > div span { overflow-wrap: anywhere; }
+.av2-invoice > div b { font-weight: 500; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.av2-invoice .total { border-top: 1px solid var(--av2-border); margin-top: 0.25rem; padding-top: 0.3rem; font-weight: 600; }
+.av2-invoice .total b { font-weight: 700; }

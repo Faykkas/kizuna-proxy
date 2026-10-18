@@ -157,4 +157,9 @@ export const JA_ORDERS: Record<string, string> = {
   "Le prix d'envoi sera enregistré sur la commande.": "送料は注文に記録されます。",
   "Le lien": "リンク",
   "Élément invalide.": "項目が正しくありません。",
+  // Détail d'un paiement (façon facture)
+  "Détail du paiement": "お支払いの内訳",
+  "Article sans nom": "名称なしの商品",
+  "Articles (total seul, sans détail)": "商品（合計のみ・内訳なし）",
+  "Frais PayPal": "PayPal手数料",
 };
