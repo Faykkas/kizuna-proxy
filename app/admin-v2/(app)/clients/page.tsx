@@ -17,6 +17,8 @@ export async function generateMetadata() {
 const SHOWN_MAX = 300;
 
 export default async function CustomersPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+  const customersP = createServerSupabase().then((sb) => listCustomers(sb));
+  customersP.catch(() => {});
   const access = await requireAccess();
   const L = await getL();
   const { t } = L;
@@ -31,10 +33,9 @@ export default async function CustomersPage({ searchParams }: { searchParams: Pr
     );
   }
 
-  const sb = await createServerSupabase();
   let customers;
   try {
-    customers = await listCustomers(sb);
+    customers = await customersP;
   } catch (e) {
     return (
       <>

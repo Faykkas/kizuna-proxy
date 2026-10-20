@@ -41,6 +41,8 @@ function href(p: { q?: string; statut?: string; type?: string; page?: number }) 
 }
 
 export default async function PaymentLinksPage({ searchParams }: { searchParams: Promise<{ q?: string; statut?: string; type?: string; page?: string }> }) {
+  const linksP = createServerSupabase().then((sb) => loadPaymentLinks(sb));
+  linksP.catch(() => {});
   const access = await requireAccess();
   const L = await getL();
   const { t } = L;
@@ -61,7 +63,7 @@ export default async function PaymentLinksPage({ searchParams }: { searchParams:
 
   let links: PaymentLinkRow[];
   try {
-    links = await loadPaymentLinks(await createServerSupabase());
+    links = await linksP;
   } catch (e) {
     return (
       <>

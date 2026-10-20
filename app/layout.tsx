@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/react";
-import { AuthProvider } from "./lib/auth";
-import { LanguageProvider } from "./lib/language";
-import ContactWidget from "./components/ContactWidget";
-import CookieConsent from "./components/CookieConsent";
+import PublicShell from "./components/PublicShell";
 import { pressStart2P, outfit, cormorantGaramond } from "./fonts";
 import "./globals.css";
 
@@ -139,14 +135,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         })}} />
       </head>
       <body>
-        <AuthProvider>
-          <LanguageProvider>
-            {children}
-            <ContactWidget />
-            <CookieConsent />
-          </LanguageProvider>
-        </AuthProvider>
-        <Analytics />
+        <PublicShell>{children}</PublicShell>
       </body>
     </html>
   );

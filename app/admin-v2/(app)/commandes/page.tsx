@@ -29,14 +29,24 @@ function href(params: { q?: string; statut?: string; type?: string; page?: numbe
 }
 
 export default async function OrdersPage({ searchParams }: { searchParams: SearchParams }) {
-  const access = await requireAccess();
-  const L = await getL();
-  const { t } = L;
+  // Les filtres viennent de l'adresse (aucune attente réseau) : on lance la lecture tout de suite,
+  // en même temps que la vérification d'accès (la RLS protège les données quoi qu'il arrive).
   const sp = await searchParams;
   const q = (sp.q ?? "").slice(0, 80);
   const statut = FILTER_STATUSES.includes(sp.statut ?? "") ? sp.statut! : "";
   const type: OrderKind = sp.type === "colis" ? "packages" : sp.type === "tout" ? "all" : "orders";
   const page = Math.max(1, Math.min(10_000, Number.parseInt(sp.page ?? "1", 10) || 1));
+  const dataP = createServerSupabase().then((sb) =>
+    Promise.all([
+      listOrders(sb, { q, status: statut || undefined, kind: type, page }),
+      summarizePackages(sb).catch(() => ({ count: 0, totalJpy: 0 })),
+    ]),
+  );
+  dataP.catch(() => {});
+
+  const access = await requireAccess();
+  const L = await getL();
+  const { t } = L;
 
   if (access.role === "staff") {
     return (
@@ -47,15 +57,10 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
     );
   }
 
-  const sb = await createServerSupabase();
   let result;
   let packages = { count: 0, totalJpy: 0 };
   try {
-    // Les deux lectures sont indépendantes : on les lance ensemble.
-    [result, packages] = await Promise.all([
-      listOrders(sb, { q, status: statut || undefined, kind: type, page }),
-      summarizePackages(sb).catch(() => ({ count: 0, totalJpy: 0 })),
-    ]);
+    [result, packages] = await dataP;
   } catch (e) {
     return (
       <>

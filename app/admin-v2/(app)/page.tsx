@@ -17,6 +17,9 @@ export async function generateMetadata() {
 }
 
 export default async function DashboardPage() {
+  // Les lectures démarrent tout de suite, en même temps que la vérification d'accès (la RLS protège les données quoi qu'il arrive).
+  const dataP = createServerSupabase().then((sb) => Promise.all([loadOrdersForStats(sb), loadPaidLinks(sb), countPendingLinks(sb)]));
+  dataP.catch(() => {});
   const access = await requireAccess();
   const L = await getL();
   const { t } = L;
@@ -31,10 +34,9 @@ export default async function DashboardPage() {
     );
   }
 
-  const sb = await createServerSupabase();
   let data;
   try {
-    const [orders, links, pendingLinks] = await Promise.all([loadOrdersForStats(sb), loadPaidLinks(sb), countPendingLinks(sb)]);
+    const [orders, links, pendingLinks] = await dataP;
     data = { orders, links, pendingLinks };
   } catch (e) {
     return (
