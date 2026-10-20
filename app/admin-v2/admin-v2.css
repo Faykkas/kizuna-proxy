@@ -227,7 +227,9 @@
 .av2-chart .bar { fill: var(--av2-bar); }
 .av2-chart .bar.now { fill: var(--av2-accent); }
 .av2-chart .bar.prev { fill: var(--av2-bar); opacity: 0.55; }
-.av2-chart text { fill: var(--av2-muted); font-size: 11px; font-family: inherit; }
+.av2-chart text { fill: var(--av2-muted); font-size: 11px; font-family: inherit; paint-order: stroke; stroke: var(--av2-surface); stroke-width: 4px; stroke-linejoin: round; }
+.av2-chart text.value { fill: var(--av2-text); }
+.av2-chart text.goal-label { fill: var(--av2-ok); }
 .av2-chart .goal { stroke: var(--av2-ok); stroke-dasharray: 5 4; stroke-width: 1.5; }
 .av2-chart .axis { stroke: var(--av2-border); }
 

@@ -28,18 +28,22 @@ export default async function CommissionChart({ points, goal, currentMonth }: { 
       <desc id="av2-chart-desc">{summary}. {t("Objectif mensuel")} : {formatJPY(goal)}.</desc>
       <line className="axis" x1={padL} x2={W - padR} y1={padT + innerH} y2={padT + innerH} />
       <line className="goal" x1={padL} x2={W - padR} y1={y(goal)} y2={y(goal)} />
-      <text x={W - padR} y={y(goal) - 5} textAnchor="end">
+      <text className="goal-label" x={padL} y={y(goal) - 5} textAnchor="start">
         {t("Objectif {n}k ¥", { n: Math.round(goal / 1000) })}
       </text>
       {points.map((p, i) => {
         const cx = padL + slot * i + slot / 2;
         const h = padT + innerH - y(p.total);
         const isNow = p.month === currentMonth;
+        // Le chiffre ne doit pas être barré par la ligne d'objectif : s'il tombe dessus, on le place juste au-dessus de la ligne.
+        const gy = y(goal);
+        let ly = y(p.total) - 5;
+        if (ly - 10 <= gy && gy <= ly + 3) ly = gy - 6;
         return (
           <g key={p.month}>
             <rect className={`bar${isNow ? " now" : ""}`} x={cx - barW / 2} y={y(p.total)} width={barW} height={Math.max(h, 0)} rx={4} />
             {p.total !== 0 ? (
-              <text x={cx} y={y(p.total) - 5} textAnchor="middle">
+              <text className="value" x={cx} y={ly} textAnchor="middle">
                 {Math.round(p.total / 1000)}k
               </text>
             ) : null}
