@@ -44,10 +44,7 @@ function buildRows(link, c) {
   }
   if (link.feeAmountJpy > 0) rows.push({ key: "fee", name: link.isShipping ? c.shipping : c.serviceFee, price: link.feeAmountJpy, fee: true });
   if (link.paypalFeeAmountJpy > 0) {
-    const base = (link.itemAmountJpy || 0) + (link.feeAmountJpy || 0);
-    const rate = base > 0 ? (link.paypalFeeAmountJpy / base) * 100 : 0;
-    const hint = Math.abs(rate - 6) < 0.25 ? " (6%)" : "";
-    rows.push({ key: "pp", name: `${c.paypalFee}${hint}`, price: link.paypalFeeAmountJpy, fee: true });
+    rows.push({ key: "pp", name: c.paypalFee, price: link.paypalFeeAmountJpy, fee: true });
   }
   const sum = rows.reduce((s, r) => s + r.price, 0);
   if (sum !== link.amountJpy) {

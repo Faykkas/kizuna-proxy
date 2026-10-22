@@ -156,7 +156,7 @@ export async function POST(request) {
 
       // Break the order into one line per item (when set — a reservation
       // fee paid before we've bought anything has none) plus separate
-      // "Kizuna fee" / "PayPal G&S fee" lines, so the payer's PayPal review
+      // "Kizuna fee" / "Fee" lines, so the payer's PayPal review
       // page and receipt show each charge explicitly instead of one opaque
       // total.
       const feeAmount = link.fee_amount_jpy || 0;
@@ -178,7 +178,7 @@ export async function POST(request) {
             ? items.map(it => ({ name: (it.name || "Item").slice(0, 127), quantity: "1", unit_amount: { currency_code: "JPY", value: String(it.price_jpy) } }))
             : (link.item_amount_jpy > 0 ? [{ name: (link.label || "Item").slice(0, 127), quantity: "1", unit_amount: { currency_code: "JPY", value: String(link.item_amount_jpy) } }] : [])),
           ...(feeAmount > 0 ? [{ name: link.is_shipping ? "Shipping" : "Kizuna Proxy — service fee", quantity: "1", unit_amount: { currency_code: "JPY", value: String(feeAmount) } }] : []),
-          ...(paypalFeeAmount > 0 ? [{ name: "PayPal Goods & Services fee", quantity: "1", unit_amount: { currency_code: "JPY", value: String(paypalFeeAmount) } }] : []),
+          ...(paypalFeeAmount > 0 ? [{ name: "Fee", quantity: "1", unit_amount: { currency_code: "JPY", value: String(paypalFeeAmount) } }] : []),
         ];
       }
 
