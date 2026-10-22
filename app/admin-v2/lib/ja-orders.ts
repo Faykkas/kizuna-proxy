@@ -119,7 +119,7 @@ export const JA_ORDERS: Record<string, string> = {
   "Commande d'un autre mois.": "別の月の注文です。",
   "La commission de ce paiement sera comptée dans les statistiques de {m} (le mois de la commande), pas dans le mois du paiement. Seule la marge PayPal suit la date du paiement.": "この入金の手数料は、支払月ではなく {m}（注文の月）の統計に計上されます。PayPal差益のみ支払日に従います。",
   "sa date": "その日付",
-  "Frais PayPal (6 %)": "PayPal手数料（6%）",
+  "Frais": "手数料",
   "Total demandé au client": "お客様へのご請求合計",
   "Ce libellé ressemble à une livraison.": "このラベルは送料のようです。",
   "Si c'est le prix d'envoi, choisissez le type « Livraison » : sinon le montant est compté comme des articles et vous ne retrouverez pas le prix de livraison de la commande.": "送料の場合は種類「送料」を選んでください。そうしないと商品代金として計上され、注文の送料を確認できなくなります。",

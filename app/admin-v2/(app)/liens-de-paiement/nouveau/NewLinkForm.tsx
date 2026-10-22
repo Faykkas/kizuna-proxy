@@ -233,7 +233,7 @@ export default function NewLinkForm() {
           ) : null}
           <dt>{kind === "shipping" ? t("Livraison") : t("Frais Kizuna")}</dt>
           <dd>{formatJPY(feeAmount)}</dd>
-          <dt>{t("Frais PayPal (6 %)")}</dt>
+          <dt>{t("Frais")}</dt>
           <dd>{formatJPY(paypal)}</dd>
           <dt><strong>{t("Total demandé au client")}</strong></dt>
           <dd><strong>{formatJPY(total)}</strong></dd>
