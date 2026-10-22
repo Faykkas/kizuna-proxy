@@ -147,11 +147,6 @@ export default function BusinessSourcingClient({ locale } = {}) {
               <p className="desc">{g.pricingDesc}</p>
             </div>
 
-            <div className="highlight-pill">
-              <span className="highlight-pill-dot" />
-              <span className="highlight-pill-text">{g.highlightBadge}</span>
-            </div>
-
             <div className="pricing-formula-grid">
               <div className="pcg-card">
                 <div className="pcg-icon"><Icon d={ICONS.online} /></div>
