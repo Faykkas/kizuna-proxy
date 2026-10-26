@@ -38,7 +38,7 @@ export default function PokemonCardsClient({ locale } = {}) {
 
         <div className="blog-cta">
           <p>{g.ctaText}</p>
-          <a href="/#request-wrap" className="btn btn-red">{g.ctaBtn}</a>
+          <a href="/request" className="btn btn-red">{g.ctaBtn}</a>
         </div>
 
         <p style={{ fontSize: ".82rem", marginTop: "1.5rem" }}>

@@ -43,7 +43,7 @@ export default function MercariClient({ locale } = {}) {
 
         <div className="blog-cta">
           <p>{g.ctaText}</p>
-          <a href="/#request-wrap" className="btn btn-red">{g.ctaBtn}</a>
+          <a href="/request" className="btn btn-red">{g.ctaBtn}</a>
         </div>
       </div>
     </main>

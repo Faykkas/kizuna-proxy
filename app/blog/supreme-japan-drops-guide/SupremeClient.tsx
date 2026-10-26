@@ -35,7 +35,7 @@ export default function SupremeClient({ locale } = {}) {
         <hr className="blog-hr" />
         <div className="blog-cta">
           <p>{g.ctaText}</p>
-          <a href="/#request-wrap" className="btn btn-gold">{g.ctaBtn}</a>
+          <a href="/request" className="btn btn-gold">{g.ctaBtn}</a>
         </div>
       </div>
     </main>

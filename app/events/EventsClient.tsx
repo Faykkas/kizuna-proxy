@@ -121,7 +121,7 @@ export default function EventsClient() {
 
           <div className="blog-cta" style={{ marginTop: "2rem" }}>
             <p>{ep.ctaText || c.ctaText}</p>
-            <a href="/#request-wrap" className="btn btn-gold">{ep.ctaBtn || c.ctaBtn}</a>
+            <a href="/request" className="btn btn-gold">{ep.ctaBtn || c.ctaBtn}</a>
           </div>
 
           <p style={{ fontSize: ".82rem", marginTop: "1.5rem" }}>
