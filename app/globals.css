@@ -4386,3 +4386,26 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 @media (max-width: 1360px) { .nav-links { gap: 1.15rem; } }
 @media (max-width: 1250px) { .nav-links a, .nav-links .nav-dropdown-btn { font-size: .76rem; } .nav-links { gap: 1rem; } }
 @media (max-width: 1150px) { .nav-links a, .nav-links .nav-dropdown-btn { font-size: .68rem; } .nav-links { gap: .7rem; } }
+
+/* ── MINI REQUEST FORM (accueil + bas des guides) ── */
+.mini-req { max-width: 720px; margin: 0 auto; padding: 1.8rem; position: relative; }
+.mini-req-title { font-family: var(--font-cormorant), serif; font-size: 1.5rem; font-weight: 600; color: var(--ink); margin: 0 0 .3rem; }
+.mini-req-sub { font-size: .85rem; line-height: 1.6; color: var(--warm); margin: 0 0 1.2rem; }
+.mini-req .req-submit { width: 100%; }
+
+/* ── STICKY REQUEST BUTTON (mobile uniquement) ── */
+.sticky-req { display: none; }
+@media (max-width: 768px) {
+  .sticky-req {
+    display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 110;
+    padding: .6rem 1rem calc(.6rem + env(safe-area-inset-bottom));
+    background: linear-gradient(to top, var(--beige) 70%, transparent);
+    transition: transform .25s ease, opacity .25s ease;
+  }
+  .sticky-req .btn { width: 100%; justify-content: center; text-align: center; }
+  .sticky-req.is-hidden { transform: translateY(110%); opacity: 0; pointer-events: none; }
+  body.has-sticky-req { padding-bottom: 4.2rem; }
+  /* le bouton de contact flottant remonte au-dessus de la barre */
+  body.has-sticky-req .cw-fab { bottom: 5.2rem; }
+  body.has-sticky-req .cw-panel { bottom: 9.3rem; }
+}

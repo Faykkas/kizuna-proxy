@@ -12,6 +12,7 @@ import { usePathname } from "next/navigation";
 import { useLanguage } from "../lib/language";
 import { translations } from "../translations";
 import { guideTranslations } from "../guideTranslations";
+import MiniRequestForm from "../components/MiniRequestForm";
 import { GUIDE_KEYS, relatedGuides, parseGuidePath, guideUrl } from "./guideMeta";
 
 const BASE = "https://kizunaproxy.com";
@@ -93,6 +94,7 @@ export default function GuideExtras() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <div className="blog-wrap">
         <hr className="blog-hr" />
+        <MiniRequestForm lang={shown} />
         {faqs.length ? (
           <>
             <h2>{L.faq}</h2>

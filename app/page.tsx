@@ -6,6 +6,7 @@ import SiteFooter from "./components/SiteFooter";
 import AnnounceBar from "./components/AnnounceBar";
 import HeroSection from "./components/sections/HeroSection";
 import SearchWidget from "./components/SearchWidget";
+import MiniRequestForm from "./components/MiniRequestForm";
 import ExplainerSection from "./components/sections/ExplainerSection";
 import ServicesSection from "./components/sections/ServicesSection";
 import WhyKizunaHomeSection from "./components/sections/WhyKizunaHomeSection";
@@ -98,6 +99,13 @@ export default function Home() {
       </section>
 
       <HeroSection t={t} />
+
+      {/* DEMANDE RAPIDE — le formulaire complet reste sur /request */}
+      <section className="section-sm reveal">
+        <div className="wrap">
+          <MiniRequestForm lang={lang} />
+        </div>
+      </section>
 
       {/* REAL PHOTO CAROUSEL — real order photos make the "we're a real
           team, not a template" case right after the hero, before any promo
