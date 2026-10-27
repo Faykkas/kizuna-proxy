@@ -122,7 +122,7 @@ export default function PayButton({ orderId, shipmentId, amountJpy, onPaid }) {
     return (
       <div className="pay-fallback">
         <p>{(od.payFallback || "Pay {amount} — contact us for a payment link.").replace("{amount}", formatJPY(amountJpy))}</p>
-        <a href="mailto:contact@kizunaproxy.com" className="btn btn-outline">{od.emailUs || "EMAIL US"}</a>
+        <a href="mailto:kizunaproxy@gmail.com" className="btn btn-outline">{od.emailUs || "EMAIL US"}</a>
       </div>
     );
   }

@@ -223,7 +223,7 @@ export default function OrderDetailClient({ orderId }) {
           <section className="ord-alert">
             <strong>{od.needSomething || "We need something from you"}</strong>
             <p>{order.notes || (od.checkEmailOrContact || "Please check your email or get in touch.")}</p>
-            <a href="mailto:contact@kizunaproxy.com" className="btn btn-outline">{od.contactUs || "CONTACT US"}</a>
+            <a href="mailto:kizunaproxy@gmail.com" className="btn btn-outline">{od.contactUs || "CONTACT US"}</a>
           </section>
         )}
 

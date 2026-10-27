@@ -319,7 +319,7 @@ export default function BusinessRequestForm({ t = {} }) {
 
       {status === "error" && (
         <p className="f-err req-error">
-          {t.errorMsg || "Something went wrong. Email us at contact@kizunaproxy.com and we'll sort it out."}
+          {t.errorMsg || "Something went wrong. Email us at kizunaproxy@gmail.com and we'll sort it out."}
         </p>
       )}
 

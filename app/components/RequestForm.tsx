@@ -336,7 +336,7 @@ export default function RequestForm({ t }) {
 
       {status === "error" && (
         <p className="f-err req-error">
-          Something went wrong. Email us at contact@kizunaproxy.com and we&apos;ll sort it out.
+          Something went wrong. Email us at kizunaproxy@gmail.com and we&apos;ll sort it out.
         </p>
       )}
 
