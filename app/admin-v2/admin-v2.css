@@ -289,3 +289,15 @@ body:has(.av2-root) .cw-panel { display: none !important; }
 .av2-invoice > div b { font-weight: 500; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .av2-invoice .total { border-top: 1px solid var(--av2-border); margin-top: 0.25rem; padding-top: 0.3rem; font-weight: 600; }
 .av2-invoice .total b { font-weight: 700; }
+
+/* Page Demandes */
+.av2-reqs { display: flex; flex-direction: column; gap: 0.8rem; }
+.av2-req { display: flex; flex-direction: column; gap: 0.55rem; padding: 0.9rem 1.1rem; }
+.av2-req.is-new { border-left: 3px solid var(--av2-accent); }
+.av2-req header { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.av2-req header small, .av2-req footer small { display: block; color: var(--av2-muted); font-size: 0.8rem; }
+.av2-req-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.2rem; }
+.av2-req-items { margin: 0; font-size: 0.92rem; overflow-wrap: anywhere; }
+.av2-req-extra { margin: 0; color: var(--av2-muted); font-size: 0.82rem; }
+.av2-req footer { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; justify-content: space-between; }
+.av2-req-actions { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; }

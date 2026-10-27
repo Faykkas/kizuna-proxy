@@ -331,3 +331,52 @@ export async function summarizePackages(sb: Sb): Promise<{ count: number; totalJ
   const rows = (data ?? []).filter((o) => isCommissionPackage(o));
   return { count: rows.length, totalJpy: rows.reduce((s, o) => s + (o.service_fee_jpy ?? 0), 0) };
 }
+
+// ── Demandes (formulaire du site) ───────────────────────────────────────
+
+export const REQUESTS_PAGE_SIZE = 20;
+
+export type RequestAdminRow = {
+  id: number;
+  name: string | null;
+  email: string | null;
+  country: string | null;
+  items: string | null;
+  budget: string | null;
+  notes: string | null;
+  status: string | null;
+  order_id: number | null;
+  created_at: string | null;
+  quantity: string | null;
+  purchase_type: string | null;
+  deadline: string | null;
+  lead_type: string | null;
+  business_name: string | null;
+  discovery_source: string | null;
+  utm_source: string | null;
+  utm_content: string | null;
+};
+
+export async function listRequests(sb: Sb, opts: { status?: string; q?: string; page: number }) {
+  const from = (opts.page - 1) * REQUESTS_PAGE_SIZE;
+  let query = sb
+    .from("requests")
+    .select("id,name,email,country,items,budget,notes,status,order_id,created_at,quantity,purchase_type,deadline,lead_type,business_name,discovery_source,utm_source,utm_content", { count: "exact" })
+    .order("created_at", { ascending: false })
+    .range(from, from + REQUESTS_PAGE_SIZE - 1);
+  if (opts.status) query = query.eq("status", opts.status);
+  const q = safeSearch(opts.q ?? "");
+  if (q) {
+    const like = `%${q}%`;
+    query = query.or(`name.ilike.${like},email.ilike.${like},items.ilike.${like},country.ilike.${like}`);
+  }
+  const { data, count, error } = await query;
+  if (error) throw new Error(error.message);
+  return { rows: (data ?? []) as RequestAdminRow[], total: count ?? 0 };
+}
+
+export async function countNewRequests(sb: Sb): Promise<number> {
+  const { count, error } = await sb.from("requests").select("id", { count: "exact", head: true }).eq("status", "new");
+  if (error) throw new Error(error.message);
+  return count ?? 0;
+}

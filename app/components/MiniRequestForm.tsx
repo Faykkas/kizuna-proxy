@@ -10,8 +10,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { track } from "@vercel/analytics";
-import { supabase } from "../lib/supabase";
-import { useAuth } from "../lib/auth";
+import { postRequest } from "../lib/sendRequest";
 import { useLanguage } from "../lib/language";
 
 const FORMSPREE_ID = "https://formspree.io/f/mnjoypyk";
@@ -33,7 +32,6 @@ const COPY = {
 
 export default function MiniRequestForm({ lang: forced }) {
   const { lang: current } = useLanguage();
-  const { user } = useAuth();
   const pathname = usePathname();
   const c = COPY[forced || current] || COPY.en;
   const [form, setForm] = useState({ message: "", email: "", country: "", website: "" });
@@ -65,7 +63,6 @@ export default function MiniRequestForm({ lang: forced }) {
     const items = form.message.trim();
     const p = new URLSearchParams(window.location.search);
     const row = {
-      customer_id: user?.id || null,
       name: email.split("@")[0],
       email,
       country: form.country.trim(),
@@ -78,19 +75,15 @@ export default function MiniRequestForm({ lang: forced }) {
       utm_content: p.get("utm_content") || `page:${pathname}`,
     };
 
-    const { error } = await supabase.from("requests").insert(row);
-    if (!error) {
+    const outcome = await postRequest(row, { website: form.website });
+    if (outcome === "ok") {
       track("request_submitted", { country: row.country, source: "mini" });
-      fetch("/api/notify-request", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: "", email, country: row.country, items, budget: "", contact: "", quantity: "", purchaseType: "", deadline: "", partialOk: false, utmSource: row.utm_source, utmMedium: row.utm_medium, utmCampaign: row.utm_campaign, utmContent: row.utm_content }),
-      }).catch((err) => console.error("notify-request failed:", err));
       setStatus("success");
       return;
     }
+    if (outcome === "rejected") { setStatus("error"); return; }
 
-    // Base injoignable : on envoie par email (Formspree) pour ne rien perdre.
+    // Serveur injoignable : on envoie par email (Formspree) pour ne rien perdre.
     try {
       const res = await fetch(FORMSPREE_ID, {
         method: "POST",

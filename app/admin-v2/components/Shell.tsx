@@ -10,6 +10,7 @@ import { useL } from "./LangProvider";
 const ICONS: Record<string, ReactNode> = {
   dashboard: <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />,
   orders: <path d="M20 7l-8-4-8 4v10l8 4 8-4V7zM4 7l8 4m0 0l8-4m-8 4v10" />,
+  inbox: <path d="M4 13l2-8h12l2 8M4 13v6h16v-6M4 13h5l1 2h4l1-2h5" />,
   clients: <path d="M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 21a8 8 0 0116 0" />,
   accounting: <path d="M4 19V5m0 14h16M8 15V9m4 6V6m4 9v-4" />,
   links: <path d="M10 14a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1m1 9a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1" />,
@@ -29,6 +30,7 @@ function Icon({ name }: { name: string }) {
 const ITEMS = [
   { href: BASE, label: "Tableau de bord", icon: "dashboard", exact: true },
   { href: `${BASE}/commandes`, label: "Commandes", icon: "orders" },
+  { href: `${BASE}/demandes`, label: "Demandes", icon: "inbox" },
   { href: `${BASE}/clients`, label: "Clients", icon: "clients" },
   { href: `${BASE}/liens-de-paiement`, label: "Liens de paiement", icon: "links" },
   { href: `${BASE}/boutique`, label: "Boutique", icon: "shop" },

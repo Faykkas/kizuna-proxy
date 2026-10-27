@@ -13,7 +13,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { track } from "@vercel/analytics";
-import { supabase } from "../lib/supabase";
+import { postRequest } from "../lib/sendRequest";
 
 const DEFAULT_BUSINESS_TYPES = [
   "K-pop / entertainment retailer",
@@ -123,7 +123,7 @@ export default function BusinessRequestForm({ t = {} }) {
       form.itemLinks ? `\n\nLinks: ${form.itemLinks}` : "",
     ].join("");
 
-    const { error } = await supabase.from("requests").insert({
+    const outcome = await postRequest({
       lead_type: "business",
       name: form.contactName,
       email: form.email,
@@ -145,41 +145,14 @@ export default function BusinessRequestForm({ t = {} }) {
       ...utm.current,
     });
 
-    if (!error) {
+    if (outcome === "ok") {
       track("business_quote_form_submit", { country: form.country, businessType: form.businessType || undefined });
-      fetch("/api/notify-request", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          leadType: "business",
-          name: form.contactName,
-          email: form.email,
-          country: form.country,
-          items,
-          budget: form.budget,
-          quantity: form.quantity,
-          deadline: form.deadline,
-          partialOk: form.partialOk === "yes",
-          businessName: form.businessName,
-          businessWebsite: form.businessWebsite,
-          businessType: form.businessType,
-          productCategory: form.productCategory,
-          recurringSourcing: form.recurringSourcing,
-          contactPlatform: form.contactPlatform,
-          discoverySource: form.discoverySource,
-          utmSource: utm.current.utm_source,
-          utmMedium: utm.current.utm_medium,
-          utmCampaign: utm.current.utm_campaign,
-          utmContent: utm.current.utm_content,
-          utmTerm: utm.current.utm_term,
-        }),
-      }).catch(err => console.error("notify-request failed:", err));
       setStatus("success");
       setForm(emptyForm);
       return;
     }
 
-    console.error("Business request insert failed:", error);
+    console.error("Business request failed:", outcome);
     setStatus("error");
   }
 

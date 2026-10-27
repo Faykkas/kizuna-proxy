@@ -8,7 +8,7 @@
 
 import { useEffect, useState } from "react";
 import { track } from "@vercel/analytics";
-import { supabase } from "../lib/supabase";
+import { postRequest } from "../lib/sendRequest";
 import { useAuth } from "../lib/auth";
 import Maneki from "./pixel/Maneki";
 
@@ -104,8 +104,7 @@ export default function RequestForm({ t }) {
       form.itemLink ? `\n\nLink: ${form.itemLink}` : "",
     ].join("");
 
-    const { error } = await supabase.from("requests").insert({
-      customer_id: user?.id || null,
+    const outcome = await postRequest({
       name: form.name || form.email.split("@")[0],
       email: form.email,
       country: form.country,
@@ -119,31 +118,16 @@ export default function RequestForm({ t }) {
       partial_ok: form.partialOk,
     });
 
-    if (!error) {
+    if (outcome === "ok") {
       track("request_submitted", { country: form.country });
-      fetch("/api/notify-request", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          country: form.country,
-          items,
-          budget: form.budget,
-          contact: form.contact,
-          quantity: form.quantity,
-          purchaseType: form.purchaseType,
-          deadline: form.deadline,
-          partialOk: form.partialOk,
-        }),
-      }).catch(err => console.error("notify-request failed:", err));
       setStatus("success");
       setForm(emptyForm);
       return;
     }
+    if (outcome === "rejected") { setStatus("error"); return; }
 
-    // Database unreachable — fall back to email so nothing is lost
-    console.error("Request insert failed, using Formspree:", error);
+    // Server unreachable — fall back to email so nothing is lost
+    console.error("Request endpoint failed, using Formspree");
     try {
       const res = await fetch(FORMSPREE_ID, {
         method: "POST",

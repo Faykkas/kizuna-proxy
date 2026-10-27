@@ -3,7 +3,7 @@ import { requireAccess } from "../lib/access";
 import { createServerSupabase } from "../lib/supabase-server";
 import { getL } from "../lib/lang-server";
 import { computeCommissions, currentMonthJst, lastMonths } from "../lib/commissions";
-import { countPendingLinks, loadOrdersForStats, loadPaidLinks } from "../lib/queries";
+import { countNewRequests, countPendingLinks, loadOrdersForStats, loadPaidLinks } from "../lib/queries";
 import { MONTHLY_GOAL_JPY, NEXT_GOAL_JPY, BASE } from "../lib/config";
 import { formatJPY, percentOf } from "../lib/money";
 import { isActiveStatus } from "../lib/status";
@@ -18,7 +18,7 @@ export async function generateMetadata() {
 
 export default async function DashboardPage() {
   // Les lectures démarrent tout de suite, en même temps que la vérification d'accès (la RLS protège les données quoi qu'il arrive).
-  const dataP = createServerSupabase().then((sb) => Promise.all([loadOrdersForStats(sb), loadPaidLinks(sb), countPendingLinks(sb)]));
+  const dataP = createServerSupabase().then((sb) => Promise.all([loadOrdersForStats(sb), loadPaidLinks(sb), countPendingLinks(sb), countNewRequests(sb).catch(() => 0)]));
   dataP.catch(() => {});
   const access = await requireAccess();
   const L = await getL();
@@ -36,8 +36,8 @@ export default async function DashboardPage() {
 
   let data;
   try {
-    const [orders, links, pendingLinks] = await dataP;
-    data = { orders, links, pendingLinks };
+    const [orders, links, pendingLinks, newRequests] = await dataP;
+    data = { orders, links, pendingLinks, newRequests };
   } catch (e) {
     return (
       <>
@@ -47,7 +47,7 @@ export default async function DashboardPage() {
     );
   }
 
-  const { orders, links, pendingLinks } = data;
+  const { orders, links, pendingLinks, newRequests } = data;
   const report = computeCommissions(orders, links);
   const byMonth = new Map(report.months.map((m) => [m.month, m]));
   const now = byMonth.get(month);
@@ -191,6 +191,10 @@ export default async function DashboardPage() {
         <div className="av2-card">
           <h2>{t("À traiter")}</h2>
           <ul className="av2-list">
+            <li>
+              <Link href={`${BASE}/demandes?statut=new`}>{t("Demandes du site à traiter")}</Link>
+              <span className="av2-num">{newRequests}</span>
+            </li>
             <li>
               <Link href={`${BASE}/liens-de-paiement?statut=pending`}>{t("Liens de paiement en attente")}</Link>
               <span className="av2-num">{pendingLinks}</span>
