@@ -1333,7 +1333,7 @@ a:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }
   --px-kraft-l:  #e0b83a;
 
   --radius-sm:   10px;
-  --font-pixel:  var(--font-body);
+  --font-pixel:  var(--font-press-start), 'Courier New', monospace;
   --font-body:   var(--font-outfit), system-ui, sans-serif;
   --ease:        cubic-bezier(.22,.61,.36,1);
   --ease-step:   steps(4, end);

@@ -3,6 +3,7 @@
 
 import MiniRequestForm from "../MiniRequestForm";
 import { IconInstagram, IconTiktok } from "../ui";
+import Maneki from "../pixel/Maneki";
 
 // Accueil v3 : à gauche la promesse (titre, description, boutons, confiance), à droite le formulaire de demande
 // déjà prêt à remplir. Tous les textes viennent de translations.ts (12 langues) : rien de nouveau à traduire ici.
@@ -13,7 +14,10 @@ export default function HeroV3({ t, lang }: { t: any; lang: string }) {
     <section className="v3-hero">
       <div className="v3-hero-grid">
         <div className="v3-hero-copy">
-          <p className="v3-eyebrow">{h.eyebrow}</p>
+          <div className="v3-hero-mascot">
+            <Maneki state="idle" prop="bag" size={92} float />
+            <p className="v3-eyebrow">{h.eyebrow}</p>
+          </div>
           <h1>
             {h.title1} <em>{h.title2}</em>
           </h1>
