@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import PublicShell from "./components/PublicShell";
-import { pressStart2P, outfit, cormorantGaramond } from "./fonts";
+import { outfit, cormorantGaramond } from "./fonts";
 import "./globals.css";
 import "./v3.css";
 
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${pressStart2P.variable} ${outfit.variable} ${cormorantGaramond.variable}`}>
+    <html lang="en" className={`${outfit.variable} ${cormorantGaramond.variable}`}>
       <head>
 
         {/* LocalBusiness + Reviews */}
