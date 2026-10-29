@@ -6,6 +6,7 @@ import SiteFooter from "./components/SiteFooter";
 import AnnounceBar from "./components/AnnounceBar";
 import HeroV3 from "./components/sections/HeroV3";
 import HighlightsV3 from "./components/sections/HighlightsV3";
+import StepsV3 from "./components/sections/StepsV3";
 import SearchWidget from "./components/SearchWidget";
 import ExplainerSection from "./components/sections/ExplainerSection";
 import ServicesSection from "./components/sections/ServicesSection";
@@ -32,11 +33,14 @@ export default function Home() {
       {/* HERO v3 — la promesse + le formulaire de demande */}
       <HeroV3 t={t} lang={lang} />
 
-      {/* Qu'est-ce que Kizuna : 4 réponses rapides */}
-      <ExplainerSection t={t} />
+      {/* Comment ça marche : 3 étapes */}
+      <StepsV3 t={t} />
 
       {/* À la une : boutique, événements, business */}
       <HighlightsV3 t={t} />
+
+      {/* Qu'est-ce que Kizuna : 4 réponses rapides */}
+      <ExplainerSection t={t} />
 
       {/* REAL PHOTO CAROUSEL — real order photos make the "we're a real
           team, not a template" case right after the hero, before any promo

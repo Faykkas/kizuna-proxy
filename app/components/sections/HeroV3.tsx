@@ -1,6 +1,7 @@
 // @ts-nocheck
 "use client";
 
+import { useState } from "react";
 import MiniRequestForm from "../MiniRequestForm";
 import { IconInstagram, IconTiktok } from "../ui";
 import Maneki from "../pixel/Maneki";
@@ -10,12 +11,14 @@ import Maneki from "../pixel/Maneki";
 
 export default function HeroV3({ t, lang }: { t: any; lang: string }) {
   const h = t.hero || {};
+  // la mascotte sourit (yeux contents + étincelles) quand le visiteur approche ou remplit le formulaire
+  const [happy, setHappy] = useState(false);
   return (
     <section className="v3-hero">
       <div className="v3-hero-grid">
         <div className="v3-hero-copy">
           <div className="v3-hero-mascot">
-            <Maneki state="idle" prop="bag" size={92} float />
+            <Maneki state={happy ? "success" : "idle"} prop="bag" size={92} float />
             <p className="v3-eyebrow">{h.eyebrow}</p>
           </div>
           <h1>
@@ -43,7 +46,7 @@ export default function HeroV3({ t, lang }: { t: any; lang: string }) {
           </ul>
         </div>
 
-        <div className="v3-hero-form">
+        <div className="v3-hero-form" onMouseEnter={() => setHappy(true)} onMouseLeave={() => setHappy(false)} onFocus={() => setHappy(true)} onBlur={() => setHappy(false)}>
           <MiniRequestForm lang={lang} />
         </div>
       </div>
