@@ -1,7 +1,6 @@
 // @ts-nocheck
 "use client";
 
-import Image from "next/image";
 import { IconInstagram, IconTiktok } from "./ui";
 import { IconEvent } from "./pixel/PixelIcons";
 import { reopenCookiePreferences } from "./CookieConsent";
@@ -12,7 +11,7 @@ export default function SiteFooter({ t }: { t: any }) {
         <div className="footer-grid">
           <div>
             <div className="footer-logo-wrap">
-              <Image src="/logo.png" alt="Kizuna Proxy" width={34} height={34} style={{imageRendering:"pixelated"}} />
+              <span className="v3-mark v3-mark-sm" aria-hidden="true">絆</span>
               <div className="footer-logo"><span className="g">Kizuna</span> Proxy</div>
             </div>
 <p className="footer-tagline">{t.footerNav?.tagline || "Tokyo-based proxy service. Your trusted link to Japan."}</p>

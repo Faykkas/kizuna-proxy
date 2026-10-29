@@ -8,7 +8,6 @@
 // is reachable is more likely to send a request, even if they never click.
 
 import { useState, useEffect } from "react";
-import Maneki from "./pixel/Maneki";
 
 const CHANNELS = [
   {
@@ -97,7 +96,6 @@ export default function ContactWidget() {
           </div>
 
           <div className="cw-foot">
-            <Maneki prop="mail" size={44} />
             <span>We reply within 24 hours, usually much faster.</span>
           </div>
         </div>
@@ -112,7 +110,7 @@ export default function ContactWidget() {
         {open ? (
           <span className="cw-fab-x">×</span>
         ) : (
-          <Maneki prop={null} size={38} />
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" /></svg>
         )}
       </button>
     </>

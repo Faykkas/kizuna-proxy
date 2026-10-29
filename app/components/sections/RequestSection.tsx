@@ -3,13 +3,14 @@
 
 import RequestForm from "../RequestForm";
 
-export default function RequestSection({ t }: { t: any }) {
+export default function RequestSection({ t, asPage = false }: { t: any; asPage?: boolean }) {
+  const H = asPage ? "h1" : "h2";
   return (
       <section id="request-wrap" className="section reveal">
         <div className="wrap">
           <div className="sec-head">
             <p className="sec-label">{t.request?.label}</p>
-            <h2>{t.request?.title} <em>{t.request?.titleEm}</em></h2>
+            <H>{t.request?.title} <em>{t.request?.titleEm}</em></H>
             <p className="desc">{t.request?.desc}</p>
           </div>
           <div className="req-layout">

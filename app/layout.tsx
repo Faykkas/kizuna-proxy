@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PublicShell from "./components/PublicShell";
 import { pressStart2P, outfit, cormorantGaramond } from "./fonts";
 import "./globals.css";
+import "./v3.css";
 
 export const metadata: Metadata = {
   title: "Kizuna Proxy — Personal Shopper in Tokyo | Japan Proxy Service",

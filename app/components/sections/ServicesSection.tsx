@@ -3,9 +3,6 @@
 
 import { CATEGORY_ICONS } from "../pixel/PixelIcons";
 
-const RARITY = ["common", "common", "rare", "common", "rare", "legend"];
-const RARITY_LABEL = { common: "COMMON", rare: "★ RARE", legend: "☆ LEGEND" };
-
 export default function ServicesSection({ t }: { t: any }) {
   return (
       <section id="services" className="section reveal">
@@ -24,9 +21,6 @@ export default function ServicesSection({ t }: { t: any }) {
                 </div>
                 <div className="svc-title">{item.title}</div>
                 <div className="svc-desc">{item.desc}</div>
-                <span className={`px-badge px-badge-${RARITY[i] || "common"}`}>
-                  {RARITY_LABEL[RARITY[i] || "common"]}
-                </span>
                 <div className="svc-arrow">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
