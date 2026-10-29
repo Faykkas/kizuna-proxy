@@ -1,0 +1,169 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   KIZUNA v3 — l'identité de la v2 (violet nuit, vert phosphore, mascotte pixel) avec une finition plus pro :
+   police de lecture nette (Inter + Outfit pour les titres), cartes sobres, boutons modernes, accueil qui met la demande en avant.
+   Ce fichier est chargé APRÈS globals.css et ne redéfinit PAS la palette : il ajoute et affine.
+   La police pixel n'est plus utilisée pour le texte : seuls les sprites (mascotte) gardent le style pixel.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --v3-radius: 14px;
+  --v3-hard: 0 14px 34px rgba(0, 0, 0, .30);
+  --v3-glow: 0 0 0 1px rgba(168, 224, 74, .28), 0 14px 44px rgba(168, 224, 74, .10);
+}
+
+/* ── Typographie : lisible, posée ───────────────────────────────────────── */
+body { font-weight: 400; -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { font-family: var(--font-head); font-weight: 700; letter-spacing: -0.02em; line-height: 1.12; }
+.sec-head .desc { font-weight: 400; font-size: 1.04rem; line-height: 1.7; }
+.sec-label { font-size: .78rem; letter-spacing: .14em; font-weight: 700; }
+.sec-label::before { animation: none; }
+
+/* ── Boutons et navigation : modernes, plus de « touches d'arcade » ───────── */
+.btn, .nav-cta { font-size: .95rem; font-weight: 650; letter-spacing: 0; text-transform: none; border-radius: 10px; transition: transform .15s ease, box-shadow .2s ease, background .2s, border-color .2s; }
+.btn-gold, .nav-cta { padding: .8rem 1.5rem; box-shadow: 0 8px 22px rgba(168, 224, 74, .22); }
+.btn-gold:hover, .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(168, 224, 74, .32); }
+.btn-gold:active, .nav-cta:active { transform: translateY(0); box-shadow: 0 4px 12px rgba(168, 224, 74, .2); }
+.btn-outline { padding: .78rem 1.45rem; border: 1px solid var(--px-border); box-shadow: none; background: transparent; }
+.btn-outline:hover { transform: translateY(-2px); box-shadow: none; border-color: var(--red); color: var(--red); }
+.btn-outline:active { transform: translateY(0); }
+.nav-cta { padding: .6rem 1.15rem; font-size: .9rem; }
+nav { border-bottom: 1px solid var(--border); }
+.nav-inner { max-width: 1320px; padding: 0 1.2rem; gap: 1rem; }
+.nav-links { gap: 1.4rem; }
+.nav-links a, .nav-links .nav-dropdown-btn { font-size: .88rem; font-weight: 500; letter-spacing: .01em; text-transform: none; white-space: nowrap; }
+@media (max-width: 1440px) { .nav-links { gap: 1.05rem; } .nav-links a, .nav-links .nav-dropdown-btn { font-size: .84rem; } }
+@media (max-width: 1320px) { .nav-links { gap: .8rem; } .nav-links a, .nav-links .nav-dropdown-btn { font-size: .8rem; } .nav-cta { padding: .5rem .85rem; font-size: .82rem; } .logo-sub { display: none; } }
+/* en dessous de 1240px la barre ne tient plus : on passe au menu burger (même comportement que sur mobile) */
+@media (max-width: 1240px) { .nav-links { display: none; } .mobile-menu-btn { display: flex; } .nav-controls .nav-cta { display: none; } .lang-selector { display: none; } }
+
+/* ── Accueil : en-tête ──────────────────────────────────────────────────── */
+.v3-hero {
+  position: relative; padding: 3.8rem 0 3.4rem; overflow: hidden;
+  background:
+    radial-gradient(700px 360px at 12% 0%, rgba(168, 224, 74, .09), transparent 65%),
+    radial-gradient(760px 420px at 92% 10%, rgba(199, 125, 255, .15), transparent 65%);
+}
+/* quadrillage discret qui s'efface vers le bas */
+.v3-hero::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(199, 125, 255, .06) 1px, transparent 1px), linear-gradient(90deg, rgba(199, 125, 255, .06) 1px, transparent 1px);
+  background-size: 38px 38px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 85%); mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+}
+/* petites étoiles pixel qui scintillent doucement */
+.v3-hero::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(#a8e04a, #a8e04a) 6% 22% / 4px 4px no-repeat,
+    linear-gradient(#c77dff, #c77dff) 44% 9% / 3px 3px no-repeat,
+    linear-gradient(#f0edf7, #f0edf7) 58% 30% / 3px 3px no-repeat,
+    linear-gradient(#a8e04a, #a8e04a) 91% 14% / 4px 4px no-repeat,
+    linear-gradient(#c77dff, #c77dff) 97% 52% / 3px 3px no-repeat,
+    linear-gradient(#f0edf7, #f0edf7) 3% 70% / 3px 3px no-repeat,
+    linear-gradient(#a8e04a, #a8e04a) 52% 84% / 3px 3px no-repeat;
+  opacity: .8; animation: v3-twinkle 3.6s ease-in-out infinite;
+}
+@keyframes v3-twinkle { 0%, 100% { opacity: .85; } 50% { opacity: .3; } }
+@media (prefers-reduced-motion: reduce) { .v3-hero::after { animation: none; } }
+
+.v3-hero-grid { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 1.6rem; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 3.2rem; align-items: center; }
+
+.v3-hero-mascot { display: inline-flex; align-items: flex-end; gap: .8rem; margin-bottom: .8rem; }
+.v3-eyebrow { display: inline-flex; align-items: center; gap: .55rem; margin: 0 0 1rem; padding: .45rem .95rem; border: 1px solid var(--border-gold); border-radius: 999px; background: rgba(168, 224, 74, .08); color: var(--red); font-family: var(--font-body); font-size: .8rem; font-weight: 650; line-height: 1.4; letter-spacing: .02em; }
+.v3-eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--red); box-shadow: 0 0 10px var(--red); }
+.v3-hero-copy h1 { font-size: clamp(2.3rem, 5vw, 3.9rem); font-weight: 700; line-height: 1.06; letter-spacing: -0.03em; color: var(--ink); margin: 0 0 1.1rem; text-transform: none; }
+.v3-hero-copy h1 em { color: var(--red); font-style: normal; font-weight: 700; text-shadow: 0 0 30px rgba(168, 224, 74, .30); }
+.v3-lead { font-size: 1.12rem; line-height: 1.7; color: var(--warm); font-weight: 400; max-width: 34rem; margin: 0 0 1.8rem; }
+.v3-hero-btns { display: flex; flex-wrap: wrap; gap: .9rem; margin-bottom: 1.8rem; }
+.v3-trust { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .8rem 1.6rem; align-items: center; }
+.v3-trust a { display: inline-flex; align-items: center; gap: .55rem; font-size: .93rem; color: var(--warm); text-decoration: none; }
+.v3-trust a:hover { color: var(--ink); }
+.v3-stars { color: #ffd24d; letter-spacing: .1em; font-size: 1rem; }
+.v3-social { display: inline-flex; align-items: center; gap: .7rem; font-size: .9rem; color: var(--mist); }
+.v3-social a { width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 10px; justify-content: center; color: var(--warm); }
+.v3-social a:hover { border-color: var(--red); color: var(--red); }
+
+/* formulaire de demande de l'en-tête */
+.v3-hero-form .mini-req { margin: 0; max-width: none; padding: 1.8rem; border: 1px solid var(--border-gold); border-radius: 18px; background: var(--surface); box-shadow: var(--v3-hard), var(--v3-glow); transition: box-shadow .25s ease, border-color .25s ease; }
+.v3-hero-form .mini-req:hover, .v3-hero-form .mini-req:focus-within { border-color: rgba(168, 224, 74, .6); box-shadow: var(--v3-hard), 0 0 0 1px rgba(168, 224, 74, .5), 0 18px 56px rgba(168, 224, 74, .16); }
+.mini-req-title { font-family: var(--font-head); font-size: 1.4rem; font-weight: 700; letter-spacing: -0.015em; color: var(--ink); }
+.mini-req-sub { font-size: .94rem; color: var(--warm); }
+.mini-req .f-field label { font-size: .78rem; letter-spacing: .06em; }
+.mini-req .req-submit { font-size: .95rem; }
+
+/* ── Bande « comment ça marche » sous l'en-tête ───────────────────────────── */
+.v3-steps-head { text-align: center; max-width: 40rem; margin: 0 auto 2rem; }
+.v3-steps-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 0 0 .5rem; }
+.v3-steps-head p { color: var(--warm); font-size: 1.04rem; line-height: 1.7; margin: 0; }
+.v3-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; position: relative; counter-reset: v3step; }
+.v3-step { position: relative; padding: 1.6rem 1.5rem 1.5rem; border: 1px solid var(--border); border-radius: var(--v3-radius); background: var(--surface); box-shadow: var(--v3-hard); }
+.v3-step-num { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 10px; background: var(--red); color: var(--px-bg); font-family: var(--font-head); font-weight: 700; font-size: 1.1rem; margin-bottom: 1rem; box-shadow: 0 6px 16px rgba(168, 224, 74, .25); }
+.v3-step h3 { font-size: 1.15rem; margin: 0 0 .45rem; color: var(--ink); }
+.v3-step p { margin: 0; font-size: .96rem; line-height: 1.65; color: var(--warm); }
+.v3-step:not(:last-child)::after { content: ""; position: absolute; top: 2.3rem; right: -1.2rem; width: 1.2rem; height: 2px; background: linear-gradient(90deg, var(--red), transparent); opacity: .7; }
+.v3-steps-more { text-align: center; margin-top: 1.6rem; }
+.v3-steps-more a { color: var(--red); font-weight: 650; font-size: .98rem; text-decoration: none; }
+.v3-steps-more a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* ── « À la une » ────────────────────────────────────────────────────────── */
+.v3-promos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.1rem; }
+.v3-promo { display: flex; flex-direction: column; gap: .65rem; padding: 1.5rem; border: 1px solid var(--border); border-radius: var(--v3-radius); background: var(--surface); text-decoration: none; box-shadow: var(--v3-hard); transition: transform .18s ease, border-color .2s ease, box-shadow .2s ease; }
+.v3-promo:hover { transform: translateY(-3px); border-color: var(--border-gold); box-shadow: var(--v3-hard), var(--v3-glow); }
+.v3-promo strong { font-family: var(--font-head); font-size: 1.15rem; line-height: 1.3; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+.v3-promo p { margin: 0; font-size: .95rem; line-height: 1.65; color: var(--warm); flex: 1; }
+.v3-badge { align-self: flex-start; font-family: var(--font-body); font-size: .72rem; font-weight: 700; line-height: 1.4; letter-spacing: .08em; text-transform: uppercase; padding: .3rem .7rem; border-radius: 999px; border: 1px solid var(--border); color: var(--ink); background: var(--paper); }
+.v3-promo-red .v3-badge { border-color: rgba(168, 224, 74, .5); color: var(--red); background: rgba(168, 224, 74, .1); }
+.v3-promo-indigo .v3-badge { border-color: rgba(199, 125, 255, .5); color: var(--gold); background: rgba(199, 125, 255, .1); }
+.v3-promo-ink { background: linear-gradient(135deg, #2d1d54, #1a1030); border-color: var(--border-gold); }
+.v3-promo-cta { font-size: .94rem; font-weight: 650; color: var(--red); }
+
+/* ── « Pourquoi Kizuna » et « Règles de service » : cartes ───────────────── */
+.why-rows { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.1rem; border: 0; }
+.why-row, .why-row.why-row-rev { display: flex; flex-direction: column; align-items: flex-start; gap: .9rem; padding: 1.6rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--v3-radius); box-shadow: var(--v3-hard); }
+.why-row::before, .why-row::after { display: none; }
+.why-row-visual, .why-row-rev .why-row-visual { order: 0; display: block; width: auto; min-height: 0; height: auto; flex: 0 0 auto; margin: 0; padding: 0; background: none; border: 0; }
+.why-row-num { display: none; }
+.why-row-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(168, 224, 74, .1); border: 1px solid rgba(168, 224, 74, .35); display: flex; align-items: center; justify-content: center; }
+.why-row-text, .why-row-rev .why-row-text { order: 1; flex: 1 1 auto; width: auto; padding: 0; text-align: left; }
+.why-row-title { font-family: var(--font-head); font-size: 1.12rem; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); margin-bottom: .45rem; }
+.why-row-desc { font-size: .96rem; line-height: 1.65; color: var(--warm); font-weight: 400; }
+
+/* ── Page de demande ─────────────────────────────────────────────────────── */
+.req-layout { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 2.4rem; align-items: start; }
+.req-side > p { font-size: 1rem; line-height: 1.7; color: var(--warm); margin: 0 0 1.4rem; }
+.req-detail { display: flex; gap: .8rem; align-items: flex-start; margin-bottom: 1rem; }
+.rd-dot { width: 10px; height: 10px; border-radius: 3px; background: var(--red); margin-top: .5rem; flex: 0 0 auto; box-shadow: 0 0 12px rgba(168, 224, 74, .6); }
+.rd-text strong { display: block; font-size: 1rem; font-weight: 650; color: var(--ink); }
+.rd-text span { display: block; font-size: .93rem; color: var(--warm); line-height: 1.6; }
+
+/* ── Articles : confort de lecture ──────────────────────────────────────── */
+.blog-wrap p { font-size: 1.02rem; line-height: 1.85; font-weight: 400; }
+.blog-lead { font-size: 1.08rem; line-height: 1.8; font-weight: 400; }
+.blog-list li { font-size: 1rem; line-height: 1.8; font-weight: 400; }
+details { border-bottom: 1px solid var(--border); padding: .9rem 0; }
+details summary { font-size: 1rem; font-weight: 600; color: var(--ink); cursor: pointer; }
+
+/* ── Mobile ──────────────────────────────────────────────────────────────── */
+@media (max-width: 980px) {
+  .v3-hero-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .v3-promos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .v3-steps { grid-template-columns: 1fr; }
+  .v3-step:not(:last-child)::after { display: none; }
+}
+@media (max-width: 860px) { .req-layout { grid-template-columns: 1fr; } }
+@media (max-width: 620px) {
+  .v3-hero { padding: 2.2rem 0 2rem; }
+  .v3-hero-grid { padding: 0 1.1rem; }
+  .v3-promos, .why-rows { grid-template-columns: 1fr; }
+  .v3-hero-mascot { margin-bottom: .2rem; }
+  .btn-gold, .btn-outline { width: 100%; justify-content: center; text-align: center; }
+}
+
+/* ── Widget de recherche : tient sur petit écran avec la police de lecture ── */
+.sw-input { min-width: 0; font-size: .95rem; font-weight: 400; }
+.sw-btn { font-size: .9rem; letter-spacing: .01em; text-transform: none; padding: .85rem 1.3rem; }
+.sw-chip { letter-spacing: 0; }
+@media (max-width: 600px) { .sw-btn { padding: .85rem 1rem; } .sw-btn svg { display: none; } }
+
+/* Index du blog : la grille de 3 colonnes (définie en ligne) déborde sur mobile */
+@media (max-width: 760px) { .ev-grid { grid-template-columns: 1fr !important; } }

@@ -4,18 +4,17 @@
 import SiteNav from "./components/SiteNav";
 import SiteFooter from "./components/SiteFooter";
 import AnnounceBar from "./components/AnnounceBar";
-import HeroSection from "./components/sections/HeroSection";
+import HeroV3 from "./components/sections/HeroV3";
+import HighlightsV3 from "./components/sections/HighlightsV3";
+import StepsV3 from "./components/sections/StepsV3";
 import SearchWidget from "./components/SearchWidget";
-import MiniRequestForm from "./components/MiniRequestForm";
 import ExplainerSection from "./components/sections/ExplainerSection";
 import ServicesSection from "./components/sections/ServicesSection";
 import WhyKizunaHomeSection from "./components/sections/WhyKizunaHomeSection";
 import ServiceRulesSection from "./components/sections/ServiceRulesSection";
 import NewsPreviewSection from "./components/sections/NewsPreviewSection";
-import EventCarousel from "./components/EventCarousel";
 import Carousel from "./components/Carousel";
 import { BackToTop, useScrollReveal } from "./components/ui";
-import usePixelCanvas from "./components/pixel/usePixelCanvas";
 import { useLang, useAnnounce, useGallery } from "./components/useSiteState";
 import { REAL_REVIEWS, SLIDES } from "./components/data";
 
@@ -25,87 +24,23 @@ export default function Home() {
   const gallery = useGallery();
 
   useScrollReveal();
-  usePixelCanvas();
 
   return (
     <>
       <AnnounceBar announce={announce} />
       <SiteNav />
 
-      {/* EXPLAINER STRIP — what a proxy service is, how Kizuna's process
-          works, who's behind it, and what services are covered. Leads the
-          page (like FromJapan's own explainer boxes), before the hero. */}
+      {/* HERO v3 — la promesse + le formulaire de demande */}
+      <HeroV3 t={t} lang={lang} />
+
+      {/* Comment ça marche : 3 étapes */}
+      <StepsV3 t={t} />
+
+      {/* À la une : boutique, événements, business */}
+      <HighlightsV3 t={t} />
+
+      {/* Qu'est-ce que Kizuna : 4 réponses rapides */}
       <ExplainerSection t={t} />
-
-      {/* TOKYO EVENTS CAROUSEL — Hobonichi Techo items now in the shop, and
-          the next Comiket/COMITIA dates. Sits right under the explainer
-          strip, ahead of the hero, so current happenings are visible
-          immediately. Update/remove slides as each event's status changes. */}
-      <section className="section-sm reveal">
-        <div className="wrap">
-          <EventCarousel
-            slides={[
-              {
-                illustration: "penguin",
-                accent: "var(--red-d)",
-                badge: t.pokemonStarbucksPromo?.badge,
-                title: t.pokemonStarbucksPromo?.title,
-                desc: t.pokemonStarbucksPromo?.desc,
-                cta: t.pokemonStarbucksPromo?.cta,
-                ctaHref: "/shop",
-              },
-              {
-                illustration: "penguin",
-                accent: "var(--gold-d)",
-                badge: t.eventPromo?.badge,
-                title: t.eventPromo?.title,
-                desc: t.eventPromo?.desc,
-                note: t.eventPromo?.note,
-                cta: t.eventPromo?.cta,
-                ctaHref: "/shop",
-              },
-              {
-                illustration: "bookStack",
-                accent: "var(--gold)",
-                badge: t.comiketPromo?.badge,
-                title: t.comiketPromo?.title,
-                desc: t.comiketPromo?.desc,
-                note: t.comiketPromo?.note,
-                cta: t.comiketPromo?.cta,
-                ctaHref: "/blog/comiket-japan-guide",
-              },
-              {
-                illustration: "penAndBook",
-                accent: "var(--red-d)",
-                badge: t.comitiaPromo?.badge,
-                title: t.comitiaPromo?.title,
-                desc: t.comitiaPromo?.desc,
-                note: t.comitiaPromo?.note,
-                cta: t.comitiaPromo?.cta,
-                ctaHref: "/blog/comitia-japan-guide",
-              },
-              {
-                illustration: "moonMic",
-                accent: "var(--red)",
-                badge: t.b2bPromo?.badge,
-                title: t.b2bPromo?.title,
-                desc: t.b2bPromo?.desc,
-                cta: t.b2bPromo?.cta,
-                ctaHref: "/business-sourcing",
-              },
-            ]}
-          />
-        </div>
-      </section>
-
-      <HeroSection t={t} />
-
-      {/* DEMANDE RAPIDE — le formulaire complet reste sur /request */}
-      <section className="section-sm reveal">
-        <div className="wrap">
-          <MiniRequestForm lang={lang} />
-        </div>
-      </section>
 
       {/* REAL PHOTO CAROUSEL — real order photos make the "we're a real
           team, not a template" case right after the hero, before any promo

@@ -130,7 +130,7 @@ nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,11,.92); ba
   display: flex; align-items: center; gap: .5rem; pointer-events: none;
 }
 .hero-kizuna-mark {
-  font-family: var(--font-pixel); font-size: .55rem; letter-spacing: .05em;
+  font-family: var(--font-pixel); font-weight: 600; font-size: 0.88rem; letter-spacing: .05em;
   color: var(--red);
 }
 @media (max-width: 640px) {
@@ -1333,8 +1333,9 @@ a:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }
   --px-kraft-l:  #e0b83a;
 
   --radius-sm:   10px;
-  --font-pixel:  var(--font-press-start), 'Courier New', monospace;
-  --font-body:   var(--font-outfit), system-ui, sans-serif;
+  --font-pixel:  var(--font-body);  /* v3 : plus de police pixel pour le texte (lisibilité) */
+  --font-body:   var(--font-inter), var(--font-outfit), system-ui, sans-serif;
+  --font-head:   var(--font-outfit), var(--font-inter), system-ui, sans-serif;
   --ease:        cubic-bezier(.22,.61,.36,1);
   --ease-step:   steps(4, end);
 
@@ -1396,8 +1397,8 @@ em { color: var(--red); font-style: normal; font-weight: 600; }
 
 /* Le label de section devient un marqueur de sélection type menu de jeu */
 .sec-label {
-  font-family: var(--font-pixel);
-  font-size: .52rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.83rem;
   letter-spacing: .1em;
   color: var(--red);
   text-transform: uppercase;
@@ -1419,8 +1420,8 @@ em { color: var(--red); font-style: normal; font-weight: 600; }
    Le relief vient d'une ombre pleine décalée, pas d'un dégradé : le bouton
    s'enfonce au clic, comme une vraie touche. */
 .btn, .nav-cta {
-  font-family: var(--font-pixel);
-  font-size: .46rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   letter-spacing: .04em;
   border-radius: 6px;
   transition: transform .08s var(--ease-step), box-shadow .08s var(--ease-step), background .2s;
@@ -1466,8 +1467,8 @@ nav {
 }
 
 .nav-links a, .nav-links .nav-dropdown-btn {
-  font-family: var(--font-pixel);
-  font-size: .5rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.8rem;
   letter-spacing: .02em;
   color: var(--warm);
   line-height: 1;
@@ -1491,21 +1492,21 @@ nav {
 .logo-name { font-family: var(--font-body); font-weight: 600; letter-spacing: 0; }
 .logo-name .g { color: var(--red); }
 .logo-sub {
-  font-family: var(--font-pixel);
-  font-size: .42rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   letter-spacing: .06em;
   color: var(--mist);
   line-height: 1.6;
 }
 
 .lang-btn.icon-btn {
-  font-family: var(--font-pixel);
-  font-size: .48rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.77rem;
   letter-spacing: 0;
   color: var(--warm);
 }
 .lang-btn.icon-btn:hover { color: var(--red); }
-.lang-option { font-family: var(--font-pixel); font-size: .48rem; }
+.lang-option { font-family: var(--font-pixel); font-weight: 600; font-size: 0.77rem; }
 .lang-option.active { color: var(--red); background: rgba(168,224,74,.12); }
 
 .nav-dropdown, .lang-dropdown {
@@ -1527,8 +1528,8 @@ nav {
 .hero-kana { display: none; }
 
 .hero-badge-text {
-  font-family: var(--font-pixel);
-  font-size: .48rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.77rem;
   letter-spacing: .04em;
   color: var(--gold);
 }
@@ -1546,13 +1547,13 @@ nav {
 .hero-desc { color: var(--warm); font-weight: 300; line-height: 1.75; }
 
 .hero-service-card strong {
-  font-family: var(--font-pixel);
-  font-size: .58rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.93rem;
   letter-spacing: .02em;
   color: var(--ink);
 }
 
-.social-label { font-family: var(--font-pixel); font-size: .45rem; color: var(--mist); }
+.social-label { font-family: var(--font-pixel); font-weight: 600; font-size: 0.74rem; color: var(--mist); }
 
 /* ── 6. CARTES DE COLLECTION ──────────────────────────────────────────────
    C'est la signature du thème : les catégories deviennent des cartes à
@@ -1579,8 +1580,8 @@ nav {
 
 /* Le numéro devient une référence de collection */
 .svc-num {
-  font-family: var(--font-pixel);
-  font-size: .5rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.8rem;
   color: var(--px-border);
   position: absolute;
   top: .9rem;
@@ -1600,8 +1601,8 @@ nav {
 /* Badge de rareté */
 .px-badge {
   display: inline-block;
-  font-family: var(--font-pixel);
-  font-size: .42rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   letter-spacing: .06em;
   padding: .3rem .5rem;
   border-radius: 4px;
@@ -1621,15 +1622,15 @@ nav {
 
 /* ── 7. STATISTIQUES — compteurs d'arcade ─────────────────────────────── */
 .why-card-v2-stat strong {
-  font-family: var(--font-pixel);
+  font-family: var(--font-pixel); font-weight: 600;
   font-size: 1rem;
   color: var(--red);
   letter-spacing: 0;
 }
 .why-card-v2-stat span,
 .why-card-v2-n {
-  font-family: var(--font-pixel);
-  font-size: .42rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--mist);
 }
 
@@ -1643,7 +1644,7 @@ nav {
 }
 .hiw-step:hover { transform: translateY(-3px); border-color: var(--gold); }
 .hiw-step-num {
-  font-family: var(--font-pixel);
+  font-family: var(--font-pixel); font-weight: 600;
   font-size: .8rem;
   color: var(--gold);
 }
@@ -1668,28 +1669,28 @@ nav {
 }
 .rcn-stars { color: var(--gold); letter-spacing: .1em; }
 .rcn-text { color: var(--ink); font-weight: 300; line-height: 1.7; }
-.rcn-name { font-family: var(--font-pixel); font-size: .48rem; color: var(--red); }
-.rcn-source, .rcn-country { font-family: var(--font-pixel); font-size: .42rem; color: var(--mist); }
+.rcn-name { font-family: var(--font-pixel); font-weight: 600; font-size: 0.77rem; color: var(--red); }
+.rcn-source, .rcn-country { font-family: var(--font-pixel); font-weight: 600; font-size: 0.74rem; color: var(--mist); }
 .rcn-avatar {
   background: var(--red);
   color: var(--px-bg);
   border-radius: 6px;
-  font-family: var(--font-pixel);
-  font-size: .6rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.96rem;
 }
 
 .reviews-big-num {
-  font-family: var(--font-pixel);
+  font-family: var(--font-pixel); font-weight: 600;
   font-size: 2rem;
   color: var(--red);
 }
 .reviews-big-stars { color: var(--gold); }
-.reviews-big-label, .reviews-count { font-family: var(--font-pixel); font-size: .45rem; color: var(--mist); }
+.reviews-big-label, .reviews-count { font-family: var(--font-pixel); font-weight: 600; font-size: 0.74rem; color: var(--mist); }
 
 /* ── 10. FORMULAIRE — champs de saisie d'arcade ───────────────────────── */
 .f-field label {
-  font-family: var(--font-pixel);
-  font-size: .45rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   letter-spacing: .04em;
   color: var(--warm);
 }
@@ -1706,8 +1707,8 @@ nav {
   border-color: var(--red);
   box-shadow: 0 0 0 3px rgba(168,224,74,.16);
 }
-.f-err { font-family: var(--font-pixel); font-size: .42rem; color: var(--alert); }
-.f-note { font-family: var(--font-pixel); font-size: .42rem; color: var(--mist); }
+.f-err { font-family: var(--font-pixel); font-weight: 600; font-size: 0.74rem; color: var(--alert); }
+.f-note { font-family: var(--font-pixel); font-weight: 600; font-size: 0.74rem; color: var(--mist); }
 .req-form {
   background: var(--surface);
   border: 2px solid var(--px-border);
@@ -1742,8 +1743,8 @@ nav {
 .page-head p { color: var(--warm); font-weight: 300; }
 
 .breadcrumb {
-  font-family: var(--font-pixel);
-  font-size: .45rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   letter-spacing: .04em;
   color: var(--mist);
   background: none;
@@ -1759,8 +1760,8 @@ nav {
   border-bottom: 2px solid var(--border);
 }
 .announce-pill {
-  font-family: var(--font-pixel);
-  font-size: .42rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   background: var(--gold);
   color: var(--px-bg);
   border-radius: 4px;
@@ -1770,8 +1771,8 @@ nav {
 /* ── 14. FOOTER ───────────────────────────────────────────────────────── */
 footer { background: var(--paper); border-top: 2px solid var(--border); }
 .footer-col-title {
-  font-family: var(--font-pixel);
-  font-size: .45rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   letter-spacing: .06em;
   color: var(--red);
 }
@@ -1780,11 +1781,11 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 .footer-logo { font-family: var(--font-body); font-weight: 600; }
 .footer-logo .g { color: var(--red); }
 .footer-tagline { color: var(--mist); font-weight: 300; }
-.footer-bottom p { font-family: var(--font-pixel); font-size: .42rem; color: var(--mist); }
+.footer-bottom p { font-family: var(--font-pixel); font-weight: 600; font-size: 0.74rem; color: var(--mist); }
 
 /* ── 15. TICKER ───────────────────────────────────────────────────────── */
-.ticker-item { font-family: var(--font-pixel); font-size: .5rem; color: var(--warm); display: inline-flex; align-items: center; gap: .35rem; }
-.ticker-label { font-family: var(--font-pixel); font-size: .45rem; color: var(--red); }
+.ticker-item { font-family: var(--font-pixel); font-weight: 600; font-size: 0.8rem; color: var(--warm); display: inline-flex; align-items: center; gap: .35rem; }
+.ticker-label { font-family: var(--font-pixel); font-weight: 600; font-size: 0.74rem; color: var(--red); }
 .ticker-dot { background: var(--red); border-radius: 0; width: 5px; height: 5px; }
 .order-ticker { background: var(--paper); border: 2px solid var(--px-border); border-radius: 10px; }
 
@@ -1800,29 +1801,29 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 .sw-btn {
   background: var(--red);
   color: var(--px-bg);
-  font-family: var(--font-pixel);
-  font-size: .5rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.8rem;
   border-radius: 8px;
   box-shadow: 0 3px 0 var(--red-d);
 }
 .sw-btn:active { transform: translateY(3px); box-shadow: none; }
 .sw-chip {
-  font-family: var(--font-pixel);
-  font-size: .45rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   border: 2px solid var(--px-border);
   border-radius: 6px;
   background: var(--surface);
   color: var(--warm);
 }
 .sw-chip.active { border-color: var(--red); color: var(--red); background: rgba(168,224,74,.1); }
-.sw-footer span, .sw-cta { font-family: var(--font-pixel); font-size: .42rem; }
+.sw-footer span, .sw-cta { font-family: var(--font-pixel); font-weight: 600; font-size: 0.74rem; }
 .sw-cta { color: var(--red); }
 
 /* ── 17. GALERIE ──────────────────────────────────────────────────────── */
 .filmstrip-main { border: 2px solid var(--px-border); border-radius: 12px; overflow: hidden; }
 .filmstrip-caption-inner strong { font-family: var(--font-body); font-weight: 500; }
 .filmstrip-caption-inner span { color: var(--warm); font-weight: 300; }
-.filmstrip-counter { font-family: var(--font-pixel); font-size: .45rem; color: var(--red); }
+.filmstrip-counter { font-family: var(--font-pixel); font-weight: 600; font-size: 0.74rem; color: var(--red); }
 .filmstrip-btn {
   background: var(--surface);
   border: 2px solid var(--px-border);
@@ -1878,11 +1879,11 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   border-radius: 12px;
   box-shadow: 0 6px 0 rgba(0,0,0,.35);
 }
-.events-float-body strong { font-family: var(--font-pixel); font-size: .5rem; color: var(--gold); }
+.events-float-body strong { font-family: var(--font-pixel); font-weight: 600; font-size: 0.8rem; color: var(--gold); }
 .events-float-body p { color: var(--warm); font-weight: 300; }
 .events-float-btn {
-  font-family: var(--font-pixel);
-  font-size: .45rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   background: var(--gold);
   color: var(--px-bg);
   border-radius: 6px;
@@ -1896,10 +1897,10 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 .pcg-cta-left strong { font-family: var(--font-body); font-weight: 500; }
 .pcg-cta-left p { color: var(--warm); font-weight: 300; }
-.carrier-badge { font-family: var(--font-pixel); font-size: .45rem; border-radius: 4px; }
+.carrier-badge { font-family: var(--font-pixel); font-weight: 600; font-size: 0.74rem; border-radius: 4px; }
 .carrier-name { font-family: var(--font-body); font-weight: 400; }
 .shipping-desc, .shipping-note { color: var(--warm); font-weight: 300; }
-.shipping-title span { font-family: var(--font-pixel); font-size: .5rem; color: var(--red); }
+.shipping-title span { font-family: var(--font-pixel); font-weight: 600; font-size: 0.8rem; color: var(--red); }
 
 .trustpilot-bar {
   background: var(--surface);
@@ -1907,7 +1908,7 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   border-radius: 10px;
 }
 .trustpilot-bar:hover { border-color: var(--red); }
-.tp-name, .tp-cta { font-family: var(--font-pixel); font-size: .48rem; }
+.tp-name, .tp-cta { font-family: var(--font-pixel); font-weight: 600; font-size: 0.77rem; }
 .tp-cta { color: var(--red); }
 
 .reviews-reddit-badge {
@@ -1915,7 +1916,7 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   border: 2px solid var(--px-border);
   border-radius: 8px;
 }
-.reviews-reddit-badge span { font-family: var(--font-pixel); font-size: .45rem; color: var(--warm); }
+.reviews-reddit-badge span { font-family: var(--font-pixel); font-weight: 600; font-size: 0.74rem; color: var(--warm); }
 
 /* ── 20. ACCESSIBILITÉ ────────────────────────────────────────────────── */
 :focus-visible {
@@ -2028,8 +2029,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   cursor: pointer;
   padding: .5rem;
   color: var(--warm);
-  font-family: var(--font-pixel);
-  font-size: .42rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   letter-spacing: .12em;
   transition: color .2s;
 }
@@ -2061,8 +2062,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   pointer-events: none;
 }
 .px-mascot-label {
-  font-family: var(--font-pixel);
-  font-size: .45rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   letter-spacing: .04em;
   color: var(--warm);
   background: var(--surface);
@@ -2121,8 +2122,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 
 .px-head-bubble {
-  font-family: var(--font-pixel);
-  font-size: .45rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   letter-spacing: .04em;
   line-height: 1.8;
   color: var(--warm);
@@ -2306,8 +2307,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 .px-mascot-hero::before {
   content: 'Welcome to Tokyo';
   order: -1;
-  font-family: var(--font-pixel);
-  font-size: .42rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   letter-spacing: .04em;
   line-height: 1.9;
   color: var(--warm);
@@ -2364,8 +2365,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 
 .acc-loading {
-  font-family: var(--font-pixel);
-  font-size: .5rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.8rem;
   color: var(--mist);
   text-align: center;
   padding: 4rem 0;
@@ -2384,7 +2385,7 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 
 .acc-section-title {
   font-family: var(--font-pixel);
-  font-size: .55rem;
+  font-size: 0.88rem;
   font-weight: 400;
   letter-spacing: .06em;
   color: var(--red);
@@ -2512,8 +2513,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 
 .acc-signout {
   margin-left: auto;
-  font-family: var(--font-pixel);
-  font-size: .48rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.77rem;
   letter-spacing: .06em;
   color: var(--warm);
   background: none;
@@ -2547,7 +2548,7 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 
 .acc-stat-num {
   display: block;
-  font-family: var(--font-pixel);
+  font-family: var(--font-pixel); font-weight: 600;
   font-size: 1.15rem;
   color: var(--red);
   line-height: 1.6;
@@ -2555,8 +2556,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 
 .acc-stat-label {
-  font-family: var(--font-pixel);
-  font-size: .46rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   letter-spacing: .1em;
   color: var(--mist);
   line-height: 1.8;
@@ -2564,8 +2565,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 
 /* ── NOTIFICATIONS ────────────────────────────────────────────────────── */
 .acc-mark-read {
-  font-family: var(--font-pixel);
-  font-size: .46rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--warm);
   background: none;
   border: none;
@@ -2602,8 +2603,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 .acc-notif-body  { font-size: .78rem; color: var(--warm); font-weight: 300; margin-top: .2rem; line-height: 1.5; }
 .acc-notif-date  {
   margin-left: auto;
-  font-family: var(--font-pixel);
-  font-size: .44rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--mist);
   flex-shrink: 0;
   line-height: 1.9;
@@ -2638,16 +2639,16 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 
 .acc-order-ref {
-  font-family: var(--font-pixel);
-  font-size: .46rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--warm);
   letter-spacing: .04em;
   line-height: 1.9;
 }
 
 .acc-order-status {
-  font-family: var(--font-pixel);
-  font-size: .46rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   letter-spacing: .04em;
   text-align: right;
   line-height: 1.9;
@@ -2694,8 +2695,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   line-height: 1.5;
 }
 .acc-order-next-label {
-  font-family: var(--font-pixel);
-  font-size: .44rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--red);
   margin-right: .35rem;
   letter-spacing: .06em;
@@ -2704,8 +2705,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 
 .acc-order-flag {
   margin-top: .8rem;
-  font-family: var(--font-pixel);
-  font-size: .46rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--alert);
   background: rgba(255,80,96,.1);
   border-radius: 6px;
@@ -2746,8 +2747,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 
 .ord-ref {
   display: block;
-  font-family: var(--font-pixel);
-  font-size: .45rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--red);
   letter-spacing: .06em;
   margin-bottom: .5rem;
@@ -2763,8 +2764,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 
 .ord-badge {
-  font-family: var(--font-pixel);
-  font-size: .45rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   letter-spacing: .04em;
   border: 2px solid currentColor;
   border-radius: 8px;
@@ -2803,15 +2804,15 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 .ord-pay-label {
   display: block;
-  font-family: var(--font-pixel);
-  font-size: .46rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--alert);
   letter-spacing: .06em;
   margin-bottom: .5rem;
   line-height: 1.9;
 }
 .ord-pay-amount {
-  font-family: var(--font-pixel);
+  font-family: var(--font-pixel); font-weight: 600;
   font-size: 1.1rem;
   color: var(--ink);
   line-height: 1.5;
@@ -2826,8 +2827,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 .ord-alert strong {
   display: block;
-  font-family: var(--font-pixel);
-  font-size: .5rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.8rem;
   color: var(--alert);
   margin-bottom: .6rem;
   line-height: 1.9;
@@ -2850,8 +2851,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 .ord-info strong {
   display: block;
-  font-family: var(--font-pixel);
-  font-size: .5rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.8rem;
   color: var(--red);
   margin-bottom: .6rem;
   line-height: 1.9;
@@ -2884,7 +2885,7 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 
 .ord-panel-title {
   font-family: var(--font-pixel);
-  font-size: .48rem;
+  font-size: 0.77rem;
   font-weight: 400;
   color: var(--red);
   letter-spacing: .06em;
@@ -2944,8 +2945,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   margin-top: .25rem;
 }
 .ord-step-date {
-  font-family: var(--font-pixel);
-  font-size: .44rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--mist);
   flex-shrink: 0;
   line-height: 2.4;
@@ -2957,8 +2958,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 .ord-special strong {
   display: block;
-  font-family: var(--font-pixel);
-  font-size: .55rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.88rem;
   color: var(--mist);
   margin-bottom: .6rem;
   line-height: 1.9;
@@ -2974,8 +2975,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   gap: 1rem;
 }
 .ord-facts dt {
-  font-family: var(--font-pixel);
-  font-size: .46rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--mist);
   letter-spacing: .04em;
   line-height: 1.9;
@@ -2989,8 +2990,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 .ord-paid {
   display: inline-block;
-  font-family: var(--font-pixel);
-  font-size: .4rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--px-bg);
   background: var(--red);
   border-radius: 4px;
@@ -3012,15 +3013,15 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 .ord-tracking code {
   flex: 1;
-  font-family: var(--font-pixel);
-  font-size: .52rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.83rem;
   color: var(--ink);
   word-break: break-all;
   line-height: 1.9;
 }
 .ord-copy {
-  font-family: var(--font-pixel);
-  font-size: .44rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--red);
   background: none;
   border: 2px solid var(--px-border);
@@ -3120,8 +3121,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 .pay-wrap { min-width: 220px; }
 .pay-buttons { min-height: 46px; }
 .pay-status, .pay-error {
-  font-family: var(--font-pixel);
-  font-size: .4rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   line-height: 1.9;
   margin-bottom: .6rem;
 }
@@ -3135,8 +3136,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   text-align: right;
 }
 .pay-done strong {
-  font-family: var(--font-pixel);
-  font-size: .5rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.8rem;
   color: var(--red);
   line-height: 1.9;
 }
@@ -3156,8 +3157,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   display: inline-flex;
   align-items: center;
   gap: .35rem;
-  font-family: var(--font-pixel);
-  font-size: .45rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--warm);
   letter-spacing: .04em;
   line-height: 1;
@@ -3171,8 +3172,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   border-radius: 8px;
   background: var(--alert);
   color: var(--px-bg);
-  font-family: var(--font-pixel);
-  font-size: .32rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -3490,8 +3491,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 .adm-btn-danger { border-color: var(--px-red); color: var(--px-red); }
 .adm-btn-danger:hover { background: rgba(255,80,96,.1); }
 .adm-btn-danger-ghost {
-  font-family: var(--font-pixel);
-  font-size: .34rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   letter-spacing: .04em;
   color: var(--px-red);
   background: none;
@@ -3577,8 +3578,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 .ord-event-label {
   display: block;
-  font-family: var(--font-pixel);
-  font-size: .4rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--gold);
   letter-spacing: .06em;
   margin-bottom: .5rem;
@@ -3600,8 +3601,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   line-height: 1.5;
 }
 .ord-event-countdown {
-  font-family: var(--font-pixel);
-  font-size: .5rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.8rem;
   color: var(--gold);
   border: 2px solid rgba(199,125,255,.4);
   border-radius: 8px;
@@ -3613,8 +3614,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 /* Rappel de l'événement sur la carte du dashboard */
 .acc-order-event {
   margin-top: .8rem;
-  font-family: var(--font-pixel);
-  font-size: .38rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--gold);
   background: rgba(199,125,255,.1);
   border-radius: 6px;
@@ -3647,16 +3648,16 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 
 .acc-req-date {
-  font-family: var(--font-pixel);
-  font-size: .38rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--mist);
   letter-spacing: .04em;
   line-height: 1.9;
 }
 
 .acc-req-status {
-  font-family: var(--font-pixel);
-  font-size: .38rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--gold);
   letter-spacing: .04em;
   line-height: 1.9;
@@ -3818,8 +3819,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   background: none;
   border: none;
   color: var(--red);
-  font-family: var(--font-pixel);
-  font-size: .42rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   letter-spacing: .04em;
   cursor: pointer;
   padding: .3rem 0;
@@ -3862,7 +3863,7 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
   gap: 1rem;
 }
 .req-success-title {
-  font-family: var(--font-pixel);
+  font-family: var(--font-pixel); font-weight: 600;
   font-size: .8rem;
   color: var(--red);
   line-height: 1.9;
@@ -3931,8 +3932,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 .cw-head-text strong {
   display: block;
-  font-family: var(--font-pixel);
-  font-size: .55rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.88rem;
   color: var(--red);
   line-height: 1.9;
   margin-bottom: .4rem;
@@ -4055,8 +4056,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 .calc-field { display: flex; flex-direction: column; gap: .5rem; }
 
 .calc-field label {
-  font-family: var(--font-pixel);
-  font-size: .48rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.77rem;
   letter-spacing: .06em;
   color: var(--red);
   line-height: 1.9;
@@ -4087,8 +4088,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 
 .calc-examples-label {
   display: block;
-  font-family: var(--font-pixel);
-  font-size: .46rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--warm);
   letter-spacing: .06em;
   margin-bottom: .6rem;
@@ -4112,8 +4113,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 .calc-chip.is-on { border-color: var(--red); color: var(--red); background: rgba(168,224,74,.08); }
 .calc-chip em {
   font-style: normal;
-  font-family: var(--font-pixel);
-  font-size: .42rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--mist);
   margin-left: .3rem;
 }
@@ -4154,8 +4155,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 .calc-over strong {
   display: block;
-  font-family: var(--font-pixel);
-  font-size: .6rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.96rem;
   color: var(--alert);
   margin-bottom: .7rem;
   line-height: 1.9;
@@ -4180,8 +4181,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 .calc-price-label {
   display: block;
-  font-family: var(--font-pixel);
-  font-size: .48rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.77rem;
   color: var(--red);
   letter-spacing: .06em;
   margin-bottom: .8rem;
@@ -4189,7 +4190,7 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 .calc-price {
   display: block;
-  font-family: var(--font-pixel);
+  font-family: var(--font-pixel); font-weight: 600;
   font-size: 1.9rem;
   color: var(--ink);
   line-height: 1.5;
@@ -4216,8 +4217,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 .calc-fact-label {
   display: block;
-  font-family: var(--font-pixel);
-  font-size: .44rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--mist);
   letter-spacing: .06em;
   margin-bottom: .45rem;
@@ -4253,8 +4254,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 .calc-customs-head { margin-bottom: .8rem; }
 .calc-customs-label {
   display: block;
-  font-family: var(--font-pixel);
-  font-size: .46rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--gold);
   letter-spacing: .06em;
   margin-bottom: .5rem;
@@ -4288,8 +4289,8 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 .calc-kizuna strong {
   display: block;
-  font-family: var(--font-pixel);
-  font-size: .45rem;
+  font-family: var(--font-pixel); font-weight: 600;
+  font-size: 0.74rem;
   color: var(--red);
   margin-bottom: .5rem;
   line-height: 1.9;
@@ -4342,7 +4343,7 @@ footer { background: var(--paper); border-top: 2px solid var(--border); }
 }
 .ship-note h3 {
   font-family: var(--font-pixel);
-  font-size: .48rem;
+  font-size: 0.77rem;
   color: var(--red);
   margin-bottom: .8rem;
   line-height: 1.9;
