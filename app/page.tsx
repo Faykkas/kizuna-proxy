@@ -34,7 +34,7 @@ export default function Home() {
       <StepsV3 t={t} />
 
       {/* À la une : boutique, événements, business */}
-      <HighlightsV3 t={t} />
+      <HighlightsV3 t={t} lang={lang} />
 
       {/* Qu'est-ce que Kizuna : 4 réponses rapides */}
       <ExplainerSection t={t} />
