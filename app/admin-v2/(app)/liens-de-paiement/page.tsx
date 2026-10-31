@@ -184,7 +184,10 @@ export default async function PaymentLinksPage({ searchParams }: { searchParams:
                     </td>
                     <td className="r">
                       {l.is_shipping ? (
-                        <div className="av2-money"><span>{t("Livraison")}</span> {formatJPY(toYen(l.fee_amount_jpy).yen)}</div>
+                        <>
+                          <div className="av2-money"><span>{t("Livraison")}</span> {formatJPY(toYen(l.fee_amount_jpy).yen)}</div>
+                          {toYen(l.tax_amount_jpy).yen > 0 ? <div className="av2-money"><span>{t("Taxes (Zonos)")}</span> {formatJPY(toYen(l.tax_amount_jpy).yen)}</div> : null}
+                        </>
                       ) : (
                         <>
                           {toYen(l.item_amount_jpy).yen > 0 ? <div className="av2-money"><span>{t("Articles")}</span> {formatJPY(toYen(l.item_amount_jpy).yen)}</div> : null}

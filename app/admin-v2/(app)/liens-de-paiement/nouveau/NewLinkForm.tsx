@@ -22,6 +22,7 @@ export default function NewLinkForm() {
   const [label, setLabel] = useState("");
   const [items, setItems] = useState([{ name: "", price: "", url: "" }]);
   const [fee, setFee] = useState("");
+  const [tax, setTax] = useState(""); // taxes Zonos (livraison seulement)
   const [clientName, setClientName] = useState("");
   const [clientEmail, setClientEmail] = useState("");
   const [confirmArticles, setConfirmArticles] = useState(false);
@@ -54,8 +55,9 @@ export default function NewLinkForm() {
 
   const itemAmount = kind === "shipping" ? 0 : items.reduce((s, it) => s + num(it.price), 0);
   const feeAmount = num(fee);
-  const paypal = paypalFee(itemAmount, feeAmount);
-  const total = itemAmount + feeAmount + paypal;
+  const taxAmount = kind === "shipping" ? num(tax) : 0;
+  const paypal = paypalFee(itemAmount, feeAmount + taxAmount);
+  const total = itemAmount + feeAmount + taxAmount + paypal;
 
   // Le piège d'origine : un paiement « Shipping… » saisi comme des articles n'est jamais
   // enregistré comme livraison sur la commande. On bloque tant que ce n'est pas confirmé.
@@ -71,7 +73,7 @@ export default function NewLinkForm() {
     startTransition(async () => {
       // Une commande précise n'est envoyée que si l'email est complet (sinon elle n'était pas affichée).
       const target = orderTarget === "new" || (emailOk && shownOrders.some((o) => String(o.id) === orderTarget)) ? orderTarget : "auto";
-      setResult(await createPaymentLink({ kind, label, items, feeAmount: fee, clientName, clientEmail, orderTarget: target }));
+      setResult(await createPaymentLink({ kind, label, items, feeAmount: fee, taxAmount: kind === "shipping" ? tax : "", clientName, clientEmail, orderTarget: target }));
     });
   }
 
@@ -80,6 +82,7 @@ export default function NewLinkForm() {
     setLabel("");
     setItems([{ name: "", price: "", url: "" }]);
     setFee("");
+    setTax("");
     setClientName("");
     setClientEmail("");
     setConfirmArticles(false);
@@ -181,6 +184,14 @@ export default function NewLinkForm() {
         <input id="fee" className="av2-input" inputMode="numeric" value={fee} onChange={(e) => setFee(e.target.value.replace(/\D/g, ""))} placeholder="0" />
       </div>
 
+      {kind === "shipping" ? (
+        <div className="av2-field">
+          <label htmlFor="tax">{t("Taxes Zonos (¥) — clients des États-Unis")}</label>
+          <input id="tax" className="av2-input" inputMode="numeric" value={tax} onChange={(e) => setTax(e.target.value.replace(/\D/g, ""))} placeholder="0" />
+          <span className="av2-sub">{t("Facultatif. Les taxes et droits de douane payés via Zonos : ils sont ajoutés au total, avec une ligne « Taxes » visible par le client.")}</span>
+        </div>
+      ) : null}
+
       <div className="av2-grid cols-2">
         <div className="av2-field">
           <label htmlFor="cname">{t("Nom du client (facultatif)")}</label>
@@ -233,6 +244,12 @@ export default function NewLinkForm() {
           ) : null}
           <dt>{kind === "shipping" ? t("Livraison") : t("Frais Kizuna")}</dt>
           <dd>{formatJPY(feeAmount)}</dd>
+          {taxAmount > 0 ? (
+            <>
+              <dt>{t("Taxes (Zonos)")}</dt>
+              <dd>{formatJPY(taxAmount)}</dd>
+            </>
+          ) : null}
           <dt>{t("Frais")}</dt>
           <dd>{formatJPY(paypal)}</dd>
           <dt><strong>{t("Total demandé au client")}</strong></dt>

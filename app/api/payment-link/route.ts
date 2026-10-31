@@ -108,7 +108,8 @@ export async function POST(request) {
     if (action === "get") {
       const { data: link } = await admin
         .from("payment_links")
-        .select("label, client_name, amount_jpy, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, items_breakdown, is_shipping, status")
+        // "*" on purpose: tax_amount_jpy is an optional column (see supabase/migrations/20261101120000).
+        .select("*")
         .eq("id", token)
         .single();
       if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
@@ -121,6 +122,7 @@ export async function POST(request) {
         itemAmountJpy: link.item_amount_jpy,
         feeAmountJpy: link.fee_amount_jpy,
         paypalFeeAmountJpy: link.paypal_fee_jpy,
+        taxAmountJpy: link.tax_amount_jpy || 0,
         itemsBreakdown: link.items_breakdown || null,
         isShipping: !!link.is_shipping,
         status: link.status,
@@ -135,7 +137,8 @@ export async function POST(request) {
 
       const { data: link } = await admin
         .from("payment_links")
-        .select("id, label, amount_jpy, item_amount_jpy, fee_amount_jpy, paypal_fee_jpy, items_breakdown, is_shipping, status")
+        // "*" on purpose: tax_amount_jpy is an optional column (see supabase/migrations/20261101120000).
+        .select("*")
         .eq("id", token)
         .single();
       if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
@@ -161,8 +164,9 @@ export async function POST(request) {
       // total.
       const feeAmount = link.fee_amount_jpy || 0;
       const paypalFeeAmount = link.paypal_fee_jpy || 0;
+      const taxAmount = link.tax_amount_jpy || 0; // taxes / droits Zonos facturés avec la livraison
       const items = Array.isArray(link.items_breakdown) ? link.items_breakdown : [];
-      const lineCount = items.length + (feeAmount > 0 ? 1 : 0) + (paypalFeeAmount > 0 ? 1 : 0);
+      const lineCount = items.length + (feeAmount > 0 ? 1 : 0) + (taxAmount > 0 ? 1 : 0) + (paypalFeeAmount > 0 ? 1 : 0);
       const hasBreakdown = lineCount > 1;
       const purchaseUnit = {
         reference_id: `LINK-${link.id}`,
@@ -171,13 +175,14 @@ export async function POST(request) {
       };
       if (hasBreakdown) {
         purchaseUnit.amount.breakdown = {
-          item_total: { currency_code: "JPY", value: String(link.item_amount_jpy + feeAmount + paypalFeeAmount) },
+          item_total: { currency_code: "JPY", value: String(link.item_amount_jpy + feeAmount + taxAmount + paypalFeeAmount) },
         };
         purchaseUnit.items = [
           ...(items.length > 0
             ? items.map(it => ({ name: (it.name || "Item").slice(0, 127), quantity: "1", unit_amount: { currency_code: "JPY", value: String(it.price_jpy) } }))
             : (link.item_amount_jpy > 0 ? [{ name: (link.label || "Item").slice(0, 127), quantity: "1", unit_amount: { currency_code: "JPY", value: String(link.item_amount_jpy) } }] : [])),
           ...(feeAmount > 0 ? [{ name: link.is_shipping ? "Shipping" : "Kizuna Proxy — service fee", quantity: "1", unit_amount: { currency_code: "JPY", value: String(feeAmount) } }] : []),
+          ...(taxAmount > 0 ? [{ name: "Taxes (Zonos)", quantity: "1", unit_amount: { currency_code: "JPY", value: String(taxAmount) } }] : []),
           ...(paypalFeeAmount > 0 ? [{ name: "Fee", quantity: "1", unit_amount: { currency_code: "JPY", value: String(paypalFeeAmount) } }] : []),
         ];
       }

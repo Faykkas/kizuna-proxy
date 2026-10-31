@@ -18,6 +18,8 @@ export type NewLinkInput = {
   label: string;
   items: { name: string; price: string; url?: string }[];
   feeAmount: string; // frais Kizuna (articles) ou montant de la livraison (shipping)
+  /** Taxes / droits de douane Zonos (livraison seulement), en yens. Facultatif. */
+  taxAmount?: string;
   clientName: string;
   clientEmail: string;
   /** "auto" = règle automatique, "new" = nouvelle commande, sinon l'identifiant de la commande choisie. */
@@ -80,6 +82,10 @@ export async function createPaymentLink(input: NewLinkInput): Promise<CreateResu
   const feeAmount = toAmount(input.feeAmount);
   if (feeAmount == null) return { ok: false, error: "Le montant des frais / de la livraison doit être un nombre entier de yens." };
 
+  // Taxes Zonos : uniquement sur un lien « livraison » (clients des États-Unis, payées avant l'envoi).
+  const taxAmount = isShipping ? toAmount(input.taxAmount ?? "") : 0;
+  if (taxAmount == null) return { ok: false, error: "Le montant des taxes doit être un nombre entier de yens." };
+
   const items: { name: string; price_jpy: number; url?: string }[] = [];
   if (!isShipping) {
     for (const it of input.items ?? []) {
@@ -120,8 +126,9 @@ export async function createPaymentLink(input: NewLinkInput): Promise<CreateResu
     orderFields.target_order_id = Number(input.orderTarget);
   }
 
-  const paypal = paypalFee(itemAmount, feeAmount);
-  const total = itemAmount + feeAmount + paypal;
+  // Les frais « PayPal » se calculent sur tout ce que le client paie, taxes comprises (PayPal prélève aussi sur les taxes).
+  const paypal = paypalFee(itemAmount, feeAmount + taxAmount);
+  const total = itemAmount + feeAmount + taxAmount + paypal;
 
   const sb = await createServerSupabase();
   const { data, error } = await sb
@@ -133,6 +140,7 @@ export async function createPaymentLink(input: NewLinkInput): Promise<CreateResu
       item_amount_jpy: itemAmount,
       fee_amount_jpy: feeAmount,
       paypal_fee_jpy: paypal,
+      ...(taxAmount > 0 ? { tax_amount_jpy: taxAmount } : {}), // colonne optionnelle (SQL 20261101120000)
       amount_jpy: total,
       client_name: (input.clientName ?? "").trim().slice(0, 120) || null,
       client_email: email || null,
@@ -142,6 +150,12 @@ export async function createPaymentLink(input: NewLinkInput): Promise<CreateResu
     .select("id")
     .single();
 
+  if (error && /tax_amount_jpy/.test(error.message)) {
+    return {
+      ok: false,
+      error: "La colonne des taxes n'est pas encore activée dans Supabase : exécutez d'abord le SQL 20261101120000_payment_link_tax.sql, ou laissez les taxes vides.",
+    };
+  }
   if (error && /target_order_id|new_order/.test(error.message)) {
     return {
       ok: false,

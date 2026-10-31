@@ -262,16 +262,25 @@ export type PaymentLinkRow = {
   paypal_fee_jpy: number | null;
   paypal_real_fee_jpy: number | null;
   is_shipping: boolean | null;
+  /** Taxes Zonos facturées avec la livraison (absent tant que le SQL 20261101120000 n'est pas appliqué). */
+  tax_amount_jpy?: number | null;
 };
 
-export function loadPaymentLinks(sb: Sb) {
-  return fetchAll<PaymentLinkRow>((from, to) =>
-    sb
-      .from("payment_links")
-      .select("id,label,client_name,client_email,status,created_at,paid_at,amount_jpy,item_amount_jpy,fee_amount_jpy,paypal_fee_jpy,paypal_real_fee_jpy,is_shipping")
-      .order("created_at", { ascending: false })
-      .range(from, to),
-  );
+const LINK_COLUMNS = "id,label,client_name,client_email,status,created_at,paid_at,amount_jpy,item_amount_jpy,fee_amount_jpy,paypal_fee_jpy,paypal_real_fee_jpy,is_shipping";
+
+export async function loadPaymentLinks(sb: Sb) {
+  const read = (columns: string) =>
+    fetchAll<PaymentLinkRow>(
+      (from, to) =>
+        sb.from("payment_links").select(columns).order("created_at", { ascending: false }).range(from, to) as unknown as PromiseLike<{ data: PaymentLinkRow[] | null; error: { message: string } | null }>,
+    );
+  try {
+    return await read(`${LINK_COLUMNS},tax_amount_jpy`);
+  } catch (e) {
+    // Colonne des taxes pas encore créée : on lit comme avant, sans la colonne.
+    if (/tax_amount_jpy/.test((e as Error).message)) return read(LINK_COLUMNS);
+    throw e;
+  }
 }
 
 export async function countPendingLinks(sb: Sb): Promise<number> {

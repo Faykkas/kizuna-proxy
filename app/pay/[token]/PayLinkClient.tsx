@@ -43,6 +43,7 @@ function buildRows(link, c) {
     rows.push({ key: "item", name: d.title, href: d.href, price: link.itemAmountJpy });
   }
   if (link.feeAmountJpy > 0) rows.push({ key: "fee", name: link.isShipping ? c.shipping : c.serviceFee, price: link.feeAmountJpy, fee: true });
+  if (link.taxAmountJpy > 0) rows.push({ key: "tax", name: c.tax, price: link.taxAmountJpy, fee: true });
   if (link.paypalFeeAmountJpy > 0) {
     rows.push({ key: "pp", name: c.paypalFee, price: link.paypalFeeAmountJpy, fee: true });
   }
