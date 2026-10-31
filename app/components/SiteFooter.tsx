@@ -26,6 +26,8 @@ export default function SiteFooter({ t }: { t: any }) {
             <a href="/services" className="footer-link">{t.whatWeBuy?.label}</a>
 <a href="/how-it-works" className="footer-link">{t.footerNav?.howItWorks || "How it works"}</a>
             <a href="/news" className="footer-link">Announcements</a>
+<a href="/why-kizuna" className="footer-link">{t.whyKizunaHome?.label || "Why Kizuna"}</a>
+<a href="/good-to-know" className="footer-link">{t.serviceRules?.label || "Good to know"}</a>
 <a href="/reviews" className="footer-link">{t.footerNav?.reviews || "Reviews"}</a>
             <a href="/pricing" className="footer-link">{t.nav.pricing}</a>
             <a href="/faq" className="footer-link">FAQ</a>

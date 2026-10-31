@@ -3,18 +3,20 @@
 
 import WhyIcon from "../WhyIcon";
 
-export default function WhyKizunaHomeSection({ t }: { t: any }) {
+export default function WhyKizunaHomeSection({ t, asPage = false }: { t: any; asPage?: boolean }) {
   const w = t.whyKizunaHome || {};
   const items = w.items || [];
 
   return (
     <section id="why-kizuna" className="section reveal">
       <div className="wrap">
-        <div className="sec-head">
-          <p className="sec-label">{w.label || "Why Kizuna"}</p>
-          <h2>{w.title || "A personal shopper,"} <em>{w.titleEm || "not a platform"}</em></h2>
-          <p className="desc">{w.desc || "Real people in Tokyo — not a warehouse, not a bot."}</p>
-        </div>
+        {!asPage && (
+          <div className="sec-head">
+            <p className="sec-label">{w.label || "Why Kizuna"}</p>
+            <h2>{w.title || "A personal shopper,"} <em>{w.titleEm || "not a platform"}</em></h2>
+            <p className="desc">{w.desc || "Real people in Tokyo — not a warehouse, not a bot."}</p>
+          </div>
+        )}
         <div className="why-rows">
           {items.map((item, i) => (
             <div key={i} className={`why-row${i % 2 === 1 ? " why-row-rev" : ""}`}>

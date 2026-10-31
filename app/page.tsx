@@ -9,14 +9,11 @@ import HighlightsV3 from "./components/sections/HighlightsV3";
 import StepsV3 from "./components/sections/StepsV3";
 import SearchWidget from "./components/SearchWidget";
 import ExplainerSection from "./components/sections/ExplainerSection";
-import ServicesSection from "./components/sections/ServicesSection";
-import WhyKizunaHomeSection from "./components/sections/WhyKizunaHomeSection";
-import ServiceRulesSection from "./components/sections/ServiceRulesSection";
 import NewsPreviewSection from "./components/sections/NewsPreviewSection";
 import Carousel from "./components/Carousel";
 import { BackToTop, useScrollReveal } from "./components/ui";
 import { useLang, useAnnounce, useGallery } from "./components/useSiteState";
-import { REAL_REVIEWS, SLIDES } from "./components/data";
+import { SLIDES } from "./components/data";
 
 export default function Home() {
   const { lang, t } = useLang();
@@ -60,63 +57,6 @@ export default function Home() {
 
       {/* NEWS */}
       <NewsPreviewSection t={t} />
-
-      {/* SERVICES — aperçu, détail sur /services */}
-      <ServicesSection t={t} />
-      <div className="wrap" style={{textAlign:"center",marginTop:"-1.5rem",marginBottom:"3rem"}}>
-        <a href="/services" className="btn btn-outline">
-          {t.whatWeBuy?.seeAll || "See all services"} →
-        </a>
-      </div>
-
-      {/* WHY KIZUNA */}
-      <WhyKizunaHomeSection t={t} />
-
-      {/* SERVICE RULES */}
-      <ServiceRulesSection t={t} />
-
-      {/* PREUVE SOCIALE — 3 avis, le reste sur /reviews */}
-      <section className="section reveal">
-        <div className="wrap">
-          <div className="sec-head">
-            <p className="sec-label">{t.reviews?.label}</p>
-            <h2>{t.reviews?.title} <em>{t.reviews?.titleEm}</em></h2>
-          </div>
-          <div className="reviews-header">
-            <div className="reviews-score-block">
-              <div className="reviews-big-num">5.0</div>
-              <div>
-                <div className="reviews-big-stars">★★★★★</div>
-                <div className="reviews-big-label">{t.reviews?.basedOn}</div>
-                <div className="reviews-count">11 verified reviews</div>
-              </div>
-            </div>
-          </div>
-          <div className="reviews-cards-grid">
-            {REAL_REVIEWS.slice(0, 3).map((r, i) => (
-              <a key={i} href={r.link} target="_blank" rel="noopener noreferrer" className="review-card-new">
-                <div className="rcn-top">
-                  <div className="rcn-stars">{"★".repeat(r.stars)}</div>
-                  <div className="rcn-country">{r.country}</div>
-                </div>
-                <p className="rcn-text">&ldquo;{r.text}&rdquo;</p>
-                <div className="rcn-footer">
-                  <div className="rcn-avatar">{r.name.replace("u/","").charAt(0).toUpperCase()}</div>
-                  <div>
-                    <div className="rcn-name">{r.name}</div>
-                    <div className="rcn-source">via Reddit</div>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-          <div style={{textAlign:"center",marginTop:"2rem"}}>
-            <a href="/reviews" className="btn btn-outline">
-              {t.reviews?.seeAll || "Read all reviews"} →
-            </a>
-          </div>
-        </div>
-      </section>
 
       {/* CTA FINAL */}
       <section className="section reveal">

@@ -45,6 +45,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/shipping`, priority: 0.9, changeFrequency: "monthly" as const },
     { url: `${BASE}/how-it-works`, priority: 0.8, changeFrequency: "monthly" as const },
     { url: `${BASE}/request`, priority: 0.9, changeFrequency: "monthly" as const },
+    { url: `${BASE}/why-kizuna`, priority: 0.7, changeFrequency: "monthly" as const },
+    { url: `${BASE}/good-to-know`, priority: 0.7, changeFrequency: "monthly" as const },
     { url: `${BASE}/reviews`, priority: 0.8, changeFrequency: "weekly" as const },
     { url: `${BASE}/faq`, priority: 0.8, changeFrequency: "monthly" as const },
     { url: `${BASE}/events`, priority: 0.9, changeFrequency: "weekly" as const },

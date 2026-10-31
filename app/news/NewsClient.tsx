@@ -79,7 +79,7 @@ export default function NewsClient() {
                 border: "1px solid",
                 borderColor: filter === cat ? "var(--red)" : "var(--border)",
                 background: filter === cat ? "var(--red)" : "var(--surface)",
-                color: filter === cat ? "#fff" : "var(--warm)",
+                color: filter === cat ? "var(--px-bg)" : "var(--warm)",
                 fontSize: ".68rem",
                 letterSpacing: ".08em",
                 textTransform: "uppercase",
