@@ -8,6 +8,10 @@ import { brandGuides } from "./brandGuides";
 import { shippingGuide } from "./shippingGuide";
 import { biohazardGuide } from "./eventGuidesBiohazard";
 import { agfGuide } from "./eventGuidesAgf";
+import { christmasGuide } from "./eventGuidesChristmas";
+import { starbucksXmasGuide } from "./eventGuidesStarbucksXmas";
+import { starbucksJapanGuide } from "./eventGuidesStarbucksJapan";
+import { fukubukuroGuide } from "./eventGuidesFukubukuro";
 
 export const guideTranslations = {
   pokemonCards: {
@@ -3941,5 +3945,9 @@ export const guideTranslations = {
   },
   biohazard30: biohazardGuide,
   agf2026: agfGuide,
+  christmas2026: christmasGuide,
+  starbucksXmas2026: starbucksXmasGuide,
+  starbucksJapan: starbucksJapanGuide,
+  fukubukuro2027: fukubukuroGuide,
   ...brandGuides,
 };

@@ -246,6 +246,14 @@ export default function Maneki({
       {paws}
       {held}
       {sparkles}
+      {/* bonnet de Père Noël : visible seulement quand le thème de Noël est actif (html[data-xmas]) */}
+      <g className="px-santa-hat">
+        <P x={5} y={2} w={6} c="var(--px-red)" />
+        <P x={6} y={1} w={5} c="var(--px-red)" />
+        <P x={8} y={0} w={3} c="var(--px-red)" />
+        <P x={4} y={3} w={8} c="var(--px-ink)" />
+        <P x={11} y={0} w={2} h={2} c="var(--px-ink)" />
+      </g>
     </svg>
   );
 }

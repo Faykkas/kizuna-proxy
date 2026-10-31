@@ -7,6 +7,7 @@ import { LanguageProvider } from "../lib/language";
 import ContactWidget from "./ContactWidget";
 import CookieConsent from "./CookieConsent";
 import StickyRequestBar from "./StickyRequestBar";
+import ChristmasTheme from "./ChristmasTheme";
 
 // Tout ce qui ne sert qu'au site PUBLIC : session client, langue du site, bouton de contact, bannière cookies,
 // scripts tiers (Trustpilot) et statistiques de visite. L'admin-v2 (/admin-v2) est un espace privé qui n'en a
@@ -24,6 +25,7 @@ export default function PublicShell({ children }: { children: React.ReactNode })
           <ContactWidget />
           <CookieConsent />
           <StickyRequestBar />
+          <ChristmasTheme />
         </LanguageProvider>
       </AuthProvider>
       <Analytics />

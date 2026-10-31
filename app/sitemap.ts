@@ -26,6 +26,10 @@ const BLOG_SLUGS = [
   "buy-porter-yoshida-bags-japan",
   "resident-evil-30th-anniversary-exhibition-tokyo",
   "agf-ikebukuro-animate-girls-festival-2026",
+  "order-christmas-gifts-from-japan-2026",
+  "starbucks-japan-christmas-2026-collection",
+  "buy-starbucks-japan-tumblers-guide",
+  "fukubukuro-japan-lucky-bags-2027-guide",
 ];
 
 const LANDING_SLUGS = [

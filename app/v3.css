@@ -227,3 +227,40 @@ a.btn-gold:hover, a.btn-gold:visited, .blog-page a.btn-gold, .blog-page a.btn-go
 .blog-fact dt { font-size: .82rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--red); }
 .blog-fact dd { margin: 0; font-size: .98rem; line-height: 1.6; color: var(--ink); }
 @media (max-width: 620px) { .blog-fact { grid-template-columns: 1fr; gap: .2rem; } }
+
+/* ═══ Thème de Noël (actif quand <html data-xmas>, posé par components/ChristmasTheme.tsx, éteint le 8 janvier 2027) ═══ */
+.xm-snow { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 90; display: none; }
+html[data-xmas] .xm-snow { display: block; }
+
+/* boules de Noël suspendues qui se balancent doucement, dans les marges gauche et droite (masquées sur petit écran) */
+.xm-orn, .xm-glow { display: none; }
+html[data-xmas] .xm-orn { display: block; position: fixed; top: 64px; z-index: 60; width: var(--s); height: calc(var(--h) + var(--s)); pointer-events: none; transform-origin: 50% 0; animation: xm-sway var(--d) ease-in-out var(--dl) infinite alternate; }
+html[data-xmas] .xm-orn::before { content: ""; position: absolute; left: 50%; top: 0; width: 1px; height: var(--h); background: linear-gradient(rgba(255, 235, 190, .15), rgba(255, 235, 190, .65)); }
+html[data-xmas] .xm-orn::after { content: ""; position: absolute; left: 0; top: var(--h); width: var(--s); height: var(--s); border-radius: 50%;
+  background: radial-gradient(circle at 30% 26%, rgba(255, 255, 255, .85) 0 7%, rgba(255, 255, 255, 0) 16%), radial-gradient(circle at 36% 32%, var(--c1), var(--c2) 58%, var(--c3));
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .4), inset -3px -4px 8px rgba(0, 0, 0, .28); }
+html[data-xmas] .xm-orn i { position: absolute; left: 50%; top: calc(var(--h) - 4px); width: calc(var(--s) * .3); height: 6px; margin-left: calc(var(--s) * -.15); border-radius: 2px 2px 0 0; background: linear-gradient(#f3d98a, #b98d2c); }
+@keyframes xm-sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+html[data-xmas] .xm-orn-l1 { left: max(8px, calc((100vw - 1240px) / 2 - 78px)); }
+html[data-xmas] .xm-orn-l2 { left: max(46px, calc((100vw - 1240px) / 2 - 40px)); }
+html[data-xmas] .xm-orn-r1 { right: max(8px, calc((100vw - 1240px) / 2 - 78px)); }
+html[data-xmas] .xm-orn-r2 { right: max(46px, calc((100vw - 1240px) / 2 - 40px)); }
+@media (max-width: 1240px) { html[data-xmas] .xm-orn { display: none; } }
+@media (prefers-reduced-motion: reduce) { html[data-xmas] .xm-orn { animation: none; } }
+
+/* lueurs chaudes (bokeh) qui flottent doucement derrière le contenu */
+html[data-xmas] .xm-glow { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.xm-glow span { position: absolute; border-radius: 50%; filter: blur(2px); opacity: 0; animation: xm-bokeh var(--t) ease-in-out var(--dl) infinite; background: radial-gradient(circle, var(--bc) 0, transparent 68%); }
+@keyframes xm-bokeh { 0%, 100% { opacity: .08; transform: translateY(0) scale(1); } 50% { opacity: .34; transform: translateY(-14px) scale(1.08); } }
+@media (prefers-reduced-motion: reduce) { .xm-glow span { animation: none; opacity: .18; } }
+
+/* bonnet de Père Noël sur la mascotte */
+.px-santa-hat { display: none; }
+html[data-xmas] .px-santa-hat { display: inline; }
+
+/* ambiance chaleureuse : lueur ambrée dans l'en-tête, vitrine et formulaire un peu plus doux */
+html[data-xmas] .v3-hero { background: radial-gradient(520px 300px at 50% -4%, rgba(255, 190, 100, .13), transparent 70%), radial-gradient(700px 360px at 12% 0%, rgba(168, 224, 74, .08), transparent 65%), radial-gradient(760px 420px at 92% 10%, rgba(199, 125, 255, .15), transparent 65%); }
+html[data-xmas] .v3-hero-form .mini-req { border-color: rgba(255, 210, 120, .45); }
+html[data-xmas] .v3-badge-live { border-color: rgba(255, 150, 120, .6); color: #ffb3a1; background: rgba(255, 80, 96, .12); }
+html[data-xmas] .v3-badge-live::before { background: #ff5060; box-shadow: 0 0 10px #ff5060; }
+html[data-xmas] .footer-bottom::before { content: "❄ ❅ ❆"; display: block; text-align: center; letter-spacing: .6em; color: rgba(240, 237, 247, .35); margin-bottom: .6rem; }

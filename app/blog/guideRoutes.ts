@@ -27,6 +27,10 @@ import OnitsukaClient from "./buy-onitsuka-tiger-japan/OnitsukaClient";
 import PorterClient from "./buy-porter-yoshida-bags-japan/PorterClient";
 import BiohazardClient from "./resident-evil-30th-anniversary-exhibition-tokyo/BiohazardClient";
 import AgfClient from "./agf-ikebukuro-animate-girls-festival-2026/AgfClient";
+import ChristmasClient from "./order-christmas-gifts-from-japan-2026/ChristmasClient";
+import StarbucksXmasClient from "./starbucks-japan-christmas-2026-collection/StarbucksXmasClient";
+import StarbucksJapanClient from "./buy-starbucks-japan-tumblers-guide/StarbucksJapanClient";
+import FukubukuroClient from "./fukubukuro-japan-lucky-bags-2027-guide/FukubukuroClient";
 
 export const GUIDE_ROUTES = {
   "best-pokemon-cards-japan-2026": { Component: PokemonCardsClient, key: "pokemonCards" },
@@ -51,6 +55,10 @@ export const GUIDE_ROUTES = {
   "buy-porter-yoshida-bags-japan": { Component: PorterClient, key: "porterYoshida" },
   "resident-evil-30th-anniversary-exhibition-tokyo": { Component: BiohazardClient, key: "biohazard30" },
   "agf-ikebukuro-animate-girls-festival-2026": { Component: AgfClient, key: "agf2026" },
+  "order-christmas-gifts-from-japan-2026": { Component: ChristmasClient, key: "christmas2026" },
+  "starbucks-japan-christmas-2026-collection": { Component: StarbucksXmasClient, key: "starbucksXmas2026" },
+  "buy-starbucks-japan-tumblers-guide": { Component: StarbucksJapanClient, key: "starbucksJapan" },
+  "fukubukuro-japan-lucky-bags-2027-guide": { Component: FukubukuroClient, key: "fukubukuro2027" },
 };
 
 export const BLOG_SLUGS = Object.keys(GUIDE_ROUTES);

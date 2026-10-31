@@ -32,6 +32,10 @@ const GUIDES = [
   { slug: "buy-porter-yoshida-bags-japan", key: "porterYoshida", Icon: IconShoppingBag },
   { slug: "resident-evil-30th-anniversary-exhibition-tokyo", key: "biohazard30", Icon: IconEvent },
   { slug: "agf-ikebukuro-animate-girls-festival-2026", key: "agf2026", Icon: IconEvent },
+  { slug: "order-christmas-gifts-from-japan-2026", key: "christmas2026", Icon: IconEvent },
+  { slug: "starbucks-japan-christmas-2026-collection", key: "starbucksXmas2026", Icon: IconShoppingBag },
+  { slug: "buy-starbucks-japan-tumblers-guide", key: "starbucksJapan", Icon: IconShoppingBag },
+  { slug: "fukubukuro-japan-lucky-bags-2027-guide", key: "fukubukuro2027", Icon: IconEvent },
 ];
 
 export default function BlogIndexClient() {

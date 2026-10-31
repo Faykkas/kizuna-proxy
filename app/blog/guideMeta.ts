@@ -24,9 +24,14 @@ export const GUIDE_KEYS: Record<string, string> = {
   "buy-sanrio-japan": "sanrio",
   "resident-evil-30th-anniversary-exhibition-tokyo": "biohazard30",
   "agf-ikebukuro-animate-girls-festival-2026": "agf2026",
+  "order-christmas-gifts-from-japan-2026": "christmas2026",
+  "starbucks-japan-christmas-2026-collection": "starbucksXmas2026",
+  "buy-starbucks-japan-tumblers-guide": "starbucksJapan",
+  "fukubukuro-japan-lucky-bags-2027-guide": "fukubukuro2027",
 };
 
 const GROUPS: string[][] = [
+  ["order-christmas-gifts-from-japan-2026", "starbucks-japan-christmas-2026-collection", "buy-starbucks-japan-tumblers-guide", "fukubukuro-japan-lucky-bags-2027-guide"],
   ["supreme-japan-drops-guide", "nike-japan-exclusives-guide", "buy-coach-bags-japan", "buy-porter-yoshida-bags-japan", "buy-onitsuka-tiger-japan", "buy-sanrio-japan"],
   ["best-pokemon-cards-japan-2026", "pokemon-center-tokyo-exclusives", "japanese-trading-cards-guide-2026", "anime-figures-japan-guide", "ichiban-kuji-japan-guide", "kpop-photocards-japan-guide"],
   ["comiket-japan-guide", "comitia-japan-guide", "tokyo-anime-events-guide", "agf-ikebukuro-animate-girls-festival-2026", "resident-evil-30th-anniversary-exhibition-tokyo"],
