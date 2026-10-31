@@ -4,6 +4,8 @@ import { createServerSupabase } from "../lib/supabase-server";
 import { getL } from "../lib/lang-server";
 import { computeCommissions, currentMonthJst, lastMonths } from "../lib/commissions";
 import { countNewRequests, countPendingLinks, loadOrdersForStats, loadPaidLinks } from "../lib/queries";
+import { loadEntitiesSafe } from "../lib/queriesAccounting";
+import { entityOn } from "../lib/accounting";
 import { MONTHLY_GOAL_JPY, NEXT_GOAL_JPY, BASE } from "../lib/config";
 import { formatJPY, percentOf } from "../lib/money";
 import { isActiveStatus } from "../lib/status";
@@ -18,7 +20,7 @@ export async function generateMetadata() {
 
 export default async function DashboardPage() {
   // Les lectures démarrent tout de suite, en même temps que la vérification d'accès (la RLS protège les données quoi qu'il arrive).
-  const dataP = createServerSupabase().then((sb) => Promise.all([loadOrdersForStats(sb), loadPaidLinks(sb), countPendingLinks(sb), countNewRequests(sb).catch(() => 0)]));
+  const dataP = createServerSupabase().then((sb) => Promise.all([loadOrdersForStats(sb), loadPaidLinks(sb), countPendingLinks(sb), countNewRequests(sb).catch(() => 0), loadEntitiesSafe(sb).catch(() => [])]));
   dataP.catch(() => {});
   const access = await requireAccess();
   const L = await getL();
@@ -36,8 +38,8 @@ export default async function DashboardPage() {
 
   let data;
   try {
-    const [orders, links, pendingLinks, newRequests] = await dataP;
-    data = { orders, links, pendingLinks, newRequests };
+    const [orders, links, pendingLinks, newRequests, entities] = await dataP;
+    data = { orders, links, pendingLinks, newRequests, entities };
   } catch (e) {
     return (
       <>
@@ -47,7 +49,7 @@ export default async function DashboardPage() {
     );
   }
 
-  const { orders, links, pendingLinks, newRequests } = data;
+  const { orders, links, pendingLinks, newRequests, entities } = data;
   const report = computeCommissions(orders, links);
   const byMonth = new Map(report.months.map((m) => [m.month, m]));
   const now = byMonth.get(month);
@@ -61,6 +63,20 @@ export default async function DashboardPage() {
     year: y,
     total: report.months.filter((m) => m.month.startsWith(y)).reduce((s, m) => s + m.total, 0),
   }));
+
+  // Cumul de l'année réparti par entité fiscale (Mayuko jusqu'à la reprise, Samuel ensuite). Seulement si des dates de bascule sont confirmées.
+  const datedEntities = entities
+    .filter((e) => e.active_from || e.active_to)
+    .sort((a, b) => (a.active_from ?? "").localeCompare(b.active_from ?? ""));
+  const split = datedEntities.map((e) => {
+    const total = report.months.filter((m) => m.month.startsWith(year) && entityOn(`${m.month}-01`, entities) === e.name).reduce((sum, m) => sum + m.total, 0);
+    const label = e.active_from && e.active_to
+      ? t("{name} du {a} au {b}", { name: e.name, a: L.date(e.active_from), b: L.date(e.active_to) })
+      : e.active_to
+        ? t("{name} jusqu'au {d}", { name: e.name, d: L.date(e.active_to) })
+        : t("{name} depuis le {d}", { name: e.name, d: L.date(e.active_from) });
+    return { name: e.name, label, total };
+  });
 
   // Commandes actives = ni livrées ni annulées, avec le détail par statut.
   // Les « commission package » sont des gains, pas des commandes : jamais comptées ici.
@@ -147,7 +163,17 @@ export default async function DashboardPage() {
           label={t("Cumul {year}", { year })}
           tag={<Tag kind="prov">{t("provisoire")}</Tag>}
           value={formatJPY(yearTotal)}
-          sub={t("Commissions de l'année en cours.")}
+          sub={
+            split.length > 0 ? (
+              <>
+                {split.map((x) => (
+                  <div key={x.name}>{t("{label} : {amount}", { label: x.label, amount: formatJPY(x.total) })}</div>
+                ))}
+              </>
+            ) : (
+              t("Commissions de l'année en cours.")
+            )
+          }
         />
       </div>
 
@@ -220,7 +246,16 @@ export default async function DashboardPage() {
           <ul className="av2-list">
             {perYear.map((y) => (
               <li key={y.year}>
-                <span>{y.year}</span>
+                <span>
+                  {y.year}
+                  {y.year === year && split.length > 0
+                    ? split.map((x) => (
+                        <small key={x.name} style={{ display: "block", color: "var(--av2-muted)" }}>
+                          {t("{label} : {amount}", { label: x.label, amount: formatJPY(x.total) })}
+                        </small>
+                      ))
+                    : null}
+                </span>
                 <span className="av2-num">{formatJPY(y.total)}</span>
               </li>
             ))}
