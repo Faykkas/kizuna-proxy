@@ -761,8 +761,6 @@ footer { background: #050506; }
 .carrier-badge { font-size: .62rem; font-weight: 700; letter-spacing: .06em; padding: .25rem .65rem; border-radius: 1px; }
 .carrier-badge.ems    { background: #c8000a; color: #fff; }
 .carrier-badge.yamato { background: #1a6934; color: #fff; }
-.carrier-badge.fedex  { background: #4d148c; color: #fff; }
-.carrier-badge.dhl    { background: #ffcc00; color: #d40511; font-weight: 900; }
 .carrier-name { font-size: .75rem; font-weight: 500; color: var(--ink); }
 .shipping-desc { font-size: .76rem; line-height: 1.75; color: var(--warm); font-weight: 300; }
 .shipping-desc strong { color: var(--red); font-weight: 500; }

@@ -26,7 +26,7 @@ export const JA_ORDERS: Record<string, string> = {
   "Moyen de paiement": "支払い方法",
   "Demander le paiement de la livraison": "送料をご請求",
   "Expédition": "発送",
-  "Transporteur (EMS, DHL, Yamato…)": "配送業者（EMS、DHL、ヤマト…）",
+  "Transporteur (EMS, Yamato…)": "配送業者（EMS、ヤマト…）",
   "Pays de destination": "配送先の国",
   "Adresse de livraison": "配送先住所",
   "Événement (facultatif)": "イベント（任意）",

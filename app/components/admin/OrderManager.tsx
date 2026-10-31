@@ -350,7 +350,7 @@ export default function OrderManager({ order, onClose, onSaved }) {
                 type="text"
                 value={form.shipping_method || ""}
                 onChange={e => set("shipping_method", e.target.value)}
-                placeholder="EMS, DHL, Yamato…"
+                placeholder="EMS, Yamato…"
               />
               <input
                 type="text"

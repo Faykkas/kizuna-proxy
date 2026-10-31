@@ -111,7 +111,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             { "@type": "Question", "name": "Can you buy Pokémon cards from Japan?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — we buy Japanese Pokémon card sets, exclusive booster packs, and limited edition products directly from Pokémon Center Tokyo and ship worldwide." } },
             { "@type": "Question", "name": "Can you buy from Mercari Japan?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — we purchase from Mercari Japan on your behalf, handling all Japanese communication with sellers, payment, and international shipping." } },
             { "@type": "Question", "name": "Do you attend Tokyo events like Supreme drops?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — we physically attend Supreme Japan drops, Pokémon Center events, Nintendo Store releases, and other exclusive Tokyo events on your behalf." } },
-            { "@type": "Question", "name": "Which countries do you ship to?", "acceptedAnswer": { "@type": "Answer", "text": "We ship worldwide — USA, Canada, France, Germany, Italy, UK, Australia, Greece, Indonesia, South Korea and many more countries via EMS, Yamato, FedEx or DHL." } }
+            { "@type": "Question", "name": "Which countries do you ship to?", "acceptedAnswer": { "@type": "Answer", "text": "We ship worldwide — USA, Canada, France, Germany, Italy, UK, Australia, Greece, Indonesia, South Korea and many more countries via EMS." } }
           ]
         })}} />
 

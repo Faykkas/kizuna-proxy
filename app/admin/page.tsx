@@ -1222,7 +1222,7 @@ function OrdersTab({ supabase, al, jumpToOrderId, onJumped }) {
           </div>
 
           <div className="adm-row2">
-            <div><label style={lbl}>Shipping method</label><input style={inp} value={f.shipping_method} onChange={e=>setF("shipping_method",e.target.value)} placeholder="EMS, FedEx, DHL…" /></div>
+            <div><label style={lbl}>Shipping method</label><input style={inp} value={f.shipping_method} onChange={e=>setF("shipping_method",e.target.value)} placeholder="EMS, Yamato…" /></div>
             <div><label style={lbl}>Tracking number</label><input style={inp} value={f.tracking_number} onChange={e=>setF("tracking_number",e.target.value)} placeholder="EN123456789JP" /></div>
           </div>
 

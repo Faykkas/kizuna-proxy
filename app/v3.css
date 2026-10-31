@@ -217,3 +217,13 @@ a.btn-gold:hover, a.btn-gold:visited, .blog-page a.btn-gold, .blog-page a.btn-go
   .v3-feed-main { grid-column: 1; grid-row: 2; }
   .v3-feed-go { grid-column: 2; grid-row: 1 / span 2; }
 }
+
+/* ── Guides d'événements : fiche « L'essentiel » ───────────────────────── */
+.blog-facts { margin: 1.6rem 0 2rem; padding: 1.3rem 1.5rem; border: 1px solid var(--border-gold); border-radius: var(--v3-radius); background: var(--surface); box-shadow: var(--v3-hard); }
+.blog-facts h2 { margin: 0 0 .8rem; font-size: 1.15rem; }
+.blog-facts dl { margin: 0; display: grid; gap: .1rem; }
+.blog-fact { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 1rem; padding: .65rem 0; border-top: 1px solid var(--border); }
+.blog-fact:first-child { border-top: 0; }
+.blog-fact dt { font-size: .82rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--red); }
+.blog-fact dd { margin: 0; font-size: .98rem; line-height: 1.6; color: var(--ink); }
+@media (max-width: 620px) { .blog-fact { grid-template-columns: 1fr; gap: .2rem; } }

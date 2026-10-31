@@ -22,12 +22,14 @@ export const GUIDE_KEYS: Record<string, string> = {
   "buy-porter-yoshida-bags-japan": "porterYoshida",
   "buy-onitsuka-tiger-japan": "onitsukaTiger",
   "buy-sanrio-japan": "sanrio",
+  "resident-evil-30th-anniversary-exhibition-tokyo": "biohazard30",
+  "agf-ikebukuro-animate-girls-festival-2026": "agf2026",
 };
 
 const GROUPS: string[][] = [
   ["supreme-japan-drops-guide", "nike-japan-exclusives-guide", "buy-coach-bags-japan", "buy-porter-yoshida-bags-japan", "buy-onitsuka-tiger-japan", "buy-sanrio-japan"],
   ["best-pokemon-cards-japan-2026", "pokemon-center-tokyo-exclusives", "japanese-trading-cards-guide-2026", "anime-figures-japan-guide", "ichiban-kuji-japan-guide", "kpop-photocards-japan-guide"],
-  ["comiket-japan-guide", "comitia-japan-guide", "tokyo-anime-events-guide"],
+  ["comiket-japan-guide", "comitia-japan-guide", "tokyo-anime-events-guide", "agf-ikebukuro-animate-girls-festival-2026", "resident-evil-30th-anniversary-exhibition-tokyo"],
   ["how-to-buy-from-mercari-japan", "yahoo-auctions-japan-guide", "japan-shipping-guide-2026", "japan-package-forwarding-guide", "tokyo-discreet-pickup-service"],
 ];
 

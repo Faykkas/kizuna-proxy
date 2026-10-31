@@ -24,6 +24,8 @@ const BLOG_SLUGS = [
   "buy-sanrio-japan",
   "buy-onitsuka-tiger-japan",
   "buy-porter-yoshida-bags-japan",
+  "resident-evil-30th-anniversary-exhibition-tokyo",
+  "agf-ikebukuro-animate-girls-festival-2026",
 ];
 
 const LANDING_SLUGS = [

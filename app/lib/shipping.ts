@@ -166,9 +166,10 @@ export const CUSTOMS = {
       "parcels entering the US are subject to import duty regardless of value. " +
       "The rate depends on what the item is and where it was made.",
     kizuna:
-      "We handle this for you through Zonos: duties are calculated and prepaid " +
-      "before the parcel ships, so it clears customs without you being asked " +
-      "for anything on delivery.",
+      "Paying duties through Zonos is mandatory for US residents: the duties are " +
+      "calculated and you pay them online before the parcel ships. We cannot ship " +
+      "a US parcel until this is paid, and once it is, the parcel clears customs " +
+      "without you being asked for anything on delivery.",
   },
   EU: {
     label: "European Union",

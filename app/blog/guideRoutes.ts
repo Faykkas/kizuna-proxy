@@ -25,6 +25,8 @@ import CoachOfficialClient from "./buy-coach-bags-japan/CoachOfficialClient";
 import SanrioClient from "./buy-sanrio-japan/SanrioClient";
 import OnitsukaClient from "./buy-onitsuka-tiger-japan/OnitsukaClient";
 import PorterClient from "./buy-porter-yoshida-bags-japan/PorterClient";
+import BiohazardClient from "./resident-evil-30th-anniversary-exhibition-tokyo/BiohazardClient";
+import AgfClient from "./agf-ikebukuro-animate-girls-festival-2026/AgfClient";
 
 export const GUIDE_ROUTES = {
   "best-pokemon-cards-japan-2026": { Component: PokemonCardsClient, key: "pokemonCards" },
@@ -47,6 +49,8 @@ export const GUIDE_ROUTES = {
   "buy-sanrio-japan": { Component: SanrioClient, key: "sanrio" },
   "buy-onitsuka-tiger-japan": { Component: OnitsukaClient, key: "onitsukaTiger" },
   "buy-porter-yoshida-bags-japan": { Component: PorterClient, key: "porterYoshida" },
+  "resident-evil-30th-anniversary-exhibition-tokyo": { Component: BiohazardClient, key: "biohazard30" },
+  "agf-ikebukuro-animate-girls-festival-2026": { Component: AgfClient, key: "agf2026" },
 };
 
 export const BLOG_SLUGS = Object.keys(GUIDE_ROUTES);

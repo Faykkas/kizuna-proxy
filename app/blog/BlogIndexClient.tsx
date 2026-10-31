@@ -30,6 +30,8 @@ const GUIDES = [
   { slug: "buy-sanrio-japan", key: "sanrio", Icon: IconShoppingBag },
   { slug: "buy-onitsuka-tiger-japan", key: "onitsukaTiger", Icon: IconShoppingBag },
   { slug: "buy-porter-yoshida-bags-japan", key: "porterYoshida", Icon: IconShoppingBag },
+  { slug: "resident-evil-30th-anniversary-exhibition-tokyo", key: "biohazard30", Icon: IconEvent },
+  { slug: "agf-ikebukuro-animate-girls-festival-2026", key: "agf2026", Icon: IconEvent },
 ];
 
 export default function BlogIndexClient() {

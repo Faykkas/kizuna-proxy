@@ -36,8 +36,8 @@ const FAQS = [
     category: "Shipping",
     items: [
       { q: "Which countries do you ship to?", a: "We ship worldwide — USA, Canada, France, Germany, UK, Italy, Greece, Indonesia, South Korea, Australia and many more." },
-      { q: "What shipping methods do you use?", a: "We use Japan Post EMS, FedEx International, DHL Express, and Yamato TA-Q-BIN depending on your destination, order value, and preference." },
-      { q: "How long does shipping take?", a: "Typically 5-10 business days via EMS to Europe and North America. FedEx and DHL are faster at 2-4 days. We always provide tracking." },
+      { q: "What shipping methods do you use?", a: "We ship internationally with Japan Post EMS, and use Yamato TA-Q-BIN for shipping within Japan. Customers in the United States must pay import duties and taxes through Zonos before the parcel ships." },
+      { q: "How long does shipping take?", a: "Typically 5-10 business days via EMS to Europe and North America. We always provide tracking." },
       { q: "When are packages shipped?", a: "We consolidate and ship packages once a week from Tokyo. Orders placed early in the week ship the fastest." },
     ]
   },

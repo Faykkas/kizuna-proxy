@@ -164,7 +164,7 @@ export default function OrderForm({ mode, order }: { mode: "create" | "edit"; or
       <div className="av2-grid cols-2">
         <div className="av2-card" style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}>
           <h2>{t("Expédition")}</h2>
-          {field("shipping_method", t("Transporteur (EMS, DHL, Yamato…)"))}
+          {field("shipping_method", t("Transporteur (EMS, Yamato…)"))}
           {field("tracking_number", t("Numéro de suivi"))}
           {field("delivery_country", t("Pays de destination"))}
           {area("shipping_address", t("Adresse de livraison"), 3)}

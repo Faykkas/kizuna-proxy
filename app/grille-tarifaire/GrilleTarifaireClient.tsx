@@ -72,7 +72,7 @@ export default function GrilleTarifaireClient() {
 
             <div className="shipping-notice">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <span>{g.zonosNote || "US residents — customs duties are settled via Zonos. If you'd like to declare a lower value on the package, Kizuna can do so at your request, but takes no responsibility for any issue related to that declaration."}</span>
+              <span>{g.zonosNote || "US residents — import duties and taxes must be paid through Zonos before shipping. This step is mandatory: we cannot ship a US parcel until it is paid."}</span>
             </div>
 
             <div className="shipping-notice">

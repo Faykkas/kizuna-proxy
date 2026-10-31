@@ -31,6 +31,8 @@ const BLOG_ITEMS = [
   { href:"/blog/comitia-japan-guide",               Icon:IconBook,        label:"COMITIA Guide" },
   { href:"/blog/ichiban-kuji-japan-guide",          Icon:IconGacha,       label:"Ichiban Kuji" },
   { href:"/blog/tokyo-anime-events-guide",          Icon:IconEvent,       label:"Tokyo Anime Events" },
+  { href:"/blog/agf-ikebukuro-animate-girls-festival-2026", Icon:IconEvent, label:"AGF 2026 Ikebukuro" },
+  { href:"/blog/resident-evil-30th-anniversary-exhibition-tokyo", Icon:IconEvent, label:"Resident Evil 30th" },
   { href:"/blog/kpop-photocards-japan-guide",       Icon:IconMusicNote,   label:"K-pop Photocards" },
   { href:"/blog/japan-package-forwarding-guide",    Icon:IconTruck,       label:"Package Forwarding" },
   { href:"/blog/tokyo-discreet-pickup-service",     Icon:IconShoppingBag, label:"Discreet Pickup" },

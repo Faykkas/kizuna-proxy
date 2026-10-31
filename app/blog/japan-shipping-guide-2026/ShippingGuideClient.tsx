@@ -42,14 +42,6 @@ export default function ShippingGuideClient({ locale } = {}) {
           ))}
         </ul>
 
-        <h2>{g.h4}</h2>
-        <p>{g.p5}</p>
-        <ul className="blog-list">
-          {g.list4.map((item, i) => (
-            <li key={i}><strong>{item.strong}</strong> {item.text}</li>
-          ))}
-        </ul>
-
         <h2>{g.h5}</h2>
         <p>{g.p6}</p>
         <hr className="blog-hr" />
