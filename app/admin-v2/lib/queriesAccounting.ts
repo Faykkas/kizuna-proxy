@@ -1,4 +1,5 @@
 import "server-only";
+import type { LedgerEntry } from "./mayuko";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { fetchAll, type EntityRow } from "./queries";
 import type { Expense, ReceiptLink } from "./accounting";
@@ -27,4 +28,20 @@ export async function loadEntitiesSafe(sb: SupabaseClient): Promise<EntityRow[]>
   const { data, error } = await sb.from("business_entities").select("id,name,notes,active_from,active_to").order("name");
   if (error) return [];
   return (data ?? []) as EntityRow[];
+}
+
+const LEDGER_TABLE_MISSING = new Set(["42P01", "PGRST205"]);
+
+/** Registre « À rembourser à Mayuko » : mouvements saisis à la main. `available: false` tant que le SQL 20261101130000 n'est pas appliqué. */
+export async function loadMayukoLedgerSafe(sb: SupabaseClient): Promise<{ available: boolean; rows: LedgerEntry[] }> {
+  const { data, error } = await sb
+    .from("mayuko_ledger")
+    .select("id,entry_date,kind,amount_jpy,note")
+    .order("entry_date", { ascending: false })
+    .order("id", { ascending: false });
+  if (error) {
+    if (LEDGER_TABLE_MISSING.has(error.code ?? "") || /mayuko_ledger/.test(error.message)) return { available: false, rows: [] };
+    throw new Error(error.message);
+  }
+  return { available: true, rows: (data ?? []) as LedgerEntry[] };
 }

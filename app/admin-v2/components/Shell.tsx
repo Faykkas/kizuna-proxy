@@ -35,6 +35,7 @@ const ITEMS = [
   { href: `${BASE}/liens-de-paiement`, label: "Liens de paiement", icon: "links" },
   { href: `${BASE}/boutique`, label: "Boutique", icon: "shop" },
   { href: `${BASE}/comptabilite`, label: "Comptabilité", icon: "accounting" },
+  { href: `${BASE}/remboursements`, label: "À rembourser à Mayuko", icon: "accounting" },
   { href: `${BASE}/galerie`, label: "Galerie", icon: "content" },
   { href: `${BASE}/actualites`, label: "Actualités", icon: "content" },
   { href: `${BASE}/bandeau`, label: "Bandeau d'annonce", icon: "content" },

@@ -4,7 +4,8 @@ import { createServerSupabase } from "../lib/supabase-server";
 import { getL } from "../lib/lang-server";
 import { computeCommissions, currentMonthJst, lastMonths } from "../lib/commissions";
 import { countNewRequests, countPendingLinks, loadOrdersForStats, loadPaidLinks } from "../lib/queries";
-import { loadEntitiesSafe } from "../lib/queriesAccounting";
+import { loadEntitiesSafe, loadMayukoLedgerSafe } from "../lib/queriesAccounting";
+import { FALLBACK_START, balance, repayableOrders } from "../lib/mayuko";
 import { entityOn } from "../lib/accounting";
 import { MONTHLY_GOAL_JPY, NEXT_GOAL_JPY, BASE } from "../lib/config";
 import { formatJPY, percentOf } from "../lib/money";
@@ -20,7 +21,7 @@ export async function generateMetadata() {
 
 export default async function DashboardPage() {
   // Les lectures démarrent tout de suite, en même temps que la vérification d'accès (la RLS protège les données quoi qu'il arrive).
-  const dataP = createServerSupabase().then((sb) => Promise.all([loadOrdersForStats(sb), loadPaidLinks(sb), countPendingLinks(sb), countNewRequests(sb).catch(() => 0), loadEntitiesSafe(sb).catch(() => [])]));
+  const dataP = createServerSupabase().then((sb) => Promise.all([loadOrdersForStats(sb), loadPaidLinks(sb), countPendingLinks(sb), countNewRequests(sb).catch(() => 0), loadEntitiesSafe(sb).catch(() => []), loadMayukoLedgerSafe(sb).catch(() => ({ available: false, rows: [] }))]));
   dataP.catch(() => {});
   const access = await requireAccess();
   const L = await getL();
@@ -38,8 +39,8 @@ export default async function DashboardPage() {
 
   let data;
   try {
-    const [orders, links, pendingLinks, newRequests, entities] = await dataP;
-    data = { orders, links, pendingLinks, newRequests, entities };
+    const [orders, links, pendingLinks, newRequests, entities, ledger] = await dataP;
+    data = { orders, links, pendingLinks, newRequests, entities, ledger };
   } catch (e) {
     return (
       <>
@@ -49,7 +50,7 @@ export default async function DashboardPage() {
     );
   }
 
-  const { orders, links, pendingLinks, newRequests, entities } = data;
+  const { orders, links, pendingLinks, newRequests, entities, ledger } = data;
   const report = computeCommissions(orders, links);
   const byMonth = new Map(report.months.map((m) => [m.month, m]));
   const now = byMonth.get(month);
@@ -77,6 +78,12 @@ export default async function DashboardPage() {
         : t("{name} depuis le {d}", { name: e.name, d: L.date(e.active_from) });
     return { name: e.name, label, total };
   });
+
+  // Ce qui reste à rembourser à Mayuko (achats avancés depuis la reprise − remboursements), si le registre est activé.
+  const mayukoSince = entities.find((e) => e.name === "Samuel")?.active_from ?? FALLBACK_START;
+  const mayukoDue = ledger.available
+    ? balance(repayableOrders(orders, mayukoSince).reduce((sum, o) => sum + Math.round(o.item_price_jpy ?? 0), 0), ledger.rows).due
+    : null;
 
   // Commandes actives = ni livrées ni annulées, avec le détail par statut.
   // Les « commission package » sont des gains, pas des commandes : jamais comptées ici.
@@ -233,6 +240,12 @@ export default async function DashboardPage() {
               <Link href={`${BASE}/commandes?statut=Action+Required`}>{t("Action requise")}</Link>
               <span className="av2-num">{actionRequired}</span>
             </li>
+            {mayukoDue != null ? (
+              <li>
+                <Link href={`${BASE}/remboursements`}>{t("À rembourser à Mayuko")}</Link>
+                <span className="av2-num">{formatJPY(mayukoDue)}</span>
+              </li>
+            ) : null}
             <li>
               <span>
                 {t("Livraison à payer")}
