@@ -271,3 +271,30 @@ html[data-xmas] .footer-bottom::before { content: "❄ ❅ ❆"; display: block;
 .shipping-card { flex: 1 1 280px; max-width: 400px; border: 1px solid var(--border); border-radius: var(--v3-radius); box-shadow: var(--v3-hard); background: var(--surface); }
 .shipping-note { justify-content: center; text-align: center; border-radius: 12px; }
 @media (max-width: 540px) { .shipping-card { max-width: none; } }
+
+/* ── Cartes : espacées, arrondies et centrées sur toutes les pages (avant : cases collées par un filet de 1px) ── */
+.services-grid, .reviews-cards-grid, .hiw-steps, .why-grid-v2, .blog-grid, .pricing-formula-grid, .pricing-custom-grid, .tarif-cards:not([style]), .news-grid {
+  --g: 1.1rem; --cols: 3;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: var(--g);
+  background: none; border: 0; border-radius: 0; overflow: visible;
+}
+.pricing-formula-grid, .tarif-cards:not([style]) { --cols: 2; }
+.hiw-steps-4 { --cols: 4; }
+.news-grid { --cols: 1; }
+.services-grid > *, .reviews-cards-grid > *, .hiw-steps > *, .why-grid-v2 > *, .blog-grid > *, .pricing-formula-grid > *, .pricing-custom-grid > *, .tarif-cards:not([style]) > *, .news-grid > * {
+  flex: 0 1 calc((100% - (var(--cols) - 1) * var(--g)) / var(--cols)); min-width: 0; box-sizing: border-box;
+  border: 1px solid var(--border); border-radius: var(--v3-radius); box-shadow: var(--v3-hard); background-color: var(--surface);
+}
+/* grille de produits de la boutique : même style de carte, colonnes automatiques conservées */
+.tarif-cards[style] { gap: 1rem; background: none; border: 0; }
+.tarif-cards[style] > * { border: 1px solid var(--border); border-radius: var(--v3-radius); box-shadow: var(--v3-hard); background-color: var(--surface); }
+.hiw-step::after { display: none; }
+@media (max-width: 900px) {
+  .services-grid, .reviews-cards-grid, .hiw-steps, .why-grid-v2, .blog-grid, .pricing-custom-grid { --cols: 2; }
+}
+@media (max-width: 620px) {
+  .services-grid, .reviews-cards-grid, .hiw-steps, .why-grid-v2, .blog-grid, .pricing-formula-grid, .pricing-custom-grid, .tarif-cards:not([style]) { --cols: 1; }
+}
+
+/* ── Typographie unifiée : les anciens titres en serif (Cormorant) passent en Outfit, comme le reste du site ── */
+html[lang] { --font-cormorant: var(--font-outfit), var(--font-inter), system-ui, sans-serif; }
