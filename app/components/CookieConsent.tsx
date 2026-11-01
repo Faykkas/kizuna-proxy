@@ -2,8 +2,8 @@
 "use client";
 // app/components/CookieConsent.tsx
 //
-// Trustpilot's invite script sets third-party cookies and can identify a
-// visitor across sessions, so it only loads after explicit consent. Vercel
+// Trustpilot's invite script and the Google Ads tag set third-party cookies and can
+// identify a visitor across sessions, so they only load after explicit consent. Vercel
 // Analytics stays unconditional — it's first-party, cookie-free and doesn't
 // fingerprint visitors, which is why it's treated as "necessary" here rather
 // than gated behind this banner.
@@ -15,7 +15,9 @@
 import { useEffect, useState } from "react";
 import { useLanguage } from "../lib/language";
 
-const CONSENT_KEY = "kizuna-cookie-consent";
+// v2 : le consentement a été redemandé quand la balise Google Ads a été ajoutée (l'ancien « accepté » ne couvrait que Trustpilot).
+const CONSENT_KEY = "kizuna-cookie-consent-v2";
+const GOOGLE_ADS_ID = "AW-18550874446";
 const REOPEN_EVENT = "kizuna-open-cookie-prefs";
 
 function loadOptionalScripts() {
@@ -30,17 +32,29 @@ function loadOptionalScripts() {
     tp('register', '08lU7DhAN84FqIu4');
   `;
   document.body.appendChild(tp);
+
+  // Google Ads (balise gtag.js) : mesure des annonces et remarketing, uniquement après consentement.
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () {
+    window.dataLayer.push(arguments);
+  };
+  const g = document.createElement("script");
+  g.async = true;
+  g.src = "https://www.googletagmanager.com/gtag/js?id=" + GOOGLE_ADS_ID;
+  document.head.appendChild(g);
+  window.gtag("js", new Date());
+  window.gtag("config", GOOGLE_ADS_ID);
 }
 
 const COPY = {
   en: {
-    text: "We use an optional Trustpilot cookie to improve your experience. Necessary cookies for sign-in and language always apply.",
+    text: "We use optional cookies (Trustpilot reviews and Google Ads measurement) to improve your experience. Necessary cookies for sign-in and language always apply.",
     learnMore: "Learn more",
     necessary: "Necessary only",
     accept: "Accept all",
   },
   fr: {
-    text: "Nous utilisons un cookie optionnel Trustpilot pour améliorer votre expérience. Les cookies nécessaires à la connexion et à la langue restent toujours actifs.",
+    text: "Nous utilisons des cookies optionnels (avis Trustpilot et mesure des annonces Google Ads) pour améliorer votre expérience. Les cookies nécessaires à la connexion et à la langue restent toujours actifs.",
     learnMore: "En savoir plus",
     necessary: "Nécessaires uniquement",
     accept: "Tout accepter",
