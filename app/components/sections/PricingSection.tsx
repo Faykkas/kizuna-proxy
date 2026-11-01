@@ -93,6 +93,7 @@ export default function PricingSection({ t }: { t: any }) {
                   <div className="carrier-badge yamato">ヤマト</div>
                   <div className="carrier-name">{t.shipping?.yamato || "Yamato Transport (TA-Q-BIN)"}</div>
                 </div>
+                <p className="shipping-desc">{t.shipping?.yamatoDesc || "Used for shipping within Japan. Known for careful handling."}</p>
               </div>
             </div>
             <p className="shipping-note">

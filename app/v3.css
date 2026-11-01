@@ -264,3 +264,10 @@ html[data-xmas] .v3-hero-form .mini-req { border-color: rgba(255, 210, 120, .45)
 html[data-xmas] .v3-badge-live { border-color: rgba(255, 150, 120, .6); color: #ffb3a1; background: rgba(255, 80, 96, .12); }
 html[data-xmas] .v3-badge-live::before { background: #ff5060; box-shadow: 0 0 10px #ff5060; }
 html[data-xmas] .footer-bottom::before { content: "❄ ❅ ❆"; display: block; text-align: center; letter-spacing: .6em; color: rgba(240, 237, 247, .35); margin-bottom: .6rem; }
+
+/* ── Partenaires de livraison : cartes centrées (2 transporteurs), plus de grille à 4 colonnes à moitié vide ── */
+.shipping-title { justify-content: center; }
+.shipping-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.1rem; background: none; border: 0; }
+.shipping-card { flex: 1 1 280px; max-width: 400px; border: 1px solid var(--border); border-radius: var(--v3-radius); box-shadow: var(--v3-hard); background: var(--surface); }
+.shipping-note { justify-content: center; text-align: center; border-radius: 12px; }
+@media (max-width: 540px) { .shipping-card { max-width: none; } }
