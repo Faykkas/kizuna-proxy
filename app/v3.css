@@ -298,3 +298,132 @@ html[data-xmas] .footer-bottom::before { content: "❄ ❅ ❆"; display: block;
 
 /* ── Typographie unifiée : les anciens titres en serif (Cormorant) passent en Outfit, comme le reste du site ── */
 html[lang] { --font-cormorant: var(--font-outfit), var(--font-inter), system-ui, sans-serif; }
+
+/* ═══ Page Tarifs et réservation : cartes de prix, panneaux, FAQ ═══════════════════════════════════════════ */
+.pg-intro { padding-bottom: 0; }
+.pg-lead { max-width: 46rem; margin: 0 auto 1.4rem; text-align: center; font-size: 1.08rem; line-height: 1.75; color: var(--warm); }
+.pg-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: .55rem; margin-bottom: .5rem; }
+.pg-nav a { padding: .45rem .9rem; border: 1px solid var(--border); border-radius: 999px; font-size: .86rem; font-weight: 600; color: var(--warm); background: var(--surface); transition: border-color .2s, color .2s, transform .15s; }
+.pg-nav a:hover { border-color: var(--red); color: var(--red); transform: translateY(-1px); }
+.pg-section { scroll-margin-top: 90px; }
+
+.pg-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.2rem; }
+.pg-card { flex: 1 1 340px; max-width: 520px; display: flex; flex-direction: column; gap: .5rem; padding: 1.7rem; border: 1px solid var(--border); border-radius: var(--v3-radius); background: var(--surface); box-shadow: var(--v3-hard); }
+.pg-card-featured { border-color: var(--border-gold); box-shadow: var(--v3-hard), var(--v3-glow); }
+.pg-card h3 { margin: 0; font-size: 1.2rem; }
+.pg-price { font-family: var(--font-head); font-size: clamp(2rem, 4vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; color: var(--red); }
+.pg-from { display: block; font-family: var(--font-body); font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--warm); margin-bottom: .1rem; }
+.pg-sub { margin: 0; color: var(--ink); font-weight: 600; font-size: .98rem; }
+.pg-body { display: flex; flex-direction: column; gap: .75rem; flex: 1; margin-top: .4rem; }
+.pg-body p, .pg-panel p, .pg-banner p { margin: 0; font-size: .96rem; line-height: 1.7; color: var(--warm); font-weight: 400; }
+.pg-body strong, .pg-panel strong { color: var(--ink); }
+.pg-cta { align-self: flex-start; margin-top: .9rem; }
+.pg-links { font-size: .92rem; }
+.pg-links a, .pg-small a { color: var(--red); font-weight: 600; }
+.pg-table { list-style: none; margin: 0; padding: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.pg-table li { display: flex; justify-content: space-between; gap: 1rem; padding: .7rem 1rem; font-size: .95rem; color: var(--warm); }
+.pg-table li + li { border-top: 1px solid var(--border); }
+.pg-table strong { color: var(--ink); white-space: nowrap; }
+.pg-example { padding: .9rem 1.1rem; border-left: 3px solid var(--red); border-radius: 0 10px 10px 0; background: rgba(168, 224, 74, .07); }
+.pg-example strong { display: block; margin-bottom: .3rem; color: var(--ink); font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; }
+.pg-example ul, .pg-list { margin: 0; padding-left: 1.15rem; display: flex; flex-direction: column; gap: .35rem; font-size: .95rem; line-height: 1.6; color: var(--warm); }
+
+.pg-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1.2rem; margin-top: 1.4rem; }
+.pg-panel { padding: 1.4rem 1.5rem; border: 1px solid var(--border); border-radius: var(--v3-radius); background: var(--surface); display: flex; flex-direction: column; gap: .6rem; }
+.pg-panel h3 { margin: 0; font-size: 1.08rem; }
+.pg-panel-warn { border-color: rgba(255, 150, 120, .45); }
+.pg-panel blockquote { margin: 0; padding: .7rem 1rem; border-left: 3px solid rgba(255, 150, 120, .7); border-radius: 0 10px 10px 0; background: rgba(255, 80, 96, .08); color: var(--ink); font-style: italic; }
+.pg-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; margin-top: 1.5rem; }
+
+.pg-banner { display: flex; align-items: center; justify-content: center; text-align: center; padding: 2.2rem 1.6rem; border: 1px solid var(--border-gold); border-radius: 20px; background: radial-gradient(520px 240px at 50% 0%, rgba(168, 224, 74, .12), transparent 70%), var(--surface); box-shadow: var(--v3-hard); }
+.pg-banner > div { max-width: 44rem; display: flex; flex-direction: column; gap: .7rem; align-items: center; }
+.pg-banner h2 { margin: 0; font-size: clamp(1.5rem, 3vw, 2rem); }
+
+.pg-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: .7rem; }
+.pg-chips li { padding: .6rem 1rem; border: 1px solid rgba(255, 150, 120, .45); border-radius: 12px; background: rgba(255, 80, 96, .08); color: var(--ink); font-size: .95rem; }
+.pg-small { margin: 1rem auto 0; max-width: 42rem; text-align: center; font-size: .92rem; line-height: 1.65; color: var(--warm); }
+
+.pg-terms { list-style: none; margin: 0 auto; padding: 0; max-width: 46rem; border: 1px solid var(--border); border-radius: var(--v3-radius); background: var(--surface); }
+.pg-terms li { position: relative; padding: .85rem 1.2rem .85rem 2.6rem; font-size: .96rem; line-height: 1.6; color: var(--warm); }
+.pg-terms li + li { border-top: 1px solid var(--border); }
+.pg-terms li::before { content: ""; position: absolute; left: 1.1rem; top: 1.25rem; width: 8px; height: 8px; border-radius: 2px; background: var(--red); }
+
+.pg-faq { max-width: 46rem; margin: 0 auto; display: flex; flex-direction: column; gap: .7rem; }
+.pg-faq details { border: 1px solid var(--border); border-radius: 12px; background: var(--surface); padding: 0 1.2rem; }
+.pg-faq summary { padding: 1rem 0; cursor: pointer; font-weight: 650; color: var(--ink); list-style: none; display: flex; justify-content: space-between; gap: 1rem; }
+.pg-faq summary::-webkit-details-marker { display: none; }
+.pg-faq summary::after { content: "+"; color: var(--red); font-size: 1.3rem; line-height: 1; }
+.pg-faq details[open] summary::after { content: "−"; }
+.pg-faq details p { margin: 0 0 1.1rem; font-size: .96rem; line-height: 1.7; color: var(--warm); }
+
+.pg-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.1rem; }
+.pg-steps li { padding: 1.4rem; border: 1px solid var(--border); border-radius: var(--v3-radius); background: var(--surface); box-shadow: var(--v3-hard); }
+.pg-step-num { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; margin-bottom: .8rem; border-radius: 10px; background: var(--red); color: var(--px-bg); font-family: var(--font-head); font-weight: 700; }
+.pg-steps h3 { margin: 0 0 .4rem; font-size: 1.05rem; }
+.pg-steps p { margin: 0; font-size: .94rem; line-height: 1.65; color: var(--warm); }
+@media (max-width: 620px) { .pg-card { flex-basis: 100%; padding: 1.4rem; } .pg-table li { flex-direction: column; gap: .15rem; } .pg-cta { align-self: stretch; text-align: center; justify-content: center; } }
+
+/* ═══ Page Tarifs, version illustrée : icônes, récapitulatif, monnaie locale ═════════════════════════════════ */
+.pg-ico { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 46px; height: 46px; border-radius: 14px; border: 1px solid var(--border-gold); background: linear-gradient(145deg, rgba(168, 224, 74, .2), rgba(168, 224, 74, .05)); color: var(--red); }
+.pg-ico-sm { width: 34px; height: 34px; border-radius: 10px; }
+.pg-ico-lg { width: 64px; height: 64px; border-radius: 20px; margin-bottom: .3rem; }
+.pg-ico svg { display: block; }
+
+.pg-nav a { display: inline-flex; align-items: center; gap: .4rem; }
+.pg-nav a svg { opacity: .85; }
+
+.pg-cur { display: flex; flex-direction: column; align-items: center; gap: .4rem; margin: 0 auto 1.4rem; }
+.pg-cur-row { display: inline-flex; align-items: center; gap: .6rem; padding: .45rem .6rem .45rem 1rem; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); color: var(--warm); font-size: .9rem; font-weight: 600; max-width: 100%; }
+.pg-cur-row svg { color: var(--red); flex: none; }
+.pg-cur-row select { max-width: 15rem; padding: .4rem .7rem; border: 1px solid var(--border); border-radius: 999px; background: var(--px-bg); color: var(--ink); font: inherit; font-size: .9rem; cursor: pointer; }
+.pg-cur-row select:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.pg-cur-note { margin: 0; max-width: 34rem; text-align: center; font-size: .82rem; line-height: 1.5; color: var(--warm); }
+
+.pg-local { font-size: .92rem; font-weight: 600; color: var(--warm); }
+.pg-table .pg-local { display: block; font-size: .78rem; font-weight: 500; font-style: normal; text-align: right; }
+
+.pg-glance { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: .9rem; }
+.pg-tile { display: flex; align-items: center; gap: .9rem; padding: 1rem 1.1rem; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); transition: transform .18s, border-color .18s, box-shadow .18s; }
+.pg-tile:hover { transform: translateY(-3px); border-color: var(--border-gold); box-shadow: var(--v3-glow); }
+.pg-tile-text { display: flex; flex-direction: column; gap: .12rem; min-width: 0; }
+.pg-tile-label { font-size: .84rem; line-height: 1.35; color: var(--warm); }
+.pg-tile strong { font-family: var(--font-head); font-size: 1.12rem; color: var(--ink); line-height: 1.25; }
+
+.pg-card { position: relative; overflow: hidden; }
+.pg-card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 3px; background: linear-gradient(90deg, var(--red), rgba(168, 224, 74, 0)); }
+.pg-card-featured::before { height: 4px; background: linear-gradient(90deg, var(--red), #7dd3fc, var(--red)); }
+.pg-card-head, .pg-panel-head { display: flex; align-items: center; gap: .8rem; }
+.pg-card-head h3 { font-size: 1.15rem; line-height: 1.25; }
+.pg-panel-head h3 { font-size: 1.05rem; line-height: 1.3; }
+.pg-price { margin-top: .5rem; }
+
+.pg-list { list-style: none; padding-left: 0; }
+.pg-list li { position: relative; padding-left: 1.5rem; }
+.pg-list li::before { content: ""; position: absolute; left: .15rem; top: .42em; width: .5rem; height: .85rem; border: solid var(--red); border-width: 0 2px 2px 0; transform: rotate(40deg) scale(.8); }
+
+.pg-note { display: flex; align-items: center; gap: .8rem; max-width: 46rem; margin: 1.2rem auto 0; padding: .9rem 1.1rem; border: 1px dashed var(--border-gold); border-radius: 14px; background: rgba(168, 224, 74, .06); color: var(--ink); font-size: .95rem; line-height: 1.55; }
+
+.pg-banner > div > .pg-ico { margin-inline: auto; }
+.pg-free { display: inline-block; padding: .3rem 1rem; border-radius: 999px; background: var(--red); color: var(--px-bg); font-family: var(--font-head); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; font-size: .85rem; }
+
+.pg-chips li { display: inline-flex; align-items: center; gap: .5rem; }
+.pg-chips li svg { color: #ff9a86; flex: none; }
+
+.pg-policy { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.1rem; margin-bottom: 2.4rem; }
+.pg-policy-item { display: flex; flex-direction: column; gap: .55rem; padding: 1.4rem; border: 1px solid var(--border-gold); border-radius: var(--v3-radius); background: radial-gradient(320px 160px at 0% 0%, rgba(168, 224, 74, .12), transparent 70%), var(--surface); box-shadow: var(--v3-hard); }
+.pg-policy-item h3 { margin: .25rem 0 0; font-size: 1.05rem; }
+.pg-policy-item p { margin: 0; font-size: .94rem; line-height: 1.65; color: var(--warm); }
+.pg-terms-head { margin-bottom: 1.2rem; }
+
+.pg-faq details { transition: border-color .2s, background .2s; }
+.pg-faq details[open] { border-color: var(--border-gold); }
+.pg-faq summary:hover { color: var(--red); }
+
+@media (max-width: 620px) { .pg-glance { grid-template-columns: 1fr; } .pg-cur-row { flex-wrap: wrap; justify-content: center; border-radius: 18px; padding: .6rem 1rem; } .pg-cur-row select { max-width: 100%; } }
+
+/* Tarifs : titres de section centrés comme les cartes, récapitulatif centré */
+.pg-section .sec-head, .pg-terms-head { display: flex; flex-direction: column; align-items: center; text-align: center; margin-inline: auto; }
+.pg-section .sec-head .desc { max-width: 46rem; margin-inline: auto; }
+.pg-glance { display: flex; flex-wrap: wrap; justify-content: center; }
+.pg-tile { flex: 1 1 250px; max-width: 310px; }
+@media (max-width: 620px) { .pg-tile { max-width: none; flex-basis: 100%; } }

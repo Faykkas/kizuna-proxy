@@ -36,7 +36,7 @@ export default function ServicesClient() {
         </header>
         <ServicesSection t={t} />
         <div className="wrap" style={{textAlign:"center",marginBottom:"3rem",fontSize:".82rem"}}>
-          Visiting stores in person? See our <a href="/tokyo-in-store-personal-shopper">Tokyo in-store shopper</a> page for details.
+          Visiting stores in person? See our <a href="/tokyo-in-store-personal-shopper">Tokyo in-store shopper</a> page for details. Planning a trip? We also offer <a href="/reservation-assistance">hotel &amp; restaurant reservation assistance</a>, and all service fees are listed on our <a href="/pricing">pricing page</a>.
         </div>
       </main>
       <SiteFooter t={t} />

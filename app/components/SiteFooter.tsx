@@ -30,6 +30,7 @@ export default function SiteFooter({ t }: { t: any }) {
 <a href="/good-to-know" className="footer-link">{t.serviceRules?.label || "Good to know"}</a>
 <a href="/reviews" className="footer-link">{t.footerNav?.reviews || "Reviews"}</a>
             <a href="/pricing" className="footer-link">{t.nav.pricing}</a>
+            <a href="/reservation-assistance" className="footer-link">Reservation Assistance</a>
             <a href="/faq" className="footer-link">FAQ</a>
             <a href="/events" className="footer-link" style={{ display: "flex", alignItems: "center", gap: ".4rem" }}>
               <IconEvent size={13} /> {t.footerNav?.events || "Tokyo Events"}
