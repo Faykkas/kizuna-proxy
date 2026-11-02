@@ -5,8 +5,11 @@ import Image from "next/image";
 import { IconInstagram, IconTiktok } from "./ui";
 import { IconEvent } from "./pixel/PixelIcons";
 import { reopenCookiePreferences } from "./CookieConsent";
+import { useLanguage } from "../lib/language";
+import { couponsCopy } from "../coupons/couponsCopy";
 
 export default function SiteFooter({ t }: { t: any }) {
+  const { lang } = useLanguage();
   return (
       <footer>
         <div className="footer-grid">
@@ -31,6 +34,7 @@ export default function SiteFooter({ t }: { t: any }) {
 <a href="/reviews" className="footer-link">{t.footerNav?.reviews || "Reviews"}</a>
             <a href="/pricing" className="footer-link">{t.nav.pricing}</a>
             <a href="/reservation-assistance" className="footer-link">Reservation Assistance</a>
+            <a href="/coupons" className="footer-link">{couponsCopy(lang).nav}</a>
             <a href="/faq" className="footer-link">FAQ</a>
             <a href="/events" className="footer-link" style={{ display: "flex", alignItems: "center", gap: ".4rem" }}>
               <IconEvent size={13} /> {t.footerNav?.events || "Tokyo Events"}

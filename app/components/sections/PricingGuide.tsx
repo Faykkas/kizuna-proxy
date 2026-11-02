@@ -10,6 +10,7 @@ import ShippingPartners from "./ShippingPartners";
 import CurrencyPicker from "../CurrencyPicker";
 import { Icon } from "../PricingIcons";
 import { pricingCopy } from "../../pricing/pricingCopy";
+import { couponsCopy } from "../../coupons/couponsCopy";
 import { useLang } from "../useSiteState";
 import { useCurrency } from "../../lib/useCurrency";
 import { hasYen } from "../../lib/currency";
@@ -94,6 +95,7 @@ export default function PricingGuide({ t }: { t: any }) {
       <section className="section-sm pg-intro">
         <div className="wrap">
           <p className="pg-lead">{c.lead}</p>
+          <a className="pg-coupon-callout" href="/coupons"><Icon name="tag" size={18} />{couponsCopy(lang).callout}</a>
           <CurrencyPicker cur={cur} copy={c.cur} lang={lang} />
           <nav className="pg-nav" aria-label={c.overview.title}>
             {NAV.map(([id, icon], i) => <a key={id} href={`#${id}`}><Icon name={icon} size={15} />{c.nav[i]}</a>)}
