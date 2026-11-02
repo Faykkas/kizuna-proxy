@@ -46,6 +46,22 @@ const en = {
   loading: "Loading your payment…",
   loadError: "Could not load this payment link.",
   language: "Language",
+  couponToggle: "Have a coupon code?",
+  couponCode: "Coupon code",
+  couponEmail: "Your email",
+  couponEmailPh: "The email of your order",
+  couponApply: "Apply",
+  couponRemove: "Remove",
+  couponApplied: "Coupon {code} applied: {amount} off our service fee.",
+  couponLine: "Coupon {code}",
+  couponNote: "One use per customer. The discount applies to our service fee.",
+  couponErrInvalid: "This code isn't valid.",
+  couponErrExpired: "This coupon has expired.",
+  couponErrUsed: "This coupon has already been used.",
+  couponErrSoldOut: "This coupon is no longer available.",
+  couponErrNotEligible: "Coupons only apply to the service fee of item orders.",
+  couponErrEmail: "Enter your email address to check this coupon.",
+  couponErrGeneric: "Something went wrong. Please try again.",
 };
 
 export type PayCopy = typeof en;
@@ -94,6 +110,22 @@ const fr: PayCopy = {
   loading: "Chargement de votre paiement…",
   loadError: "Impossible de charger ce lien de paiement.",
   language: "Langue",
+  couponToggle: "Vous avez un code promo ?",
+  couponCode: "Code promo",
+  couponEmail: "Votre email",
+  couponEmailPh: "L'email de votre commande",
+  couponApply: "Appliquer",
+  couponRemove: "Retirer",
+  couponApplied: "Coupon {code} appliqué : {amount} de moins sur nos frais de service.",
+  couponLine: "Coupon {code}",
+  couponNote: "Une seule utilisation par client. La remise s'applique à nos frais de service.",
+  couponErrInvalid: "Ce code n'est pas valide.",
+  couponErrExpired: "Ce coupon a expiré.",
+  couponErrUsed: "Ce coupon a déjà été utilisé.",
+  couponErrSoldOut: "Ce coupon n'est plus disponible.",
+  couponErrNotEligible: "Les coupons s'appliquent seulement aux frais de service des commandes d'articles.",
+  couponErrEmail: "Saisissez votre adresse email pour vérifier ce coupon.",
+  couponErrGeneric: "Une erreur est survenue. Veuillez réessayer.",
 };
 
 const ja: PayCopy = {
@@ -140,6 +172,22 @@ const ja: PayCopy = {
   loading: "お支払い情報を読み込み中…",
   loadError: "このお支払いリンクを読み込めませんでした。",
   language: "言語",
+  couponToggle: "クーポンコードをお持ちですか？",
+  couponCode: "クーポンコード",
+  couponEmail: "メールアドレス",
+  couponEmailPh: "ご注文時のメールアドレス",
+  couponApply: "適用",
+  couponRemove: "取り消す",
+  couponApplied: "クーポン {code} を適用しました：代行手数料が {amount} 割引されます。",
+  couponLine: "クーポン {code}",
+  couponNote: "1お客様につき1回のみご利用いただけます。割引は当社の代行手数料に適用されます。",
+  couponErrInvalid: "このコードは無効です。",
+  couponErrExpired: "このクーポンは有効期限が切れています。",
+  couponErrUsed: "このクーポンはすでに使用されています。",
+  couponErrSoldOut: "このクーポンは現在ご利用いただけません。",
+  couponErrNotEligible: "クーポンは、商品のご注文の代行手数料にのみ適用されます。",
+  couponErrEmail: "このクーポンを確認するため、メールアドレスを入力してください。",
+  couponErrGeneric: "エラーが発生しました。もう一度お試しください。",
 };
 
 const es: PayCopy = {
@@ -186,6 +234,22 @@ const es: PayCopy = {
   loading: "Cargando tu pago…",
   loadError: "No se pudo cargar este enlace de pago.",
   language: "Idioma",
+  couponToggle: "¿Tienes un código de cupón?",
+  couponCode: "Código de cupón",
+  couponEmail: "Tu email",
+  couponEmailPh: "El email de tu pedido",
+  couponApply: "Aplicar",
+  couponRemove: "Quitar",
+  couponApplied: "Cupón {code} aplicado: {amount} menos en nuestra tarifa de servicio.",
+  couponLine: "Cupón {code}",
+  couponNote: "Un solo uso por cliente. El descuento se aplica a nuestra tarifa de servicio.",
+  couponErrInvalid: "Este código no es válido.",
+  couponErrExpired: "Este cupón ha caducado.",
+  couponErrUsed: "Este cupón ya se ha usado.",
+  couponErrSoldOut: "Este cupón ya no está disponible.",
+  couponErrNotEligible: "Los cupones solo se aplican a la tarifa de servicio de los pedidos de artículos.",
+  couponErrEmail: "Introduce tu email para comprobar este cupón.",
+  couponErrGeneric: "Algo salió mal. Inténtalo de nuevo.",
 };
 
 const it: PayCopy = {
@@ -232,6 +296,22 @@ const it: PayCopy = {
   loading: "Caricamento del pagamento…",
   loadError: "Impossibile caricare questo link di pagamento.",
   language: "Lingua",
+  couponToggle: "Hai un codice coupon?",
+  couponCode: "Codice coupon",
+  couponEmail: "La tua email",
+  couponEmailPh: "L'email del tuo ordine",
+  couponApply: "Applica",
+  couponRemove: "Rimuovi",
+  couponApplied: "Coupon {code} applicato: {amount} in meno sulla nostra tariffa di servizio.",
+  couponLine: "Coupon {code}",
+  couponNote: "Un solo utilizzo per cliente. Lo sconto si applica alla nostra tariffa di servizio.",
+  couponErrInvalid: "Questo codice non è valido.",
+  couponErrExpired: "Questo coupon è scaduto.",
+  couponErrUsed: "Questo coupon è già stato utilizzato.",
+  couponErrSoldOut: "Questo coupon non è più disponibile.",
+  couponErrNotEligible: "I coupon si applicano solo alla tariffa di servizio degli ordini di articoli.",
+  couponErrEmail: "Inserisci la tua email per verificare questo coupon.",
+  couponErrGeneric: "Qualcosa è andato storto. Riprova.",
 };
 
 const de: PayCopy = {
@@ -278,6 +358,22 @@ const de: PayCopy = {
   loading: "Ihre Zahlung wird geladen…",
   loadError: "Dieser Zahlungslink konnte nicht geladen werden.",
   language: "Sprache",
+  couponToggle: "Haben Sie einen Gutscheincode?",
+  couponCode: "Gutscheincode",
+  couponEmail: "Ihre E-Mail",
+  couponEmailPh: "Die E-Mail Ihrer Bestellung",
+  couponApply: "Einlösen",
+  couponRemove: "Entfernen",
+  couponApplied: "Gutschein {code} eingelöst: {amount} weniger auf unsere Servicegebühr.",
+  couponLine: "Gutschein {code}",
+  couponNote: "Einmal pro Kunde. Der Rabatt gilt für unsere Servicegebühr.",
+  couponErrInvalid: "Dieser Code ist ungültig.",
+  couponErrExpired: "Dieser Gutschein ist abgelaufen.",
+  couponErrUsed: "Dieser Gutschein wurde bereits verwendet.",
+  couponErrSoldOut: "Dieser Gutschein ist nicht mehr verfügbar.",
+  couponErrNotEligible: "Gutscheine gelten nur für die Servicegebühr von Artikelbestellungen.",
+  couponErrEmail: "Geben Sie Ihre E-Mail-Adresse ein, um diesen Gutschein zu prüfen.",
+  couponErrGeneric: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
 };
 
 const ko: PayCopy = {
@@ -324,6 +420,22 @@ const ko: PayCopy = {
   loading: "결제 정보를 불러오는 중…",
   loadError: "이 결제 링크를 불러올 수 없습니다.",
   language: "언어",
+  couponToggle: "쿠폰 코드가 있으신가요?",
+  couponCode: "쿠폰 코드",
+  couponEmail: "이메일",
+  couponEmailPh: "주문 시 사용한 이메일",
+  couponApply: "적용",
+  couponRemove: "취소",
+  couponApplied: "쿠폰 {code} 적용됨: 대행 수수료가 {amount} 할인됩니다.",
+  couponLine: "쿠폰 {code}",
+  couponNote: "고객당 1회만 사용할 수 있습니다. 할인은 대행 수수료에 적용됩니다.",
+  couponErrInvalid: "유효하지 않은 코드입니다.",
+  couponErrExpired: "만료된 쿠폰입니다.",
+  couponErrUsed: "이미 사용된 쿠폰입니다.",
+  couponErrSoldOut: "더 이상 사용할 수 없는 쿠폰입니다.",
+  couponErrNotEligible: "쿠폰은 상품 주문의 대행 수수료에만 적용됩니다.",
+  couponErrEmail: "이 쿠폰을 확인하려면 이메일 주소를 입력해 주세요.",
+  couponErrGeneric: "문제가 발생했습니다. 다시 시도해 주세요.",
 };
 
 const zh: PayCopy = {
@@ -370,6 +482,22 @@ const zh: PayCopy = {
   loading: "正在加载您的付款信息…",
   loadError: "无法加载此付款链接。",
   language: "语言",
+  couponToggle: "有优惠券代码吗？",
+  couponCode: "优惠券代码",
+  couponEmail: "您的邮箱",
+  couponEmailPh: "下单时使用的邮箱",
+  couponApply: "使用",
+  couponRemove: "移除",
+  couponApplied: "已使用优惠券 {code}：服务费减免 {amount}。",
+  couponLine: "优惠券 {code}",
+  couponNote: "每位客户限用一次。优惠适用于我们的服务费。",
+  couponErrInvalid: "此代码无效。",
+  couponErrExpired: "此优惠券已过期。",
+  couponErrUsed: "此优惠券已被使用。",
+  couponErrSoldOut: "此优惠券已不可用。",
+  couponErrNotEligible: "优惠券仅适用于商品订单的服务费。",
+  couponErrEmail: "请输入您的邮箱地址以验证此优惠券。",
+  couponErrGeneric: "出了点问题，请重试。",
 };
 
 const pt: PayCopy = {
@@ -416,6 +544,22 @@ const pt: PayCopy = {
   loading: "Carregando seu pagamento…",
   loadError: "Não foi possível carregar este link de pagamento.",
   language: "Idioma",
+  couponToggle: "Tem um código de cupom?",
+  couponCode: "Código do cupom",
+  couponEmail: "Seu e-mail",
+  couponEmailPh: "O e-mail do seu pedido",
+  couponApply: "Aplicar",
+  couponRemove: "Remover",
+  couponApplied: "Cupom {code} aplicado: {amount} de desconto na nossa tarifa de serviço.",
+  couponLine: "Cupom {code}",
+  couponNote: "Um uso por cliente. O desconto se aplica à nossa tarifa de serviço.",
+  couponErrInvalid: "Este código não é válido.",
+  couponErrExpired: "Este cupom expirou.",
+  couponErrUsed: "Este cupom já foi usado.",
+  couponErrSoldOut: "Este cupom não está mais disponível.",
+  couponErrNotEligible: "Os cupons só se aplicam à tarifa de serviço de pedidos de itens.",
+  couponErrEmail: "Informe seu e-mail para verificar este cupom.",
+  couponErrGeneric: "Algo deu errado. Tente novamente.",
 };
 
 const id: PayCopy = {
@@ -462,6 +606,22 @@ const id: PayCopy = {
   loading: "Memuat pembayaran Anda…",
   loadError: "Tautan pembayaran ini tidak dapat dimuat.",
   language: "Bahasa",
+  couponToggle: "Punya kode kupon?",
+  couponCode: "Kode kupon",
+  couponEmail: "Email kamu",
+  couponEmailPh: "Email yang dipakai untuk pesananmu",
+  couponApply: "Terapkan",
+  couponRemove: "Hapus",
+  couponApplied: "Kupon {code} diterapkan: potongan {amount} pada biaya layanan kami.",
+  couponLine: "Kupon {code}",
+  couponNote: "Satu kali pakai per pelanggan. Potongan berlaku untuk biaya layanan kami.",
+  couponErrInvalid: "Kode ini tidak valid.",
+  couponErrExpired: "Kupon ini sudah kedaluwarsa.",
+  couponErrUsed: "Kupon ini sudah pernah digunakan.",
+  couponErrSoldOut: "Kupon ini sudah tidak tersedia.",
+  couponErrNotEligible: "Kupon hanya berlaku untuk biaya layanan pesanan barang.",
+  couponErrEmail: "Masukkan alamat emailmu untuk memeriksa kupon ini.",
+  couponErrGeneric: "Terjadi kesalahan. Silakan coba lagi.",
 };
 
 const vi: PayCopy = {
@@ -508,6 +668,22 @@ const vi: PayCopy = {
   loading: "Đang tải thông tin thanh toán…",
   loadError: "Không thể tải liên kết thanh toán này.",
   language: "Ngôn ngữ",
+  couponToggle: "Bạn có mã giảm giá?",
+  couponCode: "Mã giảm giá",
+  couponEmail: "Email của bạn",
+  couponEmailPh: "Email dùng cho đơn hàng",
+  couponApply: "Áp dụng",
+  couponRemove: "Xóa",
+  couponApplied: "Đã áp dụng mã {code}: giảm {amount} phí dịch vụ của chúng tôi.",
+  couponLine: "Mã {code}",
+  couponNote: "Mỗi khách hàng chỉ dùng một lần. Mức giảm áp dụng cho phí dịch vụ của chúng tôi.",
+  couponErrInvalid: "Mã này không hợp lệ.",
+  couponErrExpired: "Mã giảm giá này đã hết hạn.",
+  couponErrUsed: "Mã giảm giá này đã được sử dụng.",
+  couponErrSoldOut: "Mã giảm giá này không còn khả dụng.",
+  couponErrNotEligible: "Mã giảm giá chỉ áp dụng cho phí dịch vụ của đơn mua hàng.",
+  couponErrEmail: "Hãy nhập email của bạn để kiểm tra mã này.",
+  couponErrGeneric: "Đã xảy ra lỗi. Vui lòng thử lại.",
 };
 
 const nl: PayCopy = {
@@ -554,11 +730,27 @@ const nl: PayCopy = {
   loading: "Je betaling wordt geladen…",
   loadError: "Deze betaallink kon niet worden geladen.",
   language: "Taal",
+  couponToggle: "Heb je een couponcode?",
+  couponCode: "Couponcode",
+  couponEmail: "Je e-mail",
+  couponEmailPh: "Het e-mailadres van je bestelling",
+  couponApply: "Toepassen",
+  couponRemove: "Verwijderen",
+  couponApplied: "Coupon {code} toegepast: {amount} korting op onze servicekosten.",
+  couponLine: "Coupon {code}",
+  couponNote: "Eén keer per klant. De korting geldt voor onze servicekosten.",
+  couponErrInvalid: "Deze code is niet geldig.",
+  couponErrExpired: "Deze coupon is verlopen.",
+  couponErrUsed: "Deze coupon is al gebruikt.",
+  couponErrSoldOut: "Deze coupon is niet meer beschikbaar.",
+  couponErrNotEligible: "Coupons gelden alleen voor de servicekosten van artikelbestellingen.",
+  couponErrEmail: "Vul je e-mailadres in om deze coupon te controleren.",
+  couponErrGeneric: "Er ging iets mis. Probeer het opnieuw.",
 };
 
 export const PAY_COPY: Record<string, PayCopy> = { en, fr, ja, es, it, de, ko, zh, pt, id, vi, nl };
 
-/** Remplace {name} (et seulement {name}) dans un texte. */
-export function fill(text: string, vars: { name?: string }): string {
-  return text.replace("{name}", vars.name ?? "");
+/** Remplace {name}, {code}, {amount}… dans un texte (variables absentes : vide). */
+export function fill(text: string, vars: Record<string, string | undefined>): string {
+  return text.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
 }

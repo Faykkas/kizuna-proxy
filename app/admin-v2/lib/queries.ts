@@ -264,6 +264,9 @@ export type PaymentLinkRow = {
   is_shipping: boolean | null;
   /** Taxes Zonos facturées avec la livraison (absent tant que le SQL 20261101120000 n'est pas appliqué). */
   tax_amount_jpy?: number | null;
+  /** Coupon appliqué par le client (absent tant que le SQL 20261102120000 n'est pas appliqué). */
+  coupon_code?: string | null;
+  coupon_discount_jpy?: number | null;
 };
 
 const LINK_COLUMNS = "id,label,client_name,client_email,status,created_at,paid_at,amount_jpy,item_amount_jpy,fee_amount_jpy,paypal_fee_jpy,paypal_real_fee_jpy,is_shipping";
@@ -274,6 +277,12 @@ export async function loadPaymentLinks(sb: Sb) {
       (from, to) =>
         sb.from("payment_links").select(columns).order("created_at", { ascending: false }).range(from, to) as unknown as PromiseLike<{ data: PaymentLinkRow[] | null; error: { message: string } | null }>,
     );
+  try {
+    return await read(`${LINK_COLUMNS},tax_amount_jpy,coupon_code,coupon_discount_jpy`);
+  } catch (e) {
+    // Colonnes du coupon pas encore créées : on lit sans elles (avec les taxes si elles existent).
+    if (!/coupon_code|coupon_discount_jpy|tax_amount_jpy/.test((e as Error).message)) throw e;
+  }
   try {
     return await read(`${LINK_COLUMNS},tax_amount_jpy`);
   } catch (e) {

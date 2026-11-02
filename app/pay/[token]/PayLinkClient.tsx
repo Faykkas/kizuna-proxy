@@ -42,7 +42,10 @@ function buildRows(link, c) {
     const d = describeItem(link.label);
     rows.push({ key: "item", name: d.title, href: d.href, price: link.itemAmountJpy });
   }
-  if (link.feeAmountJpy > 0) rows.push({ key: "fee", name: link.isShipping ? c.shipping : c.serviceFee, price: link.feeAmountJpy, fee: true });
+  const discount = link.couponDiscountJpy > 0 && link.couponCode ? link.couponDiscountJpy : 0;
+  // Le lien stocke déjà les frais remisés : on affiche les frais d'origine, puis le coupon en négatif.
+  if (link.feeAmountJpy + discount > 0) rows.push({ key: "fee", name: link.isShipping ? c.shipping : c.serviceFee, price: link.feeAmountJpy + discount, fee: true });
+  if (discount > 0) rows.push({ key: "coupon", name: fill(c.couponLine, { code: link.couponCode }), price: -discount, fee: true, coupon: true });
   if (link.taxAmountJpy > 0) rows.push({ key: "tax", name: c.tax, price: link.taxAmountJpy, fee: true });
   if (link.paypalFeeAmountJpy > 0) {
     rows.push({ key: "pp", name: c.paypalFee, price: link.paypalFeeAmountJpy, fee: true });
@@ -71,7 +74,7 @@ function Summary({ link, c, name, paid }) {
       <h2 className="pp-h2">{c.summary}</h2>
       <ul className="pp-lines">
         {rows.map(r => (
-          <li key={r.key} className={`pp-line${r.fee ? " is-fee" : ""}`}>
+          <li key={r.key} className={`pp-line${r.fee ? " is-fee" : ""}${r.coupon ? " is-coupon" : ""}`}>
             <div className="pp-line-name">
               {r.name}
               {r.href && (
@@ -80,7 +83,7 @@ function Summary({ link, c, name, paid }) {
                 </span>
               )}
             </div>
-            <div className="pp-line-price">{formatJPY(r.price)}</div>
+            <div className="pp-line-price">{r.price < 0 ? "−" + formatJPY(-r.price) : formatJPY(r.price)}</div>
           </li>
         ))}
       </ul>
@@ -104,6 +107,38 @@ export default function PayLinkClient({ token }) {
   const [phone, setPhone] = useState("");
   const [wantsAltAddress, setWantsAltAddress] = useState(false);
   const [altAddress, setAltAddress] = useState("");
+  const [couponOpen, setCouponOpen] = useState(false);
+  const [couponCode, setCouponCode] = useState("");
+  const [couponEmail, setCouponEmail] = useState("");
+  const [couponBusy, setCouponBusy] = useState(false);
+  const [couponErr, setCouponErr] = useState("");
+  const [needEmail, setNeedEmail] = useState(false);
+
+  async function couponCall(action) {
+    setCouponBusy(true);
+    setCouponErr("");
+    try {
+      const res = await fetch("/api/payment-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, token, code: couponCode, email: couponEmail }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        const map = { invalid: "couponErrInvalid", expired: "couponErrExpired", used: "couponErrUsed", sold_out: "couponErrSoldOut", not_eligible: "couponErrNotEligible", email_required: "couponErrEmail" };
+        setCouponErr(c[map[data.reason] || "couponErrGeneric"]);
+        // Un code nominatif ne marche qu'avec l'email de son client : on laisse corriger l'email.
+        if (data.reason === "invalid" || data.reason === "email_required") setNeedEmail(true);
+        return;
+      }
+      setLink(data);
+      if (action === "coupon-remove") { setCouponCode(""); setCouponOpen(false); }
+    } catch {
+      setCouponErr(c.couponErrGeneric);
+    } finally {
+      setCouponBusy(false);
+    }
+  }
 
   useEffect(() => {
     fetch("/api/payment-link", {
@@ -208,9 +243,38 @@ export default function PayLinkClient({ token }) {
                   <textarea className="pp-textarea" value={altAddress} onChange={e => setAltAddress(e.target.value)} placeholder={c.altPh} rows={3} aria-label={c.altAddress} />
                 )}
 
+                {link.couponAllowed || link.couponCode ? (
+                  <div className="pp-coupon">
+                    {link.couponCode ? (
+                      <div className="pp-coupon-applied" role="status">
+                        <span>{Icon.check} {fill(c.couponApplied, { code: link.couponCode, amount: formatJPY(link.couponDiscountJpy) })}</span>
+                        <button type="button" className="pp-coupon-link" onClick={() => couponCall("coupon-remove")} disabled={couponBusy}>{c.couponRemove}</button>
+                      </div>
+                    ) : !couponOpen ? (
+                      <button type="button" className="pp-coupon-link" onClick={() => setCouponOpen(true)}>{c.couponToggle}</button>
+                    ) : (
+                      <form className="pp-coupon-form" onSubmit={e => { e.preventDefault(); if (couponCode.trim()) couponCall("coupon-apply"); }}>
+                        <label htmlFor="pp-coupon-code">{c.couponCode}</label>
+                        <div className="pp-coupon-row">
+                          <input id="pp-coupon-code" className="pp-input" value={couponCode} onChange={e => setCouponCode(e.target.value.toUpperCase())} autoComplete="off" autoCapitalize="characters" spellCheck={false} maxLength={40} />
+                          <button type="submit" className="pp-coupon-btn" disabled={couponBusy || !couponCode.trim()}>{c.couponApply}</button>
+                        </div>
+                        {!link.knowsEmail || needEmail ? (
+                          <>
+                            <label htmlFor="pp-coupon-email">{c.couponEmail}</label>
+                            <input id="pp-coupon-email" className="pp-input" type="email" required={!link.knowsEmail} autoComplete="email" value={couponEmail} onChange={e => setCouponEmail(e.target.value)} placeholder={c.couponEmailPh} />
+                          </>
+                        ) : null}
+                        <p className="pp-hint">{c.couponNote}</p>
+                        {couponErr ? <p className="pp-coupon-err" role="alert">{couponErr}</p> : null}
+                      </form>
+                    )}
+                  </div>
+                ) : null}
+
                 <div className="pp-paybox">
                   {phone.trim() ? (
-                    <PayLinkButton token={token} phone={phone.trim()} shippingAddress={wantsAltAddress ? altAddress.trim() : ""} onPaid={() => setPaidJustNow(true)} />
+                    <PayLinkButton key={link.amountJpy} token={token} phone={phone.trim()} shippingAddress={wantsAltAddress ? altAddress.trim() : ""} onPaid={() => setPaidJustNow(true)} />
                   ) : (
                     <p className="pp-hint">{c.needPhone}</p>
                   )}

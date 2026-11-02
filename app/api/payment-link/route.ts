@@ -19,6 +19,7 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { resolveOpenOrder } from "../../lib/paymentOrderTarget";
+import { checkCoupon, normalizeCode, normalizeEmail, priceWithCoupon } from "../../lib/coupons";
 
 const PAYPAL_BASE =
   process.env.PAYPAL_ENV === "live"
@@ -74,6 +75,29 @@ function formatShippingAddress(shipping) {
   return lines.length ? lines.join(" — ") : null;
 }
 
+// Ce que la page de paiement a le droit de voir d'un lien (jamais l'email, le téléphone ni le nom complet).
+function publicLink(link) {
+  // Prénom seulement (pour « Demande de paiement pour Anna ») : jamais le nom complet ni l'email.
+  const clientFirstName = String(link.client_name || "").trim().split(/\s+/)[0].slice(0, 40) || null;
+  return {
+    clientFirstName,
+    label: link.label,
+    amountJpy: link.amount_jpy,
+    itemAmountJpy: link.item_amount_jpy,
+    feeAmountJpy: link.fee_amount_jpy,
+    paypalFeeAmountJpy: link.paypal_fee_jpy,
+    taxAmountJpy: link.tax_amount_jpy || 0,
+    itemsBreakdown: link.items_breakdown || null,
+    isShipping: !!link.is_shipping,
+    status: link.status,
+    couponCode: link.coupon_code || null,
+    couponDiscountJpy: link.coupon_discount_jpy || 0,
+    // Le coupon ne s'applique qu'aux frais de service d'un lien « articles » non payé.
+    couponAllowed: !link.is_shipping && link.status === "pending" && (link.fee_before_coupon_jpy ?? link.fee_amount_jpy ?? 0) > 0,
+    knowsEmail: !!link.client_email,
+  };
+}
+
 async function paypalToken() {
   const auth = Buffer.from(
     `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_SECRET}`
@@ -113,20 +137,95 @@ export async function POST(request) {
         .eq("id", token)
         .single();
       if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
-      // Prénom seulement (pour « Demande de paiement pour Anna ») : jamais le nom complet ni l'email.
-      const clientFirstName = String(link.client_name || "").trim().split(/\s+/)[0].slice(0, 40) || null;
-      return Response.json({
-        clientFirstName,
-        label: link.label,
-        amountJpy: link.amount_jpy,
-        itemAmountJpy: link.item_amount_jpy,
-        feeAmountJpy: link.fee_amount_jpy,
-        paypalFeeAmountJpy: link.paypal_fee_jpy,
-        taxAmountJpy: link.tax_amount_jpy || 0,
-        itemsBreakdown: link.items_breakdown || null,
-        isShipping: !!link.is_shipping,
-        status: link.status,
-      });
+      return Response.json(publicLink(link));
+    }
+
+    // ── Coupon : le client applique (ou retire) un code sur son lien, avant de payer ──
+    // Le serveur recalcule les frais de service, les frais PayPal et le total ; rien ne vient du navigateur sauf le code.
+    // Un coupon = une seule utilisation par client (son email) : voir lib/coupons.ts et le SQL 20261102120000_coupons.sql.
+    if (action === "coupon-apply" || action === "coupon-remove") {
+      const { data: link } = await admin.from("payment_links").select("*").eq("id", token).single();
+      if (!link) return Response.json({ error: "Link not found" }, { status: 404 });
+      if (link.status !== "pending") return Response.json({ error: "This link is no longer payable", reason: "not_eligible" }, { status: 400 });
+
+      // Libère la réservation en cours de CE lien (changement de coupon, ou retrait).
+      const releaseOwn = () => admin.from("coupon_redemptions").update({ status: "released" }).eq("payment_link_id", token).eq("status", "reserved");
+      const original = link.fee_before_coupon_jpy ?? link.fee_amount_jpy ?? 0;
+      const item = link.item_amount_jpy || 0;
+      const tax = link.tax_amount_jpy || 0;
+
+      const restore = async () => {
+        const priced = priceWithCoupon({ itemAmount: item, fee: original, tax, couponAmount: 0 });
+        const { error } = await admin
+          .from("payment_links")
+          .update({ fee_amount_jpy: priced.fee, paypal_fee_jpy: priced.paypal, amount_jpy: priced.total, coupon_code: null, coupon_discount_jpy: 0, fee_before_coupon_jpy: null })
+          .eq("id", token);
+        return error;
+      };
+
+      if (action === "coupon-remove") {
+        if (!link.coupon_code) return Response.json(publicLink(link));
+        await releaseOwn();
+        const err = await restore();
+        if (err) return Response.json({ error: "Could not remove the coupon", reason: "error" }, { status: 500 });
+        const { data: fresh } = await admin.from("payment_links").select("*").eq("id", token).single();
+        return Response.json(publicLink(fresh));
+      }
+
+      const code = normalizeCode(body.code);
+      const email = normalizeEmail(body.email || link.client_email);
+      if (!code) return Response.json({ error: "Enter a code", reason: "invalid" }, { status: 400 });
+
+      const { data: coupon, error: couponErr } = await admin.from("coupons").select("*").eq("code", code).maybeSingle();
+      if (couponErr) {
+        // Table absente : le SQL des coupons n'est pas encore exécuté.
+        console.error("coupon lookup failed:", couponErr.message);
+        return Response.json({ error: "Coupons are not available yet", reason: "invalid" }, { status: 400 });
+      }
+
+      // Réservations oubliées depuis plus de 48 h : elles ne bloquent plus le client (lien jamais payé).
+      if (coupon && email) {
+        const stale = new Date(Date.now() - 48 * 3600 * 1000).toISOString();
+        await admin.from("coupon_redemptions").update({ status: "released" }).eq("coupon_id", coupon.id).eq("client_email", email).eq("status", "reserved").lt("created_at", stale);
+      }
+
+      let usedByThisEmail = false;
+      let totalUsed = 0;
+      if (coupon) {
+        const { count: total } = await admin.from("coupon_redemptions").select("id", { count: "exact", head: true }).eq("coupon_id", coupon.id).neq("payment_link_id", token).in("status", ["reserved", "used"]);
+        totalUsed = total || 0;
+        if (email) {
+          const { count: mine } = await admin.from("coupon_redemptions").select("id", { count: "exact", head: true }).eq("coupon_id", coupon.id).eq("client_email", email).neq("payment_link_id", token).in("status", ["reserved", "used"]);
+          usedByThisEmail = (mine || 0) > 0;
+        }
+      }
+
+      const verdict = checkCoupon({ coupon, email, now: new Date(), usedByThisEmail, totalUsed, link: { isShipping: !!link.is_shipping, feeBeforeCoupon: original } });
+      if (!verdict.ok) {
+        return Response.json({ error: "Coupon refused", reason: verdict.reason }, { status: 400 });
+      }
+
+      const priced = priceWithCoupon({ itemAmount: item, fee: original, tax, couponAmount: coupon.amount_jpy });
+      if (priced.discount <= 0) return Response.json({ error: "Coupon refused", reason: "not_eligible" }, { status: 400 });
+
+      // Le nouveau coupon est valide : on libère celui que ce lien avait déjà (changement de code), puis on réserve.
+      if (link.coupon_code) await releaseOwn();
+      const { error: insErr } = await admin.from("coupon_redemptions").insert({ coupon_id: coupon.id, client_email: email, payment_link_id: token, discount_jpy: priced.discount, status: "reserved" });
+      if (insErr) {
+        // Index unique : un autre appel simultané a déjà réservé ce coupon pour ce client.
+        return Response.json({ error: "Coupon refused", reason: "used" }, { status: 400 });
+      }
+      const { error: updErr } = await admin
+        .from("payment_links")
+        .update({ fee_before_coupon_jpy: original, coupon_code: coupon.code, coupon_discount_jpy: priced.discount, fee_amount_jpy: priced.fee, paypal_fee_jpy: priced.paypal, amount_jpy: priced.total })
+        .eq("id", token);
+      if (updErr) {
+        await releaseOwn();
+        console.error("coupon apply failed:", updErr.message);
+        return Response.json({ error: "Coupons are not available yet", reason: "invalid" }, { status: 400 });
+      }
+      const { data: fresh } = await admin.from("payment_links").select("*").eq("id", token).single();
+      return Response.json(publicLink(fresh));
     }
 
     // ── Create the PayPal order ──
@@ -235,6 +334,8 @@ export async function POST(request) {
       // flat 6% we charge the client. The gap between the two is tracked so
       // the admin can see the real margin without changing what's billed.
       const captureInfo = data.purchase_units?.[0]?.payments?.captures?.[0];
+      const capturedValue = captureInfo?.amount?.value != null ? Math.round(Number(captureInfo.amount.value)) : null;
+      const amountMismatch = capturedValue != null && capturedValue !== Math.round(Number(link.amount_jpy));
       const realFeeValue = captureInfo?.seller_receivable_breakdown?.paypal_fee?.value;
       const realPaypalFeeJpy = realFeeValue != null ? Math.round(Number(realFeeValue)) : null;
 
@@ -262,6 +363,11 @@ export async function POST(request) {
         })
         .eq("id", token);
 
+      // Coupon appliqué sur ce lien : la réservation devient une utilisation (ignoré si la table n'existe pas encore).
+      if (link.coupon_code) {
+        await admin.from("coupon_redemptions").update({ status: "used", used_at: new Date().toISOString(), payer_email: payerEmail }).eq("payment_link_id", token).eq("status", "reserved");
+      }
+
       // Turn the paid link into a regular order, same pipeline as everything
       // else in the admin — only ever runs here, on the transition into
       // "paid", so links that were already paid before this existed are
@@ -274,9 +380,11 @@ export async function POST(request) {
       const shippingAddressForOrder = link.shipping_address || paypalShippingAddress;
       const email = payerEmail || link.client_email || null;
       const isShippingPayment = !!link.is_shipping;
-      const feeNote = isShippingPayment
+      const couponNote = link.coupon_code ? ` (coupon ${link.coupon_code} −¥${link.coupon_discount_jpy || 0})` : "";
+      const mismatchNote = amountMismatch ? ` ⚠ PayPal captured ¥${capturedValue}, link total was ¥${link.amount_jpy}: check this payment.` : "";
+      const feeNote = (isShippingPayment
         ? `shipping ¥${link.fee_amount_jpy || 0}, PayPal fee ¥${link.paypal_fee_jpy || 0}`
-        : `item ¥${link.item_amount_jpy || 0}, Kizuna fee ¥${link.fee_amount_jpy || 0}, PayPal fee ¥${link.paypal_fee_jpy || 0}`;
+        : `item ¥${link.item_amount_jpy || 0}, Kizuna fee ¥${link.fee_amount_jpy || 0}${couponNote}, PayPal fee ¥${link.paypal_fee_jpy || 0}`) + mismatchNote;
 
       // A customer who already has an order still in progress gets this
       // purchase folded into it instead of starting a second one — but only

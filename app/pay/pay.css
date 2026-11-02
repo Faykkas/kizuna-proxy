@@ -95,3 +95,19 @@
 .pp-skel { border-radius: 8px; background: linear-gradient(90deg, rgba(255,255,255,.04), rgba(255,255,255,.1), rgba(255,255,255,.04)); background-size: 200% 100%; animation: pp-shimmer 1.3s linear infinite; }
 @keyframes pp-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 @media (prefers-reduced-motion: reduce) { .pp-skel { animation: none; } }
+
+/* Coupon : champ de saisie, coupon appliqué, ligne de remise dans le détail */
+.pp-coupon { margin-top: 1.1rem; }
+.pp-coupon-link { background: none; border: 0; padding: 0.2rem 0; color: var(--gold-l); font: inherit; font-size: 0.88rem; font-weight: 600; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.pp-coupon-link:disabled { opacity: 0.6; cursor: default; }
+.pp-coupon-form { display: flex; flex-direction: column; gap: 0.45rem; padding: 0.9rem 1rem; border: 1px dashed var(--border-gold); border-radius: 12px; }
+.pp-coupon-form label { font-size: 0.8rem; font-weight: 600; color: var(--warm); }
+.pp-coupon-row { display: flex; gap: 0.5rem; }
+.pp-coupon-row .pp-input { flex: 1; min-width: 0; text-transform: uppercase; letter-spacing: 0.06em; }
+.pp-coupon-btn { flex: none; padding: 0 1.1rem; border-radius: 10px; border: 1px solid var(--border-gold); background: rgba(var(--red-rgb), 0.12); color: var(--ink); font: inherit; font-weight: 700; cursor: pointer; }
+.pp-coupon-btn:disabled { opacity: 0.5; cursor: default; }
+.pp-coupon-form .pp-hint { margin: 0.2rem 0 0; padding: 0; border: 0; font-size: 0.76rem; color: var(--mist); }
+.pp-coupon-err { margin: 0; font-size: 0.84rem; color: #ff9a86; }
+.pp-coupon-applied { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; padding: 0.8rem 1rem; border: 1px solid var(--border-gold); border-radius: 12px; background: rgba(var(--red-rgb), 0.08); font-size: 0.9rem; color: var(--ink); }
+.pp-coupon-applied > span { display: inline-flex; align-items: center; gap: 0.45rem; }
+.pp-line.is-coupon .pp-line-name, .pp-line.is-coupon .pp-line-price { color: var(--gold-l); font-weight: 600; }

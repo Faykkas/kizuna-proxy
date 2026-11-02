@@ -5,8 +5,10 @@ import { JA_CONTENT } from "./ja-content.ts";
 import { JA_ORDERS } from "./ja-orders.ts";
 import { JA_FINANCE } from "./ja-finance.ts";
 import { JA_MAYUKO } from "./ja-mayuko.ts";
+import { JA_COUPONS } from "./ja-coupons.ts";
 
 export const JA: Record<string, string> = {
+  ...JA_COUPONS,
   ...JA_MAYUKO,
   ...JA_CONTENT,
   ...JA_ORDERS,
