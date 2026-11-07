@@ -42,7 +42,7 @@ export async function createCoupon(input: CouponInput): Promise<Result> {
   if (spec.personal && !email) return { ok: false, error: "Ce type de coupon est nominatif : indiquez l'email du client." };
   if (email && !isValidEmail(email)) return { ok: false, error: "Adresse email invalide." };
 
-  // Coupon nominatif sans code saisi : code aléatoire. Coupon commun : le code est choisi par vous (ex. NOEL500).
+  // Coupon nominatif sans code saisi : code aléatoire. Coupon commun : le code est choisi par vous (ex. XMAS500).
   let code = normalizeCode(input.code);
   if (!code && spec.personal) code = generateCode();
   if (!isValidCode(code)) return { ok: false, error: "Le code doit faire 4 à 32 caractères : lettres, chiffres ou tiret." };

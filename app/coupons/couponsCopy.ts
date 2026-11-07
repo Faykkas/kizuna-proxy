@@ -2,7 +2,7 @@
 // Textes de la rubrique « Coupons » (/coupons), de l'encadré de la page Tarifs et de la une de l'accueil, en 12 langues.
 // Règles réelles (voir lib/coupons.ts) : la remise ne touche que les frais de service, jamais plus que ces frais ; un coupon =
 // une utilisation par client ; un seul coupon par paiement ; les coupons d'avis sont nominatifs (liés à l'email du client).
-// Le coupon de Noël est un code commun (NOEL500) : créez-le dans l'admin avec ce code exact.
+// Le coupon de Noël est un code commun (XMAS500) : créez-le dans l'admin avec ce code exact.
 // Les montants (¥500, ¥750) et le code doivent être identiques dans toutes les langues (testé dans couponsCopy.test.ts).
 
 export const COUPONS_COPY = {
@@ -10,7 +10,7 @@ export const COUPONS_COPY = {
     nav: "Coupons",
     hero: { bubble: "Up to ¥750 off", title: "Kizuna Proxy ", titleEm: "coupons", desc: "Save on our service fee with a Christmas code, or earn a personal coupon by sharing your honest review. Here is how it works." },
     cards: [
-      { tag: "Christmas", title: "Christmas coupon", amount: "¥500", text: "¥500 off our service fee on your Christmas order. Open to every customer, once per customer, for Christmas orders until December 5, 2026.", codeLabel: "Code", code: "NOEL500" },
+      { tag: "Christmas", title: "Christmas coupon", amount: "¥500", text: "¥500 off our service fee on your Christmas order. Open to every customer, once per customer, for Christmas orders until December 5, 2026.", codeLabel: "Code", code: "XMAS500" },
       { tag: "Trustpilot", title: "Trustpilot review coupon", amount: "¥500", text: "After your order, we invite you to review us on Trustpilot. Once your review is published, we email you a personal coupon of ¥500.", codeLabel: "", code: "" },
       { tag: "Reddit", title: "Reddit review coupon", amount: "¥500 · ¥750 with photos", text: "Post a review on r/internationalshopper, then email us the link to your post. We check it by hand and send you a personal coupon: ¥500, or ¥750 if your review includes photos of your order.", codeLabel: "", code: "" },
     ],
@@ -42,7 +42,7 @@ export const COUPONS_COPY = {
     nav: "Coupons",
     hero: { bubble: "Jusqu'à ¥750 de remise", title: "Les coupons ", titleEm: "Kizuna Proxy", desc: "Économisez sur nos frais de service avec un code de Noël, ou gagnez un coupon personnel en partageant votre avis sincère. Voici comment ça marche." },
     cards: [
-      { tag: "Noël", title: "Coupon de Noël", amount: "¥500", text: "¥500 de remise sur nos frais de service pour votre commande de Noël. Ouvert à tous les clients, une fois par client, pour les commandes de Noël jusqu'au 5 décembre 2026.", codeLabel: "Code", code: "NOEL500" },
+      { tag: "Noël", title: "Coupon de Noël", amount: "¥500", text: "¥500 de remise sur nos frais de service pour votre commande de Noël. Ouvert à tous les clients, une fois par client, pour les commandes de Noël jusqu'au 5 décembre 2026.", codeLabel: "Code", code: "XMAS500" },
       { tag: "Trustpilot", title: "Coupon pour un avis Trustpilot", amount: "¥500", text: "Après votre commande, nous vous invitons à nous laisser un avis sur Trustpilot. Dès que votre avis est publié, nous vous envoyons par email un coupon personnel de ¥500.", codeLabel: "", code: "" },
       { tag: "Reddit", title: "Coupon pour un avis Reddit", amount: "¥500 · ¥750 avec photos", text: "Publiez un avis sur r/internationalshopper, puis envoyez-nous par email le lien de votre publication. Nous la vérifions à la main et vous envoyons un coupon personnel : ¥500, ou ¥750 si votre avis comprend des photos de votre commande.", codeLabel: "", code: "" },
     ],
@@ -74,7 +74,7 @@ export const COUPONS_COPY = {
     nav: "クーポン",
     hero: { bubble: "最大¥750割引", title: "Kizuna Proxyの", titleEm: "クーポン", desc: "クリスマスコードで代行手数料がお得に。正直なレビューを投稿していただくと、専用クーポンもプレゼントします。ご利用方法はこちらです。" },
     cards: [
-      { tag: "クリスマス", title: "クリスマスクーポン", amount: "¥500", text: "クリスマスのご注文で、代行手数料が¥500割引になります。すべてのお客様が対象で、1お客様につき1回、2026年12月5日までのクリスマス注文でご利用いただけます。", codeLabel: "コード", code: "NOEL500" },
+      { tag: "クリスマス", title: "クリスマスクーポン", amount: "¥500", text: "クリスマスのご注文で、代行手数料が¥500割引になります。すべてのお客様が対象で、1お客様につき1回、2026年12月5日までのクリスマス注文でご利用いただけます。", codeLabel: "コード", code: "XMAS500" },
       { tag: "Trustpilot", title: "Trustpilotレビュークーポン", amount: "¥500", text: "ご注文後、Trustpilotでのレビューをお願いしています。レビューが公開されましたら、¥500の専用クーポンをメールでお送りします。", codeLabel: "", code: "" },
       { tag: "Reddit", title: "Redditレビュークーポン", amount: "¥500 · 写真付きは¥750", text: "r/internationalshopperにレビューを投稿し、投稿へのリンクをメールでお送りください。内容を手作業で確認のうえ、専用クーポンをお送りします。¥500、ご注文の写真付きのレビューなら¥750です。", codeLabel: "", code: "" },
     ],
@@ -106,7 +106,7 @@ export const COUPONS_COPY = {
     nav: "Cupones",
     hero: { bubble: "Hasta ¥750 de descuento", title: "Cupones de ", titleEm: "Kizuna Proxy", desc: "Ahorra en nuestra tarifa de servicio con un código de Navidad, o consigue un cupón personal compartiendo tu opinión sincera. Así funciona." },
     cards: [
-      { tag: "Navidad", title: "Cupón de Navidad", amount: "¥500", text: "¥500 de descuento en nuestra tarifa de servicio en tu pedido de Navidad. Abierto a todos los clientes, una vez por cliente, para pedidos de Navidad hasta el 5 de diciembre de 2026.", codeLabel: "Código", code: "NOEL500" },
+      { tag: "Navidad", title: "Cupón de Navidad", amount: "¥500", text: "¥500 de descuento en nuestra tarifa de servicio en tu pedido de Navidad. Abierto a todos los clientes, una vez por cliente, para pedidos de Navidad hasta el 5 de diciembre de 2026.", codeLabel: "Código", code: "XMAS500" },
       { tag: "Trustpilot", title: "Cupón por reseña en Trustpilot", amount: "¥500", text: "Tras tu pedido, te invitamos a dejarnos una reseña en Trustpilot. Cuando tu reseña esté publicada, te enviamos por email un cupón personal de ¥500.", codeLabel: "", code: "" },
       { tag: "Reddit", title: "Cupón por reseña en Reddit", amount: "¥500 · ¥750 con fotos", text: "Publica una reseña en r/internationalshopper y envíanos por email el enlace a tu publicación. La revisamos a mano y te enviamos un cupón personal: ¥500, o ¥750 si tu reseña incluye fotos de tu pedido.", codeLabel: "", code: "" },
     ],
@@ -138,7 +138,7 @@ export const COUPONS_COPY = {
     nav: "Coupon",
     hero: { bubble: "Fino a ¥750 di sconto", title: "I coupon di ", titleEm: "Kizuna Proxy", desc: "Risparmia sulla nostra tariffa di servizio con un codice di Natale, oppure ottieni un coupon personale condividendo la tua recensione sincera. Ecco come funziona." },
     cards: [
-      { tag: "Natale", title: "Coupon di Natale", amount: "¥500", text: "¥500 di sconto sulla nostra tariffa di servizio per il tuo ordine di Natale. Aperto a tutti i clienti, una volta per cliente, per gli ordini di Natale fino al 5 dicembre 2026.", codeLabel: "Codice", code: "NOEL500" },
+      { tag: "Natale", title: "Coupon di Natale", amount: "¥500", text: "¥500 di sconto sulla nostra tariffa di servizio per il tuo ordine di Natale. Aperto a tutti i clienti, una volta per cliente, per gli ordini di Natale fino al 5 dicembre 2026.", codeLabel: "Codice", code: "XMAS500" },
       { tag: "Trustpilot", title: "Coupon per una recensione su Trustpilot", amount: "¥500", text: "Dopo il tuo ordine ti invitiamo a lasciarci una recensione su Trustpilot. Quando la recensione sarà pubblicata, ti invieremo via email un coupon personale da ¥500.", codeLabel: "", code: "" },
       { tag: "Reddit", title: "Coupon per una recensione su Reddit", amount: "¥500 · ¥750 con foto", text: "Pubblica una recensione su r/internationalshopper e inviaci via email il link al tuo post. Lo controlliamo a mano e ti mandiamo un coupon personale: ¥500, oppure ¥750 se la recensione include foto del tuo ordine.", codeLabel: "", code: "" },
     ],
@@ -170,7 +170,7 @@ export const COUPONS_COPY = {
     nav: "Gutscheine",
     hero: { bubble: "Bis zu ¥750 Rabatt", title: "Die ", titleEm: "Kizuna Proxy Gutscheine", desc: "Spare bei unserer Servicegebühr mit einem Weihnachtscode oder verdiene dir einen persönlichen Gutschein mit deiner ehrlichen Bewertung. So funktioniert es." },
     cards: [
-      { tag: "Weihnachten", title: "Weihnachtsgutschein", amount: "¥500", text: "¥500 Rabatt auf unsere Servicegebühr bei deiner Weihnachtsbestellung. Für alle Kunden, einmal pro Kunde, für Weihnachtsbestellungen bis zum 5. Dezember 2026.", codeLabel: "Code", code: "NOEL500" },
+      { tag: "Weihnachten", title: "Weihnachtsgutschein", amount: "¥500", text: "¥500 Rabatt auf unsere Servicegebühr bei deiner Weihnachtsbestellung. Für alle Kunden, einmal pro Kunde, für Weihnachtsbestellungen bis zum 5. Dezember 2026.", codeLabel: "Code", code: "XMAS500" },
       { tag: "Trustpilot", title: "Gutschein für eine Trustpilot-Bewertung", amount: "¥500", text: "Nach deiner Bestellung laden wir dich ein, uns auf Trustpilot zu bewerten. Sobald deine Bewertung veröffentlicht ist, schicken wir dir per E-Mail einen persönlichen Gutschein über ¥500.", codeLabel: "", code: "" },
       { tag: "Reddit", title: "Gutschein für eine Reddit-Bewertung", amount: "¥500 · ¥750 mit Fotos", text: "Veröffentliche eine Bewertung auf r/internationalshopper und schick uns den Link zu deinem Beitrag per E-Mail. Wir prüfen ihn von Hand und senden dir einen persönlichen Gutschein: ¥500, oder ¥750, wenn deine Bewertung Fotos deiner Bestellung enthält.", codeLabel: "", code: "" },
     ],
@@ -202,7 +202,7 @@ export const COUPONS_COPY = {
     nav: "쿠폰",
     hero: { bubble: "최대 ¥750 할인", title: "Kizuna Proxy ", titleEm: "쿠폰", desc: "크리스마스 코드로 대행 수수료를 아끼고, 솔직한 후기를 남기면 개인 쿠폰도 받으세요. 이용 방법을 안내해 드립니다." },
     cards: [
-      { tag: "크리스마스", title: "크리스마스 쿠폰", amount: "¥500", text: "크리스마스 주문의 대행 수수료가 ¥500 할인됩니다. 모든 고객이 대상이며, 고객당 1회, 2026년 12월 5일까지의 크리스마스 주문에 사용할 수 있습니다.", codeLabel: "코드", code: "NOEL500" },
+      { tag: "크리스마스", title: "크리스마스 쿠폰", amount: "¥500", text: "크리스마스 주문의 대행 수수료가 ¥500 할인됩니다. 모든 고객이 대상이며, 고객당 1회, 2026년 12월 5일까지의 크리스마스 주문에 사용할 수 있습니다.", codeLabel: "코드", code: "XMAS500" },
       { tag: "Trustpilot", title: "Trustpilot 후기 쿠폰", amount: "¥500", text: "주문 후 Trustpilot에 후기를 남겨 달라고 안내해 드립니다. 후기가 게시되면 ¥500 개인 쿠폰을 이메일로 보내 드립니다.", codeLabel: "", code: "" },
       { tag: "Reddit", title: "Reddit 후기 쿠폰", amount: "¥500 · 사진 포함 ¥750", text: "r/internationalshopper에 후기를 올린 뒤 게시글 링크를 이메일로 보내 주세요. 직접 확인한 후 개인 쿠폰을 보내 드립니다. ¥500이며, 주문 사진이 포함된 후기는 ¥750입니다.", codeLabel: "", code: "" },
     ],
@@ -234,7 +234,7 @@ export const COUPONS_COPY = {
     nav: "优惠券",
     hero: { bubble: "最高减免 ¥750", title: "Kizuna Proxy ", titleEm: "优惠券", desc: "使用圣诞优惠码即可节省服务费，分享您的真实评价还能获得专属优惠券。使用方法如下。" },
     cards: [
-      { tag: "圣诞", title: "圣诞优惠券", amount: "¥500", text: "圣诞订单可减免 ¥500 服务费。所有客户均可使用，每位客户限用一次，适用于 2026 年 12 月 5 日前的圣诞订单。", codeLabel: "优惠码", code: "NOEL500" },
+      { tag: "圣诞", title: "圣诞优惠券", amount: "¥500", text: "圣诞订单可减免 ¥500 服务费。所有客户均可使用，每位客户限用一次，适用于 2026 年 12 月 5 日前的圣诞订单。", codeLabel: "优惠码", code: "XMAS500" },
       { tag: "Trustpilot", title: "Trustpilot 评价优惠券", amount: "¥500", text: "下单后，我们会邀请您在 Trustpilot 上评价我们。评价发布后，我们会通过邮件发送一张 ¥500 的专属优惠券。", codeLabel: "", code: "" },
       { tag: "Reddit", title: "Reddit 评价优惠券", amount: "¥500 · 附照片 ¥750", text: "在 r/internationalshopper 发布评价，然后把帖子链接发邮件给我们。我们会人工核实，并发送专属优惠券：¥500；如果评价中包含订单照片，则为 ¥750。", codeLabel: "", code: "" },
     ],
@@ -266,7 +266,7 @@ export const COUPONS_COPY = {
     nav: "Cupons",
     hero: { bubble: "Até ¥750 de desconto", title: "Cupons da ", titleEm: "Kizuna Proxy", desc: "Economize na nossa tarifa de serviço com um código de Natal, ou ganhe um cupom pessoal compartilhando sua avaliação sincera. Veja como funciona." },
     cards: [
-      { tag: "Natal", title: "Cupom de Natal", amount: "¥500", text: "¥500 de desconto na nossa tarifa de serviço no seu pedido de Natal. Aberto a todos os clientes, uma vez por cliente, para pedidos de Natal até 5 de dezembro de 2026.", codeLabel: "Código", code: "NOEL500" },
+      { tag: "Natal", title: "Cupom de Natal", amount: "¥500", text: "¥500 de desconto na nossa tarifa de serviço no seu pedido de Natal. Aberto a todos os clientes, uma vez por cliente, para pedidos de Natal até 5 de dezembro de 2026.", codeLabel: "Código", code: "XMAS500" },
       { tag: "Trustpilot", title: "Cupom por avaliação no Trustpilot", amount: "¥500", text: "Depois do seu pedido, convidamos você a nos avaliar no Trustpilot. Quando sua avaliação for publicada, enviamos por e-mail um cupom pessoal de ¥500.", codeLabel: "", code: "" },
       { tag: "Reddit", title: "Cupom por avaliação no Reddit", amount: "¥500 · ¥750 com fotos", text: "Publique uma avaliação em r/internationalshopper e envie por e-mail o link da sua publicação. Verificamos à mão e enviamos um cupom pessoal: ¥500, ou ¥750 se a avaliação incluir fotos do seu pedido.", codeLabel: "", code: "" },
     ],
@@ -298,7 +298,7 @@ export const COUPONS_COPY = {
     nav: "Kupon",
     hero: { bubble: "Diskon hingga ¥750", title: "Kupon ", titleEm: "Kizuna Proxy", desc: "Hemat biaya layanan kami dengan kode Natal, atau dapatkan kupon pribadi dengan membagikan ulasan jujurmu. Begini cara kerjanya." },
     cards: [
-      { tag: "Natal", title: "Kupon Natal", amount: "¥500", text: "Potongan ¥500 pada biaya layanan kami untuk pesanan Natalmu. Terbuka untuk semua pelanggan, satu kali per pelanggan, untuk pesanan Natal sampai 5 Desember 2026.", codeLabel: "Kode", code: "NOEL500" },
+      { tag: "Natal", title: "Kupon Natal", amount: "¥500", text: "Potongan ¥500 pada biaya layanan kami untuk pesanan Natalmu. Terbuka untuk semua pelanggan, satu kali per pelanggan, untuk pesanan Natal sampai 5 Desember 2026.", codeLabel: "Kode", code: "XMAS500" },
       { tag: "Trustpilot", title: "Kupon ulasan Trustpilot", amount: "¥500", text: "Setelah pesananmu, kami mengundangmu memberi ulasan di Trustpilot. Setelah ulasanmu terbit, kami kirim kupon pribadi senilai ¥500 lewat email.", codeLabel: "", code: "" },
       { tag: "Reddit", title: "Kupon ulasan Reddit", amount: "¥500 · ¥750 dengan foto", text: "Tulis ulasan di r/internationalshopper, lalu kirim tautan postinganmu lewat email. Kami memeriksanya secara manual dan mengirim kupon pribadi: ¥500, atau ¥750 jika ulasanmu menyertakan foto pesananmu.", codeLabel: "", code: "" },
     ],
@@ -330,7 +330,7 @@ export const COUPONS_COPY = {
     nav: "Mã giảm giá",
     hero: { bubble: "Giảm tới ¥750", title: "Mã giảm giá ", titleEm: "Kizuna Proxy", desc: "Tiết kiệm phí dịch vụ với mã Giáng sinh, hoặc nhận mã giảm giá riêng khi chia sẻ đánh giá chân thật của bạn. Cách hoạt động như sau." },
     cards: [
-      { tag: "Giáng sinh", title: "Mã giảm giá Giáng sinh", amount: "¥500", text: "Giảm ¥500 phí dịch vụ cho đơn Giáng sinh của bạn. Dành cho mọi khách hàng, mỗi khách một lần, cho các đơn Giáng sinh đến hết ngày 5 tháng 12 năm 2026.", codeLabel: "Mã", code: "NOEL500" },
+      { tag: "Giáng sinh", title: "Mã giảm giá Giáng sinh", amount: "¥500", text: "Giảm ¥500 phí dịch vụ cho đơn Giáng sinh của bạn. Dành cho mọi khách hàng, mỗi khách một lần, cho các đơn Giáng sinh đến hết ngày 5 tháng 12 năm 2026.", codeLabel: "Mã", code: "XMAS500" },
       { tag: "Trustpilot", title: "Mã giảm giá khi đánh giá trên Trustpilot", amount: "¥500", text: "Sau đơn hàng, chúng tôi mời bạn đánh giá chúng tôi trên Trustpilot. Khi đánh giá của bạn được đăng, chúng tôi gửi qua email một mã giảm giá riêng trị giá ¥500.", codeLabel: "", code: "" },
       { tag: "Reddit", title: "Mã giảm giá khi đánh giá trên Reddit", amount: "¥500 · ¥750 kèm ảnh", text: "Đăng đánh giá trên r/internationalshopper, rồi gửi email cho chúng tôi liên kết bài đăng. Chúng tôi kiểm tra thủ công và gửi mã giảm giá riêng: ¥500, hoặc ¥750 nếu đánh giá có kèm ảnh đơn hàng của bạn.", codeLabel: "", code: "" },
     ],
@@ -362,7 +362,7 @@ export const COUPONS_COPY = {
     nav: "Coupons",
     hero: { bubble: "Tot ¥750 korting", title: "De coupons van ", titleEm: "Kizuna Proxy", desc: "Bespaar op onze servicekosten met een kerstcode, of verdien een persoonlijke coupon door je eerlijke review te delen. Zo werkt het." },
     cards: [
-      { tag: "Kerst", title: "Kerstcoupon", amount: "¥500", text: "¥500 korting op onze servicekosten bij je kerstbestelling. Voor alle klanten, één keer per klant, voor kerstbestellingen tot 5 december 2026.", codeLabel: "Code", code: "NOEL500" },
+      { tag: "Kerst", title: "Kerstcoupon", amount: "¥500", text: "¥500 korting op onze servicekosten bij je kerstbestelling. Voor alle klanten, één keer per klant, voor kerstbestellingen tot 5 december 2026.", codeLabel: "Code", code: "XMAS500" },
       { tag: "Trustpilot", title: "Coupon voor een Trustpilot-review", amount: "¥500", text: "Na je bestelling nodigen we je uit om ons te beoordelen op Trustpilot. Zodra je review is gepubliceerd, mailen we je een persoonlijke coupon van ¥500.", codeLabel: "", code: "" },
       { tag: "Reddit", title: "Coupon voor een Reddit-review", amount: "¥500 · ¥750 met foto's", text: "Plaats een review op r/internationalshopper en mail ons de link naar je post. We controleren die met de hand en sturen je een persoonlijke coupon: ¥500, of ¥750 als je review foto's van je bestelling bevat.", codeLabel: "", code: "" },
     ],

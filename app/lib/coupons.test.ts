@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { checkCoupon, COUPON_KINDS, endOfDayTokyo, generateCode, isValidCode, normalizeCode, priceWithCoupon, type CouponRow } from "./coupons.ts";
 
-const base: CouponRow = { id: "c1", code: "NOEL500", kind: "christmas", amount_jpy: 500, customer_email: null, expires_at: null, max_total_uses: null, active: true };
+const base: CouponRow = { id: "c1", code: "XMAS500", kind: "christmas", amount_jpy: 500, customer_email: null, expires_at: null, max_total_uses: null, active: true };
 const now = new Date("2026-12-10T00:00:00Z");
 const ok = { email: "anna@example.com", now, usedByThisEmail: false, totalUsed: 0, link: { isShipping: false, feeBeforeCoupon: 2500 } };
 
@@ -16,11 +16,11 @@ test("montants conseillés : Noël 500, Trustpilot 500, Reddit 500, Reddit avec 
 });
 
 test("codes : saisie nettoyée (majuscules, sans espaces), validité, génération sans caractères ambigus", () => {
-  assert.equal(normalizeCode("  noel 500 "), "NOEL500");
+  assert.equal(normalizeCode("  xmas 500 "), "XMAS500");
   assert.equal(normalizeCode("kz-ab12_cd"), "KZ-AB12CD");
   assert.equal(normalizeCode("é<script>"), "SCRIPT");
   assert.equal(normalizeCode(null), "");
-  assert.equal(isValidCode("NOEL500"), true);
+  assert.equal(isValidCode("XMAS500"), true);
   assert.equal(isValidCode("AB"), false);
   assert.equal(isValidCode("-ABC"), false);
   for (let i = 0; i < 200; i++) {
@@ -107,7 +107,7 @@ test("e-mail du coupon : code, montant, mode d'emploi, date limite en date de To
   assert.match(m.body, /KZ-ABCD2345/);
   assert.match(m.body, /Thank you so much for your review/);
   assert.match(m.body, /Valid until 2026-12-31\./);
-  const noel = couponMessage({ code: "NOEL500", amount_jpy: 500, kind: "christmas", expires_at: null });
+  const noel = couponMessage({ code: "XMAS500", amount_jpy: 500, kind: "christmas", expires_at: null });
   assert.doesNotMatch(noel.body, /Valid until/);
   assert.match(noel.body, /Thank you for shopping/);
 });

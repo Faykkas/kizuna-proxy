@@ -11,7 +11,7 @@ export const JA_COUPONS: Record<string, string> = {
   "Créer un coupon": "クーポンを作成",
   "Montant de la remise (¥)": "割引額（¥）",
   "Code (laissez vide : un code aléatoire est créé)": "コード（空欄の場合はランダムなコードを作成）",
-  "Code (ex. NOEL500)": "コード（例：NOEL500）",
+  "Code (ex. XMAS500)": "コード（例：XMAS500）",
   "Email du client (obligatoire)": "お客様のメールアドレス（必須）",
   "Email du client (facultatif)": "お客様のメールアドレス（任意）",
   "Valable jusqu'au (facultatif, inclus)": "有効期限（任意・当日を含む）",

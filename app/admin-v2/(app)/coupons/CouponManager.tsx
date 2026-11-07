@@ -84,7 +84,7 @@ export default function CouponManager({ coupons }: { coupons: CouponAdmin[] }) {
           </div>
           <div className="av2-grid cols-2">
             <div className="av2-field">
-              <label htmlFor="cp-code">{personal ? t("Code (laissez vide : un code aléatoire est créé)") : t("Code (ex. NOEL500)")}</label>
+              <label htmlFor="cp-code">{personal ? t("Code (laissez vide : un code aléatoire est créé)") : t("Code (ex. XMAS500)")}</label>
               <input id="cp-code" className="av2-input" value={code} maxLength={32} onChange={(e) => setCode(e.target.value.toUpperCase())} autoComplete="off" />
             </div>
             <div className="av2-field">

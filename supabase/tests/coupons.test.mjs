@@ -51,9 +51,9 @@ await db.exec(up);
 ok((await tables()) === 2 && (await linkCols()) === 3, 'rejouer la migration ne change rien');
 
 console.log('3. Règles de données');
-await db.exec(`insert into public.coupons (code, kind, amount_jpy) values ('NOEL500', 'christmas', 500)`);
+await db.exec(`insert into public.coupons (code, kind, amount_jpy) values ('XMAS500', 'christmas', 500)`);
 await db.exec(`insert into public.coupons (code, kind, amount_jpy, customer_email) values ('KZ-ABCD2345', 'reddit_photo', 750, 'anna@example.com')`);
-await throws(`insert into public.coupons (code, kind, amount_jpy) values ('NOEL500', 'christmas', 500)`, 'code déjà pris refusé');
+await throws(`insert into public.coupons (code, kind, amount_jpy) values ('XMAS500', 'christmas', 500)`, 'code déjà pris refusé');
 await throws(`insert into public.coupons (code, kind, amount_jpy) values ('noel', 'christmas', 500)`, 'code en minuscules / trop court refusé');
 await throws(`insert into public.coupons (code, kind, amount_jpy) values ('ZERO0', 'custom', 0)`, 'montant 0 refusé');
 await throws(`insert into public.coupons (code, kind, amount_jpy) values ('BIG-1', 'custom', 100001)`, 'montant au-delà du plafond refusé');
@@ -61,7 +61,7 @@ await throws(`insert into public.coupons (code, kind, amount_jpy) values ('AUTRE
 await throws(`insert into public.coupons (code, kind, amount_jpy, customer_email) values ('MAJ-1', 'trustpilot', 500, 'Anna@Example.com')`, 'email non normalisé (majuscules) refusé');
 
 console.log('4. Une seule utilisation par client');
-const noel = (await db.query(`select id from public.coupons where code='NOEL500'`)).rows[0].id;
+const noel = (await db.query(`select id from public.coupons where code='XMAS500'`)).rows[0].id;
 const [l1, l2] = (await db.query(`select id from public.payment_links order by label`)).rows.map((r) => r.id);
 await db.exec(`insert into public.coupon_redemptions (coupon_id, client_email, payment_link_id, discount_jpy) values ('${noel}', 'anna@example.com', '${l1}', 500)`);
 await throws(`insert into public.coupon_redemptions (coupon_id, client_email, payment_link_id, discount_jpy) values ('${noel}', 'anna@example.com', '${l2}', 500)`, 'même client, même coupon, 2e réservation refusée');

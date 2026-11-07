@@ -34,9 +34,9 @@ test("Coupons : les montants en yens sont identiques dans toutes les langues", (
   }
 });
 
-test("Coupons : le code de Noël est NOEL500 partout, et seul le coupon de Noël affiche un code", () => {
+test("Coupons : le code de Noël est XMAS500 partout, et seul le coupon de Noël affiche un code", () => {
   for (const lang of LANGS) {
-    assert.equal(C[lang].cards[0].code, "NOEL500", lang);
+    assert.equal(C[lang].cards[0].code, "XMAS500", lang);
     assert.equal(C[lang].cards[1].code, "", lang);
     assert.equal(C[lang].cards[2].code, "", lang);
   }
