@@ -120,3 +120,75 @@
   .hp-trust { grid-template-columns: 1fr; }
   .hp-collage { min-height: 360px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MENU « pro » : barre d'infos, rangée principale (logo + recherche + bouton), bande de liens
+   ═══════════════════════════════════════════════════════════════════════════ */
+.nav-util { background: rgba(8, 4, 18, .92); border-bottom: 1px solid var(--border); font-size: .78rem; color: var(--warm); }
+.nav-util-inner { max-width: 1320px; margin: 0 auto; padding: .25rem 1.2rem; min-height: 34px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.nav-util-msg { margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; font-weight: 600; }
+.nav-util-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); box-shadow: 0 0 8px var(--red); }
+.nav-util-sep { opacity: .5; }
+.nav-util-right { display: flex; align-items: center; gap: 1.1rem; }
+.nav-util-link { color: var(--warm); font-weight: 600; text-decoration: none; transition: color .2s; }
+.nav-util-link:hover { color: var(--red); }
+.nu-lang { position: relative; }
+.nu-lang-btn { display: inline-flex; align-items: center; gap: .4rem; padding: .2rem .3rem; border: 0; background: none; color: var(--warm); font: inherit; font-weight: 600; cursor: pointer; transition: color .2s; }
+.nu-lang-btn:hover { color: var(--red); }
+
+.nav-inner { height: 68px; }
+.nav-search { flex: 1 1 auto; display: flex; align-items: stretch; max-width: 580px; margin: 0 .6rem; border: 1px solid var(--border-gold); border-radius: 12px; background: var(--surface); overflow: hidden; transition: border-color .2s, box-shadow .2s; }
+.nav-search:focus-within { border-color: rgba(168, 224, 74, .7); box-shadow: 0 0 0 3px rgba(168, 224, 74, .12); }
+.nav-search input { flex: 1; min-width: 0; padding: .62rem .9rem; border: 0; outline: 0; background: transparent; color: var(--ink); font: inherit; font-size: .92rem; }
+.nav-search input::placeholder { color: var(--mist); }
+.nav-search button { width: 48px; flex: none; border: 0; background: var(--red); color: var(--px-bg); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: filter .2s; }
+.nav-search button:hover { filter: brightness(1.08); }
+.nav-search-mobile { display: flex; max-width: none; margin: 0 0 .4rem; }
+.nav-controls .nav-cta.nav-cta-main { display: inline-flex; align-items: center; }
+
+/* bande de liens, façon place de marché */
+.nav-strip { border-bottom: 1px solid var(--border); background: rgba(255, 255, 255, .03); }
+.nav-strip-inner { max-width: 1200px; margin: 0 auto; padding: 0 1.2rem; display: flex; align-items: center; flex-wrap: wrap; gap: .15rem; list-style: none; }
+.nav-strip-inner li { list-style: none; }
+.ns-link { display: inline-flex; align-items: center; gap: .35rem; padding: .72rem .85rem; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--warm); font-family: inherit; font-size: .9rem; font-weight: 600; line-height: 1.2; letter-spacing: 0; text-transform: none; text-decoration: none; white-space: nowrap; cursor: pointer; transition: color .2s, border-color .2s, background .2s; }
+.ns-link:hover { color: var(--ink); background: rgba(255, 255, 255, .04); }
+.ns-link.active { color: var(--red); border-bottom-color: var(--red); }
+.ns-shop { color: var(--red); }
+.ns-guides { padding-right: .6rem; }
+.nav-strip .nav-dropdown { left: 0; transform: none; }
+
+/* burger en dessous de 1000 px : la recherche et la bande disparaissent, tout passe dans le menu mobile */
+@media (min-width: 1000px) { .mobile-menu-btn { display: none; } }
+@media (max-width: 999px) {
+  .mobile-menu-btn { display: flex; }
+  .nav-search-desktop, .nav-strip { display: none; }
+  .nav-controls .nav-cta.nav-cta-main { display: none; }
+  .nav-inner { height: 60px; }
+}
+@media (max-width: 700px) {
+  .nav-util-msg .nav-util-sep, .nav-util-msg span:last-child { display: none; }
+  .nav-util-inner { padding: .25rem 1rem; }
+}
+@media (max-width: 480px) { .nav-util-msg { display: none; } .nav-util-inner { justify-content: flex-end; } }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PIED DE PAGE « pro »
+   ═══════════════════════════════════════════════════════════════════════════ */
+.fx-grid { max-width: 1240px; margin: 0 auto; padding: 3.6rem 1.6rem 2.2rem; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.1fr 1.1fr; gap: 2.4rem; }
+.fx-brand .footer-tagline { max-width: 20rem; margin-bottom: 1rem; }
+.fx-trust { display: inline-flex; align-items: center; gap: .5rem; margin-bottom: 1rem; font-size: .85rem; color: var(--warm); text-decoration: none; }
+.fx-trust:hover { color: var(--ink); }
+.fx .footer-col-title { font-family: var(--font-body); font-size: .8rem; font-weight: 800; letter-spacing: .1em; color: var(--ink); margin-bottom: 1.1rem; }
+.fx .footer-link { font-size: .92rem; font-weight: 400; margin-bottom: .6rem; }
+.fx .fx-more { color: var(--red); font-weight: 650; }
+.fx .footer-social-link { width: 38px; height: 38px; border-radius: 10px; }
+.fx .fx-cta { display: inline-flex; margin-bottom: 1.1rem; padding: .7rem 1.2rem; font-size: .9rem; }
+.fx .fx-cta:hover { padding-left: 1.2rem; color: var(--px-bg); }
+
+.fx-badges { max-width: 1240px; margin: 0 auto; padding: 1.2rem 1.6rem; border-top: 1px solid var(--border); display: flex; align-items: center; flex-wrap: wrap; gap: .8rem 1.4rem; }
+.fx-badges-title { font-size: .82rem; font-weight: 700; color: var(--mist); }
+.fx-badges ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+.fx-badges li { padding: .4rem .85rem; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--ink); font-size: .82rem; font-weight: 700; }
+
+@media (max-width: 1100px) { .fx-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .fx-brand { grid-column: 1 / -1; } }
+@media (max-width: 640px) { .fx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.8rem 1.2rem; padding-top: 2.6rem; } .fx-brand { grid-column: 1 / -1; } .fx-grid > div:last-child { grid-column: 1 / -1; } }
