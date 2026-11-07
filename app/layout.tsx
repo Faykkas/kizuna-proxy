@@ -3,6 +3,7 @@ import PublicShell from "./components/PublicShell";
 import { outfit, inter } from "./fonts";
 import "./globals.css";
 import "./v3.css";
+import "./home-pro.css";
 
 export const metadata: Metadata = {
   title: "Kizuna Proxy — Personal Shopper in Tokyo | Japan Proxy Service",
