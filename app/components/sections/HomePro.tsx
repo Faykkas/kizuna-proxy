@@ -81,7 +81,7 @@ export function HeroPro({ t, lang }: { t: any; lang: string }) {
           {HERO_IMAGES.map((im, i) => (
             <figure key={im.src + i} className={`hp-shot hp-shot-${i + 1}`}>
               <Image src={im.src} alt={im.alt} fill sizes="(max-width: 900px) 46vw, 300px" priority={i === 0} />
-              <figcaption>{c.delBadge} · {im.place}</figcaption>
+              <figcaption>{im.place ? `${c.delBadge} · ${im.place}` : c.delBadge}</figcaption>
             </figure>
           ))}
           <div className="hp-collage-mascot">
@@ -156,7 +156,7 @@ export function DeliveredGrid({ lang }: { lang: string }) {
               </div>
               <div className="hp-card-body">
                 <strong>{d.title}</strong>
-                <span>{d.place}</span>
+                {d.place ? <span>{d.place}</span> : null}
               </div>
             </article>
           ))}
