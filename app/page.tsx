@@ -7,7 +7,6 @@ import AnnounceBar from "./components/AnnounceBar";
 import { HeroPro, StoresStrip, CategoryGrid, DeliveredGrid, ReviewsHome, TrustBand } from "./components/sections/HomePro";
 import HighlightsV3 from "./components/sections/HighlightsV3";
 import StepsV3 from "./components/sections/StepsV3";
-import SearchWidget from "./components/SearchWidget";
 import ExplainerSection from "./components/sections/ExplainerSection";
 import NewsPreviewSection from "./components/sections/NewsPreviewSection";
 import { BackToTop, useScrollReveal } from "./components/ui";
@@ -42,13 +41,6 @@ export default function Home() {
       <ReviewsHome t={t} lang={lang} />
       <TrustBand lang={lang} />
       <ExplainerSection t={t} />
-
-      {/* SEARCH WIDGET */}
-      <section className="search-widget-section">
-        <div className="wrap">
-          <SearchWidget lang={lang} t={t} />
-        </div>
-      </section>
 
       {/* NEWS */}
       <NewsPreviewSection t={t} />
