@@ -6,7 +6,7 @@
 
 export const XMAS_DEADLINE = "2026-12-05T14:59:59Z"; // 5 décembre 2026, 23:59:59 heure de Tokyo
 export const XMAS_CODE = "XMAS500";
-export const XMAS_CODE_UNTIL = "2026-11-15T14:59:59Z"; // expiration actuelle du coupon dans la base (15 nov., 23:59 Tokyo)
+export const XMAS_CODE_UNTIL = "2026-12-05T14:59:59Z"; // expiration du coupon dans la base (5 déc., 23:59 Tokyo)
 
 export const XMAS_DEADLINE_MS = Date.parse(XMAS_DEADLINE);
 export const XMAS_CODE_UNTIL_MS = Date.parse(XMAS_CODE_UNTIL);
