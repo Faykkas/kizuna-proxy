@@ -12,6 +12,8 @@ import { LANG_LABELS } from "../translations";
 import { useAuth } from "../lib/auth";
 import { homeCopy } from "./sections/homeCopy";
 import { couponsCopy } from "../coupons/couponsCopy";
+import { xmasCopy } from "../christmas/xmasCopy";
+import { XmasChip, useXmasOn } from "../christmas/XmasParts";
 import {
   IconShoppingBag, IconAuction, IconCards, IconStore, IconApparel,
   IconSneaker, IconFigure, IconBox, IconEvent, IconBusiness, IconBook,
@@ -81,6 +83,7 @@ export default function SiteNav() {
   const [mobileLangOpen, setMobileLangOpen] = useState(false);
   const langRef = useRef(null);
   const c = homeCopy(lang);
+  const xmasOn = useXmasOn();
 
   // Click-to-open instead of hover: reaching a specific item among 12
   // languages means crossing the gap between the button and the list, and
@@ -96,6 +99,7 @@ export default function SiteNav() {
   }, [langOpen]);
 
   const links = [
+    ...(xmasOn ? [{ href: "/christmas", label: `🎄 ${xmasCopy(lang).nav}`, xmas: true }] : []),
     { href: "/shop", label: t.nav?.shop || "Shop", badge: "NEW" },
     { href: "/services", label: t.nav?.services || "Services" },
     { href: "/pricing", label: t.nav?.pricing || "Pricing" },
@@ -113,12 +117,12 @@ export default function SiteNav() {
       {/* ── Barre d'infos ── */}
       <div className="nav-util">
         <div className="nav-util-inner">
-          <p className="nav-util-msg">
+          {xmasOn ? <XmasChip lang={lang} /> : <p className="nav-util-msg">
             <span className="nav-util-dot" aria-hidden="true" />
             {c.trust[0].t}
             <span className="nav-util-sep" aria-hidden="true">·</span>
             {c.trust[1].t}
-          </p>
+          </p>}
           <div className="nav-util-right">
             <div className="nu-lang" ref={langRef}>
               <button className="nu-lang-btn" aria-label="Language" aria-expanded={langOpen} onClick={() => setLangOpen(v => !v)}>
@@ -275,7 +279,7 @@ export default function SiteNav() {
         <ul className="nav-strip-inner">
           {links.map(l => (
             <li key={l.href}>
-              <a href={l.href} className={`ns-link${isActive(l.href) ? " active" : ""}${l.badge ? " ns-shop" : ""}`} aria-current={isActive(l.href) ? "page" : undefined}>
+              <a href={l.href} className={`ns-link${isActive(l.href) ? " active" : ""}${l.badge ? " ns-shop" : ""}${l.xmas ? " ns-xmas" : ""}`} aria-current={isActive(l.href) ? "page" : undefined}>
                 {l.label}{l.badge ? <span className="nav-shop-badge">{l.badge}</span> : null}
               </a>
             </li>

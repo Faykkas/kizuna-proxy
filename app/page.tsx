@@ -4,6 +4,7 @@
 import SiteNav from "./components/SiteNav";
 import SiteFooter from "./components/SiteFooter";
 import AnnounceBar from "./components/AnnounceBar";
+import { XmasBand } from "./christmas/XmasParts";
 import { HeroPro, StoresStrip, CategoryGrid, DeliveredGrid, ReviewsHome, TrustBand } from "./components/sections/HomePro";
 import HighlightsV3 from "./components/sections/HighlightsV3";
 import StepsV3 from "./components/sections/StepsV3";
@@ -25,6 +26,9 @@ export default function Home() {
 
       {/* HERO v3 — la promesse + le formulaire de demande */}
       <HeroPro t={t} lang={lang} />
+
+      {/* Noël : compte à rebours + quiz cadeau (disparaît seule après le 5 décembre) */}
+      <XmasBand lang={lang} />
 
       {/* Boutiques, catégories en images */}
       <StoresStrip lang={lang} />
