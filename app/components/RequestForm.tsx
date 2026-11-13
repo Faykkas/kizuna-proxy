@@ -11,6 +11,8 @@ import { track } from "@vercel/analytics";
 import { postRequest } from "../lib/sendRequest";
 import { useAuth } from "../lib/auth";
 import Maneki from "./pixel/Maneki";
+import LinkPreviewCard from "./LinkPreview";
+import { useLanguage } from "../lib/language";
 
 const FORMSPREE_ID = "https://formspree.io/f/mnjoypyk";
 
@@ -47,6 +49,7 @@ const emptyForm = {
 export default function RequestForm({ t }) {
   const rt = t?.request || {};
   const { user, profile } = useAuth();
+  const { lang } = useLanguage();
   const [form, setForm] = useState(emptyForm);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle");
@@ -76,7 +79,8 @@ export default function RequestForm({ t }) {
     const q = (params.get("q") || "").trim().slice(0, 500);
     if (q && !shopImage && !shopPrice) {
       const isLink = /^https?:///i.test(q);
-      setForm(p => ({ ...p, message: p.message || q, itemLink: p.itemLink || (isLink ? q : "") }));
+      const link = (params.get("link") || "").trim().slice(0, 1000);
+      setForm(p => ({ ...p, message: p.message || q, itemLink: p.itemLink || (/^https?:\/\//i.test(link) ? link : isLink ? q : "") }));
       return;
     }
     if (!shopImage && !shopPrice) return;
@@ -108,7 +112,7 @@ export default function RequestForm({ t }) {
 
     const items = [
       form.message,
-      form.itemLink ? `\n\nLink: ${form.itemLink}` : "",
+      form.itemLink && !form.message.includes(form.itemLink) ? `\n\nLink: ${form.itemLink}` : "",
     ].join("");
 
     const outcome = await postRequest({
@@ -187,6 +191,8 @@ export default function RequestForm({ t }) {
           onChange={e => update("message", e.target.value)}
         />
         {errors.message && <span className="f-err">{errors.message}</span>}
+        {/* l'article collé (lien) : photo, titre, prix, pour que le client voie tout de suite ce qu'il demande */}
+        <LinkPreviewCard raw={form.itemLink || form.message} lang={lang} variant="form" showButton={false} />
       </div>
 
       <div className="f-row">

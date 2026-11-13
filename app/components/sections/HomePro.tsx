@@ -10,6 +10,7 @@ import Maneki from "../pixel/Maneki";
 import { IconInstagram, IconTiktok } from "../ui";
 import { REAL_REVIEWS } from "../data";
 import { homeCopy } from "./homeCopy";
+import LinkPreviewCard from "../LinkPreview";
 import { HERO_IMAGES, CATEGORY_IMAGES, DELIVERED, STORES } from "../../lib/homeImages";
 
 // « 🇯🇵 to 🇺🇸 USA » → « USA » (les drapeaux emoji ne s'affichent pas sous Windows)
@@ -59,6 +60,7 @@ export function HeroPro({ t, lang }: { t: any; lang: string }) {
             <input type="text" value={q} onChange={(e) => setQ(e.target.value)} placeholder={c.searchPh} aria-label={c.searchPh} autoComplete="off" />
             <button type="submit" className="btn btn-gold">{c.searchBtn}</button>
           </form>
+          <LinkPreviewCard raw={q} lang={lang} variant="hero" />
           <p className="hp-search-hint">{c.searchHint}</p>
 
           <ul className="v3-trust">

@@ -11,6 +11,7 @@ import { useLanguage } from "../lib/language";
 import { LANG_LABELS } from "../translations";
 import { useAuth } from "../lib/auth";
 import { homeCopy } from "./sections/homeCopy";
+import LinkPreviewCard from "./LinkPreview";
 import { couponsCopy } from "../coupons/couponsCopy";
 import { xmasCopy } from "../christmas/xmasCopy";
 import { XmasChip, useXmasOn } from "../christmas/XmasParts";
@@ -65,10 +66,13 @@ function NavSearch({ lang, className = "" }: { lang: string; className?: string 
     window.location.href = v ? `/request?q=${encodeURIComponent(v)}` : "/request";
   }
   return (
-    <form className={`nav-search ${className}`} onSubmit={go} role="search">
-      <input type="text" value={q} onChange={(e) => setQ(e.target.value)} placeholder={c.searchPh} aria-label={c.searchPh} autoComplete="off" />
-      <button type="submit" aria-label={c.searchBtn}>{SEARCH_SVG}</button>
-    </form>
+    <div className={`nav-search-wrap ${className}`}>
+      <form className="nav-search" onSubmit={go} role="search">
+        <input type="text" value={q} onChange={(e) => setQ(e.target.value)} placeholder={c.searchPh} aria-label={c.searchPh} autoComplete="off" />
+        <button type="submit" aria-label={c.searchBtn}>{SEARCH_SVG}</button>
+      </form>
+      <LinkPreviewCard raw={q} lang={lang} variant={className.includes("mobile") ? "form" : "nav"} />
+    </div>
   );
 }
 
