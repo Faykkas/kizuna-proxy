@@ -7,12 +7,12 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { track } from "@vercel/analytics";
-import { IconGacha, IconFigure, IconStore, IconShoppingBag, IconBox, IconApparel, IconCards } from "../components/pixel/PixelIcons";
+import { IconGacha, IconFigure, IconStore, IconShoppingBag, IconBox, IconApparel, IconCards, IconSneaker, IconBook, IconEvent } from "../components/pixel/PixelIcons";
 import Maneki from "../components/pixel/Maneki";
 import { XMAS_CODE, XMAS_CODE_UNTIL_MS, XMAS_DEADLINE_MS, XMAS_IDEAS, rankIdeas, timeLeft } from "./xmasConfig";
 import { xmasCopy, fillX, XMAS_LOCALES } from "./xmasCopy";
 
-const ICONS = { gacha: IconGacha, figure: IconFigure, store: IconStore, bag: IconShoppingBag, box: IconBox, apparel: IconApparel };
+const ICONS = { gacha: IconGacha, figure: IconFigure, store: IconStore, bag: IconShoppingBag, box: IconBox, apparel: IconApparel, cards: IconCards, sneaker: IconSneaker, book: IconBook, event: IconEvent };
 const UNIVERSE_ICONS = [IconFigure, IconCards, IconApparel, IconBox, IconGacha, IconStore];
 
 /** Heure courante, mise à jour toutes les `ms` (null avant le montage). */
@@ -188,7 +188,7 @@ function Results({ c, ans, valid, onRestart }) {
           const q = fillX(c.prefill, { idea: txt.t, cat, who: c.recipients[ans.r]?.label || "", budget }) + (valid ? fillX(c.prefillCode, { code: XMAS_CODE }) : "");
           return (
             <article key={i} className={`xm-idea${rank === 0 ? " best" : ""}`}>
-              <div className="xm-idea-img">
+              <div className={`xm-idea-img xm-u${ans.u}`}>
                 <IdeaVisual idea={idea} alt={txt.t} />
                 {rank === 0 ? <span className="xm-best">★ {c.best}</span> : null}
               </div>

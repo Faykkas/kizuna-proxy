@@ -21,22 +21,22 @@ export function timeLeft(now: number, target: number = XMAS_DEADLINE_MS) {
 // ── Quiz ─────────────────────────────────────────────────────────────────────
 // 6 univers × 3 idées. `tier` = gamme de budget habituelle de l'article (0 : < ¥5 000 … 3 : ¥40 000 et plus) : sert seulement
 // à classer les idées (la plus proche du budget choisi en premier) ; aucun prix n'est affiché.
-// `img` : vraie photo de commande ; sinon `icon` (icône pixel).
+// `icon` : visuel pixel art (aucune photo de client). `img` : photo produit générée (public/xmas/…), prioritaire si présente.
 export type XmasIdea = { tier: number; img?: string; icon?: string };
 
 export const XMAS_IDEAS: XmasIdea[][] = [
   // Anime & manga
-  [{ tier: 1, icon: "gacha" }, { tier: 3, icon: "figure" }, { tier: 0, img: "/home/tapestry-hapisere.jpg" }],
+  [{ tier: 1, icon: "gacha" }, { tier: 3, icon: "figure" }, { tier: 0, icon: "event" }],
   // Pokémon & cartes
-  [{ tier: 0, icon: "store" }, { tier: 1, icon: "bag" }, { tier: 2, img: "/yugioh_order.jpg" }],
+  [{ tier: 0, icon: "gacha" }, { tier: 1, icon: "store" }, { tier: 2, icon: "cards" }],
   // Mode & sacs
-  [{ tier: 1, img: "/Jojo_order.jpg" }, { tier: 0, img: "/Harrypotter_order.jpg" }, { tier: 3, img: "/home/coach-trio.jpg" }],
+  [{ tier: 1, icon: "apparel" }, { tier: 0, icon: "sneaker" }, { tier: 3, icon: "bag" }],
   // Douceurs
-  [{ tier: 0, icon: "box" }, { tier: 1, img: "/butter_butler.jpg" }, { tier: 1, icon: "bag" }],
+  [{ tier: 0, icon: "box" }, { tier: 1, icon: "bag" }, { tier: 1, icon: "store" }],
   // Kawaii & Sanrio
   [{ tier: 0, icon: "gacha" }, { tier: 1, icon: "store" }, { tier: 2, icon: "apparel" }],
   // Japon traditionnel
-  [{ tier: 0, img: "/daruma_order.jpg" }, { tier: 1, icon: "box" }, { tier: 2, img: "/Ancora_order.jpg" }],
+  [{ tier: 0, icon: "figure" }, { tier: 1, icon: "box" }, { tier: 2, icon: "book" }],
 ];
 
 /** Les 3 idées de l'univers, la plus proche du budget d'abord (à égalité : l'ordre du catalogue). */

@@ -313,3 +313,15 @@
   .xm-idea { grid-template-columns: 92px minmax(0, 1fr); gap: .8rem; }
   .xm-band-side { align-items: stretch; width: 100%; }
 }
+
+/* quiz : fond coloré par univers derrière le visuel pixel */
+.xm-idea-img::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(rgba(255, 255, 255, .14) 1px, transparent 1.4px); background-size: 12px 12px; opacity: .6; }
+.xm-idea-img::after { content: ""; position: absolute; left: 50%; top: 55%; width: 70%; height: 70%; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 255, 255, .22), transparent); }
+.xm-idea-icon { z-index: 1; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .35)); }
+.xm-idea-img img { z-index: 1; }
+.xm-u0 { background: linear-gradient(135deg, #7b3fe4, #e8418a); }
+.xm-u1 { background: linear-gradient(135deg, #f2b705, #e8334a); }
+.xm-u2 { background: linear-gradient(135deg, #3b2a5a, #c08a5b); }
+.xm-u3 { background: linear-gradient(135deg, #8a4b2a, #f28fb1); }
+.xm-u4 { background: linear-gradient(135deg, #ff8fc8, #b48cff); }
+.xm-u5 { background: linear-gradient(135deg, #2f6b3a, #c9a24a); }
