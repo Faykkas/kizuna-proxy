@@ -109,3 +109,43 @@ export function balance(purchases: number, ledger: LedgerEntry[]): Balance {
   const repayments = ledger.filter((e) => e.kind === "repayment").reduce((s, e) => s + yen(e.amount_jpy), 0);
   return { purchases, advances, repayments, due: purchases + advances - repayments };
 }
+
+// ── Catégorie d'une avance en plus (livraison, taxes Zonos, autre) ──
+// Rangée en tête de la note (« Livraison — … »), pour ne pas avoir à changer la table.
+
+export type AdvanceCategory = "shipping" | "zonos" | "other";
+export const ADVANCE_CATEGORIES: AdvanceCategory[] = ["shipping", "zonos", "other"];
+export const ADVANCE_LABEL: Record<AdvanceCategory, string> = { shipping: "Livraison", zonos: "Taxes Zonos", other: "Autre" };
+
+const CAT_PREFIX = /^\s*(livraisons?|taxes?\s+zonos|zonos|autre)\s*(?:[—–:-]\s*|$)/i;
+
+/** Catégorie lue dans la note, ou null si l'avance n'a pas encore été classée. */
+export function advanceCategory(note: string | null | undefined): AdvanceCategory | null {
+  const m = (note ?? "").match(CAT_PREFIX);
+  if (!m) return null;
+  const w = m[1].toLowerCase();
+  if (w.startsWith("livraison")) return "shipping";
+  if (w.includes("zonos")) return "zonos";
+  return "other";
+}
+
+/** Le texte libre de la note, sans la catégorie. */
+export function advanceNoteText(note: string | null | undefined): string {
+  return (note ?? "").replace(CAT_PREFIX, "").trim();
+}
+
+/** Note complète : catégorie + texte libre (« Taxes Zonos — colis de Paola »). */
+export function noteWithCategory(cat: AdvanceCategory, note: string | null | undefined): string {
+  const text = advanceNoteText(note);
+  return text ? `${ADVANCE_LABEL[cat]} — ${text}` : ADVANCE_LABEL[cat];
+}
+
+/** Total des avances par catégorie (les avances non classées vont dans « unsorted »). */
+export function advancesByCategory(ledger: LedgerEntry[]): Record<AdvanceCategory | "unsorted", number> {
+  const out = { shipping: 0, zonos: 0, other: 0, unsorted: 0 };
+  for (const e of ledger) {
+    if (e.kind !== "advance") continue;
+    out[advanceCategory(e.note) ?? "unsorted"] += yen(e.amount_jpy);
+  }
+  return out;
+}

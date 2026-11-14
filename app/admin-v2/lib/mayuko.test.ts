@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { addDays, balance, groupByWeek, notYetBoughtTotal, repayableOrders, weekStart, type PurchaseOrder } from "./mayuko.ts";
+import { addDays, advanceCategory, advanceNoteText, advancesByCategory, balance, groupByWeek, noteWithCategory, notYetBoughtTotal, repayableOrders, weekStart, type PurchaseOrder } from "./mayuko.ts";
 
 const o = (id: number, date: string, price: number, status = "Purchased", name = "Client"): PurchaseOrder => ({
   id,
@@ -54,4 +54,20 @@ test("solde : achats + avances − remboursements", () => {
   ];
   assert.deepEqual(balance(13000, ledger), { purchases: 13000, advances: 2500, repayments: 10000, due: 5500 });
   assert.equal(balance(0, []).due, 0);
+});
+
+test("avances : la catégorie (livraison, Zonos, autre) est lue et écrite dans la note", () => {
+  assert.equal(advanceCategory("Livraisons"), "shipping");
+  assert.equal(advanceCategory("Livraison — colis de Paola"), "shipping");
+  assert.equal(advanceCategory("Taxes Zonos"), "zonos");
+  assert.equal(advanceCategory("zonos: Marlon"), "zonos");
+  assert.equal(advanceCategory("Autre — timbres"), "other");
+  assert.equal(advanceCategory("virement du 10"), null);
+  assert.equal(advanceCategory(null), null);
+  assert.equal(noteWithCategory("zonos", "Livraison — colis de Paola"), "Taxes Zonos — colis de Paola");
+  assert.equal(noteWithCategory("shipping", null), "Livraison");
+  assert.equal(noteWithCategory("other", "Livraisons"), "Autre");
+  assert.equal(advanceNoteText("Taxes Zonos — Marlon"), "Marlon");
+  const e = (id: number, kind: "advance" | "repayment", amount_jpy: number, note: string | null) => ({ id, entry_date: "2026-11-10", kind, amount_jpy, note });
+  assert.deepEqual(advancesByCategory([e(1, "advance", 35710, "Livraisons"), e(2, "advance", 4964, "Taxes Zonos"), e(3, "advance", 100, null), e(4, "repayment", 500000, "Livraison")]), { shipping: 35710, zonos: 4964, other: 0, unsorted: 100 });
 });

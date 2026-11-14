@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { addLedgerEntry, deleteLedgerEntry } from "./actions";
+import { addLedgerEntry, deleteLedgerEntry, setAdvanceCategory } from "./actions";
 import { formatJPY } from "../../lib/money";
 import { useRun } from "../../components/useRun";
 import { useL } from "../../components/LangProvider";
-import type { LedgerEntry } from "../../lib/mayuko";
+import { advanceCategory, advanceNoteText, advancesByCategory, type LedgerEntry } from "../../lib/mayuko";
 
 const todayTokyo = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" });
 
@@ -13,7 +13,11 @@ const todayTokyo = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Asi
 export default function LedgerManager({ entries, due }: { entries: LedgerEntry[]; due: number }) {
   const { pending, msg, run } = useRun();
   const { t, date } = useL();
+  // « repayment », ou une avance avec sa catégorie : « advance:shipping », « advance:zonos », « advance:other »
   const [kind, setKind] = useState("repayment");
+  const [entryKind, category] = kind.split(":");
+  const catLabel = (c: string | null) => (c === "shipping" ? t("Livraison") : c === "zonos" ? t("Taxes Zonos") : c === "other" ? t("Autre") : t("Non classée"));
+  const byCat = advancesByCategory(entries);
   const [day, setDay] = useState(todayTokyo());
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
@@ -27,7 +31,7 @@ export default function LedgerManager({ entries, due }: { entries: LedgerEntry[]
         onSubmit={(e) => {
           e.preventDefault();
           run(
-            () => addLedgerEntry({ kind, date: day, amount, note }),
+            () => addLedgerEntry({ kind: entryKind, category, date: day, amount, note }),
             "Enregistré.",
             () => {
               setAmount("");
@@ -41,7 +45,9 @@ export default function LedgerManager({ entries, due }: { entries: LedgerEntry[]
             <label htmlFor="lg-kind">{t("Type")}</label>
             <select id="lg-kind" className="av2-select" value={kind} onChange={(e) => setKind(e.target.value)}>
               <option value="repayment">{t("Remboursement (je lui ai rendu l'argent)")}</option>
-              <option value="advance">{t("Avance en plus (livraison, taxes… qu'elle a payées)")}</option>
+              <option value="advance:shipping">{t("Avance : livraison payée par Mayuko")}</option>
+              <option value="advance:zonos">{t("Avance : taxes Zonos payées par Mayuko")}</option>
+              <option value="advance:other">{t("Avance : autre")}</option>
             </select>
           </div>
           <div className="av2-field">
@@ -88,8 +94,30 @@ export default function LedgerManager({ entries, due }: { entries: LedgerEntry[]
                 <tr key={e.id}>
                   <td className="av2-nowrap">{date(e.entry_date)}</td>
                   <td>
-                    {e.kind === "repayment" ? t("Remboursement") : t("Avance en plus")}
-                    {e.note ? <small>{e.note}</small> : null}
+                    {e.kind === "repayment" ? (
+                      <>
+                        {t("Remboursement")}
+                        {e.note ? <small>{e.note}</small> : null}
+                      </>
+                    ) : (
+                      <>
+                        {t("Avance")}{" "}
+                        <select
+                          className="av2-select"
+                          aria-label={t("Type d'avance")}
+                          style={{ display: "inline-block", width: "auto", padding: "0.15rem 0.5rem", marginLeft: "0.3rem" }}
+                          value={advanceCategory(e.note) ?? ""}
+                          disabled={pending}
+                          onChange={(ev) => run(() => setAdvanceCategory(e.id, ev.target.value), "Enregistré.")}
+                        >
+                          {advanceCategory(e.note) ? null : <option value="">{t("Non classée")}</option>}
+                          <option value="shipping">{t("Livraison")}</option>
+                          <option value="zonos">{t("Taxes Zonos")}</option>
+                          <option value="other">{t("Autre")}</option>
+                        </select>
+                        {advanceNoteText(e.note) ? <small>{advanceNoteText(e.note)}</small> : null}
+                      </>
+                    )}
                   </td>
                   <td className="r">
                     <strong>{e.kind === "repayment" ? "−" : "+"}{formatJPY(e.amount_jpy)}</strong>
@@ -110,6 +138,12 @@ export default function LedgerManager({ entries, due }: { entries: LedgerEntry[]
               ))}
             </tbody>
           </table>
+          {byCat.shipping + byCat.zonos + byCat.other + byCat.unsorted > 0 ? (
+            <p style={{ color: "var(--av2-muted)", marginTop: "0.6rem" }}>
+              {t("Avances en plus")} : {catLabel("shipping")} <strong>{formatJPY(byCat.shipping)}</strong> · {catLabel("zonos")} <strong>{formatJPY(byCat.zonos)}</strong> · {catLabel("other")} <strong>{formatJPY(byCat.other)}</strong>
+              {byCat.unsorted > 0 ? <> · {catLabel(null)} <strong>{formatJPY(byCat.unsorted)}</strong></> : null}
+            </p>
+          ) : null}
         </div>
       )}
     </div>
