@@ -5,7 +5,6 @@
 // Menu « pro » : fine barre d'infos (confiance + langue + compte), rangée principale (logo, barre « lien ou description », bouton de demande),
 // puis bande de liens façon place de marché. La bande se replie quand on fait défiler la page. Mobile : burger.
 import { useState, useRef, useEffect } from "react";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "../lib/language";
 import { LANG_LABELS } from "../translations";
@@ -162,7 +161,7 @@ export default function SiteNav() {
 
           {/* ── Logo ── */}
           <a href="/" className="logo">
-            <Image src="/logo.png" alt="Kizuna Proxy" width={42} height={42} priority style={{imageRendering:"pixelated"}} />
+            <img src="/logo.svg" alt="Kizuna Proxy" width={42} height={42} className="logo-mark-svg" />
             <div>
               <div className="logo-name"><span className="g">Kizuna</span> Proxy</div>
               <div className="logo-sub">Tokyo Proxy Service</div>

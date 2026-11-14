@@ -4,7 +4,6 @@
 // Pied de page « pro » : marque + réseaux, 4 colonnes de liens, bandeau paiement/expédition, barre légale.
 // Titres : navFooterCopy.ts (12 langues). Libellés de liens : translations.ts (t.nav, t.footerNav…).
 
-import Image from "next/image";
 import { IconInstagram, IconTiktok } from "./ui";
 import { reopenCookiePreferences } from "./CookieConsent";
 import { useLanguage } from "../lib/language";
@@ -32,7 +31,7 @@ export default function SiteFooter({ t }: { t: any }) {
       <div className="fx-grid">
         <div className="fx-brand">
           <div className="footer-logo-wrap">
-            <Image src="/logo.png" alt="Kizuna Proxy" width={38} height={38} style={{imageRendering:"pixelated"}} />
+            <img src="/logo.svg" alt="Kizuna Proxy" width={40} height={40} className="logo-mark-svg" />
             <div className="footer-logo"><span className="g">Kizuna</span> Proxy</div>
           </div>
           <p className="footer-tagline">{t.footerNav?.tagline || "Tokyo-based proxy service. Your trusted link to Japan."}</p>

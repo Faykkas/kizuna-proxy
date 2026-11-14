@@ -574,3 +574,10 @@ header.page-head-photo { padding: 6.5rem 1.6rem 5rem; border-bottom: 1px solid v
 header.page-head-photo h1, .page-head-photo .px-page-title { font-family: var(--font-head); font-weight: 700; font-size: clamp(2.1rem, 4.8vw, 3.4rem); line-height: 1.08; letter-spacing: -0.025em; text-transform: none; max-width: 20ch; margin: .4rem auto 1rem; }
 header.page-head-photo h1 em, .page-head-photo .px-page-title em { color: var(--red); font-style: normal; }
 header.page-head-photo p, .page-head-photo .px-page-lead { font-size: 1.06rem; line-height: 1.7; max-width: 38rem; margin-left: auto; margin-right: auto; font-weight: 400; }
+
+/* logo vectoriel + nom de marque */
+.logo-mark-svg { display: block; flex: none; width: 42px; height: 42px; filter: drop-shadow(0 4px 14px rgba(168, 224, 74, .18)); transition: transform .2s ease; }
+.logo:hover .logo-mark-svg { transform: rotate(-4deg) scale(1.04); }
+.footer-logo-wrap .logo-mark-svg { width: 40px; height: 40px; }
+.logo-name { font-family: var(--font-head); font-weight: 700; font-size: 1.22rem; letter-spacing: -0.015em; }
+.footer-logo { font-family: var(--font-head); font-weight: 700; letter-spacing: -0.015em; }
