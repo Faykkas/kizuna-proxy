@@ -2,11 +2,13 @@
 import "../globals.css";
 import SiteNav from "../components/SiteNav";
 import GuideExtras from "./GuideExtras";
+import GuideCover from "./GuideCover";
 
 export default function BlogLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <SiteNav />
+      <GuideCover />
       {children}
       <GuideExtras />
       <footer style={{

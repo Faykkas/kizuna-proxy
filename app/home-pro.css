@@ -614,3 +614,22 @@ nav.breadcrumb { position: static; -webkit-backdrop-filter: none; backdrop-filte
 .sc-logo-sm { width: 46px; height: 46px; }
 /* Événements / FAQ : en-tête pleine largeur, le contenu reprend juste en dessous */
 .blog-page.blog-page-after-head { padding-top: 1rem; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GUIDES : couverture photo propre à chaque article + vignettes sur /blog
+   ═══════════════════════════════════════════════════════════════════════════ */
+.guide-cover { position: relative; height: clamp(260px, 42vw, 440px); background: var(--gc) center 45% / cover no-repeat; -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 45%, rgba(0, 0, 0, .55) 72%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, #000 45%, rgba(0, 0, 0, .55) 72%, transparent 100%); }
+.guide-cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14, 7, 30, .25) 0%, rgba(14, 7, 30, .55) 100%); }
+.guide-cover ~ main.blog-page { position: relative; z-index: 1; margin-top: clamp(-170px, -14vw, -90px); padding-top: 0; background: transparent; }
+.guide-cover ~ main.blog-page h1 { text-shadow: 0 2px 4px rgba(0, 0, 0, .55), 0 8px 30px rgba(0, 0, 0, .6); }
+.guide-card { overflow: hidden; padding-top: 0 !important; }
+.guide-thumb { display: block; margin: 0 -1.8rem 1.1rem; aspect-ratio: 16 / 9; overflow: hidden; background: var(--surface); }
+.guide-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+.guide-card:hover .guide-thumb img { transform: scale(1.06); }
+
+/* titres des guides : même typographie que le reste du site ; résumés des vignettes limités à 3 lignes */
+.guide-cover ~ main.blog-page h1 { font-family: var(--font-head); font-weight: 700; font-size: clamp(2rem, 4.6vw, 3.1rem); line-height: 1.1; letter-spacing: -0.025em; text-transform: none; color: #fff; }
+.guide-cover ~ main.blog-page h1 em { display: inline; color: var(--red); font-style: normal; }
+.guide-cover ~ main.blog-page h1 br { display: none; }
+.guide-card h3 { font-family: var(--font-head); font-size: 1.05rem; line-height: 1.3; letter-spacing: -0.01em; text-transform: none; }
+.guide-card p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }

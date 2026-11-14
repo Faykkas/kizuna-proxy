@@ -3,6 +3,7 @@
 
 import { useLanguage } from "../lib/language";
 import { guideTranslations } from "../guideTranslations";
+import { GUIDE_PHOTOS } from "./guidePhotos";
 import {
   IconShoppingBag, IconAuction, IconCards, IconStore, IconApparel,
   IconSneaker, IconFigure, IconBox, IconEvent, IconBook, IconGacha, IconMusicNote,
@@ -58,8 +59,12 @@ export default function BlogIndexClient() {
             const data = guideTranslations[key];
             const g = data[lang] || data.en;
             return (
-              <a key={slug} href={`/blog/${slug}`} className="ev-card" style={{ display: "block", textDecoration: "none" }}>
-                <div className="ev-icon"><Icon size={40} /></div>
+              <a key={slug} href={`/blog/${slug}`} className="ev-card guide-card" style={{ display: "block", textDecoration: "none" }}>
+                {GUIDE_PHOTOS[slug] ? (
+                  <span className="guide-thumb"><img src={GUIDE_PHOTOS[slug]} alt="" loading="lazy" /></span>
+                ) : (
+                  <div className="ev-icon"><Icon size={40} /></div>
+                )}
                 <h3>{g.title}{g.titleEm}</h3>
                 <p>{g.lead}</p>
               </a>

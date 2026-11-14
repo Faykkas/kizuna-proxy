@@ -65,4 +65,6 @@ export const PHOTO_CREDITS = [
   "william wallace", "Garvit Nama", "Pedram Farjam", "Ela De Pure", "Kairi Kaljo", "Geraldine Lewa", "Nick Hamze",
   "Jakob Rosen", "COSMOH", "Lorenzo Herrera", "Fumiaki Hayashi",
   "Rohit Choudhari", "Satoshi Nitawaki", "Louie Martinez", "Erik Eastman",
+  "V H", "Roméo A.", "mintosko", "Jeff Tumale", "Maria Fernanda Pissioli", "Eiliv Aceron", "Isabela Kronemberger", "Junhyeong Song",
+  "Samuel Regan-Asante", "Branden Skeli", "Iuliia Pilipeichenko", "Joel Muniz", "Michal Balog", "Clarissa Watson", "Rochelle Lee", "Rocker Sta",
 ]; // détail fichier par fichier : docs/photo-credits.md
