@@ -2,7 +2,7 @@
 "use client";
 
 // Accueil : en-tête Akihabara plein écran (avec tes vraies commandes), Noël tant que c'est la saison, 8 catégories en photos,
-// bandeau Shibuya avec les 3 étapes, un seul bloc de preuves (chiffres réels, commandes livrées, avis), appel final.
+// bandeau Shibuya avec les 3 étapes, calculateur de prix total, un seul bloc de preuves (chiffres réels, commandes livrées, avis), appel final.
 // Le reste (produits phares, liste des boutiques) vit sur /what-we-buy ; les actualités sur /news.
 
 import SiteNav from "./components/SiteNav";
@@ -11,6 +11,7 @@ import AnnounceBar from "./components/AnnounceBar";
 import { XmasBand } from "./christmas/XmasParts";
 import { HeroPro, CategoryGrid, TokyoBand, PhotoCredits } from "./components/sections/HomePro";
 import { StoryProof } from "./components/sections/HomeStory";
+import PriceEstimator from "./components/sections/PriceEstimator";
 import { BackToTop, useScrollReveal } from "./components/ui";
 import { useLang, useAnnounce } from "./components/useSiteState";
 
@@ -32,6 +33,8 @@ export default function Home() {
 
       <CategoryGrid lang={lang} more />
       <TokyoBand t={t} lang={lang} steps />
+      {/* Calculateur : prix de l'article + frais Kizuna + livraison EMS estimée */}
+      <PriceEstimator lang={lang} />
       <StoryProof t={t} lang={lang} />
 
       {/* Appel final */}
