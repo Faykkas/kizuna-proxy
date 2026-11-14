@@ -728,3 +728,29 @@ nav.breadcrumb { position: static; -webkit-backdrop-filter: none; backdrop-filte
   .sh-more { padding: 1.3rem; }
 }
 @media (prefers-reduced-motion: reduce) { .sh-card, .sh-img img, .sh-zoom, .sh-modal, .sh-modal-card { transition: none; animation: none; } }
+
+/* ── Titres de section lisibles (anciens titres en police pixel, 10 px sur téléphone) ── */
+.sec-head h2, .why-merged-head h2 { font-family: var(--font-head); font-weight: 800; font-size: clamp(1.5rem, 3vw, 2.2rem); line-height: 1.15; letter-spacing: -0.02em; text-transform: none; max-width: 32ch; }
+.sec-head h2 em, .why-merged-head h2 em { color: var(--red); font-style: normal; }
+.blog-page h2 { font-family: var(--font-head); font-weight: 700; font-size: clamp(1.25rem, 2.4vw, 1.6rem); line-height: 1.25; letter-spacing: -0.01em; text-transform: none; max-width: none; }
+
+/* ── Confort sur téléphone, tout le site ── */
+@media (max-width: 768px) {
+  .sec-head h2, .why-merged-head h2 { font-size: 1.5rem; line-height: 1.2; max-width: none; }
+  .blog-page h2 { font-size: 1.25rem; }
+  .sec-label { font-size: .72rem; }
+  /* iPhone zoome sur un champ dont le texte fait moins de 16 px */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]), select, textarea { font-size: 16px !important; }
+  /* zones à toucher d'au moins ~40 px */
+  .footer-link { padding: .55rem 0; margin-bottom: 0; }
+  .mobile-menu-btn { min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+  .nu-lang-btn, .nav-util-link, .xm-chip { min-height: 36px; display: inline-flex; align-items: center; }
+  .breadcrumb a { display: inline-block; padding: .5rem .1rem; }
+  .st-link, .fx-trust { display: inline-flex; align-items: center; min-height: 40px; }
+  .acc-auth-forgot, .acc-auth-switch button { padding: .65rem .2rem; }
+  .v3-trust a { display: inline-flex; align-items: center; min-height: 40px; }
+  .highlight-pill-text { font-size: .72rem; }
+  /* éviter tout défilement horizontal parasite */
+  html, body { overflow-x: clip; }
+  img, video, iframe { max-width: 100%; }
+}

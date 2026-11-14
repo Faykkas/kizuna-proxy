@@ -17,7 +17,7 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
         borderTop: "1px solid rgba(255,255,255,.06)",
       }}>
         © 2026 Kizuna Proxy ·{" "}
-        <a href="/" style={{ color: "rgba(244,244,245,.3)", textDecoration: "none" }}>← Back to home</a>
+        <a href="/" style={{ display: "inline-block", padding: ".6rem 0", color: "rgba(244,244,245,.45)", textDecoration: "none" }}>← Back to home</a>
       </footer>
     </>
   );

@@ -74,13 +74,14 @@ export default function NewsClient() {
               key={cat}
               onClick={() => setFilter(cat)}
               style={{
-                padding: ".35rem .9rem",
+                padding: ".55rem 1rem",
+                minHeight: "38px",
                 borderRadius: "20px",
                 border: "1px solid",
                 borderColor: filter === cat ? "var(--red)" : "var(--border)",
                 background: filter === cat ? "var(--red)" : "var(--surface)",
                 color: filter === cat ? "var(--px-bg)" : "var(--warm)",
-                fontSize: ".68rem",
+                fontSize: ".74rem",
                 letterSpacing: ".08em",
                 textTransform: "uppercase",
                 cursor: "pointer",
@@ -116,7 +117,7 @@ export default function NewsClient() {
                 <div style={{ display: "flex", flexDirection: "column", gap: ".4rem" }}>
                   <span style={{
                     display: "inline-block",
-                    fontSize: ".58rem", fontWeight: 600, letterSpacing: ".1em", textTransform: "uppercase",
+                    fontSize: ".7rem", fontWeight: 600, letterSpacing: ".1em", textTransform: "uppercase",
                     color: "#fff",
                     background: CATEGORY_CONFIG[item.category]?.color,
                     padding: ".18rem .55rem",
@@ -143,7 +144,7 @@ export default function NewsClient() {
 
         {/* Back */}
         <div style={{ marginTop: "3rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
-          <a href="/" style={{ fontSize: ".72rem", color: "var(--warm)", textDecoration: "none", letterSpacing: ".08em" }}>
+          <a href="/" style={{ display: "inline-block", padding: ".6rem 0", fontSize: ".8rem", color: "var(--warm)", textDecoration: "none", letterSpacing: ".08em" }}>
             ← Back to home
           </a>
           <p style={{ fontSize: ".72rem", color: "var(--mist)" }}>

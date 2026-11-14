@@ -117,7 +117,7 @@ export default function FaqClient() {
         {faqs.map((section, si) => (
           <div key={si} style={{ marginBottom: "2.5rem" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}>
-              <span style={{ fontSize: ".58rem", letterSpacing: ".18em", textTransform: "uppercase", color: "var(--red)", fontWeight: 500 }}>
+              <span style={{ fontSize: ".7rem", letterSpacing: ".18em", textTransform: "uppercase", color: "var(--red)", fontWeight: 500 }}>
                 {section.category}
               </span>
               <span style={{ flex: 1, height: "1px", background: "var(--border)" }} />
@@ -146,7 +146,7 @@ export default function FaqClient() {
           </div>
           <a href="mailto:kizunaproxy@gmail.com" style={{
             background: "var(--red)", color: "#fff", padding: ".65rem 1.4rem",
-            fontSize: ".65rem", letterSpacing: ".1em", textTransform: "uppercase",
+            fontSize: ".74rem", letterSpacing: ".1em", textTransform: "uppercase", display: "inline-block",
             fontFamily: "'Inter',sans-serif", fontWeight: 500, textDecoration: "none", borderRadius: "6px",
           }}>
             {t.faq?.ctaBtn || "Contact us →"}
