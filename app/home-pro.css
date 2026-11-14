@@ -598,3 +598,19 @@ header.page-head-photo p, .page-head-photo .px-page-lead { font-size: 1.06rem; l
 .px-page-head-inline.page-head-photo::before { background: linear-gradient(180deg, rgba(14, 7, 30, .45) 0%, rgba(14, 7, 30, .82) 100%), var(--ph) center 40% / cover no-repeat; -webkit-mask-image: none; mask-image: none; border-radius: inherit; }
 .hp-hero-photo { border-bottom: 0; }
 .page-head-photo + .blog-hr { display: none; }
+
+/* fondu encore plus long : la photo déborde sous le haut de la page et s'efface progressivement (derrière le contenu) */
+header.page-head-photo { overflow: visible; padding-bottom: 6rem; }
+header.page-head-photo::before { inset: 0 0 -14rem 0; z-index: -1; background: linear-gradient(180deg, rgba(14, 7, 30, .45) 0%, rgba(14, 7, 30, .62) 45%, rgba(14, 7, 30, .75) 100%), radial-gradient(ellipse at 50% 35%, transparent 0%, rgba(14, 7, 30, .5) 100%), var(--ph) center 40% / cover no-repeat; -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 30%, rgba(0, 0, 0, .75) 50%, rgba(0, 0, 0, .35) 72%, rgba(0, 0, 0, .1) 88%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, #000 30%, rgba(0, 0, 0, .75) 50%, rgba(0, 0, 0, .35) 72%, rgba(0, 0, 0, .1) 88%, transparent 100%); pointer-events: none; }
+@media (max-width: 640px) { header.page-head-photo::before { inset: 0 0 -8rem 0; } }
+
+/* le fil d'Ariane est une balise <nav> : il héritait du flou, du collant et de la bordure du menu principal (bande sombre) */
+nav.breadcrumb { position: static; -webkit-backdrop-filter: none; backdrop-filter: none; background: transparent; border: 0; box-shadow: none; z-index: auto; }
+
+/* Noël / Livraison : logo à la place de la mascotte */
+.xm-logo { display: block; flex: none; filter: drop-shadow(0 6px 16px rgba(232, 51, 74, .25)); }
+.sc-logo, .sc-logo-sm { margin: 0 auto; }
+.sc-logo { width: 64px; height: 64px; }
+.sc-logo-sm { width: 46px; height: 46px; }
+/* Événements / FAQ : en-tête pleine largeur, le contenu reprend juste en dessous */
+.blog-page.blog-page-after-head { padding-top: 1rem; }

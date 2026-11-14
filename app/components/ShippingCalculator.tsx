@@ -7,7 +7,6 @@
 // explains, so it gets equal billing here.
 
 import { useState, useMemo } from "react";
-import Maneki from "./pixel/Maneki";
 import { useLanguage } from "../lib/language";
 import {
   COUNTRIES, ZONES, WEIGHT_EXAMPLES,
@@ -127,7 +126,7 @@ export default function ShippingCalculator() {
       {/* ── Result ── */}
       {!dest || !weight ? (
         <div className="calc-empty">
-          <Maneki prop="parcel" size={80} float />
+          <img src="/logo.svg" alt="" width={64} height={64} className="logo-mark-svg sc-logo" />
           <p>{s.pickCountryWeight || "Pick a country and a weight to see the price."}</p>
         </div>
       ) : !result ? (
@@ -191,7 +190,7 @@ export default function ShippingCalculator() {
 
               {customs.kizuna && (
                 <div className="calc-kizuna">
-                  <Maneki prop="coins" size={54} />
+                  <img src="/logo.svg" alt="" width={46} height={46} className="logo-mark-svg sc-logo-sm" />
                   <div>
                     <strong>{s.weHandleIt || "WE HANDLE IT"}</strong>
                     <p>{customs.kizuna}</p>

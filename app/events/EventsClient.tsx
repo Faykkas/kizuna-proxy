@@ -65,22 +65,23 @@ export default function EventsClient() {
       <SiteNav />
 
       {/* PAGE CONTENT */}
-      <main className="blog-page">
+      <header className="page-head page-head-photo" style={photoHead("events")}>
+        <div className="page-head-inner">
+          <div className="px-head-mascot">
+            <Maneki prop="sign" size={86} float />
+            <span className="px-head-bubble">{h.bubble || "We queue so you don't"}</span>
+          </div>
+          <nav className="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">{t.pageHeroes?.home || "Home"}</a><span>/</span><span>{t.nav?.events || "Events"}</span>
+          </nav>
+          <h1 className="px-page-title">{h.title || c.title} <em>{h.titleEm || c.titleEm}</em></h1>
+          <p className="px-page-lead">{h.lead || c.lead}</p>
+        </div>
+      </header>
+
+      <main className="blog-page blog-page-after-head">
         <div className="blog-wrap" style={{ maxWidth: "860px" }}>
 
-          <div className="px-page-head-inline page-head-photo" style={photoHead("events")}>
-            <div className="px-head-mascot">
-              <Maneki prop="sign" size={86} float />
-              <span className="px-head-bubble">{h.bubble || "We queue so you don't"}</span>
-            </div>
-            <nav className="breadcrumb" aria-label="Breadcrumb">
-              <a href="/">{t.pageHeroes?.home || "Home"}</a><span>/</span><span>{t.nav?.events || "Events"}</span>
-            </nav>
-            <h1 className="px-page-title">{h.title || c.title} <em>{h.titleEm || c.titleEm}</em></h1>
-            <p className="px-page-lead">{h.lead || c.lead}</p>
-          </div>
-
-          <hr className="blog-hr" />
 
           <h2>{ep.whatTitle || c.whatTitle}</h2>
           <div className="ev-grid">

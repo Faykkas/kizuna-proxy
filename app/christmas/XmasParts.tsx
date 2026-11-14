@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { track } from "@vercel/analytics";
 import { IconGacha, IconFigure, IconStore, IconShoppingBag, IconBox, IconApparel, IconCards, IconSneaker, IconBook, IconEvent } from "../components/pixel/PixelIcons";
-import Maneki from "../components/pixel/Maneki";
 import { XMAS_CODE, XMAS_CODE_UNTIL_MS, XMAS_DEADLINE_MS, XMAS_IDEAS, rankIdeas, timeLeft } from "./xmasConfig";
 import { xmasCopy, fillX, XMAS_LOCALES } from "./xmasCopy";
 
@@ -175,7 +174,7 @@ function Results({ c, ans, valid, onRestart }) {
   return (
     <div className="xm-results">
       <div className="xm-results-head">
-        <Maneki state="success" prop="bag" size={64} />
+        <img src="/logo-xmas.svg" alt="" width={56} height={56} className="xm-logo" />
         <div>
           <h2 className="xm-q">{fillX(c.resultTitle, { who })}</h2>
           <p>{c.resultSub}</p>

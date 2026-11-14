@@ -5,7 +5,6 @@ import SiteNav from "../components/SiteNav";
 import { photoHead } from "../lib/pagePhotos";
 import SiteFooter from "../components/SiteFooter";
 import AnnounceBar from "../components/AnnounceBar";
-import Maneki from "../components/pixel/Maneki";
 import ShippingCalculator from "../components/ShippingCalculator";
 import { BackToTop, useScrollReveal } from "../components/ui";
 import { useLang, useAnnounce } from "../components/useSiteState";
@@ -23,10 +22,6 @@ export default function ShippingClient() {
       <main>
         <header className="page-head page-head-photo" style={photoHead("shipping")}>
           <div className="page-head-inner">
-            <div className="px-head-mascot">
-              <Maneki prop="parcel" size={86} float />
-              <span className="px-head-bubble">{s.heroBubble || "No surprise at the door"}</span>
-            </div>
             <nav className="breadcrumb" aria-label="Breadcrumb">
               <a href="/">{t.pageHeroes?.home || "Home"}</a><span>/</span><span>{s.breadcrumb || "Shipping"}</span>
             </nav>

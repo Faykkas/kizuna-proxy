@@ -7,7 +7,6 @@ import SiteNav from "../components/SiteNav";
 import SiteFooter from "../components/SiteFooter";
 import AnnounceBar from "../components/AnnounceBar";
 import StepsV3 from "../components/sections/StepsV3";
-import Maneki from "../components/pixel/Maneki";
 import { BackToTop, useScrollReveal } from "../components/ui";
 import { useLang, useAnnounce } from "../components/useSiteState";
 import { xmasCopy } from "./xmasCopy";
@@ -30,7 +29,7 @@ export default function ChristmasClient() {
           <div className="xm-hero-grid">
             <div className="xm-hero-copy">
               <div className="xm-hero-mascot">
-                <Maneki state="success" prop="bag" size={88} float />
+                <img src="/logo-xmas.svg" alt="" width={84} height={84} className="xm-logo" />
                 <span className="xm-badge">🎄 {c.badge}</span>
               </div>
               <h1>

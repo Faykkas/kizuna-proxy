@@ -91,26 +91,27 @@ export default function FaqClient() {
   return (
     <>
     <SiteNav />
-    <main style={{ minHeight: "100vh", background: "var(--beige)", padding: "7rem 2rem 8rem" }}>
-      <div style={{ maxWidth: "760px", margin: "0 auto" }}>
-
-        <div className="px-page-head-inline page-head-photo" style={photoHead("faq")}>
-          <div className="px-head-mascot">
-            <Maneki prop="glass" size={86} float />
-            <span className="px-head-bubble">{h.bubble || "Ask me anything"}</span>
-          </div>
-          <nav className="breadcrumb" aria-label="Breadcrumb">
-            <a href="/">{t.pageHeroes?.home || "Home"}</a><span>/</span><span>{t.nav?.faq || "FAQ"}</span>
-          </nav>
-          <h1 className="px-page-title">
-            {t.faq?.title || "Common"} <em>{t.faq?.titleEm || "questions"}</em>
-          </h1>
-          <p className="px-page-lead">
-            {t.faq?.contactPrefix || "Can't find your answer?"}{" "}
-            <a href="mailto:kizunaproxy@gmail.com">{t.faq?.contactEmail || "Email us"}</a>{" "}
-            {t.faq?.contactSuffix || "— we reply within 24 hours."}
-          </p>
+    <header className="page-head page-head-photo" style={photoHead("faq")}>
+      <div className="page-head-inner">
+        <div className="px-head-mascot">
+          <Maneki prop="glass" size={86} float />
+          <span className="px-head-bubble">{h.bubble || "Ask me anything"}</span>
         </div>
+        <nav className="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">{t.pageHeroes?.home || "Home"}</a><span>/</span><span>{t.nav?.faq || "FAQ"}</span>
+        </nav>
+        <h1 className="px-page-title">
+          {t.faq?.title || "Common"} <em>{t.faq?.titleEm || "questions"}</em>
+        </h1>
+        <p className="px-page-lead">
+          {t.faq?.contactPrefix || "Can't find your answer?"}{" "}
+          <a href="mailto:kizunaproxy@gmail.com">{t.faq?.contactEmail || "Email us"}</a>{" "}
+          {t.faq?.contactSuffix || "— we reply within 24 hours."}
+        </p>
+      </div>
+    </header>
+    <main style={{ minHeight: "60vh", padding: "1rem 2rem 8rem" }}>
+      <div style={{ maxWidth: "760px", margin: "0 auto" }}>
 
         {/* FAQ sections */}
         {faqs.map((section, si) => (
