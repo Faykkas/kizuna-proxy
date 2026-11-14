@@ -2,6 +2,7 @@
 "use client";
 
 import SiteNav from "../components/SiteNav";
+import { photoHead } from "../lib/pagePhotos";
 import SiteFooter from "../components/SiteFooter";
 import AnnounceBar from "../components/AnnounceBar";
 import Maneki from "../components/pixel/Maneki";
@@ -23,7 +24,7 @@ export default function TokyoInStoreClient({ locale } = {}) {
       <AnnounceBar announce={announce} />
       <SiteNav />
       <main>
-        <header className="page-head">
+        <header className="page-head page-head-photo" style={photoHead("inStore")}>
           <div className="page-head-kana" aria-hidden="true">店</div>
           <div className="page-head-inner">
             <div className="px-head-mascot">

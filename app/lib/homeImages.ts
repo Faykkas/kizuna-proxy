@@ -64,4 +64,5 @@ export const PHOTO_CREDITS = [
   "Karsten Winegeart", "Fratto Kenchiku", "Denys Nevozhai", "Caramel", "Mobina Ghazazani", "Madeline Liu",
   "william wallace", "Garvit Nama", "Pedram Farjam", "Ela De Pure", "Kairi Kaljo", "Geraldine Lewa", "Nick Hamze",
   "Jakob Rosen", "COSMOH", "Lorenzo Herrera", "Fumiaki Hayashi",
+  "Rohit Choudhari", "Satoshi Nitawaki", "Louie Martinez", "Erik Eastman",
 ]; // détail fichier par fichier : docs/photo-credits.md

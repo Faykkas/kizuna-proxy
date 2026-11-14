@@ -2,6 +2,7 @@
 "use client";
 
 import SiteNav from "../components/SiteNav";
+import { photoHead } from "../lib/pagePhotos";
 import SiteFooter from "../components/SiteFooter";
 import Maneki from "../components/pixel/Maneki";
 import { useLang } from "../components/useSiteState";
@@ -67,7 +68,7 @@ export default function EventsClient() {
       <main className="blog-page">
         <div className="blog-wrap" style={{ maxWidth: "860px" }}>
 
-          <div className="px-page-head-inline">
+          <div className="px-page-head-inline page-head-photo" style={photoHead("events")}>
             <div className="px-head-mascot">
               <Maneki prop="sign" size={86} float />
               <span className="px-head-bubble">{h.bubble || "We queue so you don't"}</span>

@@ -5,6 +5,7 @@
 // Séparée des tarifs d'achat. Textes dans les 12 langues : reservationCopy.ts (prix et conditions du cahier des charges, rien d'ajouté).
 
 import SiteNav from "../components/SiteNav";
+import { photoHead } from "../lib/pagePhotos";
 import Maneki from "../components/pixel/Maneki";
 import SiteFooter from "../components/SiteFooter";
 import AnnounceBar from "../components/AnnounceBar";
@@ -31,7 +32,7 @@ export default function ReservationClient() {
       <AnnounceBar announce={announce} />
       <SiteNav />
       <main>
-        <header className="page-head">
+        <header className="page-head page-head-photo" style={photoHead("reservation")}>
           <div className="page-head-kana" aria-hidden="true">予</div>
           <div className="page-head-inner">
             <div className="px-head-mascot">

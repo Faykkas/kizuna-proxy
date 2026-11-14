@@ -1,6 +1,7 @@
 // @ts-nocheck
 "use client";
 import { useState } from "react";
+import { photoHead } from "../lib/pagePhotos";
 import { useLanguage } from "../lib/language";
 import SiteNav from "../components/SiteNav";
 import Maneki from "../components/pixel/Maneki";
@@ -93,7 +94,7 @@ export default function FaqClient() {
     <main style={{ minHeight: "100vh", background: "var(--beige)", padding: "7rem 2rem 8rem" }}>
       <div style={{ maxWidth: "760px", margin: "0 auto" }}>
 
-        <div className="px-page-head-inline">
+        <div className="px-page-head-inline page-head-photo" style={photoHead("faq")}>
           <div className="px-head-mascot">
             <Maneki prop="glass" size={86} float />
             <span className="px-head-bubble">{h.bubble || "Ask me anything"}</span>

@@ -549,3 +549,28 @@
 .hp-hero-photo .hp-hero-bg img { object-position: 70% 40%; }
 .hp-hero-photo .hp-hero-bg::after { background: linear-gradient(90deg, rgba(14, 7, 30, .92) 0%, rgba(14, 7, 30, .78) 35%, rgba(14, 7, 30, .2) 65%, rgba(14, 7, 30, .1) 100%), linear-gradient(180deg, transparent 70%, var(--px-bg, #120a24) 100%); }
 @media (max-width: 900px) { .hp-hero-photo .hp-hero-bg::after { background: linear-gradient(180deg, rgba(14, 7, 30, .7) 0%, rgba(14, 7, 30, .88) 70%, var(--px-bg, #120a24) 100%); } }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EN-TÊTES PHOTO DES PAGES (boutique, services, tarifs, livraison, avis, coupons, événements, FAQ…)
+   La photo vient de la variable --ph (lib/pagePhotos.ts). Même ambiance que l'accueil, sans mascotte.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.page-head-photo { position: relative; overflow: hidden; background: #120a24 var(--ph) center 40% / cover no-repeat; }
+header.page-head-photo { padding: 6.5rem 1.6rem 5rem; border-bottom: 1px solid var(--border); }
+.page-head-photo::before { content: ""; position: absolute; inset: 0; z-index: 0; background: linear-gradient(180deg, rgba(14, 7, 30, .5) 0%, rgba(14, 7, 30, .72) 55%, var(--px-bg, #120a24) 100%), radial-gradient(ellipse at center, transparent 0%, rgba(14, 7, 30, .45) 100%); }
+.page-head-photo > * { position: relative; z-index: 1; }
+.page-head-photo .px-head-mascot, .page-head-photo .page-head-kana { display: none; }
+.page-head-photo h1, .page-head-photo .px-page-title { color: #fff; text-shadow: 0 2px 4px rgba(0, 0, 0, .5), 0 8px 34px rgba(0, 0, 0, .7); }
+.page-head-photo p, .page-head-photo .px-page-lead { color: rgba(240, 237, 247, .92); text-shadow: 0 1px 3px rgba(0, 0, 0, .8); }
+.page-head-photo .breadcrumb, .page-head-photo .breadcrumb a, .page-head-photo .breadcrumb span { color: rgba(240, 237, 247, .82); }
+/* Événements et FAQ : l'en-tête est dans une colonne étroite → bannière arrondie */
+.px-page-head-inline.page-head-photo { margin: 0 0 2.2rem; padding: 3.6rem 2rem 3rem; border: 1px solid var(--border); border-radius: 24px; box-shadow: 0 24px 60px rgba(0, 0, 0, .4); }
+.px-page-head-inline.page-head-photo::before { background: linear-gradient(180deg, rgba(14, 7, 30, .45) 0%, rgba(14, 7, 30, .82) 100%); }
+@media (max-width: 640px) {
+  header.page-head-photo { padding: 4.2rem 1.1rem 3.4rem; }
+  .px-page-head-inline.page-head-photo { padding: 2.6rem 1.2rem 2.2rem; border-radius: 18px; }
+}
+
+/* titres des en-têtes photo : même typographie que l'accueil (plus de police pixel en majuscules) */
+header.page-head-photo h1, .page-head-photo .px-page-title { font-family: var(--font-head); font-weight: 700; font-size: clamp(2.1rem, 4.8vw, 3.4rem); line-height: 1.08; letter-spacing: -0.025em; text-transform: none; max-width: 20ch; margin: .4rem auto 1rem; }
+header.page-head-photo h1 em, .page-head-photo .px-page-title em { color: var(--red); font-style: normal; }
+header.page-head-photo p, .page-head-photo .px-page-lead { font-size: 1.06rem; line-height: 1.7; max-width: 38rem; margin-left: auto; margin-right: auto; font-weight: 400; }

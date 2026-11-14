@@ -5,6 +5,7 @@
 // Textes en 12 langues : couponsCopy.ts. Montants affichés aussi dans la monnaie du visiteur (indicatif, les paiements restent en JPY).
 
 import SiteNav from "../components/SiteNav";
+import { photoHead } from "../lib/pagePhotos";
 import Maneki from "../components/pixel/Maneki";
 import SiteFooter from "../components/SiteFooter";
 import AnnounceBar from "../components/AnnounceBar";
@@ -33,7 +34,7 @@ export default function CouponsClient() {
       <AnnounceBar announce={announce} />
       <SiteNav />
       <main>
-        <header className="page-head">
+        <header className="page-head page-head-photo" style={photoHead("coupons")}>
           <div className="page-head-kana" aria-hidden="true">券</div>
           <div className="page-head-inner">
             <div className="px-head-mascot">

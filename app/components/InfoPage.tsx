@@ -5,6 +5,7 @@
 // Les textes viennent de translations.ts (t.whyKizunaHome / t.serviceRules), déjà traduits en 12 langues.
 
 import SiteNav from "./SiteNav";
+import { photoHead } from "../lib/pagePhotos";
 import SiteFooter from "./SiteFooter";
 import AnnounceBar from "./AnnounceBar";
 import Maneki from "./pixel/Maneki";
@@ -24,7 +25,7 @@ export default function InfoPage({ which }: { which: "why" | "rules" }) {
       <AnnounceBar announce={announce} />
       <SiteNav />
       <main>
-        <header className="page-head">
+        <header className="page-head page-head-photo" style={photoHead(which === "why" ? "why" : "rules")}>
           <div className="page-head-inner">
             <div className="px-head-mascot">
               <Maneki prop={which === "why" ? "heart" : "sign"} size={86} float />

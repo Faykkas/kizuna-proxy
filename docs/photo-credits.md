@@ -32,3 +32,8 @@ La licence couvre la photo, pas les marques ou personnages qu'elle montre (Poké
 | tamagotchi.jpg | COSMOH | https://unsplash.com/photos/unlm6Fxxvjw |
 | retro-computers.jpg | Lorenzo Herrera | https://unsplash.com/photos/p0j-mE6mGo4 |
 | tea-ceremony.jpg | Fumiaki Hayashi | https://unsplash.com/photos/EUqx6ACfXFA |
+| parcels-pile.jpg | Rohit Choudhari | https://unsplash.com/photos/qO2ztAz5g7A |
+| matsuri-night.jpg | Satoshi Nitawaki | https://unsplash.com/photos/A24pQbk7wl8 |
+| tokyo-tower-dusk.jpg | Louie Martinez | https://unsplash.com/photos/IocJwyqRv3M |
+| shinjuku-neon.jpg | Erik Eastman | https://unsplash.com/photos/4HG5hlhmZg8 |
+| neon-street.jpg | Jezael Melgoza | https://unsplash.com/photos/layMbSJ3YOE |

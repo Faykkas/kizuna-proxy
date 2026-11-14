@@ -2,6 +2,7 @@
 "use client";
 
 import SiteNav from "../components/SiteNav";
+import { photoHead } from "../lib/pagePhotos";
 import Maneki from "../components/pixel/Maneki";
 import SiteFooter from "../components/SiteFooter";
 import AnnounceBar from "../components/AnnounceBar";
@@ -20,7 +21,7 @@ export default function PricingClient() {
       <AnnounceBar announce={announce} />
       <SiteNav />
       <main>
-        <header className="page-head">
+        <header className="page-head page-head-photo" style={photoHead("pricing")}>
           <div className="page-head-kana" aria-hidden="true">価</div>
           <div className="page-head-inner">
             <div className="px-head-mascot">
