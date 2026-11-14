@@ -17,6 +17,7 @@ export type HomeCopy = {
   picks: string[]; // 10 produits (même ordre que JAPAN_PICKS)
   photos: string; // « Photos » (crédit Unsplash)
   stats: string[]; // bandeau de chiffres : livrées, pays, délai de réponse, avis
+  seeAll: string; // lien vers la page « tout ce qu'on achète »
   catCta: string;
   delTitle: string;
   delSub: string;
@@ -42,6 +43,7 @@ export const HOME_COPY: Record<string, HomeCopy> = {
     picks: ["Vintage cameras","Skincare & beauty","Matcha & tea","Ceramics","Retro games","Vinyl & city pop","Tamagotchi & toys","Watches","Leather bags","Retro tech"],
     photos: "Photos",
     stats: ["orders delivered","countries delivered","to reply","verified reviews"],
+    seeAll: "See everything we buy",
     catCta: "Ask for this",
     delTitle: "Recently delivered orders",
     delSub: "Real parcels, packed by us in Tokyo and sent to customers around the world.",
@@ -70,6 +72,7 @@ export const HOME_COPY: Record<string, HomeCopy> = {
     picks: ["Appareils photo vintage","Soins & beauté","Matcha & thé","Céramique","Jeux rétro","Vinyles & city pop","Tamagotchi & jouets","Montres","Sacs en cuir","Tech rétro"],
     photos: "Photos",
     stats: ["commandes livrées","pays livrés","pour vous répondre","avis vérifiés"],
+    seeAll: "Voir tout ce qu'on achète",
     catCta: "Demander cet article",
     delTitle: "Commandes livrées récemment",
     delSub: "De vrais colis, emballés par nous à Tokyo et envoyés à des clients du monde entier.",
@@ -98,6 +101,7 @@ export const HOME_COPY: Record<string, HomeCopy> = {
     picks: ["ヴィンテージカメラ","スキンケア・コスメ","抹茶・お茶","陶磁器","レトロゲーム","レコード・シティポップ","たまごっち・おもちゃ","腕時計","レザーバッグ","レトロ家電"],
     photos: "写真",
     stats: ["件のお届け実績","か国へお届け","以内にご返信","認証済みレビュー"],
+    seeAll: "購入できるものをすべて見る",
     catCta: "この商品を依頼する",
     delTitle: "最近お届けしたご注文",
     delSub: "東京で私たちが梱包し、世界中のお客様へお送りした実際の荷物です。",
@@ -126,6 +130,7 @@ export const HOME_COPY: Record<string, HomeCopy> = {
     picks: ["Cámaras vintage","Cuidado de la piel y belleza","Matcha y té","Cerámica","Juegos retro","Vinilos y city pop","Tamagotchi y juguetes","Relojes","Bolsos de cuero","Tecnología retro"],
     photos: "Fotos",
     stats: ["pedidos entregados","países de entrega","para responderte","reseñas verificadas"],
+    seeAll: "Ver todo lo que compramos",
     catCta: "Pedir este artículo",
     delTitle: "Pedidos entregados recientemente",
     delSub: "Paquetes reales, embalados por nosotros en Tokio y enviados a clientes de todo el mundo.",
@@ -154,6 +159,7 @@ export const HOME_COPY: Record<string, HomeCopy> = {
     picks: ["Fotocamere vintage","Skincare e bellezza","Matcha e tè","Ceramica","Giochi retrò","Vinili e city pop","Tamagotchi e giocattoli","Orologi","Borse in pelle","Tecnologia retrò"],
     photos: "Foto",
     stats: ["ordini consegnati","paesi raggiunti","per risponderti","recensioni verificate"],
+    seeAll: "Vedi tutto ciò che acquistiamo",
     catCta: "Richiedi questo articolo",
     delTitle: "Ordini consegnati di recente",
     delSub: "Pacchi veri, imballati da noi a Tokyo e spediti a clienti in tutto il mondo.",
@@ -182,6 +188,7 @@ export const HOME_COPY: Record<string, HomeCopy> = {
     picks: ["Vintage-Kameras","Hautpflege & Beauty","Matcha & Tee","Keramik","Retro-Games","Vinyl & City Pop","Tamagotchi & Spielzeug","Uhren","Ledertaschen","Retro-Technik"],
     photos: "Fotos",
     stats: ["gelieferte Bestellungen","Lieferländer","bis zur Antwort","verifizierte Bewertungen"],
+    seeAll: "Alles ansehen, was wir kaufen",
     catCta: "Diesen Artikel anfragen",
     delTitle: "Kürzlich gelieferte Bestellungen",
     delSub: "Echte Pakete, von uns in Tokio verpackt und an Kunden auf der ganzen Welt verschickt.",
@@ -210,6 +217,7 @@ export const HOME_COPY: Record<string, HomeCopy> = {
     picks: ["빈티지 카메라","스킨케어 & 뷰티","말차 & 차","도자기","레트로 게임","LP & 시티팝","다마고치 & 장난감","시계","가죽 가방","레트로 테크"],
     photos: "사진",
     stats: ["건 배송 완료","개국 배송","이내 답변","인증된 후기"],
+    seeAll: "구매 가능한 모든 상품 보기",
     catCta: "이 상품 요청하기",
     delTitle: "최근 배송 완료된 주문",
     delSub: "도쿄에서 직접 포장해 전 세계 고객에게 보낸 실제 소포입니다.",
@@ -238,6 +246,7 @@ export const HOME_COPY: Record<string, HomeCopy> = {
     picks: ["复古相机","护肤与美妆","抹茶与茶","陶瓷器","复古游戏","黑胶与城市流行乐","拓麻歌子与玩具","手表","皮革包袋","复古电子"],
     photos: "图片",
     stats: ["笔订单已送达","个国家和地区","内回复","真实评价"],
+    seeAll: "查看我们代购的全部商品",
     catCta: "代购此类商品",
     delTitle: "近期已送达的订单",
     delSub: "真实的包裹，由我们在东京亲手打包，寄往世界各地的客户。",
@@ -266,6 +275,7 @@ export const HOME_COPY: Record<string, HomeCopy> = {
     picks: ["Câmeras vintage","Skincare e beleza","Matcha e chá","Cerâmica","Jogos retrô","Vinis e city pop","Tamagotchi e brinquedos","Relógios","Bolsas de couro","Tecnologia retrô"],
     photos: "Fotos",
     stats: ["pedidos entregues","países atendidos","para responder","avaliações verificadas"],
+    seeAll: "Ver tudo o que compramos",
     catCta: "Pedir este item",
     delTitle: "Pedidos entregues recentemente",
     delSub: "Pacotes reais, embalados por nós em Tóquio e enviados a clientes do mundo todo.",
@@ -294,6 +304,7 @@ export const HOME_COPY: Record<string, HomeCopy> = {
     picks: ["Kamera vintage","Skincare & kecantikan","Matcha & teh","Keramik","Game retro","Vinyl & city pop","Tamagotchi & mainan","Jam tangan","Tas kulit","Teknologi retro"],
     photos: "Foto",
     stats: ["pesanan terkirim","negara tujuan","untuk membalas","ulasan terverifikasi"],
+    seeAll: "Lihat semua yang kami beli",
     catCta: "Minta barang ini",
     delTitle: "Pesanan yang baru terkirim",
     delSub: "Paket asli, dikemas oleh kami di Tokyo dan dikirim ke pelanggan di seluruh dunia.",
@@ -322,6 +333,7 @@ export const HOME_COPY: Record<string, HomeCopy> = {
     picks: ["Máy ảnh cổ điển","Chăm sóc da & làm đẹp","Matcha & trà","Gốm sứ","Game cổ điển","Đĩa than & city pop","Tamagotchi & đồ chơi","Đồng hồ","Túi da","Đồ công nghệ cổ"],
     photos: "Ảnh",
     stats: ["đơn đã giao","quốc gia","để phản hồi","đánh giá đã xác minh"],
+    seeAll: "Xem tất cả những gì chúng tôi mua",
     catCta: "Nhờ mua món này",
     delTitle: "Đơn hàng vừa giao",
     delSub: "Những kiện hàng thật, do chúng tôi đóng gói tại Tokyo và gửi đến khách trên khắp thế giới.",
@@ -350,6 +362,7 @@ export const HOME_COPY: Record<string, HomeCopy> = {
     picks: ["Vintage camera's","Huidverzorging & beauty","Matcha & thee","Keramiek","Retrogames","Vinyl & city pop","Tamagotchi & speelgoed","Horloges","Leren tassen","Retrotech"],
     photos: "Foto's",
     stats: ["bestellingen bezorgd","landen beleverd","om te antwoorden","geverifieerde reviews"],
+    seeAll: "Bekijk alles wat we kopen",
     catCta: "Dit artikel aanvragen",
     delTitle: "Onlangs bezorgde bestellingen",
     delSub: "Echte pakketten, door ons in Tokio ingepakt en naar klanten over de hele wereld gestuurd.",

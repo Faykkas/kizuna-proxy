@@ -1,13 +1,15 @@
 // @ts-nocheck
 "use client";
 
+// Accueil « histoire » : 4 blocs alternés image / texte (voir components/sections/HomeStory.tsx), Noël tant que c'est la saison,
+// puis l'appel final. Le reste (grille complète des catégories, produits phares, actualités) vit sur /what-we-buy, /news, etc.
+
 import SiteNav from "./components/SiteNav";
 import SiteFooter from "./components/SiteFooter";
 import AnnounceBar from "./components/AnnounceBar";
 import { XmasBand } from "./christmas/XmasParts";
-import { HeroPro, StoresStrip, CategoryGrid, DeliveredGrid, ReviewsHome, TokyoBand, JapanPicks, PhotoCredits, StatsBar } from "./components/sections/HomePro";
-import HighlightsV3 from "./components/sections/HighlightsV3";
-import StepsV3 from "./components/sections/StepsV3";
+import { PhotoCredits } from "./components/sections/HomePro";
+import { StoryHero, StoryJapan, StoryTokyo, StoryProof } from "./components/sections/HomeStory";
 import { BackToTop, useScrollReveal } from "./components/ui";
 import { useLang, useAnnounce } from "./components/useSiteState";
 
@@ -22,32 +24,16 @@ export default function Home() {
       <AnnounceBar announce={announce} />
       <SiteNav />
 
-      {/* HERO v3 — la promesse + le formulaire de demande */}
-      <HeroPro t={t} lang={lang} />
+      <StoryHero t={t} lang={lang} />
 
       {/* Noël : compte à rebours + quiz cadeau (disparaît seule après le 5 décembre) */}
       <XmasBand lang={lang} />
 
-      {/* Boutiques, catégories en images */}
-      <StoresStrip lang={lang} />
-      <CategoryGrid lang={lang} />
+      <StoryJapan lang={lang} />
+      <StoryTokyo t={t} lang={lang} />
+      <StoryProof t={t} lang={lang} />
 
-      {/* Bandeau photo Tokyo + mosaïque des produits phares du Japon */}
-      <TokyoBand t={t} lang={lang} />
-      <JapanPicks lang={lang} />
-
-      {/* Comment ça marche (3 étapes) + vrais chiffres */}
-      <StepsV3 t={t} />
-      <StatsBar lang={lang} />
-
-      {/* À la une : boutique, événements, business */}
-      <HighlightsV3 t={t} lang={lang} compact />
-
-      {/* Vraies commandes livrées, avis Reddit, arguments de confiance, puis les 4 réponses rapides */}
-      <DeliveredGrid lang={lang} />
-      <ReviewsHome t={t} lang={lang} />
-
-      {/* CTA FINAL */}
+      {/* Appel final */}
       <section className="section reveal">
         <div className="wrap">
           <div className="pcg-cta">
