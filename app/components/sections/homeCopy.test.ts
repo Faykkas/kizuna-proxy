@@ -15,6 +15,7 @@ test("Accueil pro : mêmes clés, 8 catégories, 10 produits, 4 arguments, aucun
     assert.deepEqual(Object.keys(c).sort(), ref, lang);
     assert.equal(c.cats.length, 8, lang);
     assert.equal(c.picks.length, 10, lang);
+    assert.equal(c.stats.length, 4, lang);
     for (const p of c.picks) assert.ok(p.trim().length > 0, `${lang}.picks`);
     assert.equal(c.trust.length, 4, lang);
     for (const [k, v] of Object.entries(c)) {

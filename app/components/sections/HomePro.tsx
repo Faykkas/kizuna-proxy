@@ -4,9 +4,8 @@
 // Accueil « pro » : héros avec barre lien/description + collage de vraies photos, bande des boutiques, catégories en images,
 // commandes livrées, avis Reddit, arguments de confiance. Textes : homeCopy.ts (12 langues) + translations.ts. Images : lib/homeImages.ts.
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import Maneki from "../pixel/Maneki";
 import { IconInstagram, IconTiktok } from "../ui";
 import { REAL_REVIEWS } from "../data";
 import { homeCopy } from "./homeCopy";
@@ -37,7 +36,6 @@ export function HeroPro({ t, lang }: { t: any; lang: string }) {
   const h = t.hero || {};
   const c = homeCopy(lang);
   const [q, setQ] = useState("");
-  const [happy, setHappy] = useState(false);
 
   function go(e) {
     e.preventDefault();
@@ -58,7 +56,7 @@ export function HeroPro({ t, lang }: { t: any; lang: string }) {
           </h1>
           <p className="hp-lead">{h.desc}</p>
 
-          <form className="hp-search" onSubmit={go} onFocus={() => setHappy(true)} onBlur={() => setHappy(false)} role="search">
+          <form className="hp-search" onSubmit={go} role="search">
             <span className="hp-search-icon"><SearchIcon /></span>
             <input type="text" value={q} onChange={(e) => setQ(e.target.value)} placeholder={c.searchPh} aria-label={c.searchPh} autoComplete="off" />
             <button type="submit" className="btn btn-gold">{c.searchBtn}</button>
@@ -89,9 +87,6 @@ export function HeroPro({ t, lang }: { t: any; lang: string }) {
               <figcaption>{im.place ? `${c.delBadge} · ${im.place}` : c.delBadge}</figcaption>
             </figure>
           ))}
-          <div className="hp-collage-mascot">
-            <Maneki state={happy ? "success" : "idle"} prop="bag" size={104} float />
-          </div>
         </div>
       </div>
     </section>
@@ -264,5 +259,63 @@ export function PhotoCredits({ lang }: { lang: string }) {
       {c.photos} : {PHOTO_CREDITS.join(", ")} ·{" "}
       <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">Unsplash</a>
     </p>
+  );
+}
+
+/** Compte animé de 0 à la valeur quand le bloc entre à l'écran. */
+function CountUp({ to }: { to: number }) {
+  const [n, setN] = useState(0);
+  const ref = useRef<HTMLSpanElement | null>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) { setN(to); return; }
+    let raf = 0;
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      const start = performance.now();
+      const step = (now: number) => {
+        const p = Math.min(1, (now - start) / 1400);
+        setN(Math.round(to * (1 - Math.pow(1 - p, 3))));
+        if (p < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    }, { threshold: 0.4 });
+    io.observe(el);
+    return () => { io.disconnect(); cancelAnimationFrame(raf); };
+  }, [to]);
+  return <span ref={ref}>{n}</span>;
+}
+
+/** Bandeau de preuve : vrais chiffres (commandes livrées, pays) depuis /api/stats, délai de réponse, avis. */
+export function StatsBar({ lang }: { lang: string }) {
+  const c = homeCopy(lang);
+  const [data, setData] = useState<{ delivered: number; countries: number } | null>(null);
+  useEffect(() => {
+    let off = false;
+    fetch("/api/stats").then((r) => (r.ok ? r.json() : null)).then((j) => { if (!off && j && typeof j.delivered === "number") setData(j); }).catch(() => {});
+    return () => { off = true; };
+  }, []);
+  const items = [
+    data ? { v: <><CountUp to={data.delivered} /></>, l: c.stats[0] } : null,
+    data ? { v: <><CountUp to={data.countries} /></>, l: c.stats[1] } : null,
+    { v: "< 24h", l: c.stats[2] },
+    { v: "5.0 ★", l: c.stats[3] },
+  ].filter(Boolean);
+  return (
+    <section className="hp-stats-wrap">
+      <div className="wrap">
+        <ul className="hp-stats">
+          {items.map((x, i) => (
+            <li key={i}>
+              <strong>{x.v}</strong>
+              <span>{x.l}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
   );
 }

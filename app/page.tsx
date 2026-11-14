@@ -5,11 +5,9 @@ import SiteNav from "./components/SiteNav";
 import SiteFooter from "./components/SiteFooter";
 import AnnounceBar from "./components/AnnounceBar";
 import { XmasBand } from "./christmas/XmasParts";
-import { HeroPro, StoresStrip, CategoryGrid, DeliveredGrid, ReviewsHome, TrustBand, TokyoBand, JapanPicks, PhotoCredits } from "./components/sections/HomePro";
+import { HeroPro, StoresStrip, CategoryGrid, DeliveredGrid, ReviewsHome, TokyoBand, JapanPicks, PhotoCredits, StatsBar } from "./components/sections/HomePro";
 import HighlightsV3 from "./components/sections/HighlightsV3";
 import StepsV3 from "./components/sections/StepsV3";
-import ExplainerSection from "./components/sections/ExplainerSection";
-import NewsPreviewSection from "./components/sections/NewsPreviewSection";
 import { BackToTop, useScrollReveal } from "./components/ui";
 import { useLang, useAnnounce } from "./components/useSiteState";
 
@@ -38,20 +36,16 @@ export default function Home() {
       <TokyoBand t={t} lang={lang} />
       <JapanPicks lang={lang} />
 
-      {/* Comment ça marche : 3 étapes */}
+      {/* Comment ça marche (3 étapes) + vrais chiffres */}
       <StepsV3 t={t} />
+      <StatsBar lang={lang} />
 
       {/* À la une : boutique, événements, business */}
-      <HighlightsV3 t={t} lang={lang} />
+      <HighlightsV3 t={t} lang={lang} compact />
 
       {/* Vraies commandes livrées, avis Reddit, arguments de confiance, puis les 4 réponses rapides */}
       <DeliveredGrid lang={lang} />
       <ReviewsHome t={t} lang={lang} />
-      <TrustBand lang={lang} />
-      <ExplainerSection t={t} />
-
-      {/* NEWS */}
-      <NewsPreviewSection t={t} />
 
       {/* CTA FINAL */}
       <section className="section reveal">

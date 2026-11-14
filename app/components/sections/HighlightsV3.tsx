@@ -22,10 +22,31 @@ const SLOTS = [
   // gardés en réserve (pas affichés sur l'accueil pour le garder court) : eventPromo (Pingouin Suica), comiketPromo, comitiaPromo
 ];
 
-export default function HighlightsV3({ t, lang }: { t: any; lang?: string }) {
+const COMPACT_KEYS = ["couponsPromo", "pokemonStarbucksPromo", "b2bPromo"];
+
+export default function HighlightsV3({ t, lang, compact = false }: { t: any; lang?: string; compact?: boolean }) {
   const extra = { ...(eventPromos[lang || "en"] || eventPromos.en), ...(seasonPromos[lang || "en"] || seasonPromos.en), couponsPromo: couponsCopy(lang || "en").promo };
   const cards = SLOTS.map((s) => ({ ...s, p: t[s.key] || extra[s.key] })).filter((c) => c.p && c.p.title);
   if (cards.length === 0) return null;
+  if (compact) {
+    const three = COMPACT_KEYS.map((k) => cards.find((c) => c.key === k)).filter(Boolean);
+    return (
+      <section className="section-sm reveal">
+        <div className="wrap">
+          <div className="v3-promos">
+            {three.map(({ key, href, tone, p }) => (
+              <a key={key} href={href} className={`v3-promo v3-promo-${tone}`}>
+                {p.badge ? <span className="v3-badge">{p.badge}</span> : null}
+                <strong>{p.title}</strong>
+                <p>{p.desc}</p>
+                {p.cta ? <span className="v3-promo-cta">{p.cta}</span> : null}
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
   const [lead, ...rest] = cards;
   return (
     <section className="section-sm reveal">

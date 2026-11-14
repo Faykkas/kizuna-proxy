@@ -81,7 +81,9 @@ export default function ChristmasTheme() {
       canvas.style.width = w + "px";
       canvas.style.height = h + "px";
       ctx.setTransform(1, 0, 0, 1, 0, 0);
-      const total = Math.round(Math.min(110, Math.max(34, w / 13)));
+      // deux fois moins de flocons sur l'accueil (déjà riche en photos) que sur les autres pages
+      const factor = window.location.pathname === "/" ? 0.5 : 1;
+      const total = Math.round(Math.min(110, Math.max(34, w / 13)) * factor);
       flakes = [];
       layers.forEach((l, i) => {
         for (let k = 0; k < Math.round(total * l.n); k++) flakes.push(make(i, true));

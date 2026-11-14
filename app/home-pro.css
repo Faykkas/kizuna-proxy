@@ -440,3 +440,18 @@
 /* bande de liens du menu : tient sur une ligne sur les écrans moyens (sans défilement, qui couperait « Guides ») */
 @media (max-width: 1240px) { .ns-link { padding: .72rem .55rem; font-size: .84rem; } }
 @media (max-width: 1080px) { .ns-link { padding: .7rem .42rem; font-size: .8rem; } }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BANDEAU DE CHIFFRES (vrais chiffres) + allègement des effets
+   ═══════════════════════════════════════════════════════════════════════════ */
+.hp-hero-photo::before { display: none; }
+.hp-stats-wrap { padding: .4rem 0 1.4rem; }
+.hp-stats { list-style: none; margin: 0; padding: 1.4rem 1rem; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--border-gold); border-radius: 20px; background: linear-gradient(135deg, rgba(168, 224, 74, .06), rgba(199, 125, 255, .08)), var(--surface); box-shadow: var(--v3-hard); }
+.hp-stats li { display: flex; flex-direction: column; align-items: center; gap: .3rem; padding: .4rem .6rem; text-align: center; }
+.hp-stats li + li { border-left: 1px solid var(--border); }
+.hp-stats strong { font-family: var(--font-head); font-size: clamp(1.9rem, 3.6vw, 2.6rem); font-weight: 800; line-height: 1; color: var(--red); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.hp-stats li > span { font-size: .88rem; color: var(--warm); line-height: 1.35; }
+@media (max-width: 700px) {
+  .hp-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1rem; }
+  .hp-stats li:nth-child(3) { border-left: 0; }
+}
