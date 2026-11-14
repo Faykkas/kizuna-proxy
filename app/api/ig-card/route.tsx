@@ -115,15 +115,15 @@ export async function GET(req: Request) {
         {/* quand / où */}
         <div style={{ display: "flex", flexDirection: "column", gap: 26, marginTop: 54 }}>
           {post.dates ? (
-            <div style={{ display: "flex", alignItems: "baseline", gap: 26 }}>
-              <span style={{ width: 150, fontSize: 24, fontWeight: 600, letterSpacing: 3, color: C.violet }}>WHEN</span>
-              <span style={{ fontSize: 40, fontWeight: 600, color: C.ink }}>{post.dates}</span>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 26 }}>
+              <span style={{ width: 150, flexShrink: 0, paddingTop: 14, fontSize: 24, fontWeight: 600, letterSpacing: 3, color: C.violet }}>WHEN</span>
+              <span style={{ flex: 1, fontSize: 40, fontWeight: 600, lineHeight: 1.2, color: C.ink }}>{post.dates}</span>
             </div>
           ) : null}
           {post.place ? (
-            <div style={{ display: "flex", alignItems: "baseline", gap: 26 }}>
-              <span style={{ width: 150, fontSize: 24, fontWeight: 600, letterSpacing: 3, color: C.violet }}>WHERE</span>
-              <span style={{ fontSize: 40, fontWeight: 600, color: C.ink }}>{post.place}</span>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 26 }}>
+              <span style={{ width: 150, flexShrink: 0, paddingTop: 14, fontSize: 24, fontWeight: 600, letterSpacing: 3, color: C.violet }}>WHERE</span>
+              <span style={{ flex: 1, fontSize: 40, fontWeight: 600, lineHeight: 1.2, color: C.ink }}>{post.place}</span>
             </div>
           ) : null}
         </div>
