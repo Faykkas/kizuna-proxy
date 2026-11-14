@@ -12,6 +12,13 @@ const nextConfig: NextConfig = {
   // careful per-script audit — worth doing as its own pass, not bundled in
   // here where getting it wrong could silently break checkout or the chat
   // widget in production.
+  // L'ancien panneau /admin (sans double authentification) est fermé : tout se fait dans /admin-v2.
+  async redirects() {
+    return [
+      { source: "/admin", destination: "/admin-v2", permanent: false },
+      { source: "/admin/:path*", destination: "/admin-v2", permanent: false },
+    ];
+  },
   async headers() {
     return [
       {
