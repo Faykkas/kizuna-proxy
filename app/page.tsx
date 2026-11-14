@@ -5,7 +5,7 @@ import SiteNav from "./components/SiteNav";
 import SiteFooter from "./components/SiteFooter";
 import AnnounceBar from "./components/AnnounceBar";
 import { XmasBand } from "./christmas/XmasParts";
-import { HeroPro, StoresStrip, CategoryGrid, DeliveredGrid, ReviewsHome, TrustBand } from "./components/sections/HomePro";
+import { HeroPro, StoresStrip, CategoryGrid, DeliveredGrid, ReviewsHome, TrustBand, TokyoBand, JapanPicks, PhotoCredits } from "./components/sections/HomePro";
 import HighlightsV3 from "./components/sections/HighlightsV3";
 import StepsV3 from "./components/sections/StepsV3";
 import ExplainerSection from "./components/sections/ExplainerSection";
@@ -33,6 +33,10 @@ export default function Home() {
       {/* Boutiques, catégories en images */}
       <StoresStrip lang={lang} />
       <CategoryGrid lang={lang} />
+
+      {/* Bandeau photo Tokyo + mosaïque des produits phares du Japon */}
+      <TokyoBand t={t} lang={lang} />
+      <JapanPicks lang={lang} />
 
       {/* Comment ça marche : 3 étapes */}
       <StepsV3 t={t} />
@@ -63,6 +67,7 @@ export default function Home() {
         </div>
       </section>
 
+      <PhotoCredits lang={lang} />
       <SiteFooter t={t} />
       <BackToTop />
     </>

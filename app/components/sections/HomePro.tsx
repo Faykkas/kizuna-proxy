@@ -11,7 +11,7 @@ import { IconInstagram, IconTiktok } from "../ui";
 import { REAL_REVIEWS } from "../data";
 import { homeCopy } from "./homeCopy";
 import LinkPreviewCard from "../LinkPreview";
-import { HERO_IMAGES, CATEGORY_IMAGES, DELIVERED, STORES } from "../../lib/homeImages";
+import { HERO_IMAGES, HERO_BG, BAND_BG, CATEGORY_IMAGES, JAPAN_PICKS, DELIVERED, STORES, PHOTO_CREDITS } from "../../lib/homeImages";
 
 // « 🇯🇵 to 🇺🇸 USA » → « USA » (les drapeaux emoji ne s'affichent pas sous Windows)
 function cleanCountry(s: string) {
@@ -46,7 +46,10 @@ export function HeroPro({ t, lang }: { t: any; lang: string }) {
   }
 
   return (
-    <section className="hp-hero">
+    <section className="hp-hero hp-hero-photo">
+      <div className="hp-hero-bg" aria-hidden="true">
+        <Image src={HERO_BG} alt="" fill priority sizes="100vw" />
+      </div>
       <div className="hp-hero-grid">
         <div className="hp-hero-copy">
           <p className="v3-eyebrow">{h.eyebrow}</p>
@@ -126,7 +129,7 @@ export function CategoryGrid({ lang }: { lang: string }) {
         <div className="hp-cats">
           {CATEGORY_IMAGES.map((im, i) => (
             <a key={im.src + i} className="hp-cat" href={`/request?q=${encodeURIComponent(c.cats[i] || im.query)}`}>
-              <Image src={im.src} alt={im.alt} fill sizes="(max-width: 640px) 46vw, (max-width: 1100px) 31vw, 380px" />
+              <Image src={im.src} alt={im.alt} fill sizes="(max-width: 640px) 46vw, (max-width: 1100px) 31vw, 300px" />
               <span className="hp-cat-shade" aria-hidden="true" />
               <span className="hp-cat-body">
                 <strong>{c.cats[i]}</strong>
@@ -211,5 +214,55 @@ export function TrustBand({ lang }: { lang: string }) {
         </ul>
       </div>
     </section>
+  );
+}
+
+/** Bandeau photo plein écran (Shibuya la nuit) avec effet de profondeur sur ordinateur. */
+export function TokyoBand({ t, lang }: { t: any; lang: string }) {
+  const c = homeCopy(lang);
+  return (
+    <section className="hp-band" style={{ backgroundImage: `url(${BAND_BG})` }}>
+      <div className="hp-band-inner wrap">
+        <p className="v3-eyebrow">Tokyo · 東京</p>
+        <h2>{c.bandTitle}</h2>
+        <p>{c.bandDesc}</p>
+        <a href="/request" className="btn btn-gold">{t.nav?.request || c.searchBtn} →</a>
+      </div>
+    </section>
+  );
+}
+
+/** Mosaïque des produits phares du Japon : prouve qu'on peut tout chercher. Chaque tuile ouvre une demande pré-remplie. */
+export function JapanPicks({ lang }: { lang: string }) {
+  const c = homeCopy(lang);
+  return (
+    <section className="section-sm reveal">
+      <div className="wrap">
+        <div className="hp-head">
+          <h2>{c.picksTitle}</h2>
+          <p>{c.picksSub}</p>
+        </div>
+        <div className="hp-picks">
+          {JAPAN_PICKS.map((im, i) => (
+            <a key={im.src} className={`hp-pick${im.big ? " big" : ""}`} href={`/request?q=${encodeURIComponent(c.picks[i] || im.query)}`}>
+              <Image src={im.src} alt={im.alt} fill sizes={im.big ? "(max-width: 700px) 92vw, 560px" : "(max-width: 700px) 46vw, 280px"} />
+              <span className="hp-cat-shade" aria-hidden="true" />
+              <span className="hp-pick-label">{c.picks[i]}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** Crédit des photographes Unsplash (bas de l'accueil). */
+export function PhotoCredits({ lang }: { lang: string }) {
+  const c = homeCopy(lang);
+  return (
+    <p className="hp-credits">
+      {c.photos} : {PHOTO_CREDITS.join(", ")} ·{" "}
+      <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">Unsplash</a>
+    </p>
   );
 }

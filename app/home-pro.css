@@ -372,3 +372,71 @@
   .lp-img { width: 84px; }
   .lp-btn { align-self: stretch; text-align: center; justify-content: center; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VITRINE PHOTO : en-tête Akihabara plein écran, 8 catégories, bandeau Shibuya, mosaïque « le meilleur du Japon »
+   ═══════════════════════════════════════════════════════════════════════════ */
+.hp-hero-photo { min-height: 640px; display: flex; align-items: center; padding: 4.2rem 0 4rem; }
+.hp-hero-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.hp-hero-bg img { object-fit: cover; object-position: 20% 40%; filter: saturate(1.35) contrast(1.06) brightness(1.08); transform: scale(1.04); animation: hp-kenburns 24s ease-in-out infinite alternate; }
+.hp-hero-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(14, 7, 30, .8) 0%, rgba(14, 7, 30, .52) 38%, rgba(14, 7, 30, .18) 68%, rgba(14, 7, 30, .3) 100%), linear-gradient(180deg, rgba(14, 7, 30, .2) 0%, transparent 30%, transparent 70%, var(--px-bg, #120a24) 100%); }
+.hp-hero-photo::before { z-index: 1; opacity: .5; }
+.hp-hero-photo .hp-hero-grid { z-index: 2; width: 100%; }
+.hp-hero-photo .hp-hero-copy h1 { text-shadow: 0 2px 4px rgba(0, 0, 0, .55), 0 6px 34px rgba(0, 0, 0, .75); }
+.hp-hero-photo .hp-lead, .hp-hero-photo .hp-search-hint { text-shadow: 0 1px 3px rgba(0, 0, 0, .8); }
+.hp-hero-photo .hp-lead, .hp-hero-photo .hp-search-hint { color: rgba(240, 237, 247, .86); }
+.hp-hero-photo .hp-shot { box-shadow: 0 30px 60px rgba(0, 0, 0, .6), 0 0 0 1px rgba(255, 255, 255, .08); }
+@keyframes hp-kenburns { from { transform: scale(1.04) translate3d(0, 0, 0); } to { transform: scale(1.12) translate3d(-1.5%, -1%, 0); } }
+@media (prefers-reduced-motion: reduce) { .hp-hero-bg img { animation: none; } }
+
+/* 8 catégories en portrait, 4 colonnes */
+.hp-cats { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+.hp-cat { aspect-ratio: 3 / 4; border-radius: 18px; }
+.hp-cat-shade { background: linear-gradient(to top, rgba(12, 6, 26, .94) 0%, rgba(12, 6, 26, .45) 38%, transparent 65%); }
+.hp-cat-body { padding: 1.1rem 1.15rem; }
+.hp-cat-body strong { font-size: 1.15rem; text-shadow: 0 2px 12px rgba(0, 0, 0, .5); }
+
+/* bandeau Shibuya */
+.hp-band { position: relative; margin: 2.5rem 0 1rem; padding: 7.5rem 0; background-size: cover; background-position: center; text-align: center; overflow: hidden; }
+.hp-band::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(14, 7, 30, .55) 0%, rgba(14, 7, 30, .85) 75%), linear-gradient(180deg, var(--px-bg, #120a24) 0%, transparent 18%, transparent 82%, var(--px-bg, #120a24) 100%); }
+.hp-band-inner { position: relative; z-index: 1; max-width: 44rem; }
+.hp-band .v3-eyebrow { margin-inline: auto; }
+.hp-band h2 { margin: .6rem 0 .8rem; font-size: clamp(1.8rem, 4vw, 2.9rem); line-height: 1.1; color: #fff; text-shadow: 0 4px 30px rgba(0, 0, 0, .7); }
+.hp-band p { margin: 0 auto 1.6rem; max-width: 36rem; color: rgba(240, 237, 247, .9); font-size: 1.08rem; line-height: 1.65; }
+@media (hover: hover) and (min-width: 900px) { .hp-band { background-attachment: fixed; } }
+
+/* mosaïque « le meilleur du Japon » */
+.hp-picks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 210px; grid-auto-flow: dense; gap: .9rem; }
+.hp-pick { position: relative; overflow: hidden; border-radius: 18px; border: 1px solid var(--border); background: var(--surface); text-decoration: none; box-shadow: var(--v3-hard); transition: transform .2s ease, border-color .2s, box-shadow .2s; }
+.hp-pick.big { grid-column: span 2; grid-row: span 2; }
+.hp-pick img { object-fit: cover; transition: transform .6s ease; }
+.hp-pick:hover { transform: translateY(-4px); border-color: var(--border-gold); box-shadow: var(--v3-hard), var(--v3-glow); }
+.hp-pick:hover img { transform: scale(1.07); }
+.hp-pick-label { position: absolute; left: 1rem; bottom: .9rem; right: 1rem; font-family: var(--font-head); font-size: 1.05rem; font-weight: 700; color: #fff; text-shadow: 0 2px 12px rgba(0, 0, 0, .6); }
+.hp-pick.big .hp-pick-label { font-size: 1.5rem; }
+
+/* crédit photos */
+.hp-credits { max-width: 1160px; margin: 1.5rem auto 0; padding: 0 2rem 1.5rem; font-size: .72rem; line-height: 1.6; color: var(--mist); text-align: center; opacity: .75; }
+.hp-credits a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+
+@media (max-width: 1000px) {
+  .hp-cats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hp-picks { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 170px; }
+}
+@media (max-width: 900px) {
+  .hp-hero-photo { min-height: 0; padding: 2.6rem 0 2.6rem; }
+  .hp-hero-bg::after { background: linear-gradient(180deg, rgba(14, 7, 30, .78) 0%, rgba(14, 7, 30, .9) 60%, var(--px-bg, #120a24) 100%); }
+}
+@media (max-width: 640px) {
+  .hp-cats { gap: .65rem; }
+  .hp-cat { aspect-ratio: 3 / 4; }
+  .hp-cat-body strong { font-size: .98rem; }
+  .hp-band { padding: 5rem 0; }
+  .hp-picks { gap: .6rem; grid-auto-rows: 140px; }
+  .hp-pick-label { font-size: .92rem; left: .75rem; bottom: .65rem; }
+  .hp-pick.big .hp-pick-label { font-size: 1.2rem; }
+}
+
+/* bande de liens du menu : tient sur une ligne sur les écrans moyens (sans défilement, qui couperait « Guides ») */
+@media (max-width: 1240px) { .ns-link { padding: .72rem .55rem; font-size: .84rem; } }
+@media (max-width: 1080px) { .ns-link { padding: .7rem .42rem; font-size: .8rem; } }
