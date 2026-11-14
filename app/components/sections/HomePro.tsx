@@ -79,15 +79,6 @@ export function HeroPro({ t, lang }: { t: any; lang: string }) {
           </ul>
         </div>
 
-        <div className="hp-collage" aria-hidden={false}>
-          <div className="hp-collage-glow" aria-hidden="true" />
-          {HERO_IMAGES.map((im, i) => (
-            <figure key={im.src + i} className={`hp-shot hp-shot-${i + 1}`}>
-              <Image src={im.src} alt={im.alt} fill sizes="(max-width: 900px) 46vw, 300px" priority={i === 0} />
-              <figcaption>{im.place ? `${c.delBadge} · ${im.place}` : c.delBadge}</figcaption>
-            </figure>
-          ))}
-        </div>
       </div>
     </section>
   );

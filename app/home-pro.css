@@ -542,3 +542,10 @@
 .hp-band-list small { color: rgba(240, 237, 247, .82); font-size: .9rem; line-height: 1.6; }
 .hp-band-cta { background: rgba(14, 7, 30, .5); }
 @media (max-width: 900px) { .hp-band-list { grid-template-columns: 1fr; } }
+
+/* en-tête sans collage : le texte à gauche, la photo d'Akihabara visible à droite */
+.hp-hero-photo .hp-hero-grid { grid-template-columns: minmax(0, 640px); }
+.hp-hero-photo { min-height: 600px; }
+.hp-hero-photo .hp-hero-bg img { object-position: 70% 40%; }
+.hp-hero-photo .hp-hero-bg::after { background: linear-gradient(90deg, rgba(14, 7, 30, .92) 0%, rgba(14, 7, 30, .78) 35%, rgba(14, 7, 30, .2) 65%, rgba(14, 7, 30, .1) 100%), linear-gradient(180deg, transparent 70%, var(--px-bg, #120a24) 100%); }
+@media (max-width: 900px) { .hp-hero-photo .hp-hero-bg::after { background: linear-gradient(180deg, rgba(14, 7, 30, .7) 0%, rgba(14, 7, 30, .88) 70%, var(--px-bg, #120a24) 100%); } }
