@@ -526,3 +526,19 @@
   .st-mosaic-cell:nth-child(2n), .st-delivered-cell:nth-child(2n) { transform: none; }
   .st-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1rem; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ACCUEIL MIXTE : lien sous la grille, étapes dans le bandeau Shibuya
+   ═══════════════════════════════════════════════════════════════════════════ */
+.hp-more { margin: 1.6rem 0 0; text-align: center; }
+.hp-more a { color: var(--red); font-weight: 700; text-decoration: none; }
+.hp-more a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.hp-band-steps { padding: 6.5rem 0; }
+.hp-band-steps .hp-band-inner { max-width: 1100px; }
+.hp-band-list { list-style: none; margin: 2.2rem 0 2rem; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; text-align: left; }
+.hp-band-list li { display: flex; flex-direction: column; gap: .45rem; padding: 1.3rem 1.3rem 1.4rem; border: 1px solid rgba(255, 255, 255, .14); border-radius: 18px; background: rgba(14, 7, 30, .62); backdrop-filter: blur(10px); }
+.hp-band-n { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--red); color: var(--px-bg); font-family: var(--font-head); font-weight: 800; }
+.hp-band-list strong { color: #fff; font-size: 1.05rem; }
+.hp-band-list small { color: rgba(240, 237, 247, .82); font-size: .9rem; line-height: 1.6; }
+.hp-band-cta { background: rgba(14, 7, 30, .5); }
+@media (max-width: 900px) { .hp-band-list { grid-template-columns: 1fr; } }

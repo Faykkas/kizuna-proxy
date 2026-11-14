@@ -112,7 +112,7 @@ export function StoresStrip({ lang }: { lang: string }) {
   );
 }
 
-export function CategoryGrid({ lang }: { lang: string }) {
+export function CategoryGrid({ lang, more = false }: { lang: string; more?: boolean }) {
   const c = homeCopy(lang);
   return (
     <section className="section-sm reveal">
@@ -133,6 +133,7 @@ export function CategoryGrid({ lang }: { lang: string }) {
             </a>
           ))}
         </div>
+        {more ? <p className="hp-more"><a href="/what-we-buy">{c.seeAll} →</a></p> : null}
       </div>
     </section>
   );
@@ -213,15 +214,28 @@ export function TrustBand({ lang }: { lang: string }) {
 }
 
 /** Bandeau photo plein écran (Shibuya la nuit) avec effet de profondeur sur ordinateur. */
-export function TokyoBand({ t, lang }: { t: any; lang: string }) {
+export function TokyoBand({ t, lang, steps = false }: { t: any; lang: string; steps?: boolean }) {
   const c = homeCopy(lang);
+  const hw = t.howItWorks || {};
+  const list = steps ? [1, 2, 3].map((n) => ({ n, title: hw[`step${n}Title`], body: hw[`step${n}Body`] })).filter((x) => x.title) : [];
   return (
-    <section className="hp-band" style={{ backgroundImage: `url(${BAND_BG})` }}>
+    <section className={`hp-band${list.length ? " hp-band-steps" : ""}`} style={{ backgroundImage: `url(${BAND_BG})` }}>
       <div className="hp-band-inner wrap">
         <p className="v3-eyebrow">Tokyo · 東京</p>
         <h2>{c.bandTitle}</h2>
         <p>{c.bandDesc}</p>
-        <a href="/request" className="btn btn-gold">{t.nav?.request || c.searchBtn} →</a>
+        {list.length ? (
+          <ol className="hp-band-list">
+            {list.map((x) => (
+              <li key={x.n}>
+                <span className="hp-band-n" aria-hidden="true">{x.n}</span>
+                <strong>{x.title}</strong>
+                <small>{x.body}</small>
+              </li>
+            ))}
+          </ol>
+        ) : null}
+        <a href={list.length ? "/how-it-works" : "/request"} className={list.length ? "btn btn-outline hp-band-cta" : "btn btn-gold"}>{list.length ? `${hw.label || "How it works"} →` : `${t.nav?.request || c.searchBtn} →`}</a>
       </div>
     </section>
   );
