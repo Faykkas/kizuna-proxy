@@ -78,7 +78,7 @@ export default function RequestForm({ t }) {
     // depuis la barre de l'accueil / une catégorie : ?q=… pré-remplit la description
     const q = (params.get("q") || "").trim().slice(0, 500);
     if (q && !shopImage && !shopPrice) {
-      const isLink = /^https?:///i.test(q);
+      const isLink = /^https?:\/\//i.test(q);
       const link = (params.get("link") || "").trim().slice(0, 1000);
       setForm(p => ({ ...p, message: p.message || q, itemLink: p.itemLink || (/^https?:\/\//i.test(link) ? link : isLink ? q : "") }));
       return;

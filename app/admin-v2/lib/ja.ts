@@ -6,8 +6,10 @@ import { JA_ORDERS } from "./ja-orders.ts";
 import { JA_FINANCE } from "./ja-finance.ts";
 import { JA_MAYUKO } from "./ja-mayuko.ts";
 import { JA_COUPONS } from "./ja-coupons.ts";
+import { JA_INSTAGRAM } from "./ja-instagram.ts";
 
 export const JA: Record<string, string> = {
+  ...JA_INSTAGRAM,
   ...JA_COUPONS,
   ...JA_MAYUKO,
   ...JA_CONTENT,

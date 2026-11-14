@@ -20,6 +20,7 @@ export const PAGE_PHOTOS = {
   rules: "/photos/ceramics.jpg",
   events: "/photos/matsuri-night.jpg",
   faq: "/photos/tokyo-tower-dusk.jpg",
+  ig: "/photos/gachapon-row.jpg",
 } as const;
 
 export type PagePhotoKey = keyof typeof PAGE_PHOTOS;

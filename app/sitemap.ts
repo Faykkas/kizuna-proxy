@@ -60,6 +60,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/reviews`, priority: 0.8, changeFrequency: "weekly" as const },
     { url: `${BASE}/faq`, priority: 0.8, changeFrequency: "monthly" as const },
     { url: `${BASE}/events`, priority: 0.9, changeFrequency: "weekly" as const },
+    { url: `${BASE}/ig`, priority: 0.6, changeFrequency: "weekly" as const },
     { url: `${BASE}/news`, priority: 0.7, changeFrequency: "weekly" as const },
     { url: `${BASE}/blog`, priority: 0.7, changeFrequency: "weekly" as const },
     { url: `${BASE}/tokyo-in-store-personal-shopper`, priority: 0.8, changeFrequency: "monthly" as const },
