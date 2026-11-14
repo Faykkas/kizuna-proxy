@@ -4,6 +4,7 @@
 import { useLanguage } from "../lib/language";
 import { guideTranslations } from "../guideTranslations";
 import { GUIDE_PHOTOS } from "./guidePhotos";
+import { photoVariant } from "../lib/photoVariants";
 import {
   IconShoppingBag, IconAuction, IconCards, IconStore, IconApparel,
   IconSneaker, IconFigure, IconBox, IconEvent, IconBook, IconGacha, IconMusicNote,
@@ -61,7 +62,7 @@ export default function BlogIndexClient() {
             return (
               <a key={slug} href={`/blog/${slug}`} className="ev-card guide-card" style={{ display: "block", textDecoration: "none" }}>
                 {GUIDE_PHOTOS[slug] ? (
-                  <span className="guide-thumb"><img src={GUIDE_PHOTOS[slug]} alt="" loading="lazy" /></span>
+                  <span className="guide-thumb"><img src={photoVariant(GUIDE_PHOTOS[slug], 800)} alt="" loading="lazy" /></span>
                 ) : (
                   <div className="ev-icon"><Icon size={40} /></div>
                 )}

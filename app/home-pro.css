@@ -397,7 +397,7 @@
 .hp-cat-body strong { font-size: 1.15rem; text-shadow: 0 2px 12px rgba(0, 0, 0, .5); }
 
 /* bandeau Shibuya */
-.hp-band { position: relative; margin: 2.5rem 0 1rem; padding: 7.5rem 0; background-size: cover; background-position: center; text-align: center; overflow: hidden; }
+.hp-band { position: relative; margin: 2.5rem 0 1rem; padding: 7.5rem 0; background-image: var(--hb); background-size: cover; background-position: center; text-align: center; overflow: hidden; }
 .hp-band::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(14, 7, 30, .55) 0%, rgba(14, 7, 30, .85) 75%), linear-gradient(180deg, var(--px-bg, #120a24) 0%, transparent 18%, transparent 82%, var(--px-bg, #120a24) 100%); }
 .hp-band-inner { position: relative; z-index: 1; max-width: 44rem; }
 .hp-band .v3-eyebrow { margin-inline: auto; }
@@ -753,4 +753,11 @@ nav.breadcrumb { position: static; -webkit-backdrop-filter: none; backdrop-filte
   /* éviter tout défilement horizontal parasite */
   html, body { overflow-x: clip; }
   img, video, iframe { max-width: 100%; }
+}
+
+/* ── Photos en fond : version légère (WebP 800 px) sur téléphone ── */
+@media (max-width: 768px) {
+  .page-head-photo { background-image: var(--ph-sm, var(--ph)); }
+  .guide-cover { background-image: var(--gc-sm, var(--gc)); }
+  .hp-band { background-image: var(--hb-sm, var(--hb)); }
 }

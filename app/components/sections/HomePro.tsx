@@ -10,6 +10,7 @@ import { IconInstagram, IconTiktok } from "../ui";
 import { REAL_REVIEWS } from "../data";
 import { homeCopy } from "./homeCopy";
 import LinkPreviewCard from "../LinkPreview";
+import { photoBgVars } from "../../lib/photoVariants";
 import { HERO_IMAGES, HERO_BG, BAND_BG, CATEGORY_IMAGES, JAPAN_PICKS, DELIVERED, STORES, PHOTO_CREDITS } from "../../lib/homeImages";
 
 // « 🇯🇵 to 🇺🇸 USA » → « USA » (les drapeaux emoji ne s'affichent pas sous Windows)
@@ -210,7 +211,7 @@ export function TokyoBand({ t, lang, steps = false }: { t: any; lang: string; st
   const hw = t.howItWorks || {};
   const list = steps ? [1, 2, 3].map((n) => ({ n, title: hw[`step${n}Title`], body: hw[`step${n}Body`] })).filter((x) => x.title) : [];
   return (
-    <section className={`hp-band${list.length ? " hp-band-steps" : ""}`} style={{ backgroundImage: `url(${BAND_BG})` }}>
+    <section className={`hp-band${list.length ? " hp-band-steps" : ""}`} style={photoBgVars(BAND_BG, "hb")}>
       <div className="hp-band-inner wrap">
         <p className="v3-eyebrow">Tokyo · 東京</p>
         <h2>{c.bandTitle}</h2>

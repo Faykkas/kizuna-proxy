@@ -6,9 +6,10 @@
 import { usePathname } from "next/navigation";
 import type { CSSProperties } from "react";
 import { guidePhotoForPath } from "./guidePhotos";
+import { photoBgVars } from "../lib/photoVariants";
 
 export default function GuideCover() {
   const src = guidePhotoForPath(usePathname() || "");
   if (!src) return null;
-  return <div className="guide-cover" aria-hidden="true" style={{ ["--gc" as string]: `url(${src})` } as CSSProperties} />;
+  return <div className="guide-cover" aria-hidden="true" style={photoBgVars(src, "gc") as CSSProperties} />;
 }

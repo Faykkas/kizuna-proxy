@@ -2,6 +2,7 @@
 // Utilisé avec la classe .page-head-photo : <header className="page-head page-head-photo" style={photoHead("pricing")}>
 
 import type { CSSProperties } from "react";
+import { photoBgVars } from "./photoVariants";
 
 export const PAGE_PHOTOS = {
   shop: "/photos/anime-figures-shelf.jpg",
@@ -25,7 +26,7 @@ export const PAGE_PHOTOS = {
 
 export type PagePhotoKey = keyof typeof PAGE_PHOTOS;
 
-/** Style à poser sur l'en-tête : la photo passe par la variable CSS --ph. */
+/** Style à poser sur l'en-tête : la photo passe par les variables CSS --ph / --ph-sm (versions WebP légères). */
 export function photoHead(key: PagePhotoKey): CSSProperties {
-  return { ["--ph" as string]: `url(${PAGE_PHOTOS[key]})` } as CSSProperties;
+  return photoBgVars(PAGE_PHOTOS[key], "ph");
 }
