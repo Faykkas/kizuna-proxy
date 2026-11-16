@@ -4,9 +4,9 @@ import { createServerSupabase } from "../lib/supabase-server";
 import { getL } from "../lib/lang-server";
 import { computeCommissions, currentMonthJst, lastMonths } from "../lib/commissions";
 import { countNewRequests, countPendingLinks, loadOrdersForStats, loadPaidLinks } from "../lib/queries";
-import { loadEntitiesSafe, loadMayukoLedgerSafe } from "../lib/queriesAccounting";
+import { loadEntitiesSafe, loadMayukoLedgerSafe, loadPurchasesSafe } from "../lib/queriesAccounting";
 import { FALLBACK_START, balance, repayableOrders } from "../lib/mayuko";
-import { entityOn } from "../lib/accounting";
+import { entityOn, purchasesTotal } from "../lib/accounting";
 import { MONTHLY_GOAL_JPY, NEXT_GOAL_JPY, BASE } from "../lib/config";
 import { formatJPY, percentOf } from "../lib/money";
 import { isActiveStatus } from "../lib/status";
@@ -21,7 +21,7 @@ export async function generateMetadata() {
 
 export default async function DashboardPage() {
   // Les lectures démarrent tout de suite, en même temps que la vérification d'accès (la RLS protège les données quoi qu'il arrive).
-  const dataP = createServerSupabase().then((sb) => Promise.all([loadOrdersForStats(sb), loadPaidLinks(sb), countPendingLinks(sb), countNewRequests(sb).catch(() => 0), loadEntitiesSafe(sb).catch(() => []), loadMayukoLedgerSafe(sb).catch(() => ({ available: false, rows: [] }))]));
+  const dataP = createServerSupabase().then((sb) => Promise.all([loadOrdersForStats(sb), loadPaidLinks(sb), countPendingLinks(sb), countNewRequests(sb).catch(() => 0), loadEntitiesSafe(sb).catch(() => []), loadMayukoLedgerSafe(sb).catch(() => ({ available: false, rows: [] })), loadPurchasesSafe(sb).catch(() => ({ available: false, rows: [] }))]));
   dataP.catch(() => {});
   const access = await requireAccess();
   const L = await getL();
@@ -39,8 +39,8 @@ export default async function DashboardPage() {
 
   let data;
   try {
-    const [orders, links, pendingLinks, newRequests, entities, ledger] = await dataP;
-    data = { orders, links, pendingLinks, newRequests, entities, ledger };
+    const [orders, links, pendingLinks, newRequests, entities, ledger, purchases] = await dataP;
+    data = { orders, links, pendingLinks, newRequests, entities, ledger, purchases };
   } catch (e) {
     return (
       <>
@@ -50,11 +50,13 @@ export default async function DashboardPage() {
     );
   }
 
-  const { orders, links, pendingLinks, newRequests, entities, ledger } = data;
+  const { orders, links, pendingLinks, newRequests, entities, ledger, purchases } = data;
   const report = computeCommissions(orders, links);
   const byMonth = new Map(report.months.map((m) => [m.month, m]));
   const now = byMonth.get(month);
   const monthTotal = now?.total ?? 0;
+  // Achats ponctuels du mois (cartons, stock…) : déduits pour donner ce qui reste vraiment.
+  const monthPurchases = purchasesTotal(purchases.rows, month);
   const year = month.slice(0, 4);
   const yearTotal = report.months.filter((m) => m.month.startsWith(year)).reduce((s, m) => s + m.total, 0);
 
@@ -131,6 +133,14 @@ export default async function DashboardPage() {
               ) : null}
               <br />
               {t("Hors prix d'achat des articles.")}
+              {monthPurchases > 0 ? (
+                <>
+                  <br />
+                  <Link className="av2-link" href={`${BASE}/comptabilite#achats`}>{t("Achats du mois : −{x}", { x: formatJPY(monthPurchases) })}</Link>
+                  {" → "}
+                  <strong>{t("net {x}", { x: formatJPY(monthTotal - monthPurchases) })}</strong>
+                </>
+              ) : null}
             </>
           }
         />

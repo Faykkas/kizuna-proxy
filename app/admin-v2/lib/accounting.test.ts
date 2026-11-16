@@ -1,7 +1,7 @@
 // Lancer : node --test app/admin-v2/lib/accounting.test.ts
 import test from "node:test";
 import assert from "node:assert/strict";
-import { annualExpenseTotal, buildReceipts, csvCell, entityOn, missingPackageWeeks, monthlyExpenseAverage, receiptsToCsv, summarizeByMonth, toJst } from "./accounting.ts";
+import { annualExpenseTotal, purchasesByMonth, purchasesTotal, buildReceipts, csvCell, entityOn, missingPackageWeeks, monthlyExpenseAverage, receiptsToCsv, summarizeByMonth, toJst } from "./accounting.ts";
 
 const link = (o: Partial<Parameters<typeof buildReceipts>[0][number]> = {}) => ({
   id: "l1", label: "Mercari items", client_name: "Anna", paid_at: "2026-10-06T01:04:59.633+00:00",
@@ -103,4 +103,16 @@ test("entité : rien d'inventé sans dates ; attribution seulement si une seule 
   assert.equal(entityOn("2026-12-15", dated), "Samuel");
   const overlap = [{ name: "A", active_from: "2026-01-01", active_to: null }, { name: "B", active_from: "2026-06-01", active_to: null }];
   assert.equal(entityOn("2026-07-01", overlap), "");
+});
+
+test("Achats ponctuels : total par mois et par période, montants absurdes ignorés", () => {
+  const p = (id: number, spent_on: string, amount_jpy: number | null) => ({ id, spent_on, label: "x", category: null, amount_jpy, notes: null });
+  const list = [p(1, "2026-11-12", 3200), p(2, "2026-11-30", 1800), p(3, "2026-10-30", 28000), p(4, "2026-11-02", null), p(5, "pas une date", 999)];
+  const byMonth = purchasesByMonth(list);
+  assert.equal(byMonth.get("2026-11"), 5000);
+  assert.equal(byMonth.get("2026-10"), 28000);
+  assert.equal(byMonth.size, 2);
+  assert.equal(purchasesTotal(list, "2026-11"), 5000);
+  assert.equal(purchasesTotal(list, "2026"), 33000);
+  assert.equal(purchasesTotal(list, "2025"), 0);
 });

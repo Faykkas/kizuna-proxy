@@ -166,6 +166,29 @@ export function monthlyExpenseAverage(expenses: Expense[]): number {
   return Math.round(annualExpenseTotal(expenses) / 12);
 }
 
+// ── Achats ponctuels (table expense_purchases) ────────────────────────────
+// Datés : chacun est déduit du résultat de SON mois (contrairement aux dépenses récurrentes, lissées).
+
+export const PURCHASE_CATEGORIES = ["Emballage / Cartons", "Stock (articles, boxes à revendre)", "Fournitures", "Matériel", "Déplacements", "Autre"];
+
+export type Purchase = { id: number; spent_on: string; label: string; category: string | null; amount_jpy: number | null; notes: string | null };
+
+/** Total des achats ponctuels par mois (AAAA-MM). */
+export function purchasesByMonth(purchases: Purchase[]): Map<string, number> {
+  const map = new Map<string, number>();
+  for (const p of purchases) {
+    if (!/^\d{4}-\d{2}-\d{2}/.test(p.spent_on ?? "")) continue;
+    const m = p.spent_on.slice(0, 7);
+    map.set(m, (map.get(m) ?? 0) + yen(p.amount_jpy));
+  }
+  return map;
+}
+
+/** Total des achats ponctuels d'une année (AAAA), ou d'un mois (AAAA-MM). */
+export function purchasesTotal(purchases: Purchase[], period: string): number {
+  return purchases.filter((p) => (p.spent_on ?? "").startsWith(period)).reduce((s, p) => s + yen(p.amount_jpy), 0);
+}
+
 // ── Commissions colis : semaines sans entrée ─────────────────────────────
 
 /** Lundi (AAAA-MM-JJ) de la semaine d'une date. */

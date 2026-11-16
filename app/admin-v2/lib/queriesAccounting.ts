@@ -2,7 +2,7 @@ import "server-only";
 import type { LedgerEntry } from "./mayuko";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { fetchAll, type EntityRow } from "./queries";
-import type { Expense, ReceiptLink } from "./accounting";
+import type { Expense, Purchase, ReceiptLink } from "./accounting";
 
 // Lectures pour la comptabilité (lecture seule : uniquement .select()).
 
@@ -44,4 +44,18 @@ export async function loadMayukoLedgerSafe(sb: SupabaseClient): Promise<{ availa
     throw new Error(error.message);
   }
   return { available: true, rows: (data ?? []) as LedgerEntry[] };
+}
+
+/** Achats ponctuels (cartons, stock…). `available: false` tant que le SQL 20261117120000 n'est pas appliqué. */
+export async function loadPurchasesSafe(sb: SupabaseClient): Promise<{ available: boolean; rows: Purchase[] }> {
+  const { data, error } = await sb
+    .from("expense_purchases")
+    .select("id,spent_on,label,category,amount_jpy,notes")
+    .order("spent_on", { ascending: false })
+    .order("id", { ascending: false });
+  if (error) {
+    if (LEDGER_TABLE_MISSING.has(error.code ?? "") || /expense_purchases/.test(error.message)) return { available: false, rows: [] };
+    throw new Error(error.message);
+  }
+  return { available: true, rows: (data ?? []) as Purchase[] };
 }

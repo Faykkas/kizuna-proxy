@@ -3,14 +3,15 @@ import { requireAccess } from "../../lib/access";
 import { createServerSupabase } from "../../lib/supabase-server";
 import { getL } from "../../lib/lang-server";
 import { loadOrdersForStats, loadPaidLinks, type EntityRow } from "../../lib/queries";
-import { loadEntitiesSafe, loadExpenses, loadPaidLinksForJournal } from "../../lib/queriesAccounting";
-import { annualExpenseTotal, buildReceipts, entityOn, missingPackageWeeks, monthlyExpenseAverage, summarizeByMonth } from "../../lib/accounting";
+import { loadEntitiesSafe, loadExpenses, loadPaidLinksForJournal, loadPurchasesSafe } from "../../lib/queriesAccounting";
+import { annualExpenseTotal, purchasesByMonth, buildReceipts, entityOn, missingPackageWeeks, monthlyExpenseAverage, summarizeByMonth } from "../../lib/accounting";
 import { isCommissionPackage } from "../../../lib/commissionPackage";
 import { computeCommissions, currentMonthJst } from "../../lib/commissions";
 import { BASE } from "../../lib/config";
 import { formatJPY } from "../../lib/money";
 import { Banner, DataError, PageHead, StatCard, Tag } from "../../components/ui";
 import ExpensesManager from "./ExpensesManager";
+import PurchasesManager from "./PurchasesManager";
 
 export async function generateMetadata() {
   const { t } = await getL();
@@ -28,14 +29,15 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
   const sb = await createServerSupabase();
   let data;
   try {
-    const [orders, paidForMargin, links, expenses, entities] = await Promise.all([
+    const [orders, paidForMargin, links, expenses, entities, purchases] = await Promise.all([
       loadOrdersForStats(sb),
       loadPaidLinks(sb),
       loadPaidLinksForJournal(sb),
       loadExpenses(sb),
       loadEntitiesSafe(sb),
+      loadPurchasesSafe(sb),
     ]);
-    data = { orders, paidForMargin, links, expenses, entities };
+    data = { orders, paidForMargin, links, expenses, entities, purchases };
   } catch (e) {
     return (
       <>
@@ -45,7 +47,8 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
     );
   }
 
-  const { orders, paidForMargin, links, expenses, entities } = data;
+  const { orders, paidForMargin, links, expenses, entities, purchases } = data;
+  const purchaseByMonth = purchasesByMonth(purchases.rows);
   const receipts = buildReceipts(links);
   const receiptMonths = summarizeByMonth(receipts);
   const commissions = computeCommissions(orders, paidForMargin);
@@ -53,7 +56,7 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
 
   const years = [...new Set([...commissions.months.map((m) => m.month.slice(0, 4)), ...receiptMonths.map((m) => m.month.slice(0, 4)), nowMonth.slice(0, 4)])].sort();
   const yearMonths = (() => {
-    const all = new Set([...commissions.months.map((m) => m.month), ...receiptMonths.map((m) => m.month)]);
+    const all = new Set([...commissions.months.map((m) => m.month), ...receiptMonths.map((m) => m.month), ...purchaseByMonth.keys()]);
     return [...all].filter((m) => m.startsWith(year)).sort();
   })();
 
@@ -65,7 +68,9 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
   const expenseMonthly = monthlyExpenseAverage(expenses);
   const yearGains = yearMonths.reduce((s, m) => s + (gainByMonth.get(m)?.total ?? 0), 0);
   const monthsCounted = year === nowMonth.slice(0, 4) ? Number(nowMonth.slice(5, 7)) : 12;
-  const yearExpenses = expenseMonthly * monthsCounted;
+  // Dépenses = dépenses récurrentes (moyenne × mois écoulés) + achats ponctuels datés de l'année.
+  const yearPurchases = [...purchaseByMonth.entries()].filter(([m]) => m.startsWith(year)).reduce((s, [, v]) => s + v, 0);
+  const yearExpenses = expenseMonthly * monthsCounted + yearPurchases;
   const yearReceipts = receiptMonths.filter((m) => m.month.startsWith(year));
   const sum = (f: (m: (typeof yearReceipts)[number]) => number) => yearReceipts.reduce((s, m) => s + f(m), 0);
   const unknownFees = sum((m) => m.unknownFees);
@@ -96,7 +101,7 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
 
       <div className="av2-grid cols-4">
         <StatCard label={t("Gains (commissions)")} value={formatJPY(yearGains)} sub={t("Frais de service + marge PayPal, hors prix d'achat des articles.")} />
-        <StatCard label={t("Dépenses estimées")} value={formatJPY(yearExpenses)} sub={t("{x} / mois × {n} mois", { x: formatJPY(expenseMonthly), n: monthsCounted })} />
+        <StatCard label={t("Dépenses estimées")} value={formatJPY(yearExpenses)} sub={yearPurchases > 0 ? t("{x} / mois × {n} mois + achats ponctuels {p}", { x: formatJPY(expenseMonthly), n: monthsCounted, p: formatJPY(yearPurchases) }) : t("{x} / mois × {n} mois", { x: formatJPY(expenseMonthly), n: monthsCounted })} />
         <StatCard label={t("Résultat provisoire")} value={formatJPY(yearGains - yearExpenses)} sub={t("Gains − dépenses, avant impôts et cotisations.")} />
         <StatCard label={t("Net reçu sur PayPal")} value={formatJPY(sum((m) => m.net))} sub={t("Total payé {a} − frais PayPal réels {b}", { a: formatJPY(sum((m) => m.gross)), b: formatJPY(sum((m) => m.paypalReal)) })} />
       </div>
@@ -117,16 +122,18 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
                 <th>{t("Mois")}</th>
                 <th className="r">{t("Gains")}</th>
                 <th className="r">{t("Dépenses (moy.)")}</th>
+                <th className="r">{t("Achats ponctuels")}</th>
                 <th className="r">{t("Résultat")}</th>
                 <th className="r">{t("Achats pour les clients")}</th>
               </tr>
             </thead>
             <tbody>
               {yearMonths.length === 0 ? (
-                <tr><td colSpan={5} style={{ textAlign: "center", color: "var(--av2-muted)", padding: "1.4rem" }}>{t("Aucune donnée pour {year}.", { year })}</td></tr>
+                <tr><td colSpan={6} style={{ textAlign: "center", color: "var(--av2-muted)", padding: "1.4rem" }}>{t("Aucune donnée pour {year}.", { year })}</td></tr>
               ) : (
                 yearMonths.map((m) => {
                   const g = gainByMonth.get(m);
+                  const bought = purchaseByMonth.get(m) ?? 0;
                   return (
                     <tr key={m}>
                       <td style={{ textTransform: "capitalize" }}>
@@ -138,7 +145,8 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
                         {g?.packageCommission ? <small>{t("dont colis {x}", { x: formatJPY(g.packageCommission) })}</small> : null}
                       </td>
                       <td className="r av2-nowrap">{formatJPY(expenseMonthly)}</td>
-                      <td className="r av2-nowrap">{formatJPY((g?.total ?? 0) - expenseMonthly)}</td>
+                      <td className="r av2-nowrap">{bought ? <a className="av2-link" href="#achats">{formatJPY(bought)}</a> : "—"}</td>
+                      <td className="r av2-nowrap">{formatJPY((g?.total ?? 0) - expenseMonthly - bought)}</td>
                       <td className="r av2-nowrap">{g?.clientPurchases ? formatJPY(g.clientPurchases) : "—"}</td>
                     </tr>
                   );
@@ -272,6 +280,12 @@ export default async function AccountingPage({ searchParams }: { searchParams: P
           </p>
         ) : null}
       </div>
+
+      {purchases.available ? (
+        <PurchasesManager purchases={purchases.rows} year={year} month={year === nowMonth.slice(0, 4) ? nowMonth : `${year}-12`} />
+      ) : (
+        <Banner kind="warn">{t("Les achats ponctuels ne sont pas encore activés dans Supabase : exécutez d'abord le SQL 20261117120000_expense_purchases.sql.")}</Banner>
+      )}
 
       <ExpensesManager expenses={expenses} />
 
